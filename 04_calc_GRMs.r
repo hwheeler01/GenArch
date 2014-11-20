@@ -34,26 +34,26 @@ system(runGCTAchr)
 
 ###make localGRMs, for subset of genes in gencodeset
 
-#gencode <- read.table(gencodefile)
-#rownames(gencode) <- gencode[,5]
+gencode <- read.table(gencodefile)
+rownames(gencode) <- gencode[,5]
 
-#finished.grms <- scan("done.grms","character") ###already calculated a bunch of grms using old script with whole genome mach files, don't run them again
+finished.grms <- scan("done.grms","character") ###already calculated a bunch of grms using old script with whole genome mach files, don't run them again
 
 #ensidlist <- gencode[,5]
-#ensidlist <- setdiff(rownames(gencode),finished.grms)
+ensidlist <- setdiff(rownames(gencode),finished.grms)
 
-#for(i in 1:length(ensidlist)){
-#    cat(i,"/",length(ensidlist),"\n")
-#    gene <- ensidlist[i]
-#    geneinfo <- gencode[gene,]
-#    chr <- geneinfo[1]
-#    c <- substr(chr$V1,4,5)
-#    start <- geneinfo$V3 - 1e6 ### 1Mb lower bound for cis-eQTLS
-#    end <- geneinfo$V4 + 1e6 ### 1Mb upper bound for cis-eQTLs
-#    chrsnps <- subset(bim,bim[,1]==c) ### pull snps on same chr
-#    cissnps <- subset(chrsnps,chrsnps[,4]>=start & chrsnps[,4]<=end) ### pull cis-SNP info
-#    snplist <- cissnps[,2]    
-#    write.table(snplist, file= my.dir %&% "tmp.SNPlist." %&% gencodeset,quote=F,col.names=F,row.names=F)
-#    runGCTAgrm <- "gcta64 --dosage-mach-gz " %&% gt.dir %&% machpre %&% "chr" %&% gencodeset %&%  ".mldose.gz " %&% gt.dir %&% machpre %&% "chr" %&% gencodeset %&% ".mlinfo.gz --make-grm-bin --extract tmp.SNPlist." %&% gencodeset %&% " --out " %&% grm.dir %&% gene
-#    system(runGCTAgrm)
-#}
+for(i in 1:length(ensidlist)){
+    cat(i,"/",length(ensidlist),"\n")
+    gene <- ensidlist[i]
+    geneinfo <- gencode[gene,]
+    chr <- geneinfo[1]
+    c <- substr(chr$V1,4,5)
+    start <- geneinfo$V3 - 1e6 ### 1Mb lower bound for cis-eQTLS
+    end <- geneinfo$V4 + 1e6 ### 1Mb upper bound for cis-eQTLs
+    chrsnps <- subset(bim,bim[,1]==c) ### pull snps on same chr
+    cissnps <- subset(chrsnps,chrsnps[,4]>=start & chrsnps[,4]<=end) ### pull cis-SNP info
+    snplist <- cissnps[,2]    
+    write.table(snplist, file= my.dir %&% "tmp.SNPlist." %&% gencodeset,quote=F,col.names=F,row.names=F)
+    runGCTAgrm <- "gcta64 --dosage-mach-gz " %&% gt.dir %&% machpre %&% "chr" %&% gencodeset %&%  ".mldose.gz " %&% gt.dir %&% machpre %&% "chr" %&% gencodeset %&% ".mlinfo.gz --make-grm-bin --extract tmp.SNPlist." %&% gencodeset %&% " --out " %&% grm.dir %&% gene
+    system(runGCTAgrm)
+}
