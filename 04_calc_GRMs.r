@@ -13,7 +13,7 @@ annot.dir <- my.dir %&% "gtex-annot/"
 gt.dir <- my.dir %&% "gtex-genotypes/"
 grm.dir <- my.dir %&% "gtex-grms/"
 
-gencodefile <- annot.dir %&% "gencode.v18.genes.patched_contigs.summary.protein." %&% args[1]
+gencodefile <- annot.dir %&% "gencode.v18.genes.patched_contigs.summary.protein.chr" %&% args[1]
 gencodeset <- args[1]
 
 bimfile <- gt.dir %&% "GTEx_Analysis_2014-06-13.hapmapSnpsCEU.bim" ###get SNP position information###
@@ -22,7 +22,7 @@ rownames(bim) <- bim$V2
 
 ###make globalGRM, only need to do once
 
-machpre <- "GTEx_Analysis_2014-06-13.hapmapSnpsCEU."
+machpre <- "GTEx_Analysis_2014-06-13.hapmapSnpsCEU." 
 
 #runGCTAglo <- "gcta64 --dosage-mach-gz " %&% gt.dir %&% machpre %&% "mldose.gz " %&% gt.dir %&% machpre %&% "mlinfo.gz --make-grm-bin --out " %&% grm.dir %&% "GTEx.global"
 #system(runGCTAglo)
@@ -31,7 +31,11 @@ machpre <- "GTEx_Analysis_2014-06-13.hapmapSnpsCEU."
 
 gencode <- read.table(gencodefile)
 rownames(gencode) <- gencode[,5]
-ensidlist <- gencode[,5]
+
+finished.grms <- scan("done.grms","character") ###already calculated a bunch of grms using old script with whole genome mach files, don't run them again
+
+#ensidlist <- gencode[,5]
+ensidlist <- setdiff(rownames(gencode),finished.grms)
 
 for(i in 1:length(ensidlist)){
     cat(i,"/",length(ensidlist),"\n")
@@ -45,6 +49,6 @@ for(i in 1:length(ensidlist)){
     cissnps <- subset(chrsnps,chrsnps[,4]>=start & chrsnps[,4]<=end) ### pull cis-SNP info
     snplist <- cissnps[,2]    
     write.table(snplist, file= my.dir %&% "tmp.SNPlist." %&% gencodeset,quote=F,col.names=F,row.names=F)
-    runGCTAgrm <- "gcta64 --dosage-mach-gz " %&% gt.dir %&% machpre %&% "mldose.gz " %&% gt.dir %&% machpre %&% "mlinfo.gz --make-grm-bin --extract tmp.SNPlist." %&% gencodeset %&% " --out " %&% grm.dir %&% gene
+    runGCTAgrm <- "gcta64 --dosage-mach-gz " %&% gt.dir %&% machpre %&% "chr" %&% gencodeset %&%  ".mldose.gz " %&% gt.dir %&% machpre %&% "chr" %&% gencodeset %&% ".mlinfo.gz --make-grm-bin --extract tmp.SNPlist." %&% gencodeset %&% " --out " %&% grm.dir %&% gene
     system(runGCTAgrm)
 }
