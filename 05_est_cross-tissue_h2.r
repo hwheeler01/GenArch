@@ -1,0 +1,98 @@
+####by Heather E. Wheeler 20141120####
+args <- commandArgs(trailingOnly=T)
+"%&%" = function(a,b) paste(a,b,sep="")
+date = Sys.Date()
+
+my.dir <- "/group/im-lab/hwheeler/cross-tissue/"
+lmer.dir <- my.dir %&% "lmer.fits/"
+annot.dir <- my.dir %&% "gtex-annot/"
+grm.dir <- my.dir %&% "gtex-grms/"
+
+gencodefile <- annot.dir %&% "gencode.v18.genes.patched_contigs.summary.protein." %&% args[1] ##genes split into 20 files
+gencodeset <- args[1]
+
+###############################################
+### Scan expression data
+idfile <- lmer.dir %&% "ranef.SUBJID"
+genefile <- lmer.dir %&% "ranef.GENE"
+expfile <- lmer.dir %&% "ranef.SUBJIDxGENE"
+
+subjid <- scan(idfile,"character")
+geneid <- scan(genefile, "character")
+expdata <- scan(expfile)
+expdata <- matrix(expdata, ncol = length(geneid), byrow=TRUE)
+rownames(expdata) <- subjid
+colnames(expdata) <- geneid
+
+### Get gene subset to analyze
+localfile <- grm.dir %&% "localGRM.list"
+locallist <- scan(localfile,"character")
+
+gencode <- read.table(gencodefile)
+rownames(gencode) <- gencode[,5]
+
+grmlist <- intersect(locallist,rownames(gencode)) ##genes in genecodeset with grm
+ensidlist <- intersect(grmlist,colnames(expdata)) ##genes with grm and exp
+
+### Get individual subset to analyze
+grm.id <- read.table(grm.dir %&% "GTEx.global.grm.id")
+indidlist <- intersect(subjid,grm.id[,1]) ##subjects with exp and grm
+
+### Get expression data from intersected genes and subjects
+localexp <- expdata[indidlist,ensidlist]
+localensid <- colnames(localexp)
+
+loc.mat <- matrix(0,nrow=length(localensid),ncol=5)
+colnames(loc.mat) <- c("ensid","gene","h2","se","p")
+
+locglo.mat <- matrix(0,nrow=length(localensid),ncol=6)
+colnames(locglo.mat) <- c("ensid","gene","local.h2","local.se","global.h2","global.se")
+
+locchrglo.mat <- matrix(0,nrow=length(localensid),ncol=8)
+colnames(locchrglo.mat) <- c("ensid","gene","local.h2","local.se","chr.h2","chr.se","global.h2","global.se")
+
+for(i in 1:length(localensid)){
+	cat(i,"of",length(localensid),"\n")
+	ensid <- localensid[i]
+	gene <- as.character(gencode[ensid,6])
+	chr <- as.character(gencode[ensid,1])
+
+	#output expression pheno for gcta
+	geneexp <- cbind(rownames(localexp),localexp[,i])
+	write.table(geneexp, file="tmp.pheno." %&% gencodeset, col.names=F, quote=F) #output pheno for gcta
+
+	## Y ~ localGRM
+	runLOC <- "gcta64 --grm " %&% grm.dir %&% ensid %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
+	system(runLOC)
+	hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
+        res <- c(ensid, gene, hsq[14], hsq[15], hsq[25])
+        loc.mat[i,] <- res
+
+	## Y ~ localGRM + globalGRM
+	runMULT <- "echo " %&% grm.dir %&% ensid %&% "> tmp.multiGRM." %&% gencodeset
+	runMULT2 <- "echo " %&% grm.dir %&% "GTEx.global" %&% ">> tmp.multiGRM." %&% gencodeset
+	system(runMULT)
+        system(runMULT2)
+	runLOCGLO <- "gcta64 --mgrm-bin tmp.multiGRM." %&% gencodeset %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
+	system(runLOCGLO)
+	hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
+	res <- c(ensid, gene, hsq[17], hsq[18], hsq[20], hsq[21])
+	locglo.mat[i,] <- res
+
+	## Y ~ localGRM + chrGRM + globalGRM
+	runMULT <- "echo " %&% grm.dir %&% ensid %&% "> tmp.multiGRM." %&% gencodeset
+        runMULT2 <- "echo " %&% grm.dir %&% "GTEx." %&% chr %&% ">> tmp.multiGRM." %&% gencodeset
+	runMULT3 <- "echo " %&% grm.dir %&% "GTEx.global" %&% ">> tmp.multiGRM." %&% gencodeset
+        system(runMULT)
+        system(runMULT2)
+	system(runMULT3)     
+	runLOCCHRGLO <- "gcta64 --mgrm-bin tmp.multiGRM." %&% gencodeset %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
+        system(runLOCCHRGLO)
+        hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
+        res <- c(ensid, gene, hsq[20], hsq[21], hsq[23], hsq[24], hsq[26], hsq[27])
+        locchrglo.mat[i,] <- res
+}
+
+write.table(loc.mat, file="GTEx.cross-tissue.h2.localGRM_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F)
+write.table(locglo.mat, file="GTEx.cross-tissue.h2.localGRM.globalGRM_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F)
+write.table(locchrglo.mat, file="GTEx.cross-tissue.h2.localGRM.chrGRM.globalGRM_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F)

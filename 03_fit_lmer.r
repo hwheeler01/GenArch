@@ -61,3 +61,11 @@ colnames(residmat) <- colnames(rn.qn.expdata)
 
 write.table(ranefmat, file="lmer.fits/ranef.Cross-tissue.exp.pheno_GTEx_Data_2014-06-13.protein-coding_lmer.ranefSUBJID_fixefSMTSD.gender.PFs_" %&% date %&% ".txt",quote=F)
 write.table(residmat, file="lmer.fits/resid.Tissue-specific.exp.pheno_GTEx_Data_2014-06-13.protein-coding_lmer.ranefSUBJID_fixefSMTSD.gender.PFs_" %&% date %&% ".txt",quote=F)
+
+write.table(ranefmat, file="lmer.fits/ranef.SUBJIDxGENE",quote=F,row.names=F,col.names=F)
+write(colnames(ranefmat),file="lmer.fits/ranef.GENE",ncolumns=1)
+write(rownames(ranefmat),file="lmer.fits/ranef.SUBJID",ncolumns=1)
+
+write.table(residmat, file="lmer.fits/resid.SAMPIDxGENE",quote=F,row.names=F,col.names=F)
+write(colnames(residmat),file="lmer.fits/resid.GENE",ncolumns=1)
+write(rownames(residmat),file="lmer.fits/resid.SAMPID",ncolumns=1)
