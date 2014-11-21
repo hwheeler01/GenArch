@@ -76,7 +76,11 @@ for(i in 1:length(localensid)){
 	runLOCGLO <- "gcta64 --mgrm-bin tmp.multiGRM." %&% gencodeset %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
 	system(runLOCGLO)
 	hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
-	res <- c(ensid, gene, hsq[17], hsq[18], hsq[20], hsq[21])
+	if(hsq[18]=="logL0"){
+		res <- c(ensid, gene, NA, NA, NA, NA) ##gcta did not converge, script is reading in Y~localGRM result
+	}else{
+		res <- c(ensid, gene, hsq[17], hsq[18], hsq[20], hsq[21])
+	}
 	locglo.mat[i,] <- res
 
 	## Y ~ localGRM + chrGRM + globalGRM
@@ -89,10 +93,16 @@ for(i in 1:length(localensid)){
 	runLOCCHRGLO <- "gcta64 --mgrm-bin tmp.multiGRM." %&% gencodeset %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
         system(runLOCCHRGLO)
         hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
-        res <- c(ensid, gene, hsq[20], hsq[21], hsq[23], hsq[24], hsq[26], hsq[27])
-        locchrglo.mat[i,] <- res
+	if(hsq[20]=="LRT"){
+                res <- c(ensid, gene, NA, NA, NA, NA, NA, NA) ##gcta did not converge, script is reading in Y~localGRM result
+        }else if(hsq[23]=="of"){
+		res <- c(ensid, gene, NA, NA, NA, NA, NA, NA) ##gcta did not converge, script is reading in Y~localGRM+globalGRM result
+	}else{
+	        res <- c(ensid, gene, hsq[20], hsq[21], hsq[23], hsq[24], hsq[26], hsq[27])
+        }
+	locchrglo.mat[i,] <- res
 }
 
-write.table(loc.mat, file="GTEx.cross-tissue.h2.localGRM_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F)
-write.table(locglo.mat, file="GTEx.cross-tissue.h2.localGRM.globalGRM_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F)
-write.table(locchrglo.mat, file="GTEx.cross-tissue.h2.localGRM.chrGRM.globalGRM_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F)
+
+full.mat <- cbind(loc.mat,locglo.mat,locchrglo.mat)
+write.table(full.mat,file="GTEx.cross-tissue.h2.all.models_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F)
