@@ -94,8 +94,12 @@ for(i in 1:length(tislist)){
 	runLOC <- "gcta64 --grm " %&% grm.dir %&% ensid %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
 	system(runLOC)
 	hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
-        res <- c(tis, nsubj, ensid, gene, hsq[14], hsq[15], hsq[25])
-        loc.mat[j,] <- res
+	if(hsq[25]=="V(G3)/Vp"){
+                res <- c(tis, nsubj, ensid, gene, NA, NA, NA) ##gcta did not converge, script is reading in previous Y~localGRM+chrGRM+globalGRM result
+        }else{
+	        res <- c(tis, nsubj, ensid, gene, hsq[14], hsq[15], hsq[25])
+        }
+	loc.mat[j,] <- res
 
 	## Y ~ localGRM + globalGRM
 	runMULT <- "echo " %&% grm.dir %&% ensid %&% "> tmp.multiGRM." %&% gencodeset
@@ -133,5 +137,5 @@ for(i in 1:length(tislist)){
     }
 
     full.mat <- cbind(loc.mat,locglo.mat,locchrglo.mat) 
-    write.table(full.mat,file="GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F)
+    write.table(full.mat,file="GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
 }

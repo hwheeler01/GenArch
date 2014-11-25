@@ -37,13 +37,15 @@ ensidlist <- intersect(grmlist,colnames(expdata)) ##genes with grm and exp
 ### Get individual subset to analyze
 grm.id <- read.table(grm.dir %&% "GTEx.global.grm.id")
 indidlist <- intersect(subjid,grm.id[,1]) ##subjects with exp and grm
+nsubj <- length(indidlist)
+tis <- "cross-tissue"
 
 ### Get expression data from intersected genes and subjects
 localexp <- expdata[indidlist,ensidlist]
 localensid <- colnames(localexp)
 
-loc.mat <- matrix(0,nrow=length(localensid),ncol=5)
-colnames(loc.mat) <- c("ensid","gene","h2","se","p")
+loc.mat <- matrix(0,nrow=length(localensid),ncol=7)
+colnames(loc.mat) <- c("tissue","N","ensid","gene","h2","se","p")
 
 locglo.mat <- matrix(0,nrow=length(localensid),ncol=6)
 colnames(locglo.mat) <- c("ensid","gene","local.h2","local.se","global.h2","global.se")
@@ -65,8 +67,12 @@ for(i in 1:length(localensid)){
 	runLOC <- "gcta64 --grm " %&% grm.dir %&% ensid %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
 	system(runLOC)
 	hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
-        res <- c(ensid, gene, hsq[14], hsq[15], hsq[25])
-        loc.mat[i,] <- res
+	if(hsq[25]=="V(G3)/Vp"){
+		res <- c(tis, nsubj, ensid, gene, NA, NA, NA) ##gcta did not converge, script is reading in previous Y~localGRM+chrGRM+globalGRM result
+	}else{
+	        res <- c(tis, nsubj, ensid, gene, hsq[14], hsq[15], hsq[25])
+        }
+	loc.mat[i,] <- res
 
 	## Y ~ localGRM + globalGRM
 	runMULT <- "echo " %&% grm.dir %&% ensid %&% "> tmp.multiGRM." %&% gencodeset
