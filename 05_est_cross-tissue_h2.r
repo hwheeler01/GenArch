@@ -111,4 +111,4 @@ for(i in 1:length(localensid)){
 
 
 full.mat <- cbind(loc.mat,locglo.mat,locchrglo.mat)
-write.table(full.mat,file="GTEx.cross-tissue.h2.all.models_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F)
+write.table(full.mat,file="GTEx.cross-tissue.h2.all.models_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F,sep="\t")

@@ -18,7 +18,6 @@ done
 
 cat GTEx.cross-tissue.h2.all.models_subset* >o
 head -n 1 o > header
-sort -t$'\t' -rgk5 o > p
-cat header p > o
-head -n 18737 o > GTEx.cross-tissue.h2.all.models_2014-11-25.txt
+sort -rgk5 o > p
+cat header p  > GTEx.cross-tissue.h2.all.models_2014-11-25.txt
 rm o p header
