@@ -1,6 +1,7 @@
 ---
 title: Genetic architecture of cross-tissue and tissue-specific gene expression
-output: beamer_presentation
+#output: beamer_presentation
+output: pdf_document
 author: Heather E. Wheeler
 date: 25 November 2014
 ---
