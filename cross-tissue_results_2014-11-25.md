@@ -37,36 +37,36 @@ First pass: estimated h2 of cross-tissue expression and tissue-specific expressi
 
 GCTA heritability: Y ~ localGRM h2
 ========================================================
-![alt text](hist_GTEx_localGRM_h2_2014-11-25.pdf)
+![alt text](plots/hist_GTEx_localGRM_h2_2014-11-25.pdf)
 
 GCTA heritability: Y ~ localGRM h2 **ZOOM**
 ========================================================
-![alt text](hist_GTEx_localGRM_h2_ylim3000_2014-11-25.pdf)
+![alt text](plots/hist_GTEx_localGRM_h2_ylim3000_2014-11-25.pdf)
 
 GCTA heritability: Y ~ localGRM p-values
 ========================================================
-![alt text](hist_GTEx_localGRM_p_2014-11-25.pdf)
+![alt text](plots/hist_GTEx_localGRM_p_2014-11-25.pdf)
 
 GCTA heritability: Y ~ localGRM + globalGRM h2 
 ========================================================
-![alt text](scatter_GTEx_localGRM_globalGRM_h2_2014-11-25.pdf)
+![alt text](plots/scatter_GTEx_localGRM_globalGRM_h2_2014-11-25.pdf)
 
 GCTA heritability: Y ~ localGRM + globalGRM h2 
 ========================================================
-![alt text](hist_GTEx_localGRM_globalGRM_h2_2014-11-25.pdf)
+![alt text](plots/hist_GTEx_localGRM_globalGRM_h2_2014-11-25.pdf)
 
 GCTA heritability: Y ~ localGRM + globalGRM SE 
 ========================================================
-![alt text](hist_GTEx_localGRM_globalGRM_SE_2014-11-25.pdf)
+![alt text](plots/hist_GTEx_localGRM_globalGRM_SE_2014-11-25.pdf)
 
 GCTA heritability: Y ~ localGRM + chrGRM + globalGRM h2 
 ======================================================== 
-![alt text](scatter_GTEx_localGRM_chrGRM_globalGRM_h2_2014-11-25.pdf)
+![alt text](plots/scatter_GTEx_localGRM_chrGRM_globalGRM_h2_2014-11-25.pdf)
 
 GCTA heritability: Y ~ localGRM + chrGRM + globalGRM h2 
 ========================================================
-![alt text](hist_GTEx_localGRM_chrGRM_globalGRM_h2_2014-11-25.pdf)
+![alt text](plots/hist_GTEx_localGRM_chrGRM_globalGRM_h2_2014-11-25.pdf)
 
 GCTA heritability: Y ~ localGRM + chrGRM + globalGRM SE 
 ========================================================
-![alt text](hist_GTEx_localGRM_chrGRM_globalGRM_SE_2014-11-25.pdf)
+![alt text](plots/hist_GTEx_localGRM_chrGRM_globalGRM_SE_2014-11-25.pdf)
