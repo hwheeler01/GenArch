@@ -62,7 +62,7 @@ GCTA heritability: Y ~ localGRM + globalGRM SE
 
 GCTA heritability: Y ~ localGRM + chrGRM + globalGRM h2 
 ======================================================== 
-![alt text](plots/scatter_GTEx_localGRM_chrGRM_globalGRM_h2_2014-11-25.pdf)
+![alt text](plots/scatter_GTEx_localGRM_chrGRM_globalGRM_h2_2014-11-25.png)
 
 GCTA heritability: Y ~ localGRM + chrGRM + globalGRM h2 
 ========================================================
