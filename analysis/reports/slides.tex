@@ -1,0 +1,113 @@
+% \documentclass[notes]{beamer}
+\documentclass[handout]{beamer}
+%\documentclass[handout,compress]{beamer}
+% Class options include: notes, notesonly, handout, trans,
+%                        hidesubsections, shadesubsections,
+%                        inrow, blue, red, grey, brown
+
+\usepackage[absolute,overlay]{textpos}
+\usepackage{bm} % to get bold greek letters
+\usepackage{empheq}
+
+%\definecolor{maroon}{rgb}{.6902,.1882,.3765}
+\definecolor{maroon}{rgb}{.5,0,0} %% this is uchicago maroon color
+%\definecolor{sienna}{rgb}{.53,.31,.16}
+%\definecolor{gold}{rgb}{1,.84314,.0000}
+% \setbeamercolor{frametitle}{bg=maroon}
+\usecolortheme[named=maroon]{structure}
+
+%\logo{\includegraphics[width=1.2in]{uc-logo-maroon}}
+
+% Theme for beamer presentation.
+% \usepackage{default} 
+\usepackage{beamerthemesplit} 
+% Other themes include: beamerthemebars, beamerthemelined, 
+%                       beamerthemetree, beamerthemetreebars  
+
+\usepackage{fancybox} 
+\setbeamertemplate{navigation symbols}{} 
+
+% this adds page numbers 
+\expandafter\def\expandafter\insertshorttitle\expandafter{%
+  \insertshorttitle\hfill%
+  \insertframenumber\,/\,\inserttotalframenumber}
+
+\usepackage{graphicx}
+\usepackage{xmpmulti}
+
+\usepackage{hyperref}
+
+
+\title[Information Content of Quantitative GWAS results]{Information Content of Quantitative Genomewide Aggregate Results}    % Enter your title between curly braces
+\author{Hae Kyung Im}                 % Enter your name between curly braces
+
+\institute{\includegraphics[width=2in]{uc-logo-maroon}}
+\date{\today}                    % Enter the date or \today between curly braces
+
+\setbeamercovered{dynamic}
+
+
+
+
+\begin{document}
+
+
+\newcommand{\myfigure}[2]{
+
+\begin{frame}
+  \frametitle{#1}   % Insert frame title between curly braces
+\begin{center}
+\includegraphics[height=3.0in]{plots/#2} 
+\end{center}
+\end{frame}
+
+}
+
+
+\newcommand{\myfigura}[2]{
+
+\begin{frame}
+  \frametitle{#1}   % Insert frame title between curly braces
+\begin{center}
+\includegraphics[height=2.5in]{plots/#2} 
+\end{center}
+\end{frame}
+
+}
+
+%----------
+% Creates title page of slide show using above information
+\begin{frame}
+  \titlepage
+\end{frame}
+
+%\section[Outline]{}
+
+% Creates table of contents slide incorporating
+% all \section and \subsection commands
+%\begin{frame}
+%  \tableofcontents	
+%\end{frame}
+%----------
+%\begin{frame}[fragile]
+%\frametitle{title verbatim}
+%\begin{small}
+%\begin{verbatim}
+%
+%normalizing transformation applied to cholesterol
+%
+%\end{verbatim}
+%\end{small}
+%\end{frame}
+%----------
+
+%\myfigure{$\hat Y$ for Children of Participants}{hapmap-yhat}% do not use dots on plot names except for .pdf, or .eps, etc.
+
+
+
+
+
+
+\end{document}
+
+

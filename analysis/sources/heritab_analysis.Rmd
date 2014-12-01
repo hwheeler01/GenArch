@@ -1,0 +1,157 @@
+---
+title: "Analyze Cis/Trans Heritability"
+author: "Hae Kyung Im"
+date: "November 30, 2014"
+output: html_document
+---
+
+```{r, echo=FALSE}
+
+rm(list=ls())
+options(digits=3,digits.sec=4,max.print=200)
+## other options (width=120,error=recover,,device="quartz")
+## options(warn=2) ## converts warnings into errors
+
+## useful libraries
+
+library(qvalue)
+library(MASS)
+library(reshape)
+library(Hmisc)
+library(dplyr)
+library(ggplot2)
+
+## paste operator
+
+"%&%" <- function(a, b) paste(a, b, sep="")
+
+## this file has functions that I use most often
+
+pre0 <- '/Users/haky/Work/im-lab/'
+
+source(pre0 %&% 'nas40t2/haky/R_functions/myfunctions2.r')
+source(pre0 %&% 'nas40t2/haky/R_functions/mygenetic.r')
+
+## define subdirectories
+
+pre <- '/Users/haky/GitHub/cross-tissue/analysis/'
+input_dir <- pre %&% 'input/'
+output_dir <- pre %&% 'output/'
+plot_dir <- pre %&% 'plots/'
+tempo_dir <- pre %&% 'tempo/'
+source_dir <- pre %&% "sources/"
+work_dir <- pre
+
+## functions specific to the project
+##source(source.dir %&% "functions.r")
+
+## working directory
+
+setwd(work_dir)
+
+## read the data
+
+##data <- read.table(file=input.dir %&% "data.txt",sep='\t', header=T, as.is=T)
+
+
+```
+
+
+```{r}
+
+h2_global <- read.table(input_dir %&% 'DGN-WB.globalGRM.h2.exp.2014-08-27.txt',header=T,as.is=T)
+h2_local <- read.table(input_dir %&% 'DGN-WB.localGRM.h2.exp.2014-08-30.txt',header=T,as.is=T)
+h2_both <- read.table(input_dir %&% 'DGN-WB.localGRM.plus.globalGRM.h2.exp.2014-09-05.txt',header=T,as.is=T)
+
+h2alkes <- read.table(input_dir %&% 'alkes-h2all.txt',header=T,as.is=T)
+h2fred <- read.table(input_dir %&% 'fred-h2PB.txt',header=T,as.is=T)
+names(h2alkes)[names(h2alkes)=='gname'] = 'gene'
+names(h2fred)[names(h2fred)=='gname'] = 'gene'
+
+str(h2_global)
+str(h2_local)
+str(h2_both)
+```
+TODO: Why only 13648 genes in h2 local. Did GCTA not converge? Investigate why.
+
+```{r}
+names(h2_global) = c("gene", "global0.h2",   "global0.se",   "global0.p"  )
+names(h2_local) = c("gene", "local0.h2",   "local0.se",   "local0.p"  )
+## join heritability estimates
+h2all = inner_join(h2_global,h2_local,by=c('gene'))
+h2all = inner_join(h2all,h2_both,by=c('gene'))
+
+h2all2 = inner_join(h2all,h2alkes,by=c('gene'))
+h2all2 = inner_join(h2all2,h2fred,by=c('gene'))
+
+## sort by h2 and plot
+## - [ ] h2 global0
+## - [ ] h2 local0
+## - [ ] h2 global
+## - [ ] h2 local
+
+# plot global0
+data <- h2all %>% select(global0.h2,global0.se) %>% arrange(global0.h2) 
+names(data) = c('h2','se')
+data <- data %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('global (only) Heritability')
+
+##ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin,ymax=ymax) ) + geom_point() + geom_point(aes(y=ymin),col='gray')+ geom_point(aes(y=ymax),col='gray')
+
+
+# plot local0
+data <-  h2all %>% select(local0.h2,local0.se) %>% arrange(local0.h2)
+names(data) = c('h2','se')
+data <- data %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('Local (only) Heritability')
+
+# plot local (estimated jointly with global)
+data <-  h2all %>% select(local.h2,local.se) %>% arrange(local.h2)
+names(data) <- c('h2','se')
+data <- data %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('Local (joint) Heritability')
+
+# plot global (estimated jointly with local)
+data <-  h2all %>% select(global.h2,global.se) %>% arrange(global.h2)
+names(data) <- c('h2','se')
+data <- data %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('Global (joint) Heritability')
+
+
+global.ind <- with(h2all, global.h2 - global.se * 2 > 0)
+global0.ind <- with(h2all, global0.h2 - global0.se * 2 > 0)
+local.ind <- with(h2all, local.h2-local.se * 2 > 0)
+local0.ind <- with(h2all, local0.h2-local0.se * 2 > 0)
+
+## - [ ] look at genes that didnt converge for local grm
+
+```
+
+TODO: how do Alkes and Fred estimate negative heritability?
+Alkes allows negative h2 but total variance is still positive definite because `h2*GRM + (1-h2)*I`, but interpretation is all messed up. Variance component `h2*GRM` cannot be negative definite.
+
+Results below show that if we only look at positive h2 estimates, the correlation between Alkes' heritability and Heathers becomes slightly larger.
+
+```{r}
+
+h2all2 %>% filter(h2bloodcis>0) %>% with(cor.test(h2bloodcis,local.h2,method='spearman'))
+```
+vs.
+```{r}
+h2all2  %>% with(cor.test(h2bloodcis,local.h2,method='spearman'))
+
+h2all2 %>% filter(h2bloodtra>0) %>% with(cor.test(h2bloodtra,global.h2,method='spearman'))
+
+```
+vs.
+```{r}
+h2all2  %>% with(cor.test(h2bloodtra,global.h2,method='spearman'))
+
+```
+
+TODO:
+compare adipose-specific h2 to alkes-adipose h2
+alkes-adipose ~ adipose-specific + cross tissue
+alkes-blood ~ blood-specific + cross tissue
+
+alkes-adipose ~ other-tissue-specific + cross tissue
