@@ -15,9 +15,9 @@ nperms <- 100 ##number of perms per run
 
 ###############################################
 ### Scan expression data
-idfile <- lmer.dir %&% "head.resid.SAMPID"
+idfile <- lmer.dir %&% "resid.SAMPID"
 genefile <- lmer.dir %&% "resid.GENE"
-expfile <- lmer.dir %&% "head.resid.SAMPIDxGENE"
+expfile <- lmer.dir %&% "resid.SAMPIDxGENE"
 
 sampid <- scan(idfile,"character")
 geneid <- scan(genefile, "character")
