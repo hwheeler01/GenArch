@@ -86,12 +86,12 @@ tislist <- names(largesets)
 
 	#output expression pheno for gcta
 	geneexp <- cbind(rownames(localexp),localexp[,j])
-	write.table(geneexp, file="tmp.pheno." %&% gencodeset, col.names=F, quote=F) #output pheno for gcta
+	write.table(geneexp, file="tmp.pheno." %&% gencodeset %&% "." %&% i, col.names=F, quote=F) #output pheno for gcta
 
 	## Y ~ globalGRM
-        runGLO <- "gcta64 --grm " %&% grm.dir %&% "GTEx.global" %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
+        runGLO <- "gcta64 --grm " %&% grm.dir %&% "GTEx.global" %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% "." %&% i %&% " --out tmp." %&% gencodeset %&% "." %&% i
         system(runGLO)
-        hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
+        hsq <- scan("tmp." %&% gencodeset %&% "." %&% i %&% ".hsq","character")
         if(hsq[23]=="of"){
                 res <- c(tis, nsubj, ensid, gene, NA) ##gcta did not converge, script is reading in previous Y~localGRM+globalGRM result
         }else{
@@ -101,9 +101,9 @@ tislist <- names(largesets)
 
 
         ## Y ~ localGRM
-        runLOC <- "gcta64 --grm " %&% grm.dir %&% ensid %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
+        runLOC <- "gcta64 --grm " %&% grm.dir %&% ensid %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% "." %&% i %&% " --out tmp." %&% gencodeset %&% "." %&% i
         system(runLOC)
-        hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
+        hsq <- scan("tmp." %&% gencodeset %&% "." %&% i %&% ".hsq","character")
         if(hsq[23]=="of"){
                 res <- c(tis, nsubj, ensid, gene, NA) ##gcta did not converge, script is reading in previous Y~localGRM+globalGRM result
         }else{
@@ -112,13 +112,13 @@ tislist <- names(largesets)
         loc.only.mat[j,1:5] <- res
 
         ## Y ~ localGRM + globalGRM
-        runMULT <- "echo " %&% grm.dir %&% ensid %&% "> tmp.multiGRM." %&% gencodeset
-        runMULT2 <- "echo " %&% grm.dir %&% "GTEx.global" %&% ">> tmp.multiGRM." %&% gencodeset
+        runMULT <- "echo " %&% grm.dir %&% ensid %&% "> tmp.multiGRM." %&% gencodeset %&% "." %&% i
+        runMULT2 <- "echo " %&% grm.dir %&% "GTEx.global" %&% ">> tmp.multiGRM." %&% gencodeset %&% "." %&% i
         system(runMULT)
         system(runMULT2)
-        runLOCGLO <- "gcta64 --mgrm-bin tmp.multiGRM." %&% gencodeset %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
+        runLOCGLO <- "gcta64 --mgrm-bin tmp.multiGRM." %&% gencodeset %&% "." %&% i %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% "." %&% i %&% " --out tmp." %&% gencodeset %&% "." %&% i
         system(runLOCGLO)
-        hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
+        hsq <- scan("tmp." %&% gencodeset %&% "." %&% i %&% ".hsq","character")
         if(hsq[18]=="logL0"){
                 locres <- c(tis, nsubj, ensid, gene, NA) ##gcta did not converge, script is reading in Y~localGRM result
                 glores <- c(tis, nsubj, ensid, gene, NA) ##gcta did not converge, script is reading in Y~localGRM result
@@ -135,12 +135,12 @@ tislist <- names(largesets)
 	    #output expression pheno for gcta
             perm <- sample(geneexp[,2],replace=F)
             permexp <- cbind(geneexp[,1],perm)
-            write.table(permexp, file="tmp.pheno." %&% gencodeset, col.names=F, quote=F) #output pheno for gcta
+            write.table(permexp, file="tmp.pheno." %&% gencodeset %&% "." %&% i, col.names=F, quote=F) #output pheno for gcta
 
             ## Y ~ globalGRM
-            runGLO <- "gcta64 --grm " %&% grm.dir %&% ensid %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
+            runGLO <- "gcta64 --grm " %&% grm.dir %&% ensid %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% "." %&% i %&% " --out tmp." %&% gencodeset %&% "." %&% i
             system(runGLO)
-            hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
+            hsq <- scan("tmp." %&% gencodeset %&% "." %&% i %&% ".hsq","character")
             if(hsq[23]=="of"){
                     res <- NA ##gcta did not converge, script is reading in previous Y~localGRM+globalGRM result
             }else{
@@ -150,9 +150,9 @@ tislist <- names(largesets)
 
 
             ## Y ~ localGRM
-            runLOC <- "gcta64 --grm " %&% grm.dir %&% ensid %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
+            runLOC <- "gcta64 --grm " %&% grm.dir %&% ensid %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% "." %&% i %&% " --out tmp." %&% gencodeset %&% "." %&% i
             system(runLOC)
-            hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
+            hsq <- scan("tmp." %&% gencodeset %&% "." %&% i %&% ".hsq","character")
             if(hsq[23]=="of"){
                     res <- NA ##gcta did not converge, script is reading in previous Y~localGRM+globalGRM result
             }else{
@@ -161,13 +161,13 @@ tislist <- names(largesets)
             loc.only.mat[j,k+5] <- res
 
             ## Y ~ localGRM + globalGRM
-            runMULT <- "echo " %&% grm.dir %&% ensid %&% "> tmp.multiGRM." %&% gencodeset
-            runMULT2 <- "echo " %&% grm.dir %&% "GTEx.global" %&% ">> tmp.multiGRM." %&% gencodeset
+            runMULT <- "echo " %&% grm.dir %&% ensid %&% "> tmp.multiGRM." %&% gencodeset %&% "." %&% i
+            runMULT2 <- "echo " %&% grm.dir %&% "GTEx.global" %&% ">> tmp.multiGRM." %&% gencodeset %&% "." %&% i
             system(runMULT)
             system(runMULT2)
-            runLOCGLO <- "gcta64 --mgrm-bin tmp.multiGRM." %&% gencodeset %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
+            runLOCGLO <- "gcta64 --mgrm-bin tmp.multiGRM." %&% gencodeset %&% "." %&% i %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% "." %&% i %&% " --out tmp." %&% gencodeset %&% "." %&% i
             system(runLOCGLO)
-            hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
+            hsq <- scan("tmp." %&% gencodeset %&% "." %&% i %&% ".hsq","character")
             if(hsq[18]=="logL0"){
                     locres <- NA ##gcta did not converge, script is reading in Y~localGRM result
                     glores <- NA ##gcta did not converge, script is reading in Y~localGRM result

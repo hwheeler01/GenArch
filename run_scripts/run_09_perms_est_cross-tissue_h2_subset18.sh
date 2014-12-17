@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #PBS -N R.gcta
 #PBS -S /bin/bash
 #PBS -l walltime=72:00:00
@@ -9,8 +8,7 @@
 #PBS -e $HOME/${PBS_JOBNAME}.e${PBS_JOBID}.err
 
 cd $PBS_O_WORKDIR
-
 module load R
 module load gcta/1.24.4
 
-time R --vanilla < 09_perms_est_cross-tissue_h2.r --args 18
+time R --no-save < 09_perms_est_cross-tissue_h2.r --args 18

@@ -11,4 +11,4 @@ cd $PBS_O_WORKDIR
 module load R
 module load gcta/1.24.4
 
-time R --vanilla < 10_perms_est_tissue-specifc_h2.r --args 04 2
+time R --no-save < 10_perms_est_tissue-specifc_h2.r --args 04 2
