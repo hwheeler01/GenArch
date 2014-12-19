@@ -6,8 +6,6 @@ se <- function(x) sqrt(var(x,na.rm=T)/sum(!is.na(x)))
 med <- function(x) median(x,na.rm=T)
 lci<-function(x) quantile(x, c(.025, 0.975),na.rm=T)[1]
 uci<-function(x) quantile(x, c(.025, 0.975),na.rm=T)[2]
-minimum <- function(x) min(x,na.rm=T)
-maximum <- function(x) max(x,na.rm=T)
 "%&%" = function(a,b) paste(a,b,sep="")
 mydir <- "/Users/heather/Dropbox/cross-tissue/"
 tissues <- scan('tissue.list','character',sep='\t')
