@@ -10,7 +10,7 @@ grm.dir <- my.dir %&% "gtex-grms/"
 
 gencodefile <- annot.dir %&% "gencode.v18.genes.patched_contigs.summary.protein." %&% args[1] ##genes split into 20 files
 gencodeset <- args[1]
-nperms <- 100 ##number of perms per run
+nperms <- 100 ##number of perms per run, runtime ~26-36 hours
 
 ###############################################
 ### Scan expression data
