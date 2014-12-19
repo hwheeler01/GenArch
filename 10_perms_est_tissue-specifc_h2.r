@@ -138,7 +138,7 @@ tislist <- names(largesets)
             write.table(permexp, file="tmp.pheno." %&% gencodeset %&% "." %&% i, col.names=F, quote=F) #output pheno for gcta
 
             ## Y ~ globalGRM
-            runGLO <- "gcta64 --grm " %&% grm.dir %&% ensid %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% "." %&% i %&% " --out tmp." %&% gencodeset %&% "." %&% i
+            runGLO <- "gcta64 --grm " %&% grm.dir %&% "GTEx.global" %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% "." %&% i %&% " --out tmp." %&% gencodeset %&% "." %&% i
             system(runGLO)
             hsq <- scan("tmp." %&% gencodeset %&% "." %&% i %&% ".hsq","character")
             if(hsq[23]=="of"){

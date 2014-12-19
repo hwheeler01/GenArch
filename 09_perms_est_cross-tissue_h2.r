@@ -112,7 +112,7 @@ for(i in 1:length(localensid)){
 		write.table(permexp, file="tmp.pheno." %&% gencodeset, col.names=F, quote=F) #output pheno for gcta
 
 		## Y ~ globalGRM
-                runGLO <- "gcta64 --grm " %&% grm.dir %&% ensid %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
+                runGLO <- "gcta64 --grm " %&% grm.dir %&% "GTEx.global" %&% " --reml --pheno tmp.pheno." %&% gencodeset %&% " --out tmp." %&% gencodeset
                 system(runGLO)
                 hsq <- scan("tmp." %&% gencodeset %&% ".hsq","character")
                 if(hsq[23]=="of"){
