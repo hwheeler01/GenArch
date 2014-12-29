@@ -8,7 +8,7 @@ lci<-function(x) quantile(x, c(.025, 0.975),na.rm=T)[1]
 uci<-function(x) quantile(x, c(.025, 0.975),na.rm=T)[2]
 "%&%" = function(a,b) paste(a,b,sep="")
 mydir <- "/Users/heather/Dropbox/cross-tissue/"
-tissues <- scan('tissue.list','character',sep='\t')
+tissues <- scan('tissue.list.prefix','character',sep='\t')
 
 
 ###plot all genes
@@ -16,7 +16,7 @@ for(i in 1:length(tissues)){
   tis <- tissues[i]
 
   ##local only
-  loconly <- read.table(mydir %&% 'GTEx_' %&% tis %&% '_h2_localonly_allgenes_100perms_2014-12-19.txt',sep='\t')
+  loconly <- read.table(mydir %&% tis %&% '_h2_localonly_allgenes_100perms_2014-12-19.txt',sep='\t')
   obs <- loconly[,5]
   perms <- loconly[,6:105]
   meanperms <- rowMeans(perms,na.rm=T)
@@ -32,7 +32,7 @@ for(i in 1:length(tissues)){
   print(loplot)
   
   ##global only
-  gloonly <- read.table('GTEx_' %&% tis %&% '_h2_globalonly_allgenes_100perms_2014-12-19.txt',sep='\t')
+  gloonly <- read.table(tis %&% '_h2_globalonly_allgenes_100perms_2014-12-19.txt',sep='\t')
   obs <- gloonly[,5]
   perms <- gloonly[,6:105]
   meanperms <- rowMeans(perms,na.rm=T)
@@ -48,7 +48,7 @@ for(i in 1:length(tissues)){
   print(goplot)
 
   ##local joint
-  locjoint <- read.table('GTEx_' %&% tis %&% '_h2_localjoint_allgenes_100perms_2014-12-19.txt',sep='\t')
+  locjoint <- read.table(tis %&% '_h2_localjoint_allgenes_100perms_2014-12-19.txt',sep='\t')
   obs <- locjoint[,5]
   perms <- locjoint[,6:105]
   meanperms <- rowMeans(perms,na.rm=T)
@@ -64,7 +64,7 @@ for(i in 1:length(tissues)){
   print(ljplot)
   
   ##global joint
-  glojoint <- read.table('GTEx_' %&% tis %&% '_h2_globaljoint_allgenes_100perms_2014-12-19.txt',sep='\t')
+  glojoint <- read.table(tis %&% '_h2_globaljoint_allgenes_100perms_2014-12-19.txt',sep='\t')
   obs <- glojoint[,5]
   perms <- glojoint[,6:105]
   meanperms <- rowMeans(perms,na.rm=T)
@@ -85,7 +85,7 @@ for(i in 1:length(tissues)){
   tis <- tissues[i]
   
   ##local only
-  loconly <- read.table(mydir %&% 'GTEx_' %&% tis %&% '_h2_localonly_allgenes_100perms_2014-12-19.txt',sep='\t')
+  loconly <- read.table(mydir %&% tis %&% '_h2_localonly_allgenes_100perms_2014-12-19.txt',sep='\t')
   obs <- loconly[,5]
   perms <- loconly[,6:105]
   meanperms <- rowMeans(perms,na.rm=T)
@@ -102,7 +102,7 @@ for(i in 1:length(tissues)){
   print(losub)
   
   ##global only
-  gloonly <- read.table('GTEx_' %&% tis %&% '_h2_globalonly_allgenes_100perms_2014-12-19.txt',sep='\t')
+  gloonly <- read.table(tis %&% '_h2_globalonly_allgenes_100perms_2014-12-19.txt',sep='\t')
   obs <- gloonly[,5]
   perms <- gloonly[,6:105]
   meanperms <- rowMeans(perms,na.rm=T)
@@ -119,7 +119,7 @@ for(i in 1:length(tissues)){
   print(gosub)
   
   ##local joint
-  locjoint <- read.table('GTEx_' %&% tis %&% '_h2_localjoint_allgenes_100perms_2014-12-19.txt',sep='\t')
+  locjoint <- read.table(tis %&% '_h2_localjoint_allgenes_100perms_2014-12-19.txt',sep='\t')
   obs <- locjoint[,5]
   perms <- locjoint[,6:105]
   meanperms <- rowMeans(perms,na.rm=T)
@@ -136,7 +136,7 @@ for(i in 1:length(tissues)){
   print(ljsub)
   
   ##global joint
-  glojoint <- read.table('GTEx_' %&% tis %&% '_h2_globaljoint_allgenes_100perms_2014-12-19.txt',sep='\t')
+  glojoint <- read.table(tis %&% '_h2_globaljoint_allgenes_100perms_2014-12-19.txt',sep='\t')
   obs <- glojoint[,5]
   perms <- glojoint[,6:105]
   meanperms <- rowMeans(perms,na.rm=T)
@@ -161,7 +161,7 @@ for(i in 1:length(tissues)){
   tis <- tissues[i]
   
   ##local only
-  loconly <- read.table(mydir %&% 'GTEx_' %&% tis %&% '_h2_localonly_allgenes_100perms_2014-12-19.txt',sep='\t')
+  loconly <- read.table(mydir %&% tis %&% '_h2_localonly_allgenes_100perms_2014-12-19.txt',sep='\t')
   obs <- loconly[,5]
   perms <- loconly[,6:105]
   medperms <- apply(perms,1,med)
@@ -179,7 +179,7 @@ for(i in 1:length(tissues)){
   print(losub)
   
   ##global only
-  gloonly <- read.table('GTEx_' %&% tis %&% '_h2_globalonly_allgenes_100perms_2014-12-19.txt',sep='\t')
+  gloonly <- read.table(tis %&% '_h2_globalonly_allgenes_100perms_2014-12-19.txt',sep='\t')
   obs <- gloonly[,5]
   perms <- gloonly[,6:105]
   medperms <- apply(perms,1,med)
@@ -197,7 +197,7 @@ for(i in 1:length(tissues)){
   print(gosub)
   
   ##local joint
-  locjoint <- read.table('GTEx_' %&% tis %&% '_h2_localjoint_allgenes_100perms_2014-12-19.txt',sep='\t')
+  locjoint <- read.table(tis %&% '_h2_localjoint_allgenes_100perms_2014-12-19.txt',sep='\t')
   obs <- locjoint[,5]
   perms <- locjoint[,6:105]
   medperms <- apply(perms,1,med)
@@ -215,7 +215,7 @@ for(i in 1:length(tissues)){
   print(ljsub)
   
   ##global joint
-  glojoint <- read.table('GTEx_' %&% tis %&% '_h2_globaljoint_allgenes_100perms_2014-12-19.txt',sep='\t')
+  glojoint <- read.table(tis %&% '_h2_globaljoint_allgenes_100perms_2014-12-19.txt',sep='\t')
   obs <- glojoint[,5]
   perms <- glojoint[,6:105]
   medperms <- apply(perms,1,med)
