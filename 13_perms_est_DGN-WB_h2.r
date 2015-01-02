@@ -8,9 +8,12 @@ exp.dir <- "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/"
 annot.dir <- "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/"
 grm.dir <- "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/localGRMs/"
 
-gencodefile <- annot.dir %&% "gencode.v12.V1.summary.protein.nodup.genenames." %&% args[1] ##genes split into 20 files
-gencodeset <- args[1]
-nperms <- 100 ##number of perms per run, runtime ~26-36 hours for gtex, will be longer for DGN
+#gencodefile <- annot.dir %&% "gencode.v12.V1.summary.protein.nodup.genenames." %&% args[1] ##genes split into 20 files
+#gencodeset <- args[1]
+## for subsets that didn't finish in 100 hours, split gencode files into 4 (~250 genes/file)
+gencodefile <- annot.dir %&% "gencode.v12.V1.summary.protein.nodup.genenames." %&% args[1] %&% "." %&% args[2]
+gencodeset <- args[1] %&% "." %&% args[2]
+nperms <- 100 ##number of perms per run, runtime >100 hours for DGN
 
 ###############################################
 ### Scan expression data
