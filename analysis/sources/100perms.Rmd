@@ -1,26 +1,130 @@
 ---
-title: "100 permutations of h2 estimation"
+title: "100 permutations of h^2^ estimation"
 author: "Heather E. Wheeler"
-date: "December 29, 2014"
+date: "January 13, 2014"
 output: html_document
 ---
+I performed 100 resampling permutations for heritability estimation, shuffling the gene expression labels for the DGN-WB and GTEx cross-tissue and orthogonal tissue-specific expression from the linear mixed-model (see cross-tissue_results_2014-11-25.md). Plotted in <span style="color:gray">gray</span> is the sorted h<sup>2</sup> from each permutation and in <span style="color:red">red</span> is the sorted h<sup>2</sup> from the observed data.
 
-I performed 100 resampling permutations for heritability estimation, shuffling the gene expression labels for the cross-tissue and orthogonal tissue-specific expression from the linear mixed-model (see cross-tissue_results_2014-11-25.md). Plotted in **black** is the median h2 of the 100 permutations, in <span style="color:gray">gray</span> is the 95% CI, and in <span style="color:red">red</span> is the h2 from the observed data.
-
-```{r,message=FALSE}
+```{r,message=FALSE,warning=FALSE}
 date <- Sys.Date()
 library(dplyr)
 library(ggplot2)
+library(reshape2)
+library(tidyr)
 se <- function(x) sqrt(var(x,na.rm=T)/sum(!is.na(x)))
 med <- function(x) median(x,na.rm=T)
 lci<-function(x) quantile(x, c(.025, 0.975),na.rm=T)[1]
 uci<-function(x) quantile(x, c(.025, 0.975),na.rm=T)[2]
+sortf<-function(x) sort(x,na.last=FALSE) #sort and add NA's to top
 "%&%" = function(a,b) paste(a,b,sep="")
 mydir <- "/Users/heather/Dropbox/cross-tissue/"
 tissues <- scan('tissue.list.prefix','character',sep='\t')
 ```
 ###plot all genes
-```{r}
+```{r,message=FALSE,warning=FALSE}
+for(i in 1:length(tissues)){
+  tis <- tissues[i]
+  ##local only
+  loconly <- read.table(mydir %&% tis %&% '_h2_localonly_allgenes_100perms_2014-12-19.txt',sep='\t')
+
+  data <- as.matrix(loconly[,5:105]) ##includes observed in first col
+  data<-apply(data,2,sortf) ##sort each column
+  data[is.na(data)] <- 0 ##replace NA's with 0
+  permatrix <- data[,2:ncol(data)] ##pull out the perms
+  permL <- melt(permatrix,id=x) ##convert to stacked data for ggplot
+  p1 <- ggplot(permL, aes(x=Var1,y=value,group=Var2))
+  p1 <- p1 + geom_line(color='gray')
+  obs <- as.matrix(data[,1]) ##pull out the observed data to plot thicker
+  obsL <- melt(obs,id=x) ##convert to stacked data for ggplot
+  losub <- p1 + geom_point(data=obsL,aes(x=Var1,y=value),color='red') + xlab("Genes sorted by h2") + ylab("h2") + ylim(0,1) + ggtitle(tis %&% ' Local (Only) Heritability')
+  print(losub)
+  
+  ##global only
+  gloonly <- read.table(tis %&% '_h2_globalonly_allgenes_100perms_2014-12-19.txt',sep='\t')
+ 
+  data <- as.matrix(gloonly[,5:105]) ##includes observed in first col
+  data<-apply(data,2,sortf) ##sort each column
+  data[is.na(data)] <- 0 ##replace NA's with 0
+  permatrix <- data[,2:ncol(data)] ##pull out the perms
+  permL <- melt(permatrix,id=x) ##convert to stacked data for ggplot
+  p1 <- ggplot(permL, aes(x=Var1,y=value,group=Var2))
+  p1 <- p1 + geom_line(color='gray')
+  obs <- as.matrix(data[,1]) ##pull out the observed data to plot thicker
+  obsL <- melt(obs,id=x) ##convert to stacked data for ggplot
+  gosub <- p1 + geom_point(data=obsL,aes(x=Var1,y=value),color='red') + xlab("Genes sorted by h2") + ylab("h2") + ylim(0,1) + ggtitle(tis %&% ' Global (Only) Heritability')
+  print(gosub)
+  
+  ##local joint
+  locjoint <- read.table(tis %&% '_h2_localjoint_allgenes_100perms_2014-12-19.txt',sep='\t')
+  
+  data <- as.matrix(locjoint[,5:105]) ##includes observed in first col
+  data<-apply(data,2,sortf) ##sort each column
+  data[is.na(data)] <- 0 ##replace NA's with 0
+  permatrix <- data[,2:ncol(data)] ##pull out the perms
+  permL <- melt(permatrix,id=x) ##convert to stacked data for ggplot
+  p1 <- ggplot(permL, aes(x=Var1,y=value,group=Var2))
+  p1 <- p1 + geom_line(color='gray')
+  obs <- as.matrix(data[,1]) ##pull out the observed data to plot thicker
+  obsL <- melt(obs,id=x) ##convert to stacked data for ggplot
+  ljsub <- p1 + geom_point(data=obsL,aes(x=Var1,y=value),color='red') + xlab("Genes sorted by h2") + ylab("h2") + ylim(0,1) + ggtitle(tis %&% ' Local (Joint) Heritability')
+  print(ljsub)
+  
+  ##global joint
+  glojoint <- read.table(tis %&% '_h2_globaljoint_allgenes_100perms_2014-12-19.txt',sep='\t')
+  
+  data <- as.matrix(glojoint[,5:105]) ##includes observed in first col
+  data<-apply(data,2,sortf) ##sort each column
+  data[is.na(data)] <- 0 ##replace NA's with 0
+  permatrix <- data[,2:ncol(data)] ##pull out the perms
+  permL <- melt(permatrix,id=x) ##convert to stacked data for ggplot
+  p1 <- ggplot(permL, aes(x=Var1,y=value,group=Var2))
+  p1 <- p1 + geom_line(color='gray')
+  obs <- as.matrix(data[,1]) ##pull out the observed data to plot thicker
+  obsL <- melt(obs,id=x) ##convert to stacked data for ggplot
+  gjsub <- p1 + geom_point(data=obsL,aes(x=Var1,y=value),color='red') + xlab("Genes sorted by h2") + ylab("h2") + ylim(0,1) + ggtitle(tis %&% ' Global (Joint) Heritability')
+  print(gjsub)
+}
+```
+
+
+##Local GRM prediction 95% CI comparison
+Histograms of the 95% CIs for the local h^2^ estimation in the marginal model (local GRM) and the joint model (local GRM + global GRM) are plotted. 
+
+```{r,message=FALSE,warning=FALSE}
+for(i in 1:length(tissues)){
+  tis <- tissues[i]
+  ##marginal model (local GRM model)
+  loconly <- read.table(mydir %&% tis %&% '_h2_localonly_allgenes_100perms_2014-12-19.txt',sep='\t')
+  perms <- loconly[,6:105]
+  minperms <- apply(perms,1,lci)
+  maxperms <- apply(perms,1,uci)
+  marginalCI <- maxperms-minperms
+  marginalCI[is.na(marginalCI)] <- 0 ##replace NA's with 0
+  marginal <- data.frame(marginalCI,"Marginal")
+  colnames(marginal) <- c("range","model")
+  ##joint model (local + global GRM model)
+  locjoint <- read.table(tis %&% '_h2_localjoint_allgenes_100perms_2014-12-19.txt',sep='\t')
+  perms <- locjoint[,6:105]
+  minperms <- apply(perms,1,lci)
+  maxperms <- apply(perms,1,uci)
+  jointCI <- maxperms-minperms
+  jointCI[is.na(jointCI)] <- 0 ##replace NA's with 0
+  joint <- data.frame(jointCI,"Joint")
+  colnames(joint) <- c("range","model")
+  all <- rbind(marginal,joint)
+  p1 <- ggplot(all, aes(x = range, fill = model)) + geom_histogram() + xlab("95% CI (upper - lower)") + ggtitle(tis %&% ' Local GRM h2 estimate 95% CIs')+ facet_grid(model~.)
+  print(p1)
+  res <- t.test(marginalCI,jointCI) ## is diff b/t joint and marginal CIs significant?
+  print(res)
+}
+```
+
+##95% CIs per gene
+Plotted in **black** is the median h^2^ of the 100 permutations, in <span style="color:gray">gray</span> is the 95% CI, and in <span style="color:red">red</span> is the h^2^ from the observed data for the corresponding gene.
+
+###plot all genes
+```{r,message=FALSE,warning=FALSE}
 for(i in 1:length(tissues)){
   tis <- tissues[i]
   ##local only
@@ -93,8 +197,8 @@ for(i in 1:length(tissues)){
 }
 ```
 
-###plot genes w/h2 > 0.05
-```{r}
+###plot genes w/h^2^ > 0.05
+```{r,message=FALSE,warning=FALSE}
 for(i in 1:length(tissues)){
   tis <- tissues[i]
   ##local only
