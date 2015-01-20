@@ -1,12 +1,12 @@
 ####by Heather E. Wheeler 20150108####
-args <- commandArgs(trailingOnly=T)
-#args <- '22'
+#args <- commandArgs(trailingOnly=T)
+args <- '22'
 "%&%" = function(a,b) paste(a,b,sep="")
 
 ###############################################
 ### Directories & Variables
-#pre <- "/Users/heather/Dropbox/elasticNet_testing"
-pre <- ""
+pre <- "/Users/heather/Dropbox/elasticNet_testing"
+#pre <- ""
 
 my.dir <- pre %&% "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/"
 ct.dir <- pre %&% "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/"
@@ -14,7 +14,7 @@ gt.dir <- pre %&% "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.predi
 en.dir <- pre %&% "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/EN/hapmap2/transcriptome-DGN-WB/"
 
 k <- 10 ### k-fold CV
-n <- 3 #number of k-fold CV replicates
+n <- 1 #number of k-fold CV replicates, remove nrep loop for this implementation
 tis <- "DGN-WB"  
 chrom <- as.numeric(args[1]) 
 chrname <- "chr" %&% chrom
@@ -29,39 +29,34 @@ alphalist <- 0:20/20 #vector of alphas to test in CV
 ### Functions & Libraries
 
 library(glmnet)
+library(doMC)
+registerDoMC()
+getDoParWorkers()
 
 stderr <- function(x) sqrt(var(x,na.rm=TRUE)/length(x))
 lower <- function(x) quantile(x,0.025,na.rm=TRUE)
 upper <- function(x) quantile(x,0.975,na.rm=TRUE)
 
-## convenience function to select best lambda over n k-fold cv replicates for linear model by Keston edited by Heather to get predicted values over different alphas
-glmnet.select <- function(response, covariates, nrep.set = 10, nfold.set = 10, alpha.set, foldid, ...) {
+## convenience function to select best lambda over 1 k-fold cv replicates for linear model by Keston edited by Heather to get predicted values over different alphas
+glmnet.select <- function(response, covariates, nfold.set = 10, alpha.set, foldid, ...) {
   require(glmnet)
   fullout <- list()
   for(h in 1:length(alphalist)){
-    best.lam.sim = vector()
-    best.cvm.sim = vector()
-    pred.matrix = matrix(0,nrow=dim(covariates)[1],ncol=nrep.set)
-    for (i in 1:nrep.set) {
-      glmnet.fit = cv.glmnet(covariates, response, nfolds = nfold.set, alpha = alpha.set[h], foldid = foldid[,i], keep = TRUE) 
-      new.df = data.frame(glmnet.fit$cvm, glmnet.fit$lambda, glmnet.fit$glmnet.fit$df, 1:length(glmnet.fit$lambda))
-      best.lam = new.df[which.min(new.df[,1]),] # needs to be min or max depending on cv measure (MSE min, AUC max, ...)
-      cvm.best = best.lam[,1]
-      nrow.max = best.lam[,4]
-      best.lam.sim[i] = nrow.max
-      best.cvm.sim[i] = cvm.best
-      pred.matrix[,i] = glmnet.fit$fit.preval[,nrow.max]
-    }
-    cvm.avg = mean(best.cvm.sim) # average cvm
-    nrow.max = as.integer(mean(best.lam.sim)) # best lambda over cv bootstraps
-    ret <- as.data.frame(glmnet.fit$glmnet.fit$beta[,nrow.max])
+    pred.matrix = matrix(0,nrow=dim(covariates)[1],ncol=1)
+
+    glmnet.fit = cv.glmnet(covariates, response, nfolds = nfold.set, alpha = alpha.set[h], foldid = foldid[,i], keep = TRUE, parallel=T) 
+    new.df = data.frame(glmnet.fit$cvm, glmnet.fit$lambda, glmnet.fit$glmnet.fit$df, 1:length(glmnet.fit$lambda))
+    best.lam = new.df[which.min(new.df[,1]),] # needs to be min or max depending on cv measure (MSE min, AUC max, ...)
+    cvm.best = best.lam[,1] #best CV-MSE
+    nrow.max = best.lam[,4] #row position of best lambda
+    pred.matrix[,1] = glmnet.fit$fit.preval[,nrow.max] #predicted values for best lambda
+
+    ret <- as.data.frame(glmnet.fit$glmnet.fit$beta[,nrow.max]) # vector of all betas
     ret[ret == 0.0] <- NA
     ret.vec = as.vector(ret[which(!is.na(ret)),]) # vector of non-zero betas
-    names(ret.vec) = rownames(ret)[which(!is.na(ret))]
-    min.lambda <- glmnet.fit$glmnet.fit$lambda[nrow.max]
-    pred.avg <- rowMeans(pred.matrix) #when nrep.set>1
-#   pred.avg <- pred.matrix #when nrep.set=1
-    output = list(ret.vec, cvm.avg, nrow.max, min.lambda, pred.avg, alpha.set[h])
+    names(ret.vec) = rownames(ret)[which(!is.na(ret))] # names (rsID) of non-zero betas
+    min.lambda <- glmnet.fit$glmnet.fit$lambda[nrow.max] #best lambda
+    output = list(ret.vec, cvm.best, nrow.max, min.lambda, pred.matrix, alpha.set[h])
     fullout <- c(fullout,output)
   }
   return(fullout)
@@ -114,15 +109,19 @@ groupid <- grouplist[,2:dim(grouplist)[2]]
 resultsarray <- array(0,c(length(explist),8))
 dimnames(resultsarray)[[1]] <- explist
 dimnames(resultsarray)[[2]] <- c("gene","alpha","cvm","lambda.iteration","lambda.min","n.snps","R2","pval")
+write(dimnames(resultsarray)[[2]],file="working" %&% tis %&% "_exp_" %&% k %&% "-foldCV_" %&% n %&% "-reps_elasticNet_bestAlpha_hapmap2snps_predictionInfo_chr" %&% chrom %&% "_" %&% date %&% ".txt",ncolumns=8)
 
 allR2array <- array(0,c(length(explist),1,length(alphalist)))
 dimnames(allR2array)[[1]] <- explist
 dimnames(allR2array)[[2]] <- c("R2")
 dimnames(allR2array)[[3]] <- alphalist
+write(c("gene",dimnames(allR2array)[[3]]),file="working" %&% tis %&% "_exp_" %&% k %&% "-foldCV_" %&% n %&% "-reps_elasticNet_eachAlphaR2_hapmap2snps_chr" %&% chrom %&% "_" %&% date %&% ".txt",ncolumns=22)
 
 allParray <- array(0,c(length(explist),length(alphalist)))
 dimnames(allParray)[[1]] <- explist
 dimnames(allParray)[[2]] <- alphalist
+
+
 
 for(i in 1:length(explist)){
   cat(i,"/",length(explist),"\n")
@@ -152,43 +151,47 @@ for(i in 1:length(explist)){
       exppheno[is.na(exppheno)] <- 0
       rownames(exppheno) <- rownames(exp.w.geno)
       ##run Cross-Validation over alphalist
-      cv <- glmnet.select(exppheno,cisgenos,nrep.set=n,nfold.set=k,alpha.set=alphalist,foldid=groupid) ###run lasso k-fold CV n times to determine best lambda & betas
+      cv <- glmnet.select(exppheno,cisgenos,nfold.set=k,alpha.set=alphalist,foldid=groupid) ###run glmnet k-fold CV once determine best lambda & betas
 
       allbetas <- list() ##non-zero betas for each alpha 1:length(alpha.set)
-      allcvm.avg <- vector() ##mean minimum cross-validated MSE for each alpha
-      allnrow.max <- vector() ##mean (as integer) of best lambda's vector position for each alpha
-      alllambdas <- vector() ##mean best lambda for each alpha
-      pred.avg.mat <- matrix(NA,nrow=length(exppheno),ncol=length(alphalist)) ##predicted values at each alpha
+      allcvm <- vector() ##minimum cross-validated MSE for each alpha
+      allnrow.max <- vector() ##best lambda's vector position for each alpha
+      alllambdas <- vector() ##best lambda for each alpha
+      pred.mat <- matrix(NA,nrow=length(exppheno),ncol=length(alphalist)) ##predicted values at each alpha
         
       for(j in 1:length(alphalist)*6){
         allbetas <- c(allbetas,cv[j-5])
-        allcvm.avg <- c(allcvm.avg,cv[[j-4]])
+        allcvm <- c(allcvm,cv[[j-4]])
         allnrow.max <- c(allnrow.max,cv[[j-3]])
         alllambdas <- c(alllambdas,cv[[j-2]])
-        pred.avg.mat[,j/6] <- cv[[j-1]]
+        pred.mat[,j/6] <- cv[[j-1]]
       }
-          
-      indexbestbetas <- which.min(allcvm.avg)
+      
+      indexbestbetas <- which.min(allcvm)
       bestbetas <- allbetas[[indexbestbetas]] ###how many SNPs in best predictor?
     }
   }
   if(length(bestbetas) > 0){
     for(a in 1:length(alphalist)){        
-      pred.en <- pred.avg.mat[,a] ###mean k-fold CV predictions from n reps
-      cvm <- allcvm.avg[a]
+      pred.en <- pred.mat[,a] ##k-fold CV predictions for each alpha
+      cvm <- allcvm[a]
       ### calculate correlation between predicted and observed expression
       res <- summary(lm(exppheno~pred.en))
       genename <- as.character(gencode[gene,6])
       allR2array[gene,1,a] <- res$r.squared
       allParray[gene,a] <- res$coef[2,4]
-    }  
+    }
+    ## output R2's
+    workingR2 <- c(gene,allR2array[gene,,])
+    write(workingR2,file="working" %&% tis %&% "_exp_" %&% k %&% "-foldCV_" %&% n %&% "-reps_elasticNet_eachAlphaR2_hapmap2snps_chr" %&% chrom %&% "_" %&% date %&% ".txt",append=T,ncolumns=22)
+    
     idxR2 <- which.max(allR2array[gene,1,]) ##determine alpha that gives max R2
     bestbetas <- allbetas[[idxR2]] ##may differ from min cvm betas
     
     ##for the best alpha, find output
     resultsarray[gene,1] <- genename
     resultsarray[gene,2] <- alphalist[idxR2]
-    resultsarray[gene,3] <- allcvm.avg[idxR2] ###add mean minimum cvm (cross-validated mean-squared error) to results
+    resultsarray[gene,3] <- allcvm[idxR2] ###add mean minimum cvm (cross-validated mean-squared error) to results
     resultsarray[gene,4] <- allnrow.max[idxR2] ###add mean of best lambda iteration to results
     resultsarray[gene,5] <- alllambdas[idxR2] ###add best lambda to results
     resultsarray[gene,6] <- length(bestbetas) ###add #snps in prediction to results
@@ -209,6 +212,7 @@ for(i in 1:length(explist)){
     resultsarray[gene,1] <- genename
     resultsarray[gene,2:8] <- c(NA,NA,NA,NA,0,NA,NA)
   }
+  write(resultsarray[gene,],"working" %&% tis %&% "_exp_" %&% k %&% "-foldCV_" %&% n %&% "-reps_elasticNet_bestAlpha_hapmap2snps_predictionInfo_chr" %&% chrom %&% "_" %&% date %&% ".txt",ncolumns=8,append=T)
 }
 
 
