@@ -1,12 +1,13 @@
 ####by Heather E. Wheeler 20150108####
-#args <- commandArgs(trailingOnly=T)
-args <- '22'
+date <- Sys.Date()
+args <- commandArgs(trailingOnly=T)
+#args <- '22'
 "%&%" = function(a,b) paste(a,b,sep="")
 
 ###############################################
 ### Directories & Variables
-pre <- "/Users/heather/Dropbox/elasticNet_testing"
-#pre <- ""
+#pre <- "/Users/heather/Dropbox/elasticNet_testing"
+pre <- ""
 
 my.dir <- pre %&% "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/"
 ct.dir <- pre %&% "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/"
@@ -29,9 +30,9 @@ alphalist <- 0:20/20 #vector of alphas to test in CV
 ### Functions & Libraries
 
 library(glmnet)
-library(doMC)
-registerDoMC()
-getDoParWorkers()
+#library(doMC)
+#registerDoMC(4)
+#getDoParWorkers()
 
 stderr <- function(x) sqrt(var(x,na.rm=TRUE)/length(x))
 lower <- function(x) quantile(x,0.025,na.rm=TRUE)
@@ -44,7 +45,7 @@ glmnet.select <- function(response, covariates, nfold.set = 10, alpha.set, foldi
   for(h in 1:length(alphalist)){
     pred.matrix = matrix(0,nrow=dim(covariates)[1],ncol=1)
 
-    glmnet.fit = cv.glmnet(covariates, response, nfolds = nfold.set, alpha = alpha.set[h], foldid = foldid[,i], keep = TRUE, parallel=T) 
+    glmnet.fit = cv.glmnet(covariates, response, nfolds = nfold.set, alpha = alpha.set[h], foldid = foldid[,1], keep = TRUE, parallel=F) 
     new.df = data.frame(glmnet.fit$cvm, glmnet.fit$lambda, glmnet.fit$glmnet.fit$df, 1:length(glmnet.fit$lambda))
     best.lam = new.df[which.min(new.df[,1]),] # needs to be min or max depending on cv measure (MSE min, AUC max, ...)
     cvm.best = best.lam[,1] #best CV-MSE
@@ -108,14 +109,18 @@ groupid <- grouplist[,2:dim(grouplist)[2]]
 
 resultsarray <- array(0,c(length(explist),8))
 dimnames(resultsarray)[[1]] <- explist
-dimnames(resultsarray)[[2]] <- c("gene","alpha","cvm","lambda.iteration","lambda.min","n.snps","R2","pval")
-write(dimnames(resultsarray)[[2]],file="working" %&% tis %&% "_exp_" %&% k %&% "-foldCV_" %&% n %&% "-reps_elasticNet_bestAlpha_hapmap2snps_predictionInfo_chr" %&% chrom %&% "_" %&% date %&% ".txt",ncolumns=8)
+resultscol <- c("gene","alpha","cvm","lambda.iteration","lambda.min","n.snps","R2","pval")
+dimnames(resultsarray)[[2]] <- resultscol
+workingbest <- "working_" %&% tis %&% "_exp_" %&% k %&% "-foldCV_" %&% n %&% "-reps_elasticNet_bestAlpha_hapmap2snps_predictionInfo_chr" %&% chrom %&% "_" %&% date %&% ".txt"
+write(resultscol,file=workingbest,ncolumns=8)
 
 allR2array <- array(0,c(length(explist),1,length(alphalist)))
 dimnames(allR2array)[[1]] <- explist
 dimnames(allR2array)[[2]] <- c("R2")
 dimnames(allR2array)[[3]] <- alphalist
-write(c("gene",dimnames(allR2array)[[3]]),file="working" %&% tis %&% "_exp_" %&% k %&% "-foldCV_" %&% n %&% "-reps_elasticNet_eachAlphaR2_hapmap2snps_chr" %&% chrom %&% "_" %&% date %&% ".txt",ncolumns=22)
+allR2col <- c("gene",dimnames(allR2array)[[3]])
+workingall <- "working_" %&% tis %&% "_exp_" %&% k %&% "-foldCV_" %&% n %&% "-reps_elasticNet_eachAlphaR2_hapmap2snps_chr" %&% chrom %&% "_" %&% date %&% ".txt"
+write(allR2col,file=workingall,ncolumns=22)
 
 allParray <- array(0,c(length(explist),length(alphalist)))
 dimnames(allParray)[[1]] <- explist
@@ -183,7 +188,7 @@ for(i in 1:length(explist)){
     }
     ## output R2's
     workingR2 <- c(gene,allR2array[gene,,])
-    write(workingR2,file="working" %&% tis %&% "_exp_" %&% k %&% "-foldCV_" %&% n %&% "-reps_elasticNet_eachAlphaR2_hapmap2snps_chr" %&% chrom %&% "_" %&% date %&% ".txt",append=T,ncolumns=22)
+    write(workingR2,file=workingall,append=T,ncolumns=22)
     
     idxR2 <- which.max(allR2array[gene,1,]) ##determine alpha that gives max R2
     bestbetas <- allbetas[[idxR2]] ##may differ from min cvm betas
@@ -212,10 +217,9 @@ for(i in 1:length(explist)){
     resultsarray[gene,1] <- genename
     resultsarray[gene,2:8] <- c(NA,NA,NA,NA,0,NA,NA)
   }
-  write(resultsarray[gene,],"working" %&% tis %&% "_exp_" %&% k %&% "-foldCV_" %&% n %&% "-reps_elasticNet_bestAlpha_hapmap2snps_predictionInfo_chr" %&% chrom %&% "_" %&% date %&% ".txt",ncolumns=8,append=T)
+  write(resultsarray[gene,],file=workingbest,ncolumns=8,append=T)
 }
 
 
-date <- Sys.Date()
 write.table(resultsarray,file=tis %&% "_exp_" %&% k %&% "-foldCV_" %&% n %&% "-reps_elasticNet_bestAlpha_hapmap2snps_predictionInfo_chr" %&% chrom %&% "_" %&% date %&% ".txt",quote=F,row.names=F)
 write.table(allR2array, file=tis %&% "_exp_" %&% k %&% "-foldCV_" %&% n %&% "-reps_elasticNet_eachAlphaR2_hapmap2snps_chr" %&% chrom %&% "_" %&% date %&% ".txt",quote=F)
