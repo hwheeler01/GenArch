@@ -30,9 +30,9 @@ alphalist <- 0:20/20 #vector of alphas to test in CV
 ### Functions & Libraries
 
 library(glmnet)
-#library(doMC)
-#registerDoMC(4)
-#getDoParWorkers()
+library(doMC)
+registerDoMC(4)
+getDoParWorkers()
 
 stderr <- function(x) sqrt(var(x,na.rm=TRUE)/length(x))
 lower <- function(x) quantile(x,0.025,na.rm=TRUE)
@@ -45,7 +45,7 @@ glmnet.select <- function(response, covariates, nfold.set = 10, alpha.set, foldi
   for(h in 1:length(alphalist)){
     pred.matrix = matrix(0,nrow=dim(covariates)[1],ncol=1)
 
-    glmnet.fit = cv.glmnet(covariates, response, nfolds = nfold.set, alpha = alpha.set[h], foldid = foldid[,1], keep = TRUE, parallel=F) 
+    glmnet.fit = cv.glmnet(covariates, response, nfolds = nfold.set, alpha = alpha.set[h], foldid = foldid[,1], keep = TRUE, parallel=T) 
     new.df = data.frame(glmnet.fit$cvm, glmnet.fit$lambda, glmnet.fit$glmnet.fit$df, 1:length(glmnet.fit$lambda))
     best.lam = new.df[which.min(new.df[,1]),] # needs to be min or max depending on cv measure (MSE min, AUC max, ...)
     cvm.best = best.lam[,1] #best CV-MSE
