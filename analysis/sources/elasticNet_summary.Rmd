@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ###DGN-WB Elastic Net 10-fold CV Results for gene expression prediction (SNPs within 1Mb of each gene)
-```{r}
+```{r,all alphas}
 library(ggplot2)
 library(reshape2)
 library(dplyr)
@@ -16,4 +16,14 @@ ngenes<-dim(data)[1]
 data_long<-melt(data,by=gene)
 p <- ggplot(data_long, aes(x = as.numeric(levels(variable))[variable] , y = value), group=gene) + geom_line(lwd = 0.5, show_guide = FALSE) + aes(color = gene) + xlab("alpha") + ylab("R2") + ggtitle("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes)")
 print(p)
+```
+
+```{r,best alpha}
+best<-read.table('~/Dropbox/elasticNet_testing/working_DGN-WB_exp_10-foldCV_1-reps_elasticNet_bestAlpha_hapmap2snps_predictionInfo_chr22_2015-01-21.txt',header=T)
+best <- best[complete.cases(best),]
+ngenes <- dim(best)[1]
+ggplot(best, aes(x = alpha)) + geom_histogram(binwidth=0.05) + ggtitle("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes)")
+ggplot(best, aes(x = R2)) + geom_histogram(binwidth=0.05) + ggtitle("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes)")
+ggplot(best, aes(x = as.factor(alpha), y=R2)) + geom_boxplot() + ggtitle("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes)") + xlab("alpha") + ylab("Best R2")
+summary(lm(R2~alpha,best))
 ```
