@@ -25,5 +25,9 @@ ngenes <- dim(best)[1]
 ggplot(best, aes(x = alpha)) + geom_histogram(binwidth=0.05) + ggtitle("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes)")
 ggplot(best, aes(x = R2)) + geom_histogram(binwidth=0.05) + ggtitle("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes)")
 ggplot(best, aes(x = as.factor(alpha), y=R2)) + geom_boxplot() + ggtitle("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes)") + xlab("alpha") + ylab("Best R2")
-summary(lm(R2~alpha,best))
+cor.test(best$R2,best$alpha,method="s")
+top<-best[best$R2>=0.1,]
+ngenes <- dim(top)[1]
+ggplot(top, aes(x = as.factor(alpha), y=R2)) + geom_boxplot() + ggtitle("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes with R2>0.1)") + xlab("alpha") + ylab("Best R2")
+cor.test(top$R2,top$alpha,method="s")
 ```
