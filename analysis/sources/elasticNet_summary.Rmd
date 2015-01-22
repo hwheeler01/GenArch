@@ -1,0 +1,19 @@
+---
+title: "Preliminary Elastic Net Results"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+###DGN-WB Elastic Net 10-fold CV Results for gene expression prediction (SNPs within 1Mb of each gene)
+```{r}
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+"%&%" = function(a,b) paste(a,b,sep="")
+data<-read.table('~/Dropbox/elasticNet_testing/working_DGN-WB_exp_10-foldCV_1-reps_elasticNet_eachAlphaR2_hapmap2snps_chr22_2015-01-21.txt',header=T,check.names=F)
+ngenes<-dim(data)[1]
+data_long<-melt(data,by=gene)
+p <- ggplot(data_long, aes(x = as.numeric(levels(variable))[variable] , y = value), group=gene) + geom_line(lwd = 0.5, show_guide = FALSE) + aes(color = gene) + xlab("alpha") + ylab("R2") + ggtitle("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes)")
+print(p)
+```
