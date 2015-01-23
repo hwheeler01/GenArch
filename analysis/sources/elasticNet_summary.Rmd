@@ -6,6 +6,7 @@ output: html_document
 ---
 
 ###DGN-WB Elastic Net 10-fold CV Results for gene expression prediction (SNPs within 1Mb of each gene)
+####All alphas
 ```{r,all alphas}
 library(ggplot2)
 library(reshape2)
@@ -16,8 +17,12 @@ ngenes<-dim(data)[1]
 data_long<-melt(data,by=gene)
 p <- ggplot(data_long, aes(x = as.numeric(levels(variable))[variable] , y = value), group=gene) + geom_line(lwd = 0.5, show_guide = FALSE) + aes(color = gene) + xlab("alpha") + ylab("R2") + ggtitle("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes)")
 print(p)
+topR2<-data_long[data_long$value>=0.1,]
+ngenes <- length(unique(topR2$gene))
+ggplot(topR2, aes(x = as.numeric(levels(variable))[variable] , y = value), group=gene) + geom_line(lwd = 0.5, show_guide = FALSE) + aes(color = gene) + xlab("alpha") + ylab("R2") + ggtitle("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes with R2>0.1)")
 ```
 
+####Best alphas
 ```{r,best alpha}
 best<-read.table('~/Dropbox/elasticNet_testing/working_DGN-WB_exp_10-foldCV_1-reps_elasticNet_bestAlpha_hapmap2snps_predictionInfo_chr22_2015-01-21.txt',header=T)
 best <- best[complete.cases(best),]
