@@ -1,0 +1,250 @@
+\documentclass[ignorenonframetext,]{beamer}
+\usetheme{Madrid}
+\usecolortheme{beaver}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\usepackage{lmodern}
+\ifxetex
+  \usepackage{fontspec,xltxtra,xunicode}
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\else
+  \ifluatex
+    \usepackage{fontspec}
+    \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+    \newcommand{\euro}{€}
+  \else
+    \usepackage[T1]{fontenc}
+    \usepackage[utf8]{inputenc}
+      \fi
+\fi
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textbf{{#1}}}
+\newcommand{\NormalTok}[1]{{#1}}
+\usepackage{url}
+\usepackage{letltxmacro}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight0.8\textheight\else\Gin@nat@height\fi}
+\makeatother
+\AtBeginDocument{
+  \LetLtxMacro\Oldincludegraphics\includegraphics
+  \renewcommand{\includegraphics}[2][]{%
+    \Oldincludegraphics[#1,width=\maxwidth,height=\maxheight,keepaspectratio]{#2}}
+}
+
+% Comment these out if you don't want a slide with just the
+% part/section/subsection/subsubsection title:
+\AtBeginPart{
+  \let\insertpartnumber\relax
+  \let\partname\relax
+  \frame{\partpage}
+}
+\AtBeginSection{
+  \let\insertsectionnumber\relax
+  \let\sectionname\relax
+  \frame{\sectionpage}
+}
+\AtBeginSubsection{
+  \let\insertsubsectionnumber\relax
+  \let\subsectionname\relax
+  \frame{\subsectionpage}
+}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+\setbeamertemplate{navigation symbols}{}
+
+\title[hwheeler@bsd.uchicago.edu]{Understanding the genetic architecture of gene expression} % The short title appears at the bottom of every slide, the full title is only on the title page
+
+\author{Heather E. Wheeler, PhD} % Your name
+\institute[] % Your institution as it will appear on the bottom of every slide, may be shorthand to save space
+{
+The University of Chicago \\ % Your institution for the title page
+\medskip
+\textit{hwheeler@bsd.uchicago.edu} % Your email address
+}
+\date{\today} % Date, can be changed to a custom date
+
+\begin{document}
+
+%\begin{frame}
+%\titlepage % Print the title page as the first slide
+%\end{frame}
+
+\title{Understanding the genetic architecture of gene expression}
+\author{Heather E. Wheeler}
+\date{February 13, 2015}
+
+\begin{document}
+\frame{\titlepage}
+
+\begin{frame}{PrediXcan Step 1: Build and Test Predictors}
+
+\includegraphics{figs/pred1.png}
+
+\end{frame}
+
+\begin{frame}{PrediXcan Step 2: Build database of Best Predictors}
+
+\includegraphics{figs/pred2.png}
+
+\end{frame}
+
+\begin{frame}{PrediXcan Step 3: Impute gene expression and test for
+association with phenotype}
+
+\includegraphics{figs/pred3.png}
+
+\end{frame}
+
+\begin{frame}{Explore the Genetic Architecture of Transcriptome
+Regulation}
+
+Optimizing predictors for PrediXcan also tells us about the underlying
+genetic architecture of gene expression.
+
+We can ask what proportion of genes have:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  \emph{cis} vs. \emph{trans} effects
+\item
+  sparse vs.~polygenic effects
+\item
+  cross-tissue vs.~tissue-specific effects
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Primary cohort: DGN}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  Battle et al. ``Characterizing the genetic basis of transcriptome
+  diversity through RNA-sequencing of 922 individuals.'' Genome Research
+  2014, 24(1):14-24
+\item
+  Whole blood from Depression Genes and Networks study
+\item
+  N=922
+\item
+  RNA-seq: ``normalized gene-level expression data used for trans-eQTL
+  analysis. The data was normalized using HCP (Hidden Covariates with
+  Prior) where the parameters were optimized for detecting `trans'
+  trends''
+\item
+  600K genotypes: I have imputed to 1000 Genomes, but some earlier
+  analyses were genotyped data only.
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{\emph{cis} vs. \emph{trans} effects}
+
+Estimate the heritability of gene expression in a joint analysis:
+localGRM (SNPs w/in 1Mb) + globalGRM (all SNPs)
+\includegraphics{figs/gcta-DGN-globalvlocal.png}
+
+\end{frame}
+
+\begin{frame}{Local (joint) sorted h\textsuperscript{2} estimates with
+95\% CI from GCTA}
+
+\includegraphics{figs/gcta-DGN-localh2.png}
+
+\tiny \url{https://github.com/hwheeler01/cross-tissue/blob/master/analysis/sources/heritab_analysis.html}
+
+\end{frame}
+
+\begin{frame}{Global (joint) sorted h\textsuperscript{2} estimates with
+95\% CI from GCTA}
+
+\includegraphics{figs/gcta-DGN-globalh2.png}
+
+\tiny \url{https://github.com/hwheeler01/cross-tissue/blob/master/analysis/sources/heritab_analysis.html}
+
+\end{frame}
+
+\begin{frame}{100 permutations to determine expected distribution of
+h\textsuperscript{2} estimates}
+
+\includegraphics{figs/perms-DGN-localjointh2.png}
+
+\end{frame}
+
+\begin{frame}{100 permutations to determine expected distribution of
+h\textsuperscript{2} estimates}
+
+\includegraphics{figs/perms-DGN-globaljointh2.png}
+
+\end{frame}
+
+\begin{frame}{Sort the h\textsuperscript{2} from each permutation}
+
+\includegraphics{figs/sortedperms-DGN-localjointh2.png}
+
+\end{frame}
+
+\begin{frame}{Sort the h\textsuperscript{2} from each permutation}
+
+\includegraphics{figs/sortedperms-DGN-globaljointh2.png}
+
+\end{frame}
+
+\begin{frame}{Sort the h\textsuperscript{2} from each permutation}
+
+\includegraphics{figs/sortedperms-DGN-globalonlyh2.png}
+
+\end{frame}
+
+\begin{frame}[fragile]{Modeling cross-tissue expression}
+
+Linear mixed effect model
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(lme4)}
+
+\NormalTok{fit <-}\StringTok{ }\KeywordTok{lmer}\NormalTok{(expression ~}\StringTok{ }\NormalTok{(}\DecValTok{1}\NormalTok{|SUBJID) +}\StringTok{ }\NormalTok{TISSUE }
+\NormalTok{+}\StringTok{ }\NormalTok{GENDER +}\StringTok{ }\NormalTok{PEERs) }
+
+\CommentTok{#cross-tissue expression}
+\NormalTok{fitranef <-}\StringTok{ }\KeywordTok{ranef}\NormalTok{(fit) }
+
+\CommentTok{#tissue-specific expression}
+\NormalTok{fitresid <-}\StringTok{ }\KeywordTok{resid}\NormalTok{(fit) }
+\end{Highlighting}
+\end{Shaded}
+
+\end{frame}
+
+\end{document}

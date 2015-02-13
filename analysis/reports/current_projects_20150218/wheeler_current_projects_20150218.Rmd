@@ -1,0 +1,97 @@
+---
+title: "Understanding the genetic architecture of gene expression"
+author: "Heather E. Wheeler"
+date: "February 13, 2015"
+output:
+  beamer_presentation:
+    highlight: tango
+    includes:
+      in_header: ~/GitHub/cross-tissue/analysis/reports/current_projects_20150218/header.tex
+    keep_tex: yes
+  ioslides_presentation:
+    highlight: espresso
+  slidy_presentation:
+    highlight: tango
+theme: Madrid
+colortheme: beaver
+---
+
+## PrediXcan Step 1: Build and Test Predictors
+![](figs/pred1.png)
+
+
+## PrediXcan Step 2: Build database of Best Predictors
+![](figs/pred2.png)
+
+
+## PrediXcan Step 3: Impute gene expression and test for association with phenotype
+![](figs/pred3.png)
+
+
+##Explore the Genetic Architecture of Transcriptome Regulation 
+
+Optimizing predictors for PrediXcan also tells us about the underlying genetic architecture of gene expression.
+
+We can ask what proportion of genes have:
+
+- *cis* vs. *trans* effects 
+- sparse vs. polygenic effects
+- cross-tissue vs. tissue-specific effects
+
+##Primary cohort: DGN
+- Battle et al. “Characterizing the genetic basis of transcriptome diversity through RNA-sequencing of 922 individuals.” Genome Research 2014, 24(1):14-24
+- Whole blood from Depression Genes and Networks study
+- N=922
+- RNA-seq: "normalized gene-level expression data used for trans-eQTL analysis. The data was normalized using HCP (Hidden Covariates with Prior) where the parameters were optimized for detecting 'trans' trends"
+- 600K genotypes: I have imputed to 1000 Genomes, but some earlier analyses were genotyped data only.
+
+##*cis* vs. *trans* effects
+Estimate the heritability of gene expression in a joint analysis: localGRM (SNPs w/in 1Mb) + globalGRM (all SNPs)
+![](figs/gcta-DGN-globalvlocal.png)
+
+##Local (joint) sorted h^2^ estimates with 95% CI from GCTA
+![](figs/gcta-DGN-localh2.png)
+
+\tiny https://github.com/hwheeler01/cross-tissue/blob/master/analysis/sources/heritab_analysis.html
+
+##Global (joint) sorted h^2^ estimates with 95% CI from GCTA
+![](figs/gcta-DGN-globalh2.png)
+
+\tiny https://github.com/hwheeler01/cross-tissue/blob/master/analysis/sources/heritab_analysis.html
+
+##100 permutations to determine expected distribution of h^2^ estimates
+<!--I performed 100 resampling permutations for heritability estimation, shuffling the gene expression labels for the DGN-WB. Points are the median h^2^ of the 100 permutations, \textcolor{gray}{95\% CI}, \textcolor{red}{h2}-->
+![](figs/perms-DGN-localjointh2.png)
+
+##100 permutations to determine expected distribution of h^2^ estimates
+<!--I performed 100 resampling permutations for heritability estimation, shuffling the gene expression labels for the DGN-WB. Points are the median h^2^ of the 100 permutations, \textcolor{gray}{95\% CI}, \textcolor{red}{h2}-->
+![](figs/perms-DGN-globaljointh2.png)
+
+##Sort the h^2^ from each permutation
+<!--Plotted in <span style="color:gray">gray</span> is the sorted h<sup>2</sup> from each permutation and in <span style="color:red">red</span> is the sorted h<sup>2</sup> from the observed data.-->
+![](figs/sortedperms-DGN-localjointh2.png)
+
+##Sort the h^2^ from each permutation
+<!--Plotted in <span style="color:gray">gray</span> is the sorted h<sup>2</sup> from each permutation and in <span style="color:red">red</span> is the sorted h<sup>2</sup> from the observed data.-->
+![](figs/sortedperms-DGN-globaljointh2.png)
+
+##Sort the h^2^ from each permutation
+<!--Plotted in <span style="color:gray">gray</span> is the sorted h<sup>2</sup> from each permutation and in <span style="color:red">red</span> is the sorted h<sup>2</sup> from the observed data.-->
+![](figs/sortedperms-DGN-globalonlyh2.png)
+
+## Modeling cross-tissue expression
+Linear mixed effect model
+
+```{r,eval=F}
+library(lme4)
+
+fit <- lmer(expression ~ (1|SUBJID) + TISSUE 
++ GENDER + PEERs) 
+
+#cross-tissue expression
+fitranef <- ranef(fit) 
+
+#tissue-specific expression
+fitresid <- resid(fit) 
+```
+
