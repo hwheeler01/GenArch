@@ -4,7 +4,7 @@ date = Sys.Date()
 
 ###############################################
 ### Directories & Variables
-my.dir <- "/group/im-lab/hwheeler/cross-tissue/"
+my.dir <- "/group/im-lab/nas40t2/hwheeler/cross-tissue/"
 rna.dir <- my.dir %&% "gtex-rnaseq/"
 
 ################################################
@@ -23,11 +23,11 @@ expdata <- matrix(exp, ncol=length(expidlist), byrow=T)
 colnames(expdata) <- expidlist
 rownames(expdata) <- expgenelist
 
-expidinfo <- read.table(rna.dir %&% "GTEx_Analysis_2014-06-13.RNA-seq.IDinfo.PCs.PFs",sep="\t",header=T)
+expidinfo <- read.table(rna.dir %&% "GTEx_Analysis_2014-06-13.RNA-seq.meanRPKM0.1.IDinfo.PCs.PFs",sep="\t",header=T)
 
 ###quantile normalize and transform to standard normal expdata matrix, as in GTEx paper###
 
-explist <- subset(rowMeans(expdata), rowMeans(expdata)>0) ###pull genes with mean expression > 0###
+explist <- subset(rowMeans(expdata), rowMeans(expdata)>0.1) ###pull genes with mean expression > 0.1###
 explist <- names(explist)
 nz.expdata <- expdata[explist,]
 
