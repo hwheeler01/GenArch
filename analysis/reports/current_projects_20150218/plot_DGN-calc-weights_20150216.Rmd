@@ -1,0 +1,100 @@
+---
+title: "plot_DGN-calc-weights_20150216"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+###DGN-WB Elastic Net 10-fold CV Results for gene expression prediction (SNPs within 1Mb of each gene)
+####Compare alpha=0.5 to alpha=1
+```{r,compareEN,fig.width=5,fig.height=5}
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+"%&%" = function(a,b) paste(a,b,sep="")
+alpha1 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_elasticNet_alpha1_imputedSNPs_chr1-22_2015-02-02.txt', header=T)
+alpha0.5 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_elasticNet_alpha0.5_imputedSNPs_chr1-22_2015-02-02.txt', header=T)
+dim(alpha1)
+dim(alpha0.5)
+en <- inner_join(alpha1,alpha0.5,by="gene")
+with(en,plot(R2.x,R2.y,xlab='alpha=1 R2',ylab='alpha=0.5 R2',xlim=c(0,1),ylim=c(0,1),main='E-N DGN-WB all 13K protein coding genes',cex=0.5,col=rgb(100,100,100,100,maxColorValue=255)))
+abline(0,1,col="red")
+with(en,t.test(R2.x>R2.y))
+```
+
+####Compare polyscore thresholds
+```{r,comparePS}
+"%&%" = function(a,b) paste(a,b,sep="")
+ps4 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh1e-04_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps3 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh0.001_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps2 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh0.01_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps05 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh0.05_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps5 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh0.5_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps1 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh1_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps4 <- ps4 %>% select(gene,CV.R2)
+ps3 <- ps3 %>% select(gene,CV.R2)
+ps2 <- ps2 %>% select(gene,CV.R2)
+ps05 <- ps05 %>% select(gene,CV.R2)
+ps5 <- ps5 %>% select(gene,CV.R2)
+ps1 <- ps1 %>% select(gene,CV.R2)
+all <- inner_join(ps4,ps3,by='gene')
+all <- inner_join(all,ps2,by='gene')
+all <- inner_join(all,ps05,by='gene')
+all <- inner_join(all,ps5,by='gene')
+all <- inner_join(all,ps1,by='gene')
+colnames(all) <- c('gene',0.0001,0.001,0.01,0.05,0.5,1)
+all <- all[complete.cases(all),]
+all_long <- melt(all,by=gene)
+ngenes<-dim(all)[1]
+p <- ggplot(all_long, aes(x = -log10(as.numeric(levels(variable))[variable]), y = value), group=gene) + geom_line(lwd = 0.5, show_guide = FALSE) + aes(color = gene) + xlab("-log10(p) threshold") + ylab("R2") + ggtitle("Polyscore DGN-WB (" %&% ngenes %&% " protein coding genes)")
+print(p)
+
+p <- ggplot(all_long, aes(x = -log10(as.numeric(levels(variable))[variable]), y = value), group=gene) + geom_line(lwd = 0.5, show_guide = FALSE) + aes(color = gene) + xlab("-log10(p) threshold") + ylab("R2") + ggtitle("Polyscore DGN-WB (protein coding genes with R2>0.5)") + coord_cartesian(ylim=c(0.5,0.9))
+print(p)
+```
+
+####Compare polyscore to E-N
+```{r,comparePS-EN,fig.width=5,fig.height=5}
+"%&%" = function(a,b) paste(a,b,sep="")
+alpha1 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_elasticNet_alpha1_imputedSNPs_chr1-22_2015-02-02.txt', header=T)
+ps4 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh1e-04_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps05 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh0.05_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+all <- inner_join(alpha1,ps4,by='gene')
+all <- inner_join(all,ps05,by='gene')
+with(all,plot(R2,CV.R2.x,xlab='LASSO (alpha=1) R2',ylab='Polyscore P < 0.0001 R2',xlim=c(0,1),ylim=c(0,1),main='DGN-WB predictive performance',cex=0.5,col=rgb(100,100,100,100,maxColorValue=255)))
+abline(0,1,col="red")
+with(all,t.test(R2>CV.R2.x))
+with(all,plot(R2,CV.R2.y,xlab='LASSO (alpha=1) R2',ylab='Polyscore P < 0.05 R2',xlim=c(0,1),ylim=c(0,1),main='DGN-WB predictive performance',cex=0.5,col=rgb(100,100,100,100,maxColorValue=255)))
+abline(0,1,col="red")
+with(all,t.test(R2>CV.R2.y))
+with(all,plot(CV.R2.x,CV.R2.y,xlab='Polyscore P < 0.0001 R2',ylab='Polyscore P < 0.05 R2',xlim=c(0,1),ylim=c(0,1),main='DGN-WB predictive performance',cex=0.5,col=rgb(100,100,100,100,maxColorValue=255)))
+abline(0,1,col="red")
+with(all,t.test(CV.R2.x>CV.R2.y))
+
+ps2 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh0.01_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+all <- inner_join(all,ps2,by='gene')
+with(all,plot(CV.R2.x,CV.R2,xlab='Polyscore P < 0.0001 R2',ylab='Polyscore P < 0.01 R2',xlim=c(0,1),ylim=c(0,1),main='DGN-WB predictive performance',cex=0.5,col=rgb(100,100,100,100,maxColorValue=255)))
+abline(0,1,col="red")
+with(all,t.test(CV.R2.x>CV.R2))
+```
+
+####Compare n.snps per model
+```{r,nsnps,fig.width=5,fig.height=5}
+alpha1 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_elasticNet_alpha1_imputedSNPs_chr1-22_2015-02-02.txt', header=T)
+alpha0.5 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_elasticNet_alpha0.5_imputedSNPs_chr1-22_2015-02-02.txt', header=T)
+ps4 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh1e-04_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps05 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh0.05_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+alpha1 <- alpha1 %>% select(gene,n.snps)
+alpha0.5 <- alpha0.5 %>% select(gene,n.snps)
+ps4 <- ps4 %>% select(gene,n.snps)
+ps05 <- ps05 %>% select(gene,n.snps)
+all <- inner_join(alpha1,alpha0.5,by='gene')
+all <- inner_join(all,ps4,by='gene')
+all <- inner_join(all,ps05,by='gene')
+colnames(all) <- c('gene','EN.a=1','EN.a=0.5','PS.e-04','PS.0.05')
+all_long <- melt(all,by=gene)
+p <- ggplot(all_long, aes(x = variable, y = value))
+p + geom_boxplot() + ggtitle("Number of SNPs in predictive model") + xlab("model") + ylab("n SNPs")
+p <- ggplot(all_long, aes(x = variable, y = value))
+p + geom_boxplot() + ggtitle("Number of SNPs in predictive model") + xlab("model") + ylab("n SNPs") + coord_cartesian(ylim=c(0,250))
+```

@@ -41,7 +41,7 @@ We can ask what proportion of genes have:
 ##Primary cohort: DGN
 - Battle et al. “Characterizing the genetic basis of transcriptome diversity through RNA-sequencing of 922 individuals.” Genome Research 2014, 24(1):14-24
 - Whole blood from Depression Genes and Networks study
-- N=922
+- n = 922
 - RNA-seq: "normalized gene-level expression data used for trans-eQTL analysis. The data was normalized using HCP (Hidden Covariates with Prior) where the parameters were optimized for detecting 'trans' trends"
 - 600K genotypes: I have imputed to 1000 Genomes, but some earlier analyses were genotyped data only.
 
@@ -79,6 +79,66 @@ Estimate the heritability of gene expression in a joint analysis: localGRM (SNPs
 <!--Plotted in <span style="color:gray">gray</span> is the sorted h<sup>2</sup> from each permutation and in <span style="color:red">red</span> is the sorted h<sup>2</sup> from the observed data.-->
 ![](figs/sortedperms-DGN-globalonlyh2.png)
 
+##*cis* vs. *trans* effects
+Try a larger sample to better caputure *trans* effects
+
+**Framingham Heart Study**
+
+- n = 5257
+- exon expression array and genotype array
+
+##sparse vs. polygenic effects
+`glmnet` solves the following problem <span class="math">\[
+\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right],
+\]</span> over a grid of values of <span class="math">\(\lambda\)</span> covering the entire range. 
+
+The <em>elastic-net</em> penalty is controlled by <span class="math">\(\alpha\)</span>, and bridges the gap between lasso (<span class="math">\(\alpha=1\)</span>, the default) and ridge (<span class="math">\(\alpha=0\)</span>). The tuning parameter <span class="math">\(\lambda\)</span> controls the overall strength of the penalty.
+
+\small <http://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html>
+
+##sparse vs. polygenic effects
+![](figs/enline.png)
+
+For each gene, determine <span class="math">\(\alpha\)</span> with best 10-fold CV predictive performance using *cis* SNPs.
+
+##Predictive performance consistent across most alphas
+![](figs/chr22EN.png)
+
+##Predictive performance consistent between <span class="math">\(\alpha\)</span>=0.5 and <span class="math">\(\alpha\)</span>=1
+![](figs/DGN-EN-alpha-05v10.png)
+
+##Also tested Polyscore predictive performance using 10-fold CV
+$expression = \sum\hat{w}*gt$
+
+Single variant linear regression coefficients ($w$) at several P-value thresholds included in the additive model:
+
+- $P<0.0001$
+- $P<0.001$
+- $P<0.01$
+- $P<0.05$
+- $P<0.5$
+- $P<1$
+
+##Polyscore (*cis* SNPs only) predictive performance
+![](figs/psDGN.png)
+
+##Polyscore (*cis* SNPs only) predictive performance
+![](figs/psDGN-R205.png)
+
+##LASSO predicts gene expression better than Polyscore
+![](figs/PSvLASSO.png)
+
+##For robustness, consider EN (alpha=0.5) for PrediXcan
+\begin{columns}[c]  %the "c" option specifies center vertical alignment
+\column{.5\textwidth}  %column designated by a command
+  \includegraphics[height=3in]{figs/nsnps.png}
+\column{.5\textwidth}
+  \includegraphics[height=3in]{figs/nsnpsZoom.png}
+\end{columns}
+
+## cross-tissue vs. tissue-specific effects with GTEx
+![](figs/gtex.png)
+
 ## Modeling cross-tissue expression
 Linear mixed effect model
 
@@ -95,3 +155,29 @@ fitranef <- ranef(fit)
 fitresid <- resid(fit) 
 ```
 
+##Estimating heritability with GCTA
+
+Tested two genetic relationship matrix (GRM) models for each expressed gene
+
+- localGRM (SNPs within 1 Mb of gene)
+- localGRM + globalGRM (all SNPs)
+
+First pass: estimated h^2^ of cross-tissue expression and tissue-specific expression in the 7 tissues with the most samples
+
+##GCTA heritability: Y ~ localGRM h2
+![alt text](/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_h2_2014-11-25.png)
+
+##GCTA heritability: Y ~ localGRM h2 **ZOOM**
+![alt text](/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_h2_ylim3000_2014-11-25.png)
+
+##GCTA heritability: Y ~ localGRM p-values
+![alt text](/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_p_2014-11-25.png)
+
+##GCTA heritability: Y ~ localGRM + globalGRM h2 
+![alt text](/Users/heather/GitHub/cross-tissue/plots/scatter_GTEx_localGRM_globalGRM_h2_2014-11-25.png)
+
+##GCTA heritability: Y ~ localGRM + globalGRM h2 
+![alt text](/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_globalGRM_h2_2014-11-25.png)
+
+##GCTA heritability: Y ~ localGRM + globalGRM SE 
+![alt text](/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_globalGRM_se_2014-11-25.png)

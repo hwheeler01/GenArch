@@ -155,7 +155,7 @@ We can ask what proportion of genes have:
 \item
   Whole blood from Depression Genes and Networks study
 \item
-  N=922
+  n = 922
 \item
   RNA-seq: ``normalized gene-level expression data used for trans-eQTL
   analysis. The data was normalized using HCP (Hidden Covariates with
@@ -226,6 +226,120 @@ h\textsuperscript{2} estimates}
 
 \end{frame}
 
+\begin{frame}{\emph{cis} vs. \emph{trans} effects}
+
+Try a larger sample to better caputure \emph{trans} effects
+
+\textbf{Framingham Heart Study}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  n = 5257
+\item
+  exon expression array and genotype array
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{sparse vs.~polygenic effects}
+
+\texttt{glmnet} solves the following problem {\[
+\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right],
+\]} over a grid of values of {$\lambda$} covering the entire range.
+
+The elastic-net penalty is controlled by {$\alpha$}, and bridges the gap
+between lasso ({$\alpha=1$}, the default) and ridge ({$\alpha=0$}). The
+tuning parameter {$\lambda$} controls the overall strength of the
+penalty.
+
+\small \url{http://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html}
+
+\end{frame}
+
+\begin{frame}{sparse vs.~polygenic effects}
+
+\includegraphics{figs/enline.png}
+
+For each gene, determine {$\alpha$} with best 10-fold CV predictive
+performance using \emph{cis} SNPs.
+
+\end{frame}
+
+\begin{frame}{Predictive performance consistent across most alphas}
+
+\includegraphics{figs/chr22EN.png}
+
+\end{frame}
+
+\begin{frame}{Predictive performance consistent between {$\alpha$}=0.5
+and {$\alpha$}=1}
+
+\includegraphics{figs/DGN-EN-alpha-05v10.png}
+
+\end{frame}
+
+\begin{frame}{Also tested Polyscore predictive performance using 10-fold
+CV}
+
+$expression = \sum\hat{w}*gt$
+
+Single variant linear regression coefficients ($w$) at several P-value
+thresholds included in the additive model:
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  $P<0.0001$
+\item
+  $P<0.001$
+\item
+  $P<0.01$
+\item
+  $P<0.05$
+\item
+  $P<0.5$
+\item
+  $P<1$
+\end{itemize}
+
+\end{frame}
+
+\begin{frame}{Polyscore (\emph{cis} SNPs only) predictive performance}
+
+\includegraphics{figs/psDGN.png}
+
+\end{frame}
+
+\begin{frame}{Polyscore (\emph{cis} SNPs only) predictive performance}
+
+\includegraphics{figs/psDGN-R205.png}
+
+\end{frame}
+
+\begin{frame}{LASSO predicts gene expression better than Polyscore}
+
+\includegraphics{figs/PSvLASSO.png}
+
+\end{frame}
+
+\begin{frame}{For robustness, consider EN (alpha=0.5) for PrediXcan}
+
+\begin{columns}[c]  %the "c" option specifies center vertical alignment
+\column{.5\textwidth}  %column designated by a command
+  \includegraphics[height=3in]{figs/nsnps.png}
+\column{.5\textwidth}
+  \includegraphics[height=3in]{figs/nsnpsZoom.png}
+\end{columns}
+
+\end{frame}
+
+\begin{frame}{cross-tissue vs.~tissue-specific effects with GTEx}
+
+\includegraphics{figs/gtex.png}
+
+\end{frame}
+
 \begin{frame}[fragile]{Modeling cross-tissue expression}
 
 Linear mixed effect model
@@ -244,6 +358,64 @@ Linear mixed effect model
 \NormalTok{fitresid <-}\StringTok{ }\KeywordTok{resid}\NormalTok{(fit) }
 \end{Highlighting}
 \end{Shaded}
+
+\end{frame}
+
+\begin{frame}{Estimating heritability with GCTA}
+
+Tested two genetic relationship matrix (GRM) models for each expressed
+gene
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  localGRM (SNPs within 1 Mb of gene)
+\item
+  localGRM + globalGRM (all SNPs)
+\end{itemize}
+
+First pass: estimated h\textsuperscript{2} of cross-tissue expression
+and tissue-specific expression in the 7 tissues with the most samples
+
+\end{frame}
+
+\begin{frame}{GCTA heritability: Y \textasciitilde{} localGRM h2}
+
+\includegraphics{/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_h2_2014-11-25.png}
+
+\end{frame}
+
+\begin{frame}{GCTA heritability: Y \textasciitilde{} localGRM h2
+\textbf{ZOOM}}
+
+\includegraphics{/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_h2_ylim3000_2014-11-25.png}
+
+\end{frame}
+
+\begin{frame}{GCTA heritability: Y \textasciitilde{} localGRM p-values}
+
+\includegraphics{/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_p_2014-11-25.png}
+
+\end{frame}
+
+\begin{frame}{GCTA heritability: Y \textasciitilde{} localGRM +
+globalGRM h2}
+
+\includegraphics{/Users/heather/GitHub/cross-tissue/plots/scatter_GTEx_localGRM_globalGRM_h2_2014-11-25.png}
+
+\end{frame}
+
+\begin{frame}{GCTA heritability: Y \textasciitilde{} localGRM +
+globalGRM h2}
+
+\includegraphics{/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_globalGRM_h2_2014-11-25.png}
+
+\end{frame}
+
+\begin{frame}{GCTA heritability: Y \textasciitilde{} localGRM +
+globalGRM SE}
+
+\includegraphics{/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_globalGRM_se_2014-11-25.png}
 
 \end{frame}
 
