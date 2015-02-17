@@ -3,7 +3,7 @@ args <- commandArgs(trailingOnly=T)
 "%&%" = function(a,b) paste(a,b,sep="")
 date = Sys.Date()
 
-my.dir <- "/group/im-lab/hwheeler/cross-tissue/"
+my.dir <- "/group/im-lab/nas40t2/hwheeler/cross-tissue/"
 lmer.dir <- my.dir %&% "lmer.fits/"
 annot.dir <- my.dir %&% "gtex-annot/"
 grm.dir <- my.dir %&% "gtex-grms/"
@@ -13,9 +13,9 @@ gencodeset <- args[1]
 
 ###############################################
 ### Scan expression data
-idfile <- lmer.dir %&% "ranef.SUBJID"
-genefile <- lmer.dir %&% "ranef.GENE"
-expfile <- lmer.dir %&% "ranef.SUBJIDxGENE"
+idfile <- lmer.dir %&% "ranef.mean0.1.SUBJID"
+genefile <- lmer.dir %&% "ranef.mean0.1.GENE"
+expfile <- lmer.dir %&% "ranef.mean0.1.SUBJIDxGENE"
 
 subjid <- scan(idfile,"character")
 geneid <- scan(genefile, "character")
