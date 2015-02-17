@@ -136,11 +136,17 @@ Single variant linear regression coefficients ($w$) at several P-value threshold
   \includegraphics[height=3in]{figs/nsnpsZoom.png}
 \end{columns}
 
+##LASSO predictive performance reaches (or exceeds?) local h^2^ of most genes
+![](figs/DGN-h2-R2.png)
+
 ## cross-tissue vs. tissue-specific effects with GTEx
 ![](figs/gtex.png)
 
 ## Modeling cross-tissue expression
-Linear mixed effect model
+Linear mixed effect model using `GTEx_Data_2014-06-13` release
+
+- 8555 tissues across 544 subjects
+- limited to ~17K protein coding genes
 
 ```{r,eval=F}
 library(lme4)
