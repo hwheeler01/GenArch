@@ -1,7 +1,7 @@
 "%&%" = function(a,b) paste(a,b,sep="")
 library(scatterplot3d)
 date <- Sys.Date()
-grms<-read.table('GTEx.cross-tissue.h2.all.models_2014-11-25.txt',header=T,sep="\t")
+grms<-read.table('GTEx.cross-tissue.h2.all.models_2015-02-17.txt',header=T,sep="\t")
 
 pdf(file="plots/GTEx_cross-tissue_global_v_local_h2_" %&% date %&% ".pdf",height=5,width=5)
 plot(grms$local.h2,grms$global.h2,xlim=c(0,1),ylim=c(0,1),cex=0.5,xlab="localGRM h2",ylab="globalGRM h2",
@@ -18,7 +18,7 @@ dev.off()
 tissues<-read.table("tissue.list",sep="\n")
 
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   
   pdf(file="plots/GTEx_resid_" %&% tis %&% "_global_v_local_h2_" %&% date %&% ".pdf",height=5,width=5)
@@ -42,7 +42,7 @@ par(mfcol=c(2,4))
 ###no ylim
 hist(grms$h2,ylim=c(0,15000),xlim=c(0,1),main="Cross-tissue",xlab="h2")
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$h2,xlim=c(0,1),main=tis,xlab="h2")
 }
@@ -52,7 +52,7 @@ png(file="plots/hist_GTEx_localGRM_h2_ylim3000_" %&% date %&% ".png",height=6,wi
 par(mfcol=c(2,4))
 hist(grms$h2,ylim=c(0,3000),xlim=c(0,0.5),main="Cross-tissue",xlab="h2")
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$h2,ylim=c(0,3000),xlim=c(0,0.5),main=tis,xlab="h2")
 }
@@ -64,7 +64,7 @@ par(mfcol=c(2,4))
 ###no ylim
 hist(grms$p,main="Cross-tissue",xlab="p-value",ylim=c(0,10000))
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$p,main=tis,xlab="p-value",ylim=c(0,10000))
 }
@@ -78,13 +78,13 @@ par(mfcol=c(4,4))
 ###ylim = 2000
 hist(grms$local.h2,ylim=c(0,2000),xlim=c(0,1),main="Cross-tissue",xlab="localGRM h2")
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$local.h2,ylim=c(0,2000),xlim=c(0,1),main=tis,xlab="localGRM h2")
 }
 hist(grms$global.h2,ylim=c(0,2000),xlim=c(0,1),main="Cross-tissue",xlab="globalGRM h2")
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$global.h2,ylim=c(0,2000),xlim=c(0,1),main=tis,xlab="globalGRM h2")
 }
@@ -96,13 +96,13 @@ par(mfcol=c(4,4))
 ###ylim = 5000
 hist(grms$local.se,xlim=c(0,1),main="Cross-tissue",xlab="localGRM SE",ylim=c(0,5000))
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$local.se,xlim=c(0,1),main=tis,xlab="localGRM SE",ylim=c(0,5000))
 }
 hist(grms$global.se,xlim=c(0,1),main="Cross-tissue",xlab="globalGRM SE",ylim=c(0,5000))
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$global.se,xlim=c(0,1),main=tis,xlab="globalGRM SE",ylim=c(0,5000))
 }
@@ -116,19 +116,19 @@ par(mfcol=c(4,6))
 ###ylim = 2000
 hist(grms$local.h2.1,ylim=c(0,2000),xlim=c(0,1),main="Cross-tissue",xlab="localGRM h2")
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$local.h2.1,ylim=c(0,2000),xlim=c(0,1),main=tis,xlab="localGRM h2")
 }
 hist(grms$chr.h2,ylim=c(0,2000),xlim=c(0,1),main="Cross-tissue",xlab="chrGRM h2")
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$chr.h2,ylim=c(0,2000),xlim=c(0,1),main=tis,xlab="chrGRM h2")
 }
 hist(grms$global.h2.1,ylim=c(0,2000),xlim=c(0,1),main="Cross-tissue",xlab="globalGRM h2")
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$global.h2.1,ylim=c(0,2000),xlim=c(0,1),main=tis,xlab="globalGRM h2")
 }
@@ -140,19 +140,19 @@ par(mfcol=c(4,6))
 ###ylim = 4000
 hist(grms$local.se.1,xlim=c(0,1),main="Cross-tissue",xlab="localGRM SE",ylim=c(0,4000))
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$local.se.1,xlim=c(0,1),main=tis,xlab="localGRM SE",ylim=c(0,4000))
 }
 hist(grms$chr.se,xlim=c(0,1),main="Cross-tissue",xlab="chrGRM SE",ylim=c(0,4000))
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$chr.se,xlim=c(0,1),main=tis,xlab="chrGRM SE",ylim=c(0,4000))
 }
 hist(grms$global.se.1,xlim=c(0,1),main="Cross-tissue",xlab="globalGRM SE",ylim=c(0,4000))
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$global.se.1,xlim=c(0,1),main=tis,xlab="globalGRM SE",ylim=c(0,4000))
 }
@@ -167,7 +167,7 @@ plot(grms$local.h2,grms$global.h2,xlim=c(0,1),ylim=c(0,1),cex=0.5,xlab="localGRM
      main="Cross-tissue",col=rgb(100,100,100,100,maxColorValue=255))
 abline(1,-1,col="red")
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   plot(tisgrms$local.h2,tisgrms$global.h2,xlim=c(0,1),ylim=c(0,1),cex=0.5,xlab="localGRM h2",ylab="globalGRM h2",
        main=tis,col=rgb(100,100,100,100,maxColorValue=255))
@@ -182,7 +182,7 @@ par(mfcol=c(2,4))
 scatterplot3d(grm3[,1],grm3[,2],grm3[,3],pch=16, highlight.3d=TRUE,cex.symbols=0.5,cex.lab=0.7,cex.axis=0.5,xlim=c(0,1),ylim=c(0,1),zlim=c(0,1),
               type="p",xlab="localGRM h2",ylab="chrGRM h2",zlab="globalGRM h2",main="Cross-tissue")
 for(tis in tissues[,1]){
-  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2014-11-24.txt"
+  file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
   tisgrms<-read.table(file,header=T,sep="\t")
   tisgrm3<-cbind(tisgrms$local.h2.1,tisgrms$chr.h2,tisgrms$global.h2.1)
   scatterplot3d(tisgrm3[,1],tisgrm3[,2],tisgrm3[,3],pch=16, highlight.3d=TRUE,cex.symbols=0.5,cex.lab=0.7,cex.axis=0.5,
