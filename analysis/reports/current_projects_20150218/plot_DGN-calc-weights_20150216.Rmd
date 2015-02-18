@@ -98,3 +98,15 @@ p + geom_boxplot() + ggtitle("Number of SNPs in predictive model") + xlab("model
 p <- ggplot(all_long, aes(x = variable, y = value))
 p + geom_boxplot() + ggtitle("Number of SNPs in predictive model") + xlab("model") + ylab("n SNPs") + coord_cartesian(ylim=c(0,250))
 ```
+
+####Compare LASSO R2 to gcta local h2
+```{r,lassovh2}
+"%&%" = function(a,b) paste(a,b,sep="")
+alpha1 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_elasticNet_alpha1_imputedSNPs_chr1-22_2015-02-02.txt', header=T)
+h2 <- read.table('/Users/heather/Dropbox/cis.v.trans.prediction/DGN-WB.localGRM.h2.exp.2014-08-30.txt',header=T)
+all <- inner_join(alpha1,h2,by='gene')
+data <- all %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(h2)
+data <- data[complete.cases(data),]
+p1<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()
+p1 + geom_point(data=data,aes(x=1:nrow(data),y=R2),color='red',cex=0.5) + xlab("Genes sorted by h2") + ylab("h2 (black) or R2 (red)") + ggtitle('DGN-WB Local Heritability (black) and LASSO 10-fold CV R2 (red)')
+```
