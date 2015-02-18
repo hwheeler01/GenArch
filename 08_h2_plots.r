@@ -73,8 +73,8 @@ dev.off()
 ## Y ~ localGRM + globalGRM
 ###plot histograms of h2
 
-png(file="plots/hist_GTEx_localGRM_globalGRM_h2_" %&% date %&% ".png",height=10,width=10,units="in",res=100)
-par(mfcol=c(4,4))
+png(file="plots/hist_GTEx_localGRM_globalGRM_h2_" %&% date %&% ".png",height=10,width=15,units="in",res=100)
+par(mfcol=c(3,6))
 ###ylim = 2000
 hist(grms$local.h2,ylim=c(0,2000),xlim=c(0,1),main="Cross-tissue",xlab="localGRM h2")
 for(tis in tissues[,1]){
@@ -82,6 +82,7 @@ for(tis in tissues[,1]){
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$local.h2,ylim=c(0,2000),xlim=c(0,1),main=tis,xlab="localGRM h2")
 }
+plot.new()
 hist(grms$global.h2,ylim=c(0,2000),xlim=c(0,1),main="Cross-tissue",xlab="globalGRM h2")
 for(tis in tissues[,1]){
   file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
@@ -91,8 +92,8 @@ for(tis in tissues[,1]){
 dev.off()
 
 ###plot histograms of se
-png(file="plots/hist_GTEx_localGRM_globalGRM_se_" %&% date %&% ".png",height=10,width=10,units="in",res=100)
-par(mfcol=c(4,4))
+png(file="plots/hist_GTEx_localGRM_globalGRM_se_" %&% date %&% ".png",height=10,width=15,units="in",res=100)
+par(mfcol=c(3,6))
 ###ylim = 5000
 hist(grms$local.se,xlim=c(0,1),main="Cross-tissue",xlab="localGRM SE",ylim=c(0,5000))
 for(tis in tissues[,1]){
@@ -100,6 +101,7 @@ for(tis in tissues[,1]){
   tisgrms<-read.table(file,header=T,sep="\t")
   hist(tisgrms$local.se,xlim=c(0,1),main=tis,xlab="localGRM SE",ylim=c(0,5000))
 }
+plot.new()
 hist(grms$global.se,xlim=c(0,1),main="Cross-tissue",xlab="globalGRM SE",ylim=c(0,5000))
 for(tis in tissues[,1]){
   file<- "GTEx.resid.tissue-specific.h2_" %&% tis %&% "_all.models_2015-02-17.txt"
