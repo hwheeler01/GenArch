@@ -190,3 +190,18 @@ First pass: estimated h^2^ of cross-tissue expression and tissue-specific expres
 
 ##GCTA joint heritability: localGRM + globalGRM SE 
 ![alt text](figs/hist_GTEx_localGRM_globalGRM_se_2015-02-18.png)
+
+##Summary
+
+***cis* vs. *trans* effects**
+
+- *cis* effects are easily detected: 37\% of DGN-WB genes have local h^2^ > 0.1, 81\% have local h^2^ > 0.01
+- good estimates of *trans* h^2^ will require larger n
+
+**sparse vs. polygenic effects**
+
+- *cis* effects are mostly sparse (LASSO beats ridge and polyscore)
+
+**cross-tissue vs. tissue-specific effects**
+
+- GTEx cross-tissue local h^2^ is greater than tissue-specific local h^2^

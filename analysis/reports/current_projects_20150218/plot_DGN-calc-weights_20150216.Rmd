@@ -121,4 +121,10 @@ data <- all %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) 
 data <- data[complete.cases(data),]
 p1<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()
 p1 + geom_point(data=data,aes(x=1:nrow(data),y=CV.R2),color='red',cex=0.5) + xlab("Genes sorted by h2") + ylab("h2 (black) or R2 (red)") + ggtitle('DGN-WB Local h2 (black) and Polyscore (P<e-04) 10-fold CV R2 (red)')
+##calc prop genes with h2>0.1
+a<-h2$h2>0.1
+table(a)/sum(table(a))
+##calc prop genes with h2>0.01
+a<-h2$h2>0.01
+table(a)/sum(table(a))
 ```
