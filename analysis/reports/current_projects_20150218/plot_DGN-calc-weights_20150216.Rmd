@@ -108,5 +108,17 @@ all <- inner_join(alpha1,h2,by='gene')
 data <- all %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(h2)
 data <- data[complete.cases(data),]
 p1<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()
-p1 + geom_point(data=data,aes(x=1:nrow(data),y=R2),color='red',cex=0.5) + xlab("Genes sorted by h2") + ylab("h2 (black) or R2 (red)") + ggtitle('DGN-WB Local Heritability (black) and LASSO 10-fold CV R2 (red)')
+p1 + geom_point(data=data,aes(x=1:nrow(data),y=R2),color='red',cex=0.5) + xlab("Genes sorted by h2") + ylab("h2 (black) or R2 (red)") + ggtitle('DGN-WB Local h2 (black) and LASSO 10-fold CV R2 (red)')
+```
+
+####Compare polyscore R2 to gcta local h2
+```{r,PSvh2}
+"%&%" = function(a,b) paste(a,b,sep="")
+ps4 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh1e-04_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+h2 <- read.table('/Users/heather/Dropbox/cis.v.trans.prediction/DGN-WB.localGRM.h2.exp.2014-08-30.txt',header=T)
+all <- inner_join(ps4,h2,by='gene')
+data <- all %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(h2)
+data <- data[complete.cases(data),]
+p1<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()
+p1 + geom_point(data=data,aes(x=1:nrow(data),y=CV.R2),color='red',cex=0.5) + xlab("Genes sorted by h2") + ylab("h2 (black) or R2 (red)") + ggtitle('DGN-WB Local h2 (black) and Polyscore (P<e-04) 10-fold CV R2 (red)')
 ```

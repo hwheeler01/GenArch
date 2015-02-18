@@ -137,7 +137,10 @@ Single variant linear regression coefficients ($w$) at several P-value threshold
 \end{columns}
 
 ##LASSO predictive performance reaches (or exceeds?) local h^2^ of most genes
-![](figs/DGN-h2-R2.png)
+![](figs/DGN-h2-lassoR2.png)
+
+##Polyscore predictive performance does not reach local h^2^ of many genes
+![](figs/DGN-h2-polyscoreR2.png)
 
 ## cross-tissue vs. tissue-specific effects with GTEx
 ![](figs/gtex.png)
@@ -170,20 +173,20 @@ Tested two genetic relationship matrix (GRM) models for each expressed gene
 
 First pass: estimated h^2^ of cross-tissue expression and tissue-specific expression in the 7 tissues with the most samples
 
-##GCTA heritability: Y ~ localGRM h2
-![alt text](/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_h2_2014-11-25.png)
+##GCTA heritability: localGRM h^2^
+![alt text](figs/hist_GTEx_localGRM_h2_2015-02-18.png)
 
-##GCTA heritability: Y ~ localGRM h2 **ZOOM**
-![alt text](/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_h2_ylim3000_2014-11-25.png)
+##GCTA heritability: localGRM h^2^ **ZOOM**
+![alt text](figs/hist_GTEx_localGRM_h2_ylim3000_2015-02-18.png)
 
-##GCTA heritability: Y ~ localGRM p-values
-![alt text](/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_p_2014-11-25.png)
+##GCTA heritability: localGRM p-values
+![alt text](figs/hist_GTEx_localGRM_p_2015-02-18.png)
 
-##GCTA heritability: Y ~ localGRM + globalGRM h2 
-![alt text](/Users/heather/GitHub/cross-tissue/plots/scatter_GTEx_localGRM_globalGRM_h2_2014-11-25.png)
+##GCTA joint heritability: localGRM + globalGRM h^2^ 
+![alt text](figs/scatter_GTEx_localGRM_globalGRM_h2_2015-02-18.png)
 
-##GCTA heritability: Y ~ localGRM + globalGRM h2 
-![alt text](/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_globalGRM_h2_2014-11-25.png)
+##GCTA joint heritability: localGRM + globalGRM h^2^ 
+![alt text](figs/hist_GTEx_localGRM_globalGRM_h2_2015-02-18.png)
 
-##GCTA heritability: Y ~ localGRM + globalGRM SE 
-![alt text](/Users/heather/GitHub/cross-tissue/plots/hist_GTEx_localGRM_globalGRM_se_2014-11-25.png)
+##GCTA joint heritability: localGRM + globalGRM SE 
+![alt text](figs/hist_GTEx_localGRM_globalGRM_se_2015-02-18.png)
