@@ -128,3 +128,22 @@ table(a)/sum(table(a))
 a<-h2$h2>0.01
 table(a)/sum(table(a))
 ```
+
+####Compare gcta local h2 to mean expression level
+```{r,localh2vexp}
+h2 <- read.table('/Users/heather/Dropbox/cis.v.trans.prediction/DGN-WB.localGRM.h2.exp.2014-08-30.txt',header=T)
+exp <- read.table('/Users/heather/Dropbox/cis.v.trans.prediction/DGN-WB.mean.median.expression.2015-02-23.txt',header=T)
+all <- inner_join(h2,exp,by='gene')
+dim(all)
+ggplot(all,aes(x=h2,y=expmeans)) + geom_point() + geom_smooth(method = "lm") + xlab("Local h2") + ylab("Mean expression") + ggtitle("DGN-WB (each point is a gene)")
+summary(lm(expmeans~h2,all))
+##No relationship between mean expression and h2
+ggplot(all,aes(x=h2,y=expmedians)) + geom_point() + geom_smooth(method = "lm") + xlab("Local h2") + ylab("Median expression") + ggtitle("DGN-WB (each point is a gene)")
+summary(lm(expmedians~h2,all))
+##Lower median expression has a larger h2
+toph2 <- all[all[,2]>0.1,]
+dim(toph2)
+ggplot(toph2,aes(x=h2,y=expmedians)) + geom_point() + geom_smooth(method = "lm") + xlab("Local h2") + ylab("Median expression") + ggtitle("DGN-WB h2>0.1 (each point is a gene)")
+summary(lm(expmedians~h2,toph2))
+##Lower median expression has a larger h2
+```
