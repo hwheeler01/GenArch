@@ -1,0 +1,52 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1344\cocoasubrtf720
+{\fonttbl\f0\fnil\fcharset0 Verdana;\f1\fswiss\fcharset0 Helvetica;\f2\fnil\fcharset0 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red255\green255\blue255;\red212\green212\blue193;
+\red48\green48\blue48;}
+\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720
+
+\f0\fs20 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 Email from 
+\f1\fs40 \cb3 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 Ray Powell [support@opensciencedatacloud.org]
+\f0\fs20 \cb1 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \
+on 2/23/15\
+\
+http://cran.r-project.org/bin/linux/ubuntu/\
+We have the following R mirrors whitelisted on Atwood:\
+"cran.r-project.org streaming.stat.iastate.edu cran.wustl.edu cran.cnr.Berkeley.edu cran.fhcrc.org cran.rstudio.co"\
+\
+So if you are running an Ubuntu 14.04 VM you would enable the proxy per normal and then:\
+\
+echo " deb http://<my.favorite.cran.mirror>/bin/linux/ubuntu trusty/" >> /etc/apt/sources.list.d/R.list\
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9\
+apt-get update\
+apt-get install <THE NEEDED R packages>\
+\
+For ubuntu 12.04 you would do:\
+\
+echo " deb http://<my.favorite.cran.mirror>/bin/linux/ubuntu precise/" >> /etc/apt/sources.list.d/R.list\
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E084DAB9\
+apt-get update\
+apt-get install <THE NEEDED R packages>\
+\
+\
+What I actually did:\
+launched a VM on Ubuntu-14.04-LTS=v1.0\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f2\fs28 \cf4 \cb5 \kerning1\expnd0\expndtw0 \CocoaLigature0 \outl0\strokewidth0 sudo nano /etc/apt/sources.list.d/R.list\
+
+\f0\fs20 \cf0 \cb1 \expnd0\expndtw0\kerning0
+\CocoaLigature1 added this text and saved:\
+
+\f2\fs28 \cf4 \cb5 \kerning1\expnd0\expndtw0 \CocoaLigature0 deb http://streaming.stat.iastate.edu/bin/linux/ubuntu trusty/\
+\pard\pardeftab720
+
+\f0\fs20 \cf0 \cb1 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+rest didn\'92t work, try later\
+}
