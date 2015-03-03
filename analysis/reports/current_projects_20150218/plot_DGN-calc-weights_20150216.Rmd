@@ -38,9 +38,13 @@ ps05 <- ps05 %>% select(gene,CV.R2)
 ps5 <- ps5 %>% select(gene,CV.R2)
 ps1 <- ps1 %>% select(gene,CV.R2)
 all <- inner_join(ps4,ps3,by='gene')
+colnames(all) <- c('gene',0.0001,0.001)
 all <- inner_join(all,ps2,by='gene')
+colnames(all) <- c('gene',0.0001,0.001,0.01)
 all <- inner_join(all,ps05,by='gene')
+colnames(all) <- c('gene',0.0001,0.001,0.01,0.05)
 all <- inner_join(all,ps5,by='gene')
+colnames(all) <- c('gene',0.0001,0.001,0.01,0.05,0.5)
 all <- inner_join(all,ps1,by='gene')
 colnames(all) <- c('gene',0.0001,0.001,0.01,0.05,0.5,1)
 all <- all[complete.cases(all),]
@@ -109,6 +113,11 @@ data <- all %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) 
 data <- data[complete.cases(data),]
 p1<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()
 p1 + geom_point(data=data,aes(x=1:nrow(data),y=R2),color='red',cex=0.5) + xlab("Genes sorted by h2") + ylab("h2 (black) or R2 (red)") + ggtitle('DGN-WB Local h2 (black) and LASSO 10-fold CV R2 (red)')
+##calc %genes with R2 that reaches lower bound of h2 estimate
+count<-data$R2>data$ymin
+table(count)
+sum(table(count))
+table(count)/sum(table(count))
 ```
 
 ####Compare polyscore R2 to gcta local h2
@@ -121,6 +130,11 @@ data <- all %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) 
 data <- data[complete.cases(data),]
 p1<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()
 p1 + geom_point(data=data,aes(x=1:nrow(data),y=CV.R2),color='red',cex=0.5) + xlab("Genes sorted by h2") + ylab("h2 (black) or R2 (red)") + ggtitle('DGN-WB Local h2 (black) and Polyscore (P<e-04) 10-fold CV R2 (red)')
+##calc %genes with R2 that reaches lower bound of h2 estimate
+count<-data$CV.R2>data$ymin
+table(count)
+sum(table(count))
+table(count)/sum(table(count))
 ##calc prop genes with h2>0.1
 a<-h2$h2>0.1
 table(a)/sum(table(a))
@@ -146,4 +160,96 @@ dim(toph2)
 ggplot(toph2,aes(x=h2,y=expmedians)) + geom_point() + geom_smooth(method = "lm") + xlab("Local h2") + ylab("Median expression") + ggtitle("DGN-WB h2>0.1 (each point is a gene)")
 summary(lm(expmedians~h2,toph2))
 ##Lower median expression has a larger h2
+```
+
+####Compare polyscore thresholds
+```{r,compareAllCV}
+"%&%" = function(a,b) paste(a,b,sep="")
+library(GGally)
+alpha1 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_elasticNet_alpha1_imputedSNPs_chr1-22_2015-02-02.txt', header=T)
+alpha0.5 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_elasticNet_alpha0.5_imputedSNPs_chr1-22_2015-02-02.txt', header=T)
+ps4 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh1e-04_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps3 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh0.001_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps2 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh0.01_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps05 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh0.05_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps5 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh0.5_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+ps1 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh1_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+alpha1 <- alpha1 %>% select(gene,R2)
+alpha0.5<-alpha0.5 %>% select(gene,R2)
+ps4 <- ps4 %>% select(gene,CV.R2)
+ps3 <- ps3 %>% select(gene,CV.R2)
+ps2 <- ps2 %>% select(gene,CV.R2)
+ps05 <- ps05 %>% select(gene,CV.R2)
+ps5 <- ps5 %>% select(gene,CV.R2)
+ps1 <- ps1 %>% select(gene,CV.R2)
+all <- inner_join(alpha1,alpha0.5,by='gene')
+colnames(all) <- c('gene','lasso','eNet')
+all <- inner_join(all,ps4,by='gene')
+colnames(all) <- c('gene','lasso','eNet','poly0.0001')
+all <- inner_join(all,ps3,by='gene')
+colnames(all) <- c('gene','lasso','eNet','poly0.0001','poly0.001')
+all <- inner_join(all,ps2,by='gene')
+colnames(all) <- c('gene','lasso','eNet','poly0.0001','poly0.001','poly0.01')
+all <- inner_join(all,ps05,by='gene')
+colnames(all) <- c('gene','lasso','eNet','poly0.0001','poly0.001','poly0.01','poly0.05')
+all <- inner_join(all,ps5,by='gene')
+colnames(all) <- c('gene','lasso','eNet','poly0.0001','poly0.001','poly0.01','poly0.05','poly0.5')
+all <- inner_join(all,ps1,by='gene')
+colnames(all) <- c('gene','lasso','eNet','poly0.0001','poly0.001','poly0.01','poly0.05','poly0.5','poly1')
+all <- all[complete.cases(all),]
+p<-ggpairs(all[,2:9],lower=list(continuous="points",params=c(cex=0.5,ylim=c(0,1),xlim=c(0,1))),diag=list(continuous='blank'),title="Predictive Performance (R2 of GReX vs. observed expression)")
+tiff(filename="ggpairs_DGN-WB_10-fCV.tiff",width=960,height=960)
+print(p)
+dev.off()
+png(filename="ggpairs_DGN-WB_10-fCV.png",width=960,height=960)
+print(p)
+dev.off()
+print(p)
+```
+
+
+####Compare LASSO and Polyscore R2 to gcta local h2
+```{r,lassoAndPSvh2}
+"%&%" = function(a,b) paste(a,b,sep="")
+alpha1 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_elasticNet_alpha1_imputedSNPs_chr1-22_2015-02-02.txt', header=T)
+h2 <- read.table('/Users/heather/Dropbox/cis.v.trans.prediction/DGN-WB.localGRM.h2.exp.2014-08-30.txt',header=T)
+ps4 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh1e-04_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+all <- inner_join(alpha1,h2,by='gene')
+all <- inner_join(all,ps4,by='gene')
+data <- all %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(h2)
+data <- data[complete.cases(data),]
+p1<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()
+p1<-p1 + geom_point(data=data,aes(x=1:nrow(data),y=R2),color='red',cex=0.5) + xlab("Genes sorted by h2") + ylab("h2 (black) or R2 (red)") + ggtitle('LASSO predictive performance (R2) compared to local heritability (h2)')
+p2<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()
+p2<-p2 + geom_point(data=data,aes(x=1:nrow(data),y=CV.R2),color='red',cex=0.5) + xlab("Genes sorted by h2") + ylab("h2 (black) or R2 (red)") + ggtitle('Polygenic score (P<1e-04) predictive performance (R2) compared to local heritability (h2)')
+library(grid)
+pushViewport(viewport(layout = grid.layout(2, 1)))
+print(p1, vp = viewport(layout.pos.row = 1, layout.pos.col = 1))
+print(p2, vp = viewport(layout.pos.row = 2, layout.pos.col = 1))
+```
+
+####Compare LASSO and Polyscore R2 to gcta local h2
+```{r,lassoAndPSvh2take2}
+"%&%" = function(a,b) paste(a,b,sep="")
+alpha1 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_elasticNet_alpha1_imputedSNPs_chr1-22_2015-02-02.txt', header=T)
+h2 <- read.table('/Users/heather/Dropbox/cis.v.trans.prediction/DGN-WB.localGRM.h2.exp.2014-08-30.txt',header=T)
+ps4 <- read.table('/Users/heather/Dropbox/elasticNet_testing/DGN-imputed-CV_20150209/DGN-WB_exp_10-foldCV_polyscore_Pthresh1e-04_imputedSNPs_chr1-22_2015-02-09.txt',header=T)
+alpha1h2 <- inner_join(alpha1,h2,by='gene')
+dataL <- alpha1h2 %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se)) %>% arrange(h2) %>% select(gene,R2,h2,ymin,ymax)
+dataL <- dataL %>% mutate(method="LASSO",position=1:nrow(dataL))
+ps4h2 <- inner_join(ps4,h2,by='gene')
+dataP <- ps4h2 %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se)) %>% arrange(h2) %>% select(gene,CV.R2,h2,ymin,ymax)
+dataP <- dataP %>% mutate(method="Polyscore",position=1:nrow(dataP))
+colnames(dataP) <- c('gene','R2','h2','ymin','ymax','method','position')
+data<-rbind(dataL,dataP)
+data <- data[complete.cases(data),]
+p1<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+facet_wrap(~method,ncol=1)
+p1<- p1 + geom_point(data=data,aes(x=position,y=R2),color='red',cex=0.8) + xlab("Genes sorted by h2") + ylab("h2 (black) or R2 (red)") +theme_bw(40)
+png(filename="compareR2_h2.png",width=720,height=960)
+print(p1)
+dev.off()
+tiff(filename="compareR2_h2.tiff",width=360,height=480)
+print(p1)
+dev.off()
+p1
 ```
