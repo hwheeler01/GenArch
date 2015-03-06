@@ -7,7 +7,7 @@ use strict;
 
 
 my $framing = '/group/im-lab/nas40t2/haky/Data/Transcriptome/eQTL-results/Framingham/eqtl-gene-1000g-peer-validate_c1-23_c28.csv.gz';
-#my $framing = '10k.test.csv.gz';
+#my $framing = 'test.csv.gz';
 my $hapmap = '/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/hapmapSnpsCEU.list'; ##from http://hgdownload.cse.ucsc.edu/goldenPath/hg19/database/hapmapSnpsCEU.txt.gz
 
 open(OUTALL, ">perl.Framingham_eqtl-gene_p0.0001_hapmapSnpsCEU.rsIDlist");
