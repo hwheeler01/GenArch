@@ -10,7 +10,7 @@ for i in range(1,23):
     outfile = open(outfilename,'w')
     output = '''#!/bin/bash
 #PBS -N R.gcta.''' + str(i) +'''\n#PBS -S /bin/bash
-#PBS -l walltime=24:00:00
+#PBS -l walltime=72:00:00
 #PBS -l nodes=1:ppn=1
 #PBS -l mem=10gb
 #PBS -o logs/${PBS_JOBNAME}.o${PBS_JOBID}.log
