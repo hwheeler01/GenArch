@@ -30,17 +30,17 @@ rownames(expdata) <- subjid
 colnames(expdata) <- geneid
 
 ### Get gene subset to analyze
-system("ls " %&% grm.dir %&% "global*Chr*id > tmp" %&% thresh %&% gencodeset)
-system("cut -d\'-\' -f 6 tmp" %&% thresh %&% gencodeset %&% ">globalGRM.list." %&% thresh %&% gencodeset)
-globalfile <- "globalGRM.list."	%&% thresh %&% gencodeset
-globallist <- as.data.frame(scan(globalfile,"character")) ##list of global GRMs
-colnames(globallist)<-'gene'
+system("ls " %&% grm.dir %&% "local*id > tmp." %&% thresh %&% gencodeset)
+system("awk -F \"local-\" \'{print $2}\' < tmp." %&% thresh %&% gencodeset %&% " | awk -F \".grm\" \'{print $1}\' >localGRM.list." %&% thresh %&% gencodeset)
+localfile <- "localGRM.list."	%&% thresh %&% gencodeset
+locallist <- as.data.frame(scan(localfile,"character")) ##list of global GRMs
+colnames(locallist)<-'gene'
 
 gencode <- read.table(gencodefile)
 rownames(gencode) <- gencode[,5]
 colnames(gencode) <- c('chr','str','start','end','ensid','gene','func','known')
 
-grmlist <- inner_join(globallist,gencode,by='gene') ##genes in genecodeset with grm
+grmlist <- inner_join(locallist,gencode,by='gene') ##genes in genecodeset with grm
 geneidlist <- as.data.frame(geneid)
 colnames(geneidlist) <- 'gene'
 ensidlist <- inner_join(grmlist,geneidlist,by='gene') ##genes with grm and exp
@@ -66,8 +66,7 @@ colnames(glo.mat) <- c("gene","global.h2","global.se","global.p")
 locglo.mat <- matrix(0,nrow=length(localensid),ncol=5)
 colnames(locglo.mat) <- c("gene","loc.jt.h2","loc.jt.se","glo.jt.h2","glo.jt.se")
 
-#for(i in 1:length(localensid)){
-for(i in 1:5){
+for(i in 1:length(localensid)){
 	cat(i,"of",length(localensid),"\n")
 	ensid <- as.character(localensid[i])
 	gene <- as.character(gencode[ensid,6])
@@ -95,8 +94,9 @@ for(i in 1:5){
 	chrlist <- c(1:22)
 	otherchrs <- setdiff(chrlist,c)
 	grmmat <- matrix(NA,nrow=length(chrlist),ncol=1) 
-	for(j in otherchrs){
-		grmfile <- grm.dir %&% "DGN.global_Chr" %&% j
+	for(j in 1:length(otherchrs)){
+		chrom <- otherchrs[j]
+		grmfile <- grm.dir %&% "DGN.global_Chr" %&% chrom
 		grmmat[j,] <- grmfile
 	}
 	glochrfile <- grm.dir %&% "global-" %&% gene %&% "-Chr" %&% gencodeset
