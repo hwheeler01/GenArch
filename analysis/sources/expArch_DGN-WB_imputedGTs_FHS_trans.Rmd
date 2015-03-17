@@ -86,4 +86,13 @@ data <- global[global[,1]>0.25,] %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = 
 data <- data[complete.cases(data),]
 ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Joint Global (FHS eQTLs p < 0.0001) Heritability > 0.25')
 
+###compare marginal v. joint analyses
+fdr = fdr[complete.cases(fdr),]
+ggplot(fdr,aes(x=local.h2,y=loc.jt.h2)) + geom_point() + xlab(expression("Marginal Local h"^2)) + ylab(expression("Joint Local h"^2)) + geom_abline(intercept=0, slope=1,col="red") + ggtitle('DGN-WB Heritability') + coord_cartesian(xlim=c(0,1),ylim=c(0,1))
+
+ggplot(fdr,aes(x=local.se,y=loc.jt.se)) + geom_point() + xlab(expression("Marginal Local h"^2~ "SE")) + ylab(expression("Joint Local h"^2~"SE")) + geom_abline(intercept=0, slope=1,col="red") + ggtitle('DGN-WB Heritability Standard Errors') + coord_cartesian(xlim=c(0,0.13),ylim=c(0,0.13))
+
+ggplot(fdr,aes(x=global.h2,y=glo.jt.h2)) + geom_point() + xlab(expression("Marginal Global h"^2)) + ylab(expression("Joint Global h"^2)) + geom_abline(intercept=0, slope=1,col="red") + ggtitle('DGN-WB Heritability') + coord_cartesian(xlim=c(0,1),ylim=c(0,1))
+
+ggplot(fdr,aes(x=global.se,y=glo.jt.se)) + geom_point() + xlab(expression("Marginal Global h"^2~ "SE")) + ylab(expression("Joint Global h"^2~"SE")) + geom_abline(intercept=0, slope=1,col="red") + ggtitle('DGN-WB Heritability Standard Errors') + coord_cartesian(xlim=c(0,0.2),ylim=c(0,0.2))
 ```
