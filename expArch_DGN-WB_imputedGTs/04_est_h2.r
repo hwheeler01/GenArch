@@ -4,7 +4,7 @@ args <- commandArgs(trailingOnly=T)
 date = Sys.Date()
 library(dplyr)
 
-thresh <- 'p0.0001' ##threshold for inclusion of trans FHS SNPs
+thresh <- 'fdr0.05' ##threshold for inclusion of trans FHS SNPs
 tis <- "DGN-WB"
 
 pre.dir <- "/group/im-lab/nas40t2/hwheeler/cross-tissue/"
@@ -33,7 +33,7 @@ colnames(expdata) <- geneid
 system("ls " %&% grm.dir %&% "local*id > tmp." %&% thresh %&% gencodeset)
 system("awk -F \"local-\" \'{print $2}\' < tmp." %&% thresh %&% gencodeset %&% " | awk -F \".grm\" \'{print $1}\' >localGRM.list." %&% thresh %&% gencodeset)
 localfile <- "localGRM.list."	%&% thresh %&% gencodeset
-locallist <- as.data.frame(scan(localfile,"character")) ##list of global GRMs
+locallist <- as.data.frame(scan(localfile,"character")) ##list of local GRMs
 colnames(locallist)<-'gene'
 
 gencode <- read.table(gencodefile)
@@ -89,23 +89,24 @@ for(i in 1:length(localensid)){
 	loc.mat[i,] <- res
 
 
-	## Y ~ globalGRM (all FHS eQTLs, not including localGRM SNPs)
+	## Y ~ globalGRM (all FHS eQTLs, not including localGRM SNPs) ##changed 3/18/15 to all FHS eQTLs on other chrs
 	###combine GRMs
 	chrlist <- c(1:22)
 	otherchrs <- setdiff(chrlist,c)
-	grmmat <- matrix(NA,nrow=length(chrlist),ncol=1) 
+#	grmmat <- matrix(NA,nrow=length(chrlist),ncol=1) 
+	grmmat <- matrix(NA,nrow=length(otherchrs),ncol=1)
 	for(j in 1:length(otherchrs)){
 		chrom <- otherchrs[j]
 		grmfile <- grm.dir %&% "DGN.global_Chr" %&% chrom
 		grmmat[j,] <- grmfile
 	}
-	glochrfile <- grm.dir %&% "global-" %&% gene %&% "-Chr" %&% gencodeset
-	grmmat[length(chrlist),] <- glochrfile
+#	glochrfile <- grm.dir %&% "global-" %&% gene %&% "-Chr" %&% gencodeset
+#	grmmat[length(chrlist),] <- glochrfile
 	write.table(grmmat,file="tmp.grm.list" %&% thresh %&% gencodeset,quote=F,col.names=F,row.names=F)
-	runGRM <- "gcta64 --mgrm-bin tmp.grm.list" %&% thresh %&% gencodeset %&% " --make-grm --out " %&% grm.dir %&% "global-" %&% gene %&% "-all"
+	runGRM <- "gcta64 --mgrm-bin tmp.grm.list" %&% thresh %&% gencodeset %&% " --make-grm --out " %&% grm.dir %&% "global-" %&% gene %&% "-otherChr"
 	system(runGRM)
 
-	runGLO <- "gcta64 --grm " %&% grm.dir %&% "global-" %&% gene %&% "-all --reml --pheno tmp.pheno." %&% thresh %&% gencodeset %&% " --out tmp." %&% thresh %&% gencodeset
+	runGLO <- "gcta64 --grm " %&% grm.dir %&% "global-" %&% gene %&% "-otherChr --reml --pheno tmp.pheno." %&% thresh %&% gencodeset %&% " --out tmp." %&% thresh %&% gencodeset
 	system(runGLO)
 	hsq <- scan("tmp." %&% thresh %&% gencodeset %&% ".hsq","character")
 	res <- c(gene, hsq[14], hsq[15], hsq[25])
@@ -114,7 +115,7 @@ for(i in 1:length(localensid)){
 
 	## Y ~ localGRM + globalGRM (joint model)
 	runMULT <- "echo " %&% grm.dir %&% "local-" %&% gene %&% " > tmp.multiGRM." %&% thresh %&% gencodeset
-	runMULT2 <- "echo " %&% grm.dir %&% "global-" %&% gene %&% "-all >> tmp.multiGRM." %&% thresh %&% gencodeset
+	runMULT2 <- "echo " %&% grm.dir %&% "global-" %&% gene %&% "-otherChr >> tmp.multiGRM." %&% thresh %&% gencodeset
 	system(runMULT)
         system(runMULT2)
 	runLOCGLO <- "gcta64 --mgrm-bin tmp.multiGRM." %&% thresh %&% gencodeset %&% " --reml --pheno tmp.pheno." %&% thresh %&% gencodeset %&% " --out tmp." %&% thresh %&% gencodeset
@@ -130,4 +131,4 @@ for(i in 1:length(localensid)){
 
 
 full.mat <- cbind(loc.mat,glo.mat,locglo.mat)
-write.table(full.mat,file=tis %&% ".h2.all.models_FHS" %&% thresh %&% ".Chr" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
+write.table(full.mat,file=tis %&% ".h2.all.models_FHS" %&% thresh %&% ".Chr" %&% gencodeset %&% "_globalOtherChr." %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
