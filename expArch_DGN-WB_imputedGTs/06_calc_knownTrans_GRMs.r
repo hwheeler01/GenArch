@@ -15,13 +15,13 @@ gt.dir <- "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/GTEx_2014-06013_release/t
 gencodefile <- annot.dir %&% "gencode.v18.genes.patched_contigs.summary.protein." %&% args[1]
 gencodeset <- args[1]
 
-thresh <- 'p0.0001'
+thresh <- 'fdr0.05'
 eqtlfile <- my.dir %&% "Framingham_trans-eqtl-gene_" %&% thresh %&% "_hapmapSnpsCEU.list"
 eqtllist <- read.table(eqtlfile)
 
 grm.dir <- my.dir %&% "dgn-grms/FHS_eQTLs_" %&% thresh %&% "/"
 
-machpre <- "DGN.imputed_maf0.05_R20.8.hapmapSnpsCEU."
+machpre <- "DGN.imputed_maf0.05_R20.8.hapmapSnpsCEU.FHSfdr0.05_trans-eQTLs."
 
 ###make transGRMs using known trans-eQTLs from FHS 
 
