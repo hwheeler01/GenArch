@@ -23,16 +23,16 @@ ggplot(fdr,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(int
 local <- fdr %>% select(local.h2,local.se) %>% arrange(local.h2) 
 names(local) = c('h2','se')
 data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Only Local (w/in 1 Mb) Heritability')
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Marginal Local (w/in 1 Mb) Heritability')
 
 global <- fdr %>% select(global.h2,global.se) %>% arrange(global.h2) 
 names(global) = c('h2','se')
 data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Only Global (FHS eQTLs fdr < 0.05) Heritability')
-##plot top global only estimates
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Marginal Global (FHS eQTLs fdr < 0.05) Heritability')
+##plot top global Marginal estimates
 data <- global[global[,1]>0.25,] %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
 data <- data[complete.cases(data),]
-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Only Global (FHS eQTLs fdr < 0.05) Heritability > 0.25')
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Marginal Global (FHS eQTLs fdr < 0.05) h2 > 0.25')
 
 ##plot joint h2 estimates
 local <- fdr %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
@@ -49,7 +49,7 @@ ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(co
 
 data <- global[global[,1]>0.25,] %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
 data <- data[complete.cases(data),]
-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Joint Global (FHS eQTLs fdr < 0.05) Heritability > 0.25')
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Joint Global (FHS eQTLs fdr < 0.05) h2 > 0.25')
 
 
 ##Plot p-value based results
@@ -58,16 +58,16 @@ ggplot(p,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(inter
 local <- p %>% select(local.h2,local.se) %>% arrange(local.h2) 
 names(local) = c('h2','se')
 data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Only Local (w/in 1 Mb) Heritability')
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Marginal Local (w/in 1 Mb) Heritability')
 
 global <- p %>% select(global.h2,global.se) %>% arrange(global.h2) 
 names(global) = c('h2','se')
 data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Only Global (FHS eQTLs p < 0.0001) Heritability')
-##plot top global only estimates
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Marginal Global (FHS eQTLs p < 0.0001) Heritability')
+##plot top global Marginal estimates
 data <- global[global[,1]>0.25,] %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
 data <- data[complete.cases(data),]
-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Only Global (FHS eQTLs p < 0.0001) Heritability > 0.25')
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Marginal Global (FHS eQTLs p < 0.0001) h2 > 0.25')
 
 ##plot joint h2 estimates
 local <- p %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
@@ -84,7 +84,7 @@ ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(co
 
 data <- global[global[,1]>0.25,] %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
 data <- data[complete.cases(data),]
-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Joint Global (FHS eQTLs p < 0.0001) Heritability > 0.25')
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Joint Global (FHS eQTLs p < 0.0001) h2 > 0.25')
 
 ###compare marginal v. joint analyses
 fdr = fdr[complete.cases(fdr),]
@@ -95,4 +95,68 @@ ggplot(fdr,aes(x=local.se,y=loc.jt.se)) + geom_point() + xlab(expression("Margin
 ggplot(fdr,aes(x=global.h2,y=glo.jt.h2)) + geom_point() + xlab(expression("Marginal Global h"^2)) + ylab(expression("Joint Global h"^2)) + geom_abline(intercept=0, slope=1,col="red") + ggtitle('DGN-WB Heritability') + coord_cartesian(xlim=c(0,1),ylim=c(0,1))
 
 ggplot(fdr,aes(x=global.se,y=glo.jt.se)) + geom_point() + xlab(expression("Marginal Global h"^2~ "SE")) + ylab(expression("Joint Global h"^2~"SE")) + geom_abline(intercept=0, slope=1,col="red") + ggtitle('DGN-WB Heritability Standard Errors') + coord_cartesian(xlim=c(0,0.2),ylim=c(0,0.2))
+```
+
+###globalGRM = FHS eQTLs on other chromosomes
+```{r}
+otherfile<-'/Users/heather/Dropbox/cross-tissue/expArch_DGN-FHS_results/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt'
+
+fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
+
+##Plot FDR based results
+ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("Local (within 1Mb) h"^2)) + ylab(expression("Global (FHS eQTLs other Chrs fdr < 0.05) h"^2)) + coord_cartesian(ylim=c(0,1),xlim=c(0,1)) + ggtitle("DGN-WB Joint Heritability")
+
+##plot joint h2 estimates
+local <- fdrother %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
+names(local) = c('h2','se')
+data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+data <- data[complete.cases(data),]
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Joint Local (w/in 1 Mb) Heritability')
+
+global <- fdrother %>% select(glo.jt.h2,glo.jt.se) %>% arrange(glo.jt.h2) 
+names(global) = c('h2','se')
+data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+data <- data[complete.cases(data),]
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Joint Global (FHS eQTLs other Chrs fdr < 0.05) Heritability')
+
+data <- global[global[,1]>0.25,] %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+data <- data[complete.cases(data),]
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Joint Global (FHS eQTLs other Chrs fdr < 0.05) h2 > 0.25')
+
+##compare joint global (non-local eQTLs) vs joint global (non-chr eQTLs)
+jg<-inner_join(fdr,fdrother,by='gene')
+ggplot(jg,aes(x=glo.jt.h2.x,y=glo.jt.h2.y)) + geom_point() + xlab(expression("Joint Global h"^2~ "(GRM: non-local FHS eQTLs)")) + ylab(expression("Joint Global h"^2~ "(GRM: non-Chr FHS eQTLs)")) + geom_abline(intercept=0, slope=1,col="red") + ggtitle('DGN-WB Heritability') + coord_cartesian(xlim=c(0,1),ylim=c(0,1))
+ggplot(jg,aes(x=glo.jt.se.x,y=glo.jt.se.y)) + geom_point() + xlab(expression("Joint Global SE (GRM: non-local FHS eQTLs)")) + ylab(expression("Joint Global SE (GRM: non-Chr FHS eQTLs)")) + geom_abline(intercept=0, slope=1,col="red") + ggtitle('DGN-WB Heritability') 
+```
+
+###transGRM = FHS trans-eQTLs for respective gne
+```{r}
+transfile<-'/Users/heather/Dropbox/cross-tissue/expArch_DGN-FHS_results/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_transForGene.2015-03-20.txt'
+
+fdrtrans<-read.table(transfile,header=T) ##FHS trans-eQTLs for gene w/fdr<0.05 used to define Known trans GRM
+
+##Plot FDR based results
+ggplot(fdrtrans,aes(x=loc.jt.h2,y=trans.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("Local (within 1Mb) h"^2)) + ylab(expression("Known trans (FHS trans-eQTLs for Gene fdr < 0.05) h"^2)) + coord_cartesian(ylim=c(0,1),xlim=c(0,1)) + ggtitle("DGN-WB Joint Heritability")
+
+##plot joint h2 estimates
+local <- fdrtrans %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
+names(local) = c('h2','se')
+data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+data <- data[complete.cases(data),]
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle('DGN-WB Joint Local (w/in 1 Mb) Heritability')
+
+global <- fdrtrans %>% select(trans.jt.h2,trans.jt.se) %>% arrange(trans.jt.h2) 
+names(global) = c('h2','se')
+data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+data <- data[complete.cases(data),]
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle(expression('DGN-WB Joint Trans (FHS trans-eQTLs for Gene fdr<0.05) h'^2))
+
+data <- global[global[,1]>0.05,] %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+data <- data[complete.cases(data),]
+ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ggtitle(expression('DGN-WB Joint Trans (FHS trans-eQTLs for Gene fdr<0.05) h'^2~ '>0.05'))
+
+##compare joint Global (non-local eQTLs) vs joint Known trans (FHS trans-eQTLs for gene)
+jg<-inner_join(fdr,fdrtrans,by='gene')
+ggplot(jg,aes(x=glo.jt.h2,y=trans.jt.h2)) + geom_point() + xlab(expression("Joint Global h"^2~ "(GRM: non-local FHS eQTLs)")) + ylab(expression("Joint Known Trans h"^2~ "(GRM: FHS trans-eQTLs for gene)")) + geom_abline(intercept=0, slope=1,col="red") + ggtitle('DGN-WB Heritability') + coord_cartesian(xlim=c(0,1),ylim=c(0,1))
+ggplot(jg,aes(x=glo.jt.se,y=trans.jt.se)) + geom_point() + xlab(expression("Joint Global SE (GRM: non-local FHS eQTLs)")) + ylab(expression("Joint Known Trans SE (GRM: FHS trans-eQTLs for gene)")) + geom_abline(intercept=0, slope=1,col="red") + ggtitle('DGN-WB Heritability') 
 ```
