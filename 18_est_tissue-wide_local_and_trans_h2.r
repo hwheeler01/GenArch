@@ -4,8 +4,6 @@ args <- commandArgs(trailingOnly=T)
 date = Sys.Date()
 library(dplyr)
 
-pasteid = function(list,x) paste(list[[x]][1:2],collapse='-') 
-
 thresh <- 'fdr0.05' ##threshold for inclusion of trans FHS SNPs
 
 my.dir <- "/group/im-lab/nas40t2/hwheeler/cross-tissue/"
@@ -35,31 +33,25 @@ tissuesets <- table(tissues$SMTSD)
 largesets <- tissuesets[tissuesets >= 100] ###start with tissues with n>=100
 tislist <- names(largesets)
 
+tiswidefile <- exp.dir %&% "GTEx_PrediXmod.tissue.list"
+peerlist<- scan(tiswidefile,"character")
+squishlist<- gsub(' ','',tislist) ##removes all whitespace to match peerlist & .RDS files
+
+tislist<-intersect(peerlist,squishlist)
+
 for(i in 1:length(tislist)){
     tis <- tislist[i]
-    samplelist <- subset(tissues,SMTSD == tis)
-
-    squishtis <- gsub(' ','',tis) ##removes all whitespace to match .RDS files
-
-    ##shorten ID to "GTEX-\w+" to match *ID.list files
-    samlis <- as.character(samplelist[,1])
-    splitsamlis <- strsplit(samlis,'-')
-    shortsample <- character()
-    for(h in 1:length(samlis)){
-	shortsamlis<-as.character(pasteid(splitsamlis,h))
-	shortsample <- c(shortsample,shortsamlis)
-    }
 
     ##read exp data
-    obs<-readRDS(exp.dir %&% "GTEx_PrediXmod." %&% squishtis %&% ".exp.adj.15PEERfactors.3PCs.gender.IDxGENE.RDS")
-    genefile <- exp.dir %&% "GTEx_PrediXmod." %&% squishtis %&% ".exp.adj.15PEERfactors.3PCs.gender.GENE.list"
-    idfile <- exp.dir %&% "GTEx_PrediXmod." %&% squishtis %&% ".exp.adj.15PEERfactors.3PCs.gender.ID.list"
+    obs<-readRDS(exp.dir %&% "GTEx_PrediXmod." %&% tis %&% ".exp.adj.15PEERfactors.3PCs.gender.IDxGENE.RDS")
+    genefile <- exp.dir %&% "GTEx_PrediXmod." %&% tis %&% ".exp.adj.15PEERfactors.3PCs.gender.GENE.list"
+    idfile <- exp.dir %&% "GTEx_PrediXmod." %&% tis %&% ".exp.adj.15PEERfactors.3PCs.gender.ID.list"
     genelist <- scan(genefile,"character")
     idlist <- scan(idfile,"character")
     colnames(obs) <- genelist
     rownames(obs) <- idlist    
 
-    tissue.exp <- obs[intersect(rownames(obs),shortsample),intersect(colnames(obs),grmlist)] ###pull expression data for chosen tissue & grmlist###
+    tissue.exp <- obs[,intersect(colnames(obs),grmlist)] ###pull expression data for chosen tissue & grmlist###
     
     nsubj <- dim(tissue.exp)[1]
 
@@ -87,7 +79,7 @@ for(i in 1:length(tislist)){
         res <- c(tis, nsubj, ensid, gene, hsq[14], hsq[15], hsq[25])
 	local.mat[j,] <- res
     }
-    write.table(local.mat,file="GTEx.resid.tissue-wide.h2_" %&% tis %&% "_marginal.local_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
+    write.table(local.mat,file="GTEx.tissue-wide.h2_" %&% tis %&% "_marginal.local_subset" %&% gencodeset %&% "." %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
 
     ########################################################
     ### Estimate trans h2 for genes with FHS trans eQTLs ###
@@ -155,13 +147,9 @@ for(i in 1:length(tislist)){
               	res <- c(gene, hsq[17], hsq[18], hsq[20], hsq[21])
         }
 	locglo.mat[j,] <- res
-}
-
-
-full.mat <- cbind(loc.mat,glo.mat,locglo.mat)
-write.table(full.mat,file="GTEx.resid.tissue-wide.h2_" %&% tis %&% "_FHS" %&% thresh %&% ".subset" %&% gencodeset %&% "_transForGene." %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
-
-
+    }
+    full.mat <- cbind(loc.mat,glo.mat,locglo.mat)
+    write.table(full.mat,file="GTEx.tissue-wide.h2_" %&% tis %&% "_FHS" %&% thresh %&% ".subset" %&% gencodeset %&% "_transForGene." %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
 }
 
 
