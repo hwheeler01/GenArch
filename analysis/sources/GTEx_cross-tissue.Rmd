@@ -5,7 +5,7 @@ date: "`r Sys.time()`"
 output: html_document
 ---
 #### Plot standard errors (SE) from Local h2 estimation of Cross-Tissue and Tissue-Wide expression in GTex
-```{r,plotSE}
+```{r,plotSE,warning=F,message=F}
 library(ggplot2)
 library(reshape2)
 library(dplyr)
@@ -16,48 +16,69 @@ my.dir <- '/Users/heather/Dropbox/cross-tissue/expArch_DGN-FHS_results/GTEx-cros
 tislist <- scan(my.dir %&% 'GTEx_nine_tissues','c')
 
 ct <- read.table(my.dir %&% 'GTEx.ranef.cross-tissue.h2_marginal.local_2015-03-23.txt',header=T)
+nlist<-ct[1,2]
 
 allse <- ct %>% select(ensid,se)
 colnames(allse) <- c('ensid','CrossTissue')
 
 for(i in 1:length(tislist)){
   tis <- tislist[i]
-  tish2 <- read.table(my.dir %&% 'GTEx.tissue-wide.h2_' %&% tis %&% '_marginal.local_2015-03-24.txt',header=T)
-  tisse <- tish2 %>% select(ensid,se)
-  allse <- inner_join(tisse,allse,by='ensid')
+  tisdata <- read.table(my.dir %&% 'GTEx.tissue-wide.h2_' %&% tis %&% '_marginal.local_2015-03-24.txt',header=T)
+  nlist <- c(nlist,tisdata[1,2])
+  tisse <- tisdata %>% select(ensid,se)
+  allse <- inner_join(allse,tisse,by='ensid')
   tis <- gsub('(','',tis,fixed=T) #replace any parentheses in tis string
   tis <- gsub(')','',tis,fixed=T)
   tis <- gsub('-','',tis)
-  colnames(allse)[2] <- tis
+  colnames(allse)[2+i] <- tis
 }
+
+alllist<-c("Cross-Tissue",tislist)
+samplesize<-data.frame(cbind(alllist,nlist))
+colnames(samplesize)<-c("Tissue","n")
+arrange(samplesize,desc(n))
 
 dim(allse)
 
-a<-gather(allse,"CrossTissue","Tissue",2:10)
+a<-gather(allse,"CrossTissue","Tissue",3:11)
 colnames(a) <- c('ensid','CrossTissue','TissueName','Tissue')
 ggplot(a,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + xlab('Cross-Tissue SE') + ylab('Tissue-Wide SE') +  ggtitle("GTEx Compare SE from Local h2 estimation")
 
 ```
 
 #### Plot Local h2 estimates of Cross-Tissue and Tissue-Wide expression in GTex
-```{r,ploth2}
+```{r,ploth2,warning=F,message=F}
 allh2 <- ct %>% select(ensid,h2)
 colnames(allh2) <- c('ensid','CrossTissue')
 
 for(i in 1:length(tislist)){
   tis <- tislist[i]
-  tish2 <- read.table(my.dir %&% 'GTEx.tissue-wide.h2_' %&% tis %&% '_marginal.local_2015-03-24.txt',header=T)
-  tish2 <- tish2 %>% select(ensid,h2)
-  allh2 <- inner_join(tish2,allh2,by='ensid')
+  tisdata <- read.table(my.dir %&% 'GTEx.tissue-wide.h2_' %&% tis %&% '_marginal.local_2015-03-24.txt',header=T)
+  tish2 <- tisdata %>% select(ensid,h2)
+  allh2 <- inner_join(allh2,tish2,by='ensid')
   tis <- gsub('(','',tis,fixed=T) #replace any parentheses in tis string
   tis <- gsub(')','',tis,fixed=T)
   tis <- gsub('-','',tis)
-  colnames(allh2)[2] <- tis
+  colnames(allh2)[2+i] <- tis
 }
 
 dim(allh2)
 
-b<-gather(allh2,"CrossTissue","Tissue",2:10)
+b<-gather(allh2,"CrossTissue","Tissue",3:11)
 colnames(b) <- c('ensid','CrossTissue','TissueName','Tissue')
 ggplot(b,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + xlab('Cross-Tissue h2') + ylab('Tissue-Wide h2') +  ggtitle("GTEx Local h2 estimates")
+```
+
+#### Plot histograms of h2 and se
+```{r,hist,warning=F,message=F}
+histh2<-gather(allh2,"ensid","Tissue",2:11)
+colnames(histh2) <- c('ensid','Tissue','h2')
+ggplot(histh2, aes(x = h2, fill = Tissue)) + geom_histogram() + facet_wrap(~Tissue,ncol=2) +  ggtitle("GTEx Local h2") + guides(fill=FALSE)
+ggplot(histh2, aes(x = h2, fill = Tissue)) + geom_histogram() + facet_wrap(~Tissue,ncol=2) + coord_cartesian(xlim=c(0.2,1),ylim=c(0,300)) + ggtitle("GTEx Local h2 > 0.20") + guides(fill=FALSE)
+ggplot(histh2, aes(x = h2, fill = Tissue, color = Tissue)) + geom_density(alpha=0.3) + ggtitle("GTEx Local h2")
+ggplot(histh2, aes(x = h2, fill = Tissue, color = Tissue)) + geom_density(alpha=0.3) + coord_cartesian(ylim=c(0,15)) + ggtitle("GTEx Local h2 ZOOM")
+
+histse<-gather(allse,"ensid","Tissue",2:11)
+colnames(histse) <- c('ensid','Tissue','se')
+ggplot(histse, aes(x = se, fill = Tissue, color = Tissue)) + geom_density(alpha=0.3)
 ```
