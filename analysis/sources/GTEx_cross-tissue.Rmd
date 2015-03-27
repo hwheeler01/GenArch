@@ -1,0 +1,63 @@
+---
+title: "GTEx_cross-tissue"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+#### Plot standard errors (SE) from Local h2 estimation of Cross-Tissue and Tissue-Wide expression in GTex
+```{r,plotSE}
+library(ggplot2)
+library(reshape2)
+library(dplyr)
+library(tidyr)
+library(GGally)
+"%&%" = function(a,b) paste(a,b,sep="")
+my.dir <- '/Users/heather/Dropbox/cross-tissue/expArch_DGN-FHS_results/GTEx-cross-tissue/'
+tislist <- scan(my.dir %&% 'GTEx_nine_tissues','c')
+
+ct <- read.table(my.dir %&% 'GTEx.ranef.cross-tissue.h2_marginal.local_2015-03-23.txt',header=T)
+
+allse <- ct %>% select(ensid,se)
+colnames(allse) <- c('ensid','CrossTissue')
+
+for(i in 1:length(tislist)){
+  tis <- tislist[i]
+  tish2 <- read.table(my.dir %&% 'GTEx.tissue-wide.h2_' %&% tis %&% '_marginal.local_2015-03-24.txt',header=T)
+  tisse <- tish2 %>% select(ensid,se)
+  allse <- inner_join(tisse,allse,by='ensid')
+  tis <- gsub('(','',tis,fixed=T) #replace any parentheses in tis string
+  tis <- gsub(')','',tis,fixed=T)
+  tis <- gsub('-','',tis)
+  colnames(allse)[2] <- tis
+}
+
+dim(allse)
+
+a<-gather(allse,"CrossTissue","Tissue",2:10)
+colnames(a) <- c('ensid','CrossTissue','TissueName','Tissue')
+ggplot(a,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + xlab('Cross-Tissue SE') + ylab('Tissue-Wide SE') +  ggtitle("GTEx Compare SE from Local h2 estimation")
+
+```
+
+#### Plot Local h2 estimates of Cross-Tissue and Tissue-Wide expression in GTex
+```{r,ploth2}
+allh2 <- ct %>% select(ensid,h2)
+colnames(allh2) <- c('ensid','CrossTissue')
+
+for(i in 1:length(tislist)){
+  tis <- tislist[i]
+  tish2 <- read.table(my.dir %&% 'GTEx.tissue-wide.h2_' %&% tis %&% '_marginal.local_2015-03-24.txt',header=T)
+  tish2 <- tish2 %>% select(ensid,h2)
+  allh2 <- inner_join(tish2,allh2,by='ensid')
+  tis <- gsub('(','',tis,fixed=T) #replace any parentheses in tis string
+  tis <- gsub(')','',tis,fixed=T)
+  tis <- gsub('-','',tis)
+  colnames(allh2)[2] <- tis
+}
+
+dim(allh2)
+
+b<-gather(allh2,"CrossTissue","Tissue",2:10)
+colnames(b) <- c('ensid','CrossTissue','TissueName','Tissue')
+ggplot(b,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + xlab('Cross-Tissue h2') + ylab('Tissue-Wide h2') +  ggtitle("GTEx Local h2 estimates")
+```
