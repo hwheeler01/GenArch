@@ -42,7 +42,7 @@ dim(allse)
 
 a<-gather(allse,"CrossTissue","Tissue",3:11)
 colnames(a) <- c('ensid','CrossTissue','TissueName','Tissue')
-ggplot(a,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + xlab('Cross-Tissue SE') + ylab('Tissue-Wide SE') +  ggtitle("GTEx Compare SE from Local h2 estimation")
+ggplot(a,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + ylab('Cross-Tissue SE') + xlab('Tissue-Wide SE') +  ggtitle("GTEx Compare SE from Local h2 estimation")
 
 ```
 
@@ -66,7 +66,7 @@ dim(allh2)
 
 b<-gather(allh2,"CrossTissue","Tissue",3:11)
 colnames(b) <- c('ensid','CrossTissue','TissueName','Tissue')
-ggplot(b,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + xlab('Cross-Tissue h2') + ylab('Tissue-Wide h2') +  ggtitle("GTEx Local h2 estimates")
+ggplot(b,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + ylab('Cross-Tissue h2') + xlab('Tissue-Wide h2') +  ggtitle("GTEx Local h2 estimates")
 ```
 
 #### Plot histograms of h2 and se
