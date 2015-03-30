@@ -12,7 +12,8 @@ library(dplyr)
 library(tidyr)
 library(GGally)
 "%&%" = function(a,b) paste(a,b,sep="")
-my.dir <- '/Users/heather/Dropbox/cross-tissue/expArch_DGN-FHS_results/GTEx-cross-tissue/'
+#my.dir <- '/Users/heather/Dropbox/cross-tissue/expArch_DGN-FHS_results/GTEx-cross-tissue/'
+my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
 tislist <- scan(my.dir %&% 'GTEx_nine_tissues','c')
 
 ct <- read.table(my.dir %&% 'GTEx.ranef.cross-tissue.h2_marginal.local_2015-03-23.txt',header=T)

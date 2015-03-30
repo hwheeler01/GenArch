@@ -54,7 +54,7 @@ if (window.hljs && document.readyState && document.readyState === "complete") {
 <div id="header">
 <h1 class="title">GTEx_cross-tissue</h1>
 <h4 class="author"><em>Heather E. Wheeler</em></h4>
-<h4 class="date"><em>2015-03-27 14:33:39</em></h4>
+<h4 class="date"><em>2015-03-30 10:09:25</em></h4>
 </div>
 
 
@@ -66,7 +66,8 @@ library(dplyr)
 library(tidyr)
 library(GGally)
 &quot;%&amp;%&quot; = function(a,b) paste(a,b,sep=&quot;&quot;)
-my.dir &lt;- '/Users/heather/Dropbox/cross-tissue/expArch_DGN-FHS_results/GTEx-cross-tissue/'
+#my.dir &lt;- '/Users/heather/Dropbox/cross-tissue/expArch_DGN-FHS_results/GTEx-cross-tissue/'
+my.dir &lt;- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
 tislist &lt;- scan(my.dir %&amp;% 'GTEx_nine_tissues','c')
 
 ct &lt;- read.table(my.dir %&amp;% 'GTEx.ranef.cross-tissue.h2_marginal.local_2015-03-23.txt',header=T)
