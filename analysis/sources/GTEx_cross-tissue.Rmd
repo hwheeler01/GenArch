@@ -83,3 +83,113 @@ histse<-gather(allse,"ensid","Tissue",2:11)
 colnames(histse) <- c('ensid','Tissue','se')
 ggplot(histse, aes(x = se, fill = Tissue, color = Tissue)) + geom_density(alpha=0.3)
 ```
+
+## Do same with tissue-specific h2 and se
+#### Plot standard errors (SE) from Local h2 estimation of Cross-Tissue and Tissue-Specific expression in GTex
+```{r,plotSEts,warning=F,message=F}
+my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
+tislist <- scan(my.dir %&% 'GTEx_nine_tissues_spaces','c',sep="\n")
+
+ct <- read.table(my.dir %&% 'GTEx.ranef.cross-tissue.h2_marginal.local_2015-03-23.txt',header=T)
+nlist<-ct[1,2]
+
+ts_allse <- ct %>% select(ensid,se)
+colnames(ts_allse) <- c('ensid','CrossTissue')
+
+for(i in 1:length(tislist)){
+  tis <- tislist[i]
+  tisdata <- read.table(my.dir %&% 'GTEx.resid.tissue-specific.h2_' %&% tis %&% '_marginal.local_2015-03-23.txt',header=T,sep="\t")
+  nlist <- c(nlist,tisdata[1,2])
+  tisse <- tisdata %>% select(ensid,se)
+  ts_allse <- inner_join(ts_allse,tisse,by='ensid')
+  tis <- gsub(' ','',tis) #replace spaces in tis string
+  tis <- gsub('(','',tis,fixed=T) #replace any parentheses in tis string
+  tis <- gsub(')','',tis,fixed=T)
+  tis <- gsub('-','',tis)
+  colnames(ts_allse)[2+i] <- tis
+}
+
+alllist<-c("Cross-Tissue",tislist)
+samplesize<-data.frame(cbind(alllist,nlist))
+colnames(samplesize)<-c("Tissue","n")
+arrange(samplesize,desc(n))
+
+dim(ts_allse)
+
+ts_a<-gather(ts_allse,"CrossTissue","Tissue",3:11)
+colnames(ts_a) <- c('ensid','CrossTissue','TissueName','Tissue')
+ggplot(ts_a,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + ylab('Cross-Tissue SE') + xlab('Tissue-Specific SE') +  ggtitle("GTEx Compare SE from Local h2 estimation")
+
+```
+
+#### Plot Local h2 estimates of Cross-Tissue and Tissue-Specific expression in GTex
+```{r,ploth2ts,warning=F,message=F}
+ts_allh2 <- ct %>% select(ensid,h2)
+colnames(ts_allh2) <- c('ensid','CrossTissue')
+
+for(i in 1:length(tislist)){
+  tis <- tislist[i]
+  tisdata <- read.table(my.dir %&% 'GTEx.resid.tissue-specific.h2_' %&% tis %&% '_marginal.local_2015-03-23.txt',header=T,sep="\t")
+  tish2 <- tisdata %>% select(ensid,h2)
+  ts_allh2 <- inner_join(ts_allh2,tish2,by='ensid')
+  tis <- gsub(' ','',tis) #replace spaces in tis string
+  tis <- gsub('(','',tis,fixed=T) #replace any parentheses in tis string
+  tis <- gsub(')','',tis,fixed=T)
+  tis <- gsub('-','',tis)
+  colnames(ts_allh2)[2+i] <- tis
+}
+
+dim(ts_allh2)
+
+ts_b<-gather(ts_allh2,"CrossTissue","Tissue",3:11)
+colnames(ts_b) <- c('ensid','CrossTissue','TissueName','Tissue')
+ggplot(ts_b,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + ylab('Cross-Tissue h2') + xlab('Tissue-Specific h2') +  ggtitle("GTEx Local h2 estimates")
+```
+
+#### Plot histograms of h2 and se Cross-Tissue and Tissue-Specific
+```{r,histts,warning=F,message=F}
+histh2<-gather(ts_allh2,"ensid","Tissue",2:11)
+colnames(histh2) <- c('ensid','Tissue','h2')
+ggplot(histh2, aes(x = h2, fill = Tissue)) + geom_histogram() + facet_wrap(~Tissue,ncol=2) +  ggtitle("GTEx Local h2") + guides(fill=FALSE)
+ggplot(histh2, aes(x = h2, fill = Tissue)) + geom_histogram() + facet_wrap(~Tissue,ncol=2) + coord_cartesian(xlim=c(0.2,1),ylim=c(0,300)) + ggtitle("GTEx Local h2 > 0.20") + guides(fill=FALSE)
+ggplot(histh2, aes(x = h2, fill = Tissue, color = Tissue)) + geom_density(alpha=0.3) + ggtitle("GTEx Local h2")
+ggplot(histh2, aes(x = h2, fill = Tissue, color = Tissue)) + geom_density(alpha=0.3) + coord_cartesian(ylim=c(0,15)) + ggtitle("GTEx Local h2 ZOOM")
+
+histse<-gather(ts_allse,"ensid","Tissue",2:11)
+colnames(histse) <- c('ensid','Tissue','se')
+ggplot(histse, aes(x = se, fill = Tissue, color = Tissue)) + geom_density(alpha=0.3)
+```
+
+```{r,joindata}
+se3<-inner_join(allse,ts_allse,by="ensid")
+h23<-inner_join(allh2,ts_allh2,by="ensid")
+
+seTW <- select(se3,1:11)
+colnames(seTW)<-gsub('\\.x','',colnames(seTW))
+gseTW <- gather(seTW,"Tissue","TissueWide",3:11)
+dim(gseTW)
+
+seTS <- select(se3,ensid,12:21)
+colnames(seTS)<-gsub('\\.y','',colnames(seTS))
+gseTS <- gather(seTS,"TissueName","TissueSpecific",3:11)
+dim(gseTS)
+
+gseALL <- cbind(gseTW,gseTS)
+
+
+h2TW <- select(h23,1:11)
+colnames(h2TW)<-gsub('\\.x','',colnames(h2TW))
+gh2TW <- gather(h2TW,"Tissue","TissueWide",3:11)
+dim(gh2TW)
+
+h2TS <- select(h23,ensid,12:21)
+colnames(h2TS)<-gsub('\\.y','',colnames(h2TS))
+gh2TS <- gather(h2TS,"TissueName","TissueSpecific",3:11)
+dim(gh2TS)
+
+gh2ALL <- cbind(gh2TW,gh2TS)
+
+ggplot(gh2ALL,aes(x=TissueSpecific,y=TissueWide)) +facet_wrap(~Tissue,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + ylab('Tissue-Wide h2') + xlab('Tissue-Specific h2') +  ggtitle("GTEx Local h2 estimates")
+
+ggplot(gh2ALL,aes(x=TissueSpecific+CrossTissue,y=TissueWide)) +facet_wrap(~Tissue,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + ylab('Tissue-Wide h2') + xlab('Tissue-Specific + Cross-Tissue h2') +  ggtitle("GTEx Local h2 estimates")
+```
