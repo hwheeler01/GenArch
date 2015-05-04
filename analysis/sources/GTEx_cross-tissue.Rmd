@@ -160,7 +160,7 @@ colnames(histse) <- c('ensid','Tissue','se')
 ggplot(histse, aes(x = se, fill = Tissue, color = Tissue)) + geom_density(alpha=0.3)
 ```
 
-```{r,joindata}
+```{r,joindata,fig.width=6,fig.height=9}
 se3<-inner_join(allse,ts_allse,by="ensid")
 h23<-inner_join(allh2,ts_allh2,by="ensid")
 
@@ -191,5 +191,31 @@ gh2ALL <- cbind(gh2TW,gh2TS)
 
 ggplot(gh2ALL,aes(x=TissueSpecific,y=TissueWide)) +facet_wrap(~Tissue,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + ylab('Tissue-Wide h2') + xlab('Tissue-Specific h2') +  ggtitle("GTEx Local h2 estimates")
 
+ggplot(gseALL,aes(x=TissueSpecific,y=TissueWide)) +facet_wrap(~Tissue,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + ylab('Tissue-Wide SE') + xlab('Tissue-Specific SE') +  ggtitle("GTEx Compare SE from Local h2 estimation")
+
 ggplot(gh2ALL,aes(x=TissueSpecific+CrossTissue,y=TissueWide)) +facet_wrap(~Tissue,scales="fixed",ncol=3) + geom_point(cex=0.7) + geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method = "lm") + ylab('Tissue-Wide h2') + xlab('Tissue-Specific + Cross-Tissue h2') +  ggtitle("GTEx Local h2 estimates")
+
+###make ordered point+CI h2 plots
+gTW_h2 <- gather(h2TW,"Tissue.h2","TissueWide.h2",2:11)
+gTW_se <- gather(seTW,"Tissue.se","TissueWide.se",2:11)
+gTW_h2_se <- cbind(gTW_h2,gTW_se[,3])
+colnames(gTW_h2_se) <- c("ensid","Tissue","h2","se")
+ngenes<-nrow(gTW_h2_se)/length(unique(gTW_h2_se$Tissue))
+gTW_h2_se <- gTW_h2_se %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(Tissue,h2) %>% mutate(place=rep(1:ngenes,10),nonzeroCI=ymin>0) 
+ggplot(gTW_h2_se,aes(x=place,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + facet_wrap(~Tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+ggtitle('Tissue-Wide h2')+ theme(legend.justification=c(0,1), legend.position=c(0,1))+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))
+
+gTS_h2 <- gather(h2TS,"Tissue.h2","TissueSpecific.h2",2:11)
+gTS_se <- gather(seTS,"Tissue.se","TissueSpecific.se",2:11)
+gTS_h2_se <- cbind(gTS_h2,gTS_se[,3])
+colnames(gTS_h2_se) <- c("ensid","Tissue","h2","se")
+ngenes<-nrow(gTS_h2_se)/length(unique(gTS_h2_se$Tissue))
+gTS_h2_se <- gTS_h2_se %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(Tissue,h2) %>% mutate(place=rep(1:ngenes,10),nonzeroCI=ymin>0)
+ggplot(gTS_h2_se,aes(x=place,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + facet_wrap(~Tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+ggtitle('Tissue-Specific h2')+ theme(legend.justification=c(0,1), legend.position=c(0,1))+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))
+
+##save data for later
+write.table(h2TW,file=my.dir %&% "GTEx_Tissue-Wide_local_h2.txt",quote=F,row.names=F)
+write.table(seTW,file= my.dir %&% "GTEx_Tissue-Wide_local_se.txt",quote=F,row.names=F)
+write.table(h2TS,file=my.dir %&% "GTEx_Tissue-Specific_local_h2.txt",quote=F,row.names=F)
+write.table(seTS,file=my.dir %&% "GTEx_Tissue-Specific_local_se.txt",quote=F,row.names=F)
+
 ```

@@ -75,7 +75,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-04-30 14:42:56}
+  \date{2015-05-04 13:35:13}
 
 
 
@@ -142,15 +142,19 @@ the \textbf{centered equation}:
 
 \subsection{Tables}\label{tables}
 
+\begin{verbatim}
+## Warning: package 'knitr' was built under R version 3.1.2
+\end{verbatim}
+
 \begin{longtable}[c]{@{}lrrrr@{}}
 \toprule\addlinespace
 & Estimate & Std. Error & t value &
 Pr(\textgreater{}\textbar{}t\textbar{})
 \\\addlinespace
 \midrule\endhead
-(Intercept) & 0.11 & 0.11 & 0.99 & 0.32
+(Intercept) & 0.03 & 0.11 & 0.26 & 0.8
 \\\addlinespace
-x & 2.02 & 0.11 & 18.64 & 0.00
+x & 1.99 & 0.11 & 17.87 & 0.0
 \\\addlinespace
 \bottomrule
 \addlinespace
@@ -162,27 +166,28 @@ x & 2.02 & 0.11 & 18.64 & 0.00
 \begin{figure}[htbp]
 \centering
 \includegraphics{GenArch_manuscript_files/figure-latex/jointH2-1.pdf}
-\caption{DGN-WB joint heritability. Local h\^{}2 is estimated with SNPs
-within 1 Mb of each gene. Global h\^{}2 is estimated with SNPs that are
-eQTLs in the Framingham Heart Study on other chromosomes (FDR
-\textless{} 0.05).}
+\caption{DGN-WB joint heritability. Local h\textsuperscript{2} is
+estimated with SNPs within 1 Mb of each gene. Global
+h\textsuperscript{2} is estimated with SNPs that are eQTLs in the
+Framingham Heart Study on other chromosomes (FDR \textless{} 0.05).}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics{GenArch_manuscript_files/figure-latex/transH2-1.pdf}
-\caption{DGN-WB joint heritability with known trans-eQTLs. Local h\^{}2
-is estimated with SNPs within 1 Mb of each gene. Known trans h\^{}2 is
-estimated with SNPs that are trans-eQTLs in the Framingham Heart Study
-for each gene (FDR \textless{} 0.05).}
+\caption{DGN-WB joint heritability with known trans-eQTLs. Local
+h\textsuperscript{2} is estimated with SNPs within 1 Mb of each gene.
+Known trans h\textsuperscript{2} is estimated with SNPs that are
+trans-eQTLs in the Framingham Heart Study for each gene (FDR \textless{}
+0.05).}
 \end{figure}
 
 \subsection{Citations}\label{citations}
 
 The relationship was first described by Halpern et al. (2006). However,
 there are also opinions that the relationship is spurious (Keil \emph{et
-al.} 2012). We used R for our calculations (R Core Team 2015), and we
-used package \texttt{knitcitations} (Boettiger 2014) to make the
+al.} 2012). We used R for our calculations ({\textbf{???}}), and we used
+package \texttt{knitcitations} (Boettiger 2014) to make the
 bibliography.
 
 \section{Results and discussion}\label{results-and-discussion}
@@ -226,9 +231,5 @@ Keil, P., Belmaker, J., Wilson, A.M., Unitt, P. \& Jetz, W. (2012).
 Downscaling of species distribution models: a hierarchical approach (R.
 Freckleton, Ed.). \emph{Methods Ecol Evol}, \textbf{4}, 82--94.
 Retrieved from \url{http://dx.doi.org/10.1111/j.2041-210x.2012.00264.x}
-
-R Core Team. (2015). \emph{R: A language and environment for statistical
-computing}. R Foundation for Statistical Computing, Vienna, Austria.
-Retrieved from \url{http://www.R-project.org/}
 
 \end{document}

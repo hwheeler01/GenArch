@@ -1,0 +1,203 @@
+---
+title: "GenArch_figures"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+  library(ggplot2)
+  library(reshape2)
+  library(dplyr)
+  library(tidyr)
+  library(GGally)
+  "%&%" = function(a,b) paste(a,b,sep="")
+  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
+  my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
+  fig.dir <- '~/GitHub/cross-tissue/GenArchPaper/Figures/'
+```
+##Fig1
+DGN-WB joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Global h^2^ is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).
+```{r jointH2,fig.width=6,fig.height=16, echo=TRUE, warning=FALSE, message=FALSE}
+otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt'
+
+fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
+
+##Plot FDR based results
+a<-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("local h"^2)) + ylab(expression("global h"^2)) + coord_cartesian(ylim=c(0,1),xlim=c(0,1)) + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
+
+##plot joint h2 estimates
+local <- fdrother %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
+names(local) = c('h2','se')
+data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+data <- data[complete.cases(data),]
+cigt0 <- data$ymin>0
+table(cigt0)
+table(cigt0)/sum(table(cigt0))
+data <- mutate(data,nonzeroCI=cigt0)
+b<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(0,1))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))
+
+global <- fdrother %>% select(glo.jt.h2,glo.jt.se) %>% arrange(glo.jt.h2) 
+names(global) = c('h2','se')
+data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+data <- data[complete.cases(data),]
+cigt0 <- data$ymin>0
+table(cigt0)
+table(cigt0)/sum(table(cigt0))
+data <- mutate(data,nonzeroCI=cigt0)
+c<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("global h"^2)) + xlab(expression("genes ordered by global h"^2))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))
+multiplot(a,b,c,cols=1)
+
+tiff(filename=fig.dir %&% "Fig1.tiff",width=360,height=960)
+multiplot(a,b,c,cols=1)
+dev.off()
+```
+##Fig2
+DGN-WB joint heritability with known trans-eQTLs. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Known trans h^2^ is estimated with SNPs that are trans-eQTLs in the Framingham Heart Study for each gene (FDR < 0.05).
+```{r transH2,fig.width=6,fig.height=16, echo=TRUE, warning=FALSE, message=FALSE}
+transfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_transForGene.2015-03-20.txt'
+
+fdrtrans<-read.table(transfile,header=T) ##FHS trans-eQTLs for gene w/fdr<0.05 used to define Known trans GRM
+
+##Plot FDR based results
+a<-ggplot(fdrtrans,aes(x=loc.jt.h2,y=trans.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("local h"^2)) + ylab(expression("known trans h"^2)) + coord_cartesian(ylim=c(0,1),xlim=c(0,1)) + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
+##plot joint h2 estimates
+local <- fdrtrans %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
+names(local) = c('h2','se')
+data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+data <- data[complete.cases(data),]
+cigt0 <- data$ymin>0
+table(cigt0)
+table(cigt0)/sum(table(cigt0))
+data <- mutate(data,nonzeroCI=cigt0)
+b<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax,color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(0,1),xlim=c(-30,1280))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))
+
+global <- fdrtrans %>% select(trans.jt.h2,trans.jt.se) %>% arrange(trans.jt.h2) 
+names(global) = c('h2','se')
+data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+data <- data[complete.cases(data),]
+cigt0 <- data$ymin>0
+table(cigt0)
+table(cigt0)/sum(table(cigt0))
+data <- mutate(data,nonzeroCI=cigt0)
+c<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax,color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("known trans h"^2)) + xlab(expression("genes ordered by known trans h"^2))+coord_cartesian(ylim=c(0,1),xlim=c(-30,1280))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))
+multiplot(a,b,c,cols=1)
+
+tiff(filename=fig.dir %&% "Fig2.tiff",width=360,height=960)
+multiplot(a,b,c,cols=1)
+dev.off()
+```
+##Fig3
+GTEx tissue-wide heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. 
+```{r TW_h2,fig.width=6,fig.height=9, echo=TRUE, warning=FALSE, message=FALSE}
+h2TW<-read.table(my.dir %&% "GTEx_Tissue-Wide_local_h2.txt",header=T)
+seTW<-read.table(my.dir %&% "GTEx_Tissue-Wide_local_se.txt",header=T)
+
+###make ordered point+CI h2 plots
+gTW_h2 <- gather(h2TW,"Tissue.h2","TissueWide.h2",2:11)
+gTW_se <- gather(seTW,"Tissue.se","TissueWide.se",2:11)
+gTW_h2_se <- cbind(gTW_h2,gTW_se[,3])
+colnames(gTW_h2_se) <- c("ensid","Tissue","h2","se")
+ngenes<-nrow(gTW_h2_se)/length(unique(gTW_h2_se$Tissue))
+gTW_h2_se <- gTW_h2_se %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(Tissue,h2) %>% mutate(place=rep(1:ngenes,10),nonzeroCI=ymin>0) 
+fig3<-ggplot(gTW_h2_se,aes(x=place,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + facet_wrap(~Tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+ theme(legend.justification=c(0,1), legend.position=c(0,1))+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),strip.text.x = element_text(size = 18),legend.text=element_text(size=14),legend.title=element_text(size=14))
+fig3
+
+tiff(filename=fig.dir %&% "Fig3.tiff",width=720,height=960)
+fig3
+dev.off()
+
+###calc % nonzero for each tissue TISSUE-WIDE
+### ADD to plot legend
+a<-gTW_h2_se %>% select(ensid,Tissue,nonzeroCI) %>% spread(Tissue,nonzeroCI)
+for(i in 2:11){
+  tis<-colnames(a)[i]
+  cat("\n\n---",tis,"---\n")
+  print(table(a[,i]))
+  print(round(table(a[,i])/sum(table(a[,i])),3))
+}
+###calc mean h2 for each tissue
+a<-gTW_h2_se %>% select(ensid,Tissue,h2) %>% spread(Tissue,h2)
+for(i in 2:11){
+  tis<-colnames(a)[i]
+  cat(tis,"mean h2:",mean(a[,i]),"\n")
+}
+
+```
+
+##Fig4
+GTEx cross-tissue and tissue-wide h^2^ (A) and SE (B). 
+```{r TW_v_CT,fig.width=4.5,fig.height=9, echo=TRUE, warning=FALSE, message=FALSE}
+h2TW<-read.table(my.dir %&% "GTEx_Tissue-Wide_local_h2.txt",header=T)
+seTW<-read.table(my.dir %&% "GTEx_Tissue-Wide_local_se.txt",header=T)
+
+gh2_TW<-gather(h2TW,"CrossTissue","Tissue",3:11)
+colnames(gh2_TW) <- c('ensid','CrossTissue','TissueName','Tissue')
+fig4a<-ggplot(gh2_TW,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(alpha=1/5) + geom_abline(intercept=0, slope=1,color='red') +geom_smooth(method = "lm") + ylab(expression('Cross-Tissue h'^2)) + xlab(expression('Tissue-Wide h'^2)) +  ggtitle("A")+ coord_cartesian(ylim=c(-0.1,1.1),xlim=c(-0.1,1.1)) + theme(plot.title = element_text(hjust = 0,face="bold")) 
+
+gse_TW<-gather(seTW,"CrossTissue","Tissue",3:11)
+colnames(gse_TW) <- c('ensid','CrossTissue','TissueName','Tissue')
+fig4b<-ggplot(gse_TW,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(alpha=1/5) + geom_abline(intercept=0, slope=1,color='red') +geom_smooth(method = "lm") + ylab('Cross-Tissue SE') + xlab('Tissue-Wide SE') +  ggtitle("B") + coord_cartesian(ylim=c(-0.01,0.16),xlim=c(-0.01,0.16))+ theme(plot.title = element_text(hjust = 0,face="bold")) 
+multiplot(fig4a,fig4b)
+
+tiff(filename=fig.dir %&% "Fig4.tiff",width=480,height=960)
+multiplot(fig4a,fig4b)
+dev.off()
+```
+
+##FigS1
+GTEx tissue-specific heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. 
+```{r TS_h2,fig.width=6,fig.height=9, echo=TRUE, warning=FALSE, message=FALSE}
+h2TS<-read.table(my.dir %&% "GTEx_Tissue-Specific_local_h2.txt",header=T)
+seTS<-read.table(my.dir %&% "GTEx_Tissue-Specific_local_se.txt",header=T)
+
+###make ordered point+CI h2 plots
+gTS_h2 <- gather(h2TS,"Tissue.h2","TissueSpecific.h2",2:11)
+gTS_se <- gather(seTS,"Tissue.se","TissueSpecific.se",2:11)
+gTS_h2_se <- cbind(gTS_h2,gTS_se[,3])
+colnames(gTS_h2_se) <- c("ensid","Tissue","h2","se")
+ngenes<-nrow(gTS_h2_se)/length(unique(gTS_h2_se$Tissue))
+gTS_h2_se <- gTS_h2_se %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(Tissue,h2) %>% mutate(place=rep(1:ngenes,10),nonzeroCI=ymin>0) 
+figS1<-ggplot(gTS_h2_se,aes(x=place,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + facet_wrap(~Tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+ theme(legend.justification=c(0,1), legend.position=c(0,1))+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),strip.text.x = element_text(size = 18),legend.text=element_text(size=14),legend.title=element_text(size=14))
+figS1
+
+tiff(filename=fig.dir %&% "FigS1.tiff",width=720,height=960)
+figS1
+dev.off()
+
+###calc % nonzero for each tissue TISSUE-SPECIFIC
+### ADD to plot legend
+b<-gTS_h2_se %>% select(ensid,Tissue,nonzeroCI) %>% spread(Tissue,nonzeroCI)
+for(i in 2:11){
+  tis<-colnames(b)[i]
+  cat("\n\n---",tis,"---\n")
+  print(table(b[,i]))
+  print(round(table(b[,i])/sum(table(b[,i])),3))
+}
+###calc mean h2 for each tissue
+b<-gTS_h2_se %>% select(ensid,Tissue,h2) %>% spread(Tissue,h2)
+for(i in 2:11){
+  tis<-colnames(b)[i]
+  cat(tis,"mean h2:",mean(b[,i]),"\n")
+}
+```
+
+##FigS2
+GTEx cross-tissue and tissue-specific h^2^ (A) and SE (B). 
+```{r TS_v_CT,fig.width=4.5,fig.height=9, echo=TRUE, warning=FALSE, message=FALSE}
+h2TS<-read.table(my.dir %&% "GTEx_Tissue-Specific_local_h2.txt",header=T)
+seTS<-read.table(my.dir %&% "GTEx_Tissue-Specific_local_se.txt",header=T)
+
+gh2_TS<-gather(h2TS,"CrossTissue","Tissue",3:11)
+colnames(gh2_TS) <- c('ensid','CrossTissue','TissueName','Tissue')
+figS2a<-ggplot(gh2_TS,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(alpha=1/5) + geom_abline(intercept=0, slope=1,color='red') +geom_smooth(method = "lm") + ylab(expression('Cross-Tissue h'^2)) + xlab(expression('Tissue-Specific h'^2)) +  ggtitle("A")+ coord_cartesian(ylim=c(-0.1,1.1),xlim=c(-0.1,1.1)) + theme(plot.title = element_text(hjust = 0,face="bold")) 
+
+gse_TS<-gather(seTS,"CrossTissue","Tissue",3:11)
+colnames(gse_TS) <- c('ensid','CrossTissue','TissueName','Tissue')
+figS2b<-ggplot(gse_TS,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(alpha=1/5) + geom_abline(intercept=0, slope=1,color='red') +geom_smooth(method = "lm") + ylab('Cross-Tissue SE') + xlab('Tissue-Specific SE') +  ggtitle("B") + coord_cartesian(ylim=c(-0.01,0.16),xlim=c(-0.01,0.16))+ theme(plot.title = element_text(hjust = 0,face="bold")) 
+multiplot(figS2a,figS2b)
+
+tiff(filename=fig.dir %&% "FigS2.tiff",width=480,height=960)
+multiplot(figS2a,figS2b)
+dev.off()
+```

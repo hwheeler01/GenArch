@@ -80,7 +80,7 @@ print(tab, type="latex")
 
 ## Plots
 
-```{r jointH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN-WB joint heritability. Local h^2 is estimated with SNPs within 1 Mb of each gene. Global h^2 is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).",fig.width=5,fig.height=9}
+```{r jointH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN-WB joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Global h^2^ is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).",fig.width=3,fig.height=8}
 otherfile<-'/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt'
 
 fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
@@ -107,7 +107,7 @@ c<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) 
 multiplot(a,b,c,cols=1)
 ```
 
-```{r transH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN-WB joint heritability with known trans-eQTLs. Local h^2 is estimated with SNPs within 1 Mb of each gene. Known trans h^2 is estimated with SNPs that are trans-eQTLs in the Framingham Heart Study for each gene (FDR < 0.05).",fig.width=5,fig.height=9}
+```{r transH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN-WB joint heritability with known trans-eQTLs. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Known trans h^2^ is estimated with SNPs that are trans-eQTLs in the Framingham Heart Study for each gene (FDR < 0.05).",fig.width=3,fig.height=8}
 transfile<-'/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_transForGene.2015-03-20.txt'
 
 fdrtrans<-read.table(transfile,header=T) ##FHS trans-eQTLs for gene w/fdr<0.05 used to define Known trans GRM
