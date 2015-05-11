@@ -25,8 +25,11 @@ bibliography: references.bib
   library(ggplot2)
   library(reshape2)
   library(dplyr)
+  library(png)
+  library(grid)
   "%&%" = function(a,b) paste(a,b,sep="")
   source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
+  fig.dir <- '~/GitHub/cross-tissue/GenArchPaper/Figures/'
 ```
 
 # Abstract
@@ -80,59 +83,34 @@ print(tab, type="latex")
 
 ## Plots
 
-```{r jointH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN-WB joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Global h^2^ is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).",fig.width=3,fig.height=8}
-otherfile<-'/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt'
-
-fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
-
-##Plot FDR based results
-a<-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("local h"^2)) + ylab(expression("global h"^2)) + coord_cartesian(ylim=c(0,1),xlim=c(0,1)) 
-
-##plot joint h2 estimates
-local <- fdrother %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
-names(local) = c('h2','se')
-data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-data <- data[complete.cases(data),]
-cigt0 <- data$ymin>0
-data <- mutate(data,nonzeroCI=cigt0)
-b<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(0,1))+ theme(legend.justification=c(0,1), legend.position=c(0,1))
-
-global <- fdrother %>% select(glo.jt.h2,glo.jt.se) %>% arrange(glo.jt.h2) 
-names(global) = c('h2','se')
-data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-data <- data[complete.cases(data),]
-cigt0 <- data$ymin>0
-data <- mutate(data,nonzeroCI=cigt0)
-c<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("global h"^2)) + xlab(expression("genes ordered by global h"^2))+ theme(legend.justification=c(0,1), legend.position=c(0,1))
-multiplot(a,b,c,cols=1)
+```{r jointH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN-WB joint heritability (h^2^). Local h^2^ is estimated with SNPs within 1 Mb of each gene. Global h^2^ is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).",fig.width=3,fig.height=8}
+fig1<-readPNG(fig.dir %&% 'Fig1.png')
+grid.raster(fig1)
 ```
 
-```{r transH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN-WB joint heritability with known trans-eQTLs. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Known trans h^2^ is estimated with SNPs that are trans-eQTLs in the Framingham Heart Study for each gene (FDR < 0.05).",fig.width=3,fig.height=8}
-transfile<-'/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_transForGene.2015-03-20.txt'
+```{r transH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN-WB joint heritability (h^2^) with known trans-eQTLs. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Known trans h^2^ is estimated with SNPs that are trans-eQTLs in the Framingham Heart Study for each gene (FDR < 0.05).",fig.width=3,fig.height=8}
+fig2<-readPNG(fig.dir %&% 'Fig2.png')
+grid.raster(fig2)
+```
 
-fdrtrans<-read.table(transfile,header=T) ##FHS trans-eQTLs for gene w/fdr<0.05 used to define Known trans GRM
+```{r otdTWh2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue heritability (h^2^) compared to tissue-wide h^2^.  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-wide local h^2^ is estimated using the measured gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=5,fig.height=8}
+fig3<-readPNG(fig.dir %&% 'Fig3.png')
+grid.raster(fig3)
+```
 
-##Plot FDR based results
-a<-ggplot(fdrtrans,aes(x=loc.jt.h2,y=trans.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("local h"^2)) + ylab(expression("known trans h"^2)) + coord_cartesian(ylim=c(0,1),xlim=c(0,1)) 
-##plot joint h2 estimates
-local <- fdrtrans %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
-names(local) = c('h2','se')
-data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-data <- data[complete.cases(data),]
-cigt0 <- data$ymin>0
-data <- mutate(data,nonzeroCI=cigt0)
-b<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax,color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(0,1))+ theme(legend.justification=c(0,1), legend.position=c(0,1))
+```{r otdTWh2SE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue and tissue-wide comparison of heritability (h^2^, **A**) and standard error (SE, **B**).  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-wide local h^2^ is estimated using the measured gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=4,fig.height=8}
+fig4<-readPNG(fig.dir %&% 'Fig4.png')
+grid.raster(fig4)
+```
 
-global <- fdrtrans %>% select(trans.jt.h2,trans.jt.se) %>% arrange(trans.jt.h2) 
-names(global) = c('h2','se')
-data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-data <- data[complete.cases(data),]
-cigt0 <- data$ymin>0
-data <- mutate(data,nonzeroCI=cigt0)
-c<-ggplot(data,aes(x=1:nrow(data),y=h2,ymin=ymin, ymax=ymax,color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("known trans h"^2)) + xlab(expression("genes ordered by known trans h"^2))+ theme(legend.justification=c(0,1), legend.position=c(0,1))
+```{r otdTSh2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue heritability (h^2^) compared to tissue-specific h^2^.  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-specifc local h^2^ is estimated using the tissue-specific component (residuals) of the mixed effects model for gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=5,fig.height=8}
+figS1<-readPNG(fig.dir %&% 'FigS1.png')
+grid.raster(figS1)
+```
 
-
-multiplot(a,b,c,cols=1)
+```{r otdTSh2SE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue and tissue-specific comparison of heritability (h^2^, **A**) and standard error (SE, **B**) estimation.  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-specifc local h^2^ is estimated using the tissue-specific component (residuals) of the mixed effects model for gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=4,fig.height=8}
+figS2<-readPNG(fig.dir %&% 'FigS2.png')
+grid.raster(figS2)
 ```
 
 ## Citations

@@ -66,6 +66,10 @@ multiplot(a,b,c,cols=1)
 tiff(filename=fig.dir %&% "Fig1.tiff",width=360,height=960)
 multiplot(a,b,c,cols=1)
 dev.off()
+
+png(filename=fig.dir %&% "Fig1.png",width=360,height=960)
+multiplot(a,b,c,cols=1)
+dev.off()
 ```
 ##Fig2
 DGN-WB joint heritability with known trans-eQTLs. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Known trans h^2^ is estimated with SNPs that are trans-eQTLs in the Framingham Heart Study for each gene (FDR < 0.05).
@@ -113,6 +117,10 @@ c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax,color=nonzeroCI) ) + geo
 multiplot(a,b,c,cols=1)
 
 tiff(filename=fig.dir %&% "Fig2.tiff",width=360,height=960)
+multiplot(a,b,c,cols=1)
+dev.off()
+
+png(filename=fig.dir %&% "Fig2.png",width=360,height=960)
 multiplot(a,b,c,cols=1)
 dev.off()
 ```
@@ -163,6 +171,10 @@ fig3
 tiff(filename=fig.dir %&% "Fig3.tiff",width=720,height=960)
 fig3
 dev.off()
+
+png(filename=fig.dir %&% "Fig3.png",width=720,height=960)
+fig3
+dev.off()
 ```
 
 ##Fig4
@@ -181,6 +193,10 @@ fig4b<-ggplot(gse_TW,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales
 multiplot(fig4a,fig4b)
 
 tiff(filename=fig.dir %&% "Fig4.tiff",width=480,height=960)
+multiplot(fig4a,fig4b)
+dev.off()
+
+png(filename=fig.dir %&% "Fig4.png",width=480,height=960)
 multiplot(fig4a,fig4b)
 dev.off()
 ```
@@ -232,6 +248,10 @@ tiff(filename=fig.dir %&% "FigS1.tiff",width=720,height=960)
 figS1
 dev.off()
 
+png(filename=fig.dir %&% "FigS1.png",width=720,height=960)
+figS1
+dev.off()
+
 ```
 
 ##FigS2
@@ -250,6 +270,10 @@ figS2b<-ggplot(gse_TS,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scale
 multiplot(figS2a,figS2b)
 
 tiff(filename=fig.dir %&% "FigS2.tiff",width=480,height=960)
+multiplot(figS2a,figS2b)
+dev.off()
+
+png(filename=fig.dir %&% "FigS2.png",width=480,height=960)
 multiplot(figS2a,figS2b)
 dev.off()
 ```

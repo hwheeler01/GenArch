@@ -75,7 +75,7 @@
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-05-04 13:35:13}
+  \date{2015-05-11 08:40:00}
 
 
 
@@ -152,9 +152,9 @@ the \textbf{centered equation}:
 Pr(\textgreater{}\textbar{}t\textbar{})
 \\\addlinespace
 \midrule\endhead
-(Intercept) & 0.03 & 0.11 & 0.26 & 0.8
+(Intercept) & 0.05 & 0.11 & 0.45 & 0.65
 \\\addlinespace
-x & 1.99 & 0.11 & 17.87 & 0.0
+x & 2.10 & 0.11 & 19.72 & 0.00
 \\\addlinespace
 \bottomrule
 \addlinespace
@@ -166,20 +166,70 @@ x & 1.99 & 0.11 & 17.87 & 0.0
 \begin{figure}[htbp]
 \centering
 \includegraphics{GenArch_manuscript_files/figure-latex/jointH2-1.pdf}
-\caption{DGN-WB joint heritability. Local h\textsuperscript{2} is
-estimated with SNPs within 1 Mb of each gene. Global
-h\textsuperscript{2} is estimated with SNPs that are eQTLs in the
+\caption{DGN-WB joint heritability (h\textsuperscript{2}). Local
+h\textsuperscript{2} is estimated with SNPs within 1 Mb of each gene.
+Global h\textsuperscript{2} is estimated with SNPs that are eQTLs in the
 Framingham Heart Study on other chromosomes (FDR \textless{} 0.05).}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics{GenArch_manuscript_files/figure-latex/transH2-1.pdf}
-\caption{DGN-WB joint heritability with known trans-eQTLs. Local
-h\textsuperscript{2} is estimated with SNPs within 1 Mb of each gene.
-Known trans h\textsuperscript{2} is estimated with SNPs that are
-trans-eQTLs in the Framingham Heart Study for each gene (FDR \textless{}
-0.05).}
+\caption{DGN-WB joint heritability (h\textsuperscript{2}) with known
+trans-eQTLs. Local h\textsuperscript{2} is estimated with SNPs within 1
+Mb of each gene. Known trans h\textsuperscript{2} is estimated with SNPs
+that are trans-eQTLs in the Framingham Heart Study for each gene (FDR
+\textless{} 0.05).}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{GenArch_manuscript_files/figure-latex/otdTWh2-1.pdf}
+\caption{Cross-tissue heritability (h\textsuperscript{2}) compared to
+tissue-wide h\textsuperscript{2}. Cross-tissue local
+h\textsuperscript{2} is estimated using the cross-tissue component
+(random effects) of the mixed effects model for gene expression and SNPs
+within 1 Mb of each gene. Tissue-wide local h\textsuperscript{2} is
+estimated using the measured gene expression for each respective tissue
+and SNPs within 1 Mb of each gene.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{GenArch_manuscript_files/figure-latex/otdTWh2SE-1.pdf}
+\caption{Cross-tissue and tissue-wide comparison of heritability
+(h\textsuperscript{2}, \textbf{A}) and standard error (SE, \textbf{B}).
+Cross-tissue local h\textsuperscript{2} is estimated using the
+cross-tissue component (random effects) of the mixed effects model for
+gene expression and SNPs within 1 Mb of each gene. Tissue-wide local
+h\textsuperscript{2} is estimated using the measured gene expression for
+each respective tissue and SNPs within 1 Mb of each gene.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{GenArch_manuscript_files/figure-latex/otdTSh2-1.pdf}
+\caption{Cross-tissue heritability (h\textsuperscript{2}) compared to
+tissue-specific h\textsuperscript{2}. Cross-tissue local
+h\textsuperscript{2} is estimated using the cross-tissue component
+(random effects) of the mixed effects model for gene expression and SNPs
+within 1 Mb of each gene. Tissue-specifc local h\textsuperscript{2} is
+estimated using the tissue-specific component (residuals) of the mixed
+effects model for gene expression for each respective tissue and SNPs
+within 1 Mb of each gene.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{GenArch_manuscript_files/figure-latex/otdTSh2SE-1.pdf}
+\caption{Cross-tissue and tissue-specific comparison of heritability
+(h\textsuperscript{2}, \textbf{A}) and standard error (SE, \textbf{B})
+estimation. Cross-tissue local h\textsuperscript{2} is estimated using
+the cross-tissue component (random effects) of the mixed effects model
+for gene expression and SNPs within 1 Mb of each gene. Tissue-specifc
+local h\textsuperscript{2} is estimated using the tissue-specific
+component (residuals) of the mixed effects model for gene expression for
+each respective tissue and SNPs within 1 Mb of each gene.}
 \end{figure}
 
 \subsection{Citations}\label{citations}
