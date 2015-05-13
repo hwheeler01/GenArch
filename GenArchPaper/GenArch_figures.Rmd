@@ -15,7 +15,7 @@ output: html_document
   "%&%" = function(a,b) paste(a,b,sep="")
   source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
   my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
-  fig.dir <- '~/GitHub/cross-tissue/GenArchPaper/Figures/'
+  fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
 ```
 ##Fig1
 DGN-WB joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Global h^2^ is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).
@@ -185,11 +185,11 @@ seTW<-read.table(my.dir %&% "GTEx_Tissue-Wide_local_se.txt",header=T)
 
 gh2_TW<-gather(h2TW,"CrossTissue","Tissue",3:11)
 colnames(gh2_TW) <- c('ensid','CrossTissue','TissueName','Tissue')
-fig4a<-ggplot(gh2_TW,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(alpha=1/5) + geom_abline(intercept=0, slope=1,color='red') +geom_smooth(method = "lm") + ylab(expression('Cross-Tissue h'^2)) + xlab(expression('Tissue-Wide h'^2)) +  ggtitle("A")+ coord_cartesian(ylim=c(-0.1,1.1),xlim=c(-0.1,1.1)) + theme(plot.title = element_text(hjust = 0,face="bold")) 
+fig4a<-ggplot(gh2_TW,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(alpha=1/5) + geom_abline(intercept=0, slope=1,color='red')  + ylab(expression('Cross-Tissue h'^2)) + xlab(expression('Tissue-Wide h'^2)) +  ggtitle("A")+ coord_cartesian(ylim=c(-0.1,1.1),xlim=c(-0.1,1.1)) + theme(plot.title = element_text(hjust = 0,face="bold")) 
 
 gse_TW<-gather(seTW,"CrossTissue","Tissue",3:11)
 colnames(gse_TW) <- c('ensid','CrossTissue','TissueName','Tissue')
-fig4b<-ggplot(gse_TW,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(alpha=1/5) + geom_abline(intercept=0, slope=1,color='red') +geom_smooth(method = "lm") + ylab('Cross-Tissue SE') + xlab('Tissue-Wide SE') +  ggtitle("B") + coord_cartesian(ylim=c(-0.01,0.16),xlim=c(-0.01,0.16))+ theme(plot.title = element_text(hjust = 0,face="bold")) 
+fig4b<-ggplot(gse_TW,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(alpha=1/5) + geom_abline(intercept=0, slope=1,color='red')  + ylab('Cross-Tissue SE') + xlab('Tissue-Wide SE') +  ggtitle("B") + coord_cartesian(ylim=c(-0.01,0.16),xlim=c(-0.01,0.16))+ theme(plot.title = element_text(hjust = 0,face="bold")) 
 multiplot(fig4a,fig4b)
 
 tiff(filename=fig.dir %&% "Fig4.tiff",width=480,height=960)
@@ -262,11 +262,11 @@ seTS<-read.table(my.dir %&% "GTEx_Tissue-Specific_local_se.txt",header=T)
 
 gh2_TS<-gather(h2TS,"CrossTissue","Tissue",3:11)
 colnames(gh2_TS) <- c('ensid','CrossTissue','TissueName','Tissue')
-figS2a<-ggplot(gh2_TS,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(alpha=1/5) + geom_abline(intercept=0, slope=1,color='red') +geom_smooth(method = "lm") + ylab(expression('Cross-Tissue h'^2)) + xlab(expression('Tissue-Specific h'^2)) +  ggtitle("A")+ coord_cartesian(ylim=c(-0.1,1.1),xlim=c(-0.1,1.1)) + theme(plot.title = element_text(hjust = 0,face="bold")) 
+figS2a<-ggplot(gh2_TS,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(alpha=1/5) + geom_abline(intercept=0, slope=1,color='red')  + ylab(expression('Cross-Tissue h'^2)) + xlab(expression('Tissue-Specific h'^2)) +  ggtitle("A")+ coord_cartesian(ylim=c(-0.1,1.1),xlim=c(-0.1,1.1)) + theme(plot.title = element_text(hjust = 0,face="bold")) 
 
 gse_TS<-gather(seTS,"CrossTissue","Tissue",3:11)
 colnames(gse_TS) <- c('ensid','CrossTissue','TissueName','Tissue')
-figS2b<-ggplot(gse_TS,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(alpha=1/5) + geom_abline(intercept=0, slope=1,color='red') +geom_smooth(method = "lm") + ylab('Cross-Tissue SE') + xlab('Tissue-Specific SE') +  ggtitle("B") + coord_cartesian(ylim=c(-0.01,0.16),xlim=c(-0.01,0.16))+ theme(plot.title = element_text(hjust = 0,face="bold")) 
+figS2b<-ggplot(gse_TS,aes(x=Tissue,y=CrossTissue)) +facet_wrap(~TissueName,scales="fixed",ncol=3) + geom_point(alpha=1/5) + geom_abline(intercept=0, slope=1,color='red') + ylab('Cross-Tissue SE') + xlab('Tissue-Specific SE') +  ggtitle("B") + coord_cartesian(ylim=c(-0.01,0.16),xlim=c(-0.01,0.16))+ theme(plot.title = element_text(hjust = 0,face="bold")) 
 multiplot(figS2a,figS2b)
 
 tiff(filename=fig.dir %&% "FigS2.tiff",width=480,height=960)

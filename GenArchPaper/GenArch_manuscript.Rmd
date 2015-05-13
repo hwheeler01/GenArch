@@ -1,7 +1,10 @@
 ---
 title: "Genetic Architecture of Transcriptome Regulation"
-author: "Heather E. Wheeler, Hae Kyung Im"
-date: "`r Sys.time()`"
+author: Heather E. Wheeler^1^, Nicholas Knoblauch^2^, GTEx Consortium, Nancy J. Cox^3^,
+  Dan L. Nicolae^1^, Hae Kyung Im^1^
+date: '`r Sys.time()` ^1^Department of Medicine, University of Chicago, ^2^Committee
+  on Genetics, Genomics, and Systems Biology, University of Chicago, ^3^Division of
+  Genetic Medicine, Vanderbilt University'
 output:
   pdf_document:
     fig_caption: yes
@@ -13,8 +16,8 @@ output:
     highlight: pygments
     number_sections: yes
     theme: cerulean
-csl: mee.csl
-bibliography: references.bib
+csl: plos.csl
+bibliography: GenArch_references.bib
 ---
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
@@ -29,7 +32,7 @@ bibliography: references.bib
   library(grid)
   "%&%" = function(a,b) paste(a,b,sep="")
   source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
-  fig.dir <- '~/GitHub/cross-tissue/GenArchPaper/Figures/'
+  fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
 ```
 
 # Abstract

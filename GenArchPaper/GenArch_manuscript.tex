@@ -51,7 +51,7 @@
 \fi
 \hypersetup{breaklinks=true,
             bookmarks=true,
-            pdfauthor={Heather E. Wheeler, Hae Kyung Im},
+            pdfauthor={Heather E. Wheeler1, Nicholas Knoblauch2, GTEx Consortium, Nancy J. Cox3, Dan L. Nicolae1, Hae Kyung Im1},
             pdftitle={Genetic Architecture of Transcriptome Regulation},
             colorlinks=true,
             citecolor=blue,
@@ -70,12 +70,18 @@
   \title{Genetic Architecture of Transcriptome Regulation}
   \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
-  \author{Heather E. Wheeler, Hae Kyung Im}
+  \author{Heather E. Wheeler\textsuperscript{1}, Nicholas
+Knoblauch\textsuperscript{2}, GTEx Consortium, Nancy J.
+Cox\textsuperscript{3}, Dan L. Nicolae\textsuperscript{1}, Hae Kyung
+Im\textsuperscript{1}}
   \preauthor{\centering\large\emph}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-05-11 08:40:00}
+  \date{2015-05-13 12:26:40 \textsuperscript{1}Department of Medicine,
+University of Chicago, \textsuperscript{2}Committee on Genetics,
+Genomics, and Systems Biology, University of Chicago,
+\textsuperscript{3}Division of Genetic Medicine, Vanderbilt University}
 
 
 
@@ -152,9 +158,9 @@ the \textbf{centered equation}:
 Pr(\textgreater{}\textbar{}t\textbar{})
 \\\addlinespace
 \midrule\endhead
-(Intercept) & 0.05 & 0.11 & 0.45 & 0.65
+(Intercept) & -0.09 & 0.1 & -0.89 & 0.38
 \\\addlinespace
-x & 2.10 & 0.11 & 19.72 & 0.00
+x & 2.19 & 0.1 & 22.51 & 0.00
 \\\addlinespace
 \bottomrule
 \addlinespace
@@ -234,11 +240,10 @@ each respective tissue and SNPs within 1 Mb of each gene.}
 
 \subsection{Citations}\label{citations}
 
-The relationship was first described by Halpern et al. (2006). However,
-there are also opinions that the relationship is spurious (Keil \emph{et
-al.} 2012). We used R for our calculations ({\textbf{???}}), and we used
-package \texttt{knitcitations} (Boettiger 2014) to make the
-bibliography.
+The relationship was first described by Reference 1. However, there are
+also opinions that the relationship is spurious {[}2{]}. We used R for
+our calculations {[}3{]}, and we used package \texttt{knitcitations}
+{[}4{]} to make the bibliography.
 
 \section{Results and discussion}\label{results-and-discussion}
 
@@ -268,18 +273,22 @@ suas latine vix, eos oblique sanctus pertinax cu.
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
 
-Boettiger, C. (2014). \emph{knitcitations: Citations for knitr markdown
-files}. Retrieved from
+1. Halpern BS, Regan HM, Possingham HP, McCarthy MA. Accounting for
+uncertainty in marine reserve design. Ecol Letters. Wiley-Blackwell;
+2006;9: 2--11.
+doi:\href{http://dx.doi.org/10.1111/j.1461-0248.2005.00827.x}{10.1111/j.1461-0248.2005.00827.x}
+
+2. Keil P, Belmaker J, Wilson AM, Unitt P, Jetz W. Downscaling of
+species distribution models: a hierarchical approach. Freckleton R,
+editor. Methods Ecol Evol. Wiley-Blackwell; 2012;4: 82--94.
+doi:\href{http://dx.doi.org/10.1111/j.2041-210x.2012.00264.x}{10.1111/j.2041-210x.2012.00264.x}
+
+3. R Core Team. R: A language and environment for statistical computing
+{[}Internet{]}. Vienna, Austria: R Foundation for Statistical Computing;
+2014. Available: \url{http://www.R-project.org/}
+
+4. Boettiger C. knitcitations: Citations for knitr markdown files
+{[}Internet{]}. 2014. Available:
 \url{http://CRAN.R-project.org/package=knitcitations}
-
-Halpern, B.S., Regan, H.M., Possingham, H.P. \& McCarthy, M.A. (2006).
-Accounting for uncertainty in marine reserve design. \emph{Ecol
-Letters}, \textbf{9}, 2--11. Retrieved from
-\url{http://dx.doi.org/10.1111/j.1461-0248.2005.00827.x}
-
-Keil, P., Belmaker, J., Wilson, A.M., Unitt, P. \& Jetz, W. (2012).
-Downscaling of species distribution models: a hierarchical approach (R.
-Freckleton, Ed.). \emph{Methods Ecol Evol}, \textbf{4}, 82--94.
-Retrieved from \url{http://dx.doi.org/10.1111/j.2041-210x.2012.00264.x}
 
 \end{document}
