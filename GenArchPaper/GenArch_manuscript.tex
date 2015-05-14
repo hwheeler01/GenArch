@@ -78,7 +78,7 @@ Im\textsuperscript{1}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-05-13 12:26:40 \textsuperscript{1}Department of Medicine,
+  \date{2015-05-14 15:42:20 \textsuperscript{1}Department of Medicine,
 University of Chicago, \textsuperscript{2}Committee on Genetics,
 Genomics, and Systems Biology, University of Chicago,
 \textsuperscript{3}Division of Genetic Medicine, Vanderbilt University}
@@ -148,44 +148,79 @@ the \textbf{centered equation}:
 
 \subsection{Tables}\label{tables}
 
-\begin{verbatim}
-## Warning: package 'knitr' was built under R version 3.1.2
-\end{verbatim}
-
 \begin{longtable}[c]{@{}lrrrr@{}}
 \toprule\addlinespace
 & Estimate & Std. Error & t value &
 Pr(\textgreater{}\textbar{}t\textbar{})
 \\\addlinespace
 \midrule\endhead
-(Intercept) & -0.09 & 0.1 & -0.89 & 0.38
+(Intercept) & -0.02 & 0.1 & -0.20 & 0.84
 \\\addlinespace
-x & 2.19 & 0.1 & 22.51 & 0.00
+x & 2.04 & 0.1 & 20.88 & 0.00
 \\\addlinespace
 \bottomrule
 \addlinespace
 \caption{This is a GLM summary table.}
 \end{longtable}
 
+\section{Results}\label{results}
+
+\subsection{Local genetic variation explains a large proportion of gene
+expression
+variance}\label{local-genetic-variation-explains-a-large-proportion-of-gene-expression-variance}
+
+\subsection{The effect of local genetic variation on gene expression is
+sparse rather than
+polygenic}\label{the-effect-of-local-genetic-variation-on-gene-expression-is-sparse-rather-than-polygenic}
+
+\subsection{Cross-tissue and tissue-specific gene expression by
+orthogonal tissue
+decomposition}\label{cross-tissue-and-tissue-specific-gene-expression-by-orthogonal-tissue-decomposition}
+
 \subsection{Plots}\label{plots}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics{GenArch_manuscript_files/figure-latex/jointH2-1.pdf}
-\caption{DGN-WB joint heritability (h\textsuperscript{2}). Local
-h\textsuperscript{2} is estimated with SNPs within 1 Mb of each gene.
-Global h\textsuperscript{2} is estimated with SNPs that are eQTLs in the
-Framingham Heart Study on other chromosomes (FDR \textless{} 0.05).}
+\caption{DGN whole blood expression joint heritability
+(h\textsuperscript{2}). Local (SNPs within 1 Mb of each gene) and global
+(SNPs that are eQTLs in the Framingham Heart Study on other chromosomes
+{[}FDR \textless{} 0.05{]}) h\textsuperscript{2} for gene expression
+were jointly estimated. (\textbf{A}) Global h\textsuperscript{2}
+compared to local h\textsuperscript{2} per gene. (\textbf{B}) Local and
+(\textbf{C}) global gene expression h\textsuperscript{2} estimates
+ordered by increasing h\textsuperscript{2}. The 95\% confidence interval
+(CI) of each h\textsuperscript{2} estimate is in gray and genes with a
+lower bound greater than zero are in blue.}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \includegraphics{GenArch_manuscript_files/figure-latex/transH2-1.pdf}
-\caption{DGN-WB joint heritability (h\textsuperscript{2}) with known
-trans-eQTLs. Local h\textsuperscript{2} is estimated with SNPs within 1
-Mb of each gene. Known trans h\textsuperscript{2} is estimated with SNPs
-that are trans-eQTLs in the Framingham Heart Study for each gene (FDR
-\textless{} 0.05).}
+\caption{DGN whole blood expression joint heritability
+(h\textsuperscript{2}) with known trans-eQTLs. Local (SNPs within 1 Mb
+of each gene) and known trans (SNPs that are trans-eQTLs in the
+Framingham Heart Study for each gene {[}FDR \textless{} 0.05{]})
+h\textsuperscript{2} for gene expression were jointly estimated.
+(\textbf{A}) Known trans h\textsuperscript{2} compared to local
+h\textsuperscript{2} per gene. (\textbf{B}) Local and (\textbf{C}) known
+trans gene expression h\textsuperscript{2} estimates ordered by
+increasing h\textsuperscript{2}. The 95\% confidence interval (CI) of
+each h\textsuperscript{2} estimate is in gray and genes with a lower
+bound greater than zero are in blue.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{GenArch_manuscript_files/figure-latex/EN-1.pdf}
+\caption{Cross-validated predictive performance across the elastic net.
+(\textbf{A}) 10-fold cross-validated R\textsuperscript{2} of predicted
+vs.~observed expression in DGN whole blood compared to a range of
+elastic net mixing parameters ($\alpha$) for 341 genes on chromosome 22.
+(\textbf{B}) Predictive R\textsuperscript{2} for $\alpha = 0$ (ridge
+regression) compared to $\alpha = 0.5$. (\textbf{C}) Predictive
+R\textsuperscript{2} for $\alpha = 1$ (lasso) compared to
+$\alpha = 0.5$.}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -245,7 +280,7 @@ also opinions that the relationship is spurious {[}2{]}. We used R for
 our calculations {[}3{]}, and we used package \texttt{knitcitations}
 {[}4{]} to make the bibliography.
 
-\section{Results and discussion}\label{results-and-discussion}
+\section{Discussion}\label{discussion}
 
 Lorem ipsum dolor sit amet, est ad doctus eligendi scriptorem. Mel erat
 falli ut. Feugiat legendos adipisci vix at, usu at laoreet argumentum
@@ -285,7 +320,7 @@ doi:\href{http://dx.doi.org/10.1111/j.2041-210x.2012.00264.x}{10.1111/j.2041-210
 
 3. R Core Team. R: A language and environment for statistical computing
 {[}Internet{]}. Vienna, Austria: R Foundation for Statistical Computing;
-2014. Available: \url{http://www.R-project.org/}
+2015. Available: \url{http://www.R-project.org/}
 
 4. Boettiger C. knitcitations: Citations for knitr markdown files
 {[}Internet{]}. 2014. Available:

@@ -84,26 +84,39 @@ tab <- xtable(summary(out)$coef, digits=c(0, 2, 2, 1, 2),
 print(tab, type="latex")
 ```
 
+# Results
+
+## Local genetic variation explains a large proportion of gene expression variance
+
+## The effect of local genetic variation on gene expression is sparse rather than polygenic
+
+## Cross-tissue and tissue-specific gene expression by orthogonal tissue decomposition
+
 ## Plots
 
-```{r jointH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN-WB joint heritability (h^2^). Local h^2^ is estimated with SNPs within 1 Mb of each gene. Global h^2^ is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).",fig.width=3,fig.height=8}
+```{r jointH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN whole blood expression joint heritability (h^2^). Local (SNPs within 1 Mb of each gene) and global (SNPs that are eQTLs in the Framingham Heart Study on other chromosomes [FDR < 0.05]) h^2^ for gene expression were jointly estimated. (**A**) Global h^2^ compared to local h^2^ per gene. (**B**) Local and (**C**) global gene expression h^2^ estimates ordered by increasing h^2^. The 95% confidence interval (CI) of each h^2^ estimate is in gray and genes with a lower bound greater than zero are in blue.",fig.width=3,fig.height=8}
 fig1<-readPNG(fig.dir %&% 'Fig1.png')
 grid.raster(fig1)
 ```
 
-```{r transH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN-WB joint heritability (h^2^) with known trans-eQTLs. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Known trans h^2^ is estimated with SNPs that are trans-eQTLs in the Framingham Heart Study for each gene (FDR < 0.05).",fig.width=3,fig.height=8}
+```{r transH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN whole blood expression joint heritability (h^2^) with known trans-eQTLs. Local (SNPs within 1 Mb of each gene) and known trans (SNPs that are trans-eQTLs in the Framingham Heart Study for each gene [FDR < 0.05]) h^2^ for gene expression were jointly estimated. (**A**) Known trans h^2^ compared to local h^2^ per gene. (**B**) Local and (**C**) known trans gene expression h^2^ estimates ordered by increasing h^2^. The 95% confidence interval (CI) of each h^2^ estimate is in gray and genes with a lower bound greater than zero are in blue.",fig.width=3,fig.height=8}
 fig2<-readPNG(fig.dir %&% 'Fig2.png')
 grid.raster(fig2)
 ```
 
-```{r otdTWh2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue heritability (h^2^) compared to tissue-wide h^2^.  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-wide local h^2^ is estimated using the measured gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=5,fig.height=8}
+```{r EN,echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-validated predictive performance across the elastic net. (**A**) 10-fold cross-validated R^2^ of predicted vs. observed expression in DGN whole blood compared to a range of elastic net mixing parameters ($\\alpha$) for 341 genes on chromosome 22. (**B**) Predictive R^2^ for $\\alpha = 0$ (ridge regression) compared to $\\alpha = 0.5$. (**C**) Predictive R^2^ for $\\alpha = 1$ (lasso) compared to $\\alpha = 0.5$."}
 fig3<-readPNG(fig.dir %&% 'Fig3.png')
 grid.raster(fig3)
 ```
 
-```{r otdTWh2SE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue and tissue-wide comparison of heritability (h^2^, **A**) and standard error (SE, **B**).  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-wide local h^2^ is estimated using the measured gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=4,fig.height=8}
+```{r otdTWh2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue heritability (h^2^) compared to tissue-wide h^2^.  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-wide local h^2^ is estimated using the measured gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=5,fig.height=8}
 fig4<-readPNG(fig.dir %&% 'Fig4.png')
 grid.raster(fig4)
+```
+
+```{r otdTWh2SE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue and tissue-wide comparison of heritability (h^2^, **A**) and standard error (SE, **B**).  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-wide local h^2^ is estimated using the measured gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=4,fig.height=8}
+fig5<-readPNG(fig.dir %&% 'Fig5.png')
+grid.raster(fig5)
 ```
 
 ```{r otdTSh2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue heritability (h^2^) compared to tissue-specific h^2^.  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-specifc local h^2^ is estimated using the tissue-specific component (residuals) of the mixed effects model for gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=5,fig.height=8}
@@ -124,7 +137,7 @@ that the relationship is spurious `r citep("10.1111/j.2041-210x.2012.00264.x")`.
 We used R for our calculations `r citep(citation())`, and we used package `knitcitations` `r citep(citation("knitcitations"))` to make the bibliography.
 
 
-# Results and discussion
+# Discussion
 
 Lorem ipsum dolor sit amet, est ad doctus eligendi scriptorem. Mel erat falli ut. Feugiat legendos adipisci vix at, usu at laoreet argumentum suscipiantur. An eos adhuc aliquip scriptorem, te adhuc dolor liberavisse sea. Ponderum vivendum te nec, id agam brute disputando mei.
 
