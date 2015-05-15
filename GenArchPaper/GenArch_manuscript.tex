@@ -52,7 +52,7 @@
 \hypersetup{breaklinks=true,
             bookmarks=true,
             pdfauthor={Heather E. Wheeler1, Nicholas Knoblauch2, GTEx Consortium, Nancy J. Cox3, Dan L. Nicolae1, Hae Kyung Im1},
-            pdftitle={Genetic Architecture of Transcriptome Regulation},
+            pdftitle={Genetic architecture of transcriptome regulation and orthogonal tissue decompositon},
             colorlinks=true,
             citecolor=blue,
             urlcolor=blue,
@@ -62,12 +62,13 @@
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{6pt plus 2pt minus 1pt}
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
-\setcounter{secnumdepth}{5}
+\setcounter{secnumdepth}{0}
 
 %%% Change title format to be more compact
 \usepackage{titling}
 \setlength{\droptitle}{-2em}
-  \title{Genetic Architecture of Transcriptome Regulation}
+  \title{Genetic architecture of transcriptome regulation and orthogonal tissue
+decompositon}
   \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
   \author{Heather E. Wheeler\textsuperscript{1}, Nicholas
@@ -78,7 +79,7 @@ Im\textsuperscript{1}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-05-14 15:42:20 \textsuperscript{1}Department of Medicine,
+  \date{2015-05-15 16:23:28 \textsuperscript{1}Department of Medicine,
 University of Chicago, \textsuperscript{2}Committee on Genetics,
 Genomics, and Systems Biology, University of Chicago,
 \textsuperscript{3}Division of Genetic Medicine, Vanderbilt University}
@@ -100,6 +101,65 @@ liberavisse sea. Ponderum vivendum te nec, id agam brute disputando
 mei.}
 
 \section{Introduction}\label{introduction}
+
+Lorem ipsum dolor sit amet, est ad doctus eligendi scriptorem. Mel erat
+falli ut. Feugiat legendos adipisci vix at, usu at laoreet argumentum
+suscipiantur. An eos adhuc aliquip scriptorem, te adhuc dolor
+liberavisse sea. Ponderum vivendum te nec, id agam brute disputando mei.
+
+Putant numquam tacimates at eum. Aliquip torquatos ex vis, mei et quando
+debitis appareat, impetus accumsan corrumpit in usu. Nam mucius facilis
+singulis id, duo ei autem imperdiet instructior. Cu ceteros alienum mel,
+id vix putant impedit, ex idque eruditi forensibus eum. Posse dicunt id
+usu. Ei iracundia constituto sed, duo ne exerci ignota, an eum unum
+conceptam.
+
+Has audire salutandi no, ut eam dicat libris dicunt. Pri hendrerit
+quaerendum adversarium ea, dicat atqui munere et sea. Illum insolens eos
+ne, eu enim graece rationibus mea. At postea utamur mel, eius nonumes
+percipitur at vis. Numquam similique in per, te quo saepe utroque
+pericula.
+
+Ea nonumy volumus usu, no mel inermis dissentias. Dico partiendo
+vituperatoribus eum et. Mea accusam convenire te, usu populo qualisque
+gloriatur ut. Eu eum oratio altera option, ad mea ignota scriptorem. Ne
+suas latine vix, eos oblique sanctus pertinax cu.
+
+\section{Results}\label{results}
+
+\subsection{Local genetic variation explains a large proportion of gene
+expression
+variance}\label{local-genetic-variation-explains-a-large-proportion-of-gene-expression-variance}
+
+We estimated the heritability of gene expression in whole blood from the
+Depression Genes and Networks (DGN) cohort (n=922) {[}1{]} using a
+mixed-effects model (see Materials and Methods) and calculated variances
+using restricted maximum likelihood as implemented in GCTA {[}2{]}. We
+fit a joint model with a local and a global genetic relationship matrix
+(GRM). The local GRM was derived from SNPs within 1 Mb of each gene and
+the global GRM was derived from SNPs that are located on non-gene
+chromosomes and are eQTLs in the Framingham Heart Study (FHS) cohort
+(n=5257, FDR \textless{} 0.05) {[}3{]}. The mean local
+h\textsuperscript{2} was 0.13 and 54.6\% of genes had a positive 95\%
+confidence interval (CI), while the mean global h\textsuperscript{2} was
+0.076 and just 4.2\% of genes had a positive CI (Fig 1).
+
+\subsection{The effect of local genetic variation on gene expression is
+sparse rather than
+polygenic}\label{the-effect-of-local-genetic-variation-on-gene-expression-is-sparse-rather-than-polygenic}
+
+\subsection{Cross-tissue and tissue-specific gene expression by
+orthogonal tissue
+decomposition}\label{cross-tissue-and-tissue-specific-gene-expression-by-orthogonal-tissue-decomposition}
+
+\subsection{Citations}\label{citations}
+
+The relationship was first described by Reference 4. However, there are
+also opinions that the relationship is spurious {[}5{]}. We used R for
+our calculations {[}6{]}, and we used package \texttt{knitcitations}
+{[}7{]} to make the bibliography.
+
+\section{Discussion}\label{discussion}
 
 Lorem ipsum dolor sit amet, est ad doctus eligendi scriptorem. Mel erat
 falli ut. Feugiat legendos adipisci vix at, usu at laoreet argumentum
@@ -148,34 +208,24 @@ the \textbf{centered equation}:
 
 \subsection{Tables}\label{tables}
 
+\begin{verbatim}
+## Warning: package 'knitr' was built under R version 3.1.3
+\end{verbatim}
+
 \begin{longtable}[c]{@{}lrrrr@{}}
 \toprule\addlinespace
 & Estimate & Std. Error & t value &
 Pr(\textgreater{}\textbar{}t\textbar{})
 \\\addlinespace
 \midrule\endhead
-(Intercept) & -0.02 & 0.1 & -0.20 & 0.84
+(Intercept) & -0.07 & 0.10 & -0.78 & 0.43
 \\\addlinespace
-x & 2.04 & 0.1 & 20.88 & 0.00
+x & 1.78 & 0.09 & 19.56 & 0.00
 \\\addlinespace
 \bottomrule
 \addlinespace
 \caption{This is a GLM summary table.}
 \end{longtable}
-
-\section{Results}\label{results}
-
-\subsection{Local genetic variation explains a large proportion of gene
-expression
-variance}\label{local-genetic-variation-explains-a-large-proportion-of-gene-expression-variance}
-
-\subsection{The effect of local genetic variation on gene expression is
-sparse rather than
-polygenic}\label{the-effect-of-local-genetic-variation-on-gene-expression-is-sparse-rather-than-polygenic}
-
-\subsection{Cross-tissue and tissue-specific gene expression by
-orthogonal tissue
-decomposition}\label{cross-tissue-and-tissue-specific-gene-expression-by-orthogonal-tissue-decomposition}
 
 \subsection{Plots}\label{plots}
 
@@ -273,56 +323,41 @@ component (residuals) of the mixed effects model for gene expression for
 each respective tissue and SNPs within 1 Mb of each gene.}
 \end{figure}
 
-\subsection{Citations}\label{citations}
-
-The relationship was first described by Reference 1. However, there are
-also opinions that the relationship is spurious {[}2{]}. We used R for
-our calculations {[}3{]}, and we used package \texttt{knitcitations}
-{[}4{]} to make the bibliography.
-
-\section{Discussion}\label{discussion}
-
-Lorem ipsum dolor sit amet, est ad doctus eligendi scriptorem. Mel erat
-falli ut. Feugiat legendos adipisci vix at, usu at laoreet argumentum
-suscipiantur. An eos adhuc aliquip scriptorem, te adhuc dolor
-liberavisse sea. Ponderum vivendum te nec, id agam brute disputando mei.
-
-Putant numquam tacimates at eum. Aliquip torquatos ex vis, mei et quando
-debitis appareat, impetus accumsan corrumpit in usu. Nam mucius facilis
-singulis id, duo ei autem imperdiet instructior. Cu ceteros alienum mel,
-id vix putant impedit, ex idque eruditi forensibus eum. Posse dicunt id
-usu. Ei iracundia constituto sed, duo ne exerci ignota, an eum unum
-conceptam.
-
-Has audire salutandi no, ut eam dicat libris dicunt. Pri hendrerit
-quaerendum adversarium ea, dicat atqui munere et sea. Illum insolens eos
-ne, eu enim graece rationibus mea. At postea utamur mel, eius nonumes
-percipitur at vis. Numquam similique in per, te quo saepe utroque
-pericula.
-
-Ea nonumy volumus usu, no mel inermis dissentias. Dico partiendo
-vituperatoribus eum et. Mea accusam convenire te, usu populo qualisque
-gloriatur ut. Eu eum oratio altera option, ad mea ignota scriptorem. Ne
-suas latine vix, eos oblique sanctus pertinax cu.
-
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
 
-1. Halpern BS, Regan HM, Possingham HP, McCarthy MA. Accounting for
+1. Battle A, Mostafavi S, Zhu X, Potash JB, Weissman MM, McCormick C, et
+al. Characterizing the genetic basis of transcriptome diversity through
+RNA-sequencing of 922 individuals. Genome Research. Cold Spring Harbor
+Laboratory Press; 2013;24: 14--24.
+doi:\href{http://dx.doi.org/10.1101/gr.155192.113}{10.1101/gr.155192.113}
+
+2. Yang J, Lee SH, Goddard ME, Visscher PM. GCTA: A tool for genome-wide
+complex trait analysis. The American Journal of Human Genetics. Elsevier
+BV; 2011;88: 76--82.
+doi:\href{http://dx.doi.org/10.1016/j.ajhg.2010.11.011}{10.1016/j.ajhg.2010.11.011}
+
+3. Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et al.
+Identification of common genetic variants controlling transcript isoform
+variation in human whole blood. Nat Genet. Nature Publishing Group;
+2015;47: 345--352.
+doi:\href{http://dx.doi.org/10.1038/ng.3220}{10.1038/ng.3220}
+
+4. Halpern BS, Regan HM, Possingham HP, McCarthy MA. Accounting for
 uncertainty in marine reserve design. Ecol Letters. Wiley-Blackwell;
 2006;9: 2--11.
 doi:\href{http://dx.doi.org/10.1111/j.1461-0248.2005.00827.x}{10.1111/j.1461-0248.2005.00827.x}
 
-2. Keil P, Belmaker J, Wilson AM, Unitt P, Jetz W. Downscaling of
+5. Keil P, Belmaker J, Wilson AM, Unitt P, Jetz W. Downscaling of
 species distribution models: a hierarchical approach. Freckleton R,
 editor. Methods Ecol Evol. Wiley-Blackwell; 2012;4: 82--94.
 doi:\href{http://dx.doi.org/10.1111/j.2041-210x.2012.00264.x}{10.1111/j.2041-210x.2012.00264.x}
 
-3. R Core Team. R: A language and environment for statistical computing
+6. R Core Team. R: A language and environment for statistical computing
 {[}Internet{]}. Vienna, Austria: R Foundation for Statistical Computing;
-2015. Available: \url{http://www.R-project.org/}
+2014. Available: \url{http://www.R-project.org/}
 
-4. Boettiger C. knitcitations: Citations for knitr markdown files
+7. Boettiger C. knitcitations: Citations for knitr markdown files
 {[}Internet{]}. 2014. Available:
 \url{http://CRAN.R-project.org/package=knitcitations}
 
