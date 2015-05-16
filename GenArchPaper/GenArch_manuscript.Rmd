@@ -56,7 +56,10 @@ Ea nonumy volumus usu, no mel inermis dissentias. Dico partiendo vituperatoribus
 # Results
 
 ## Local genetic variation explains a large proportion of gene expression variance
-We estimated the heritability of gene expression in whole blood from the Depression Genes and Networks (DGN) cohort (n=922) `r citep("10.1101/gr.155192.113")` using a mixed-effects model (see Materials and Methods) and calculated variances using restricted maximum likelihood as implemented in GCTA `r citep("10.1016/j.ajhg.2010.11.011")`. We fit a joint model with a local and a global genetic relationship matrix (GRM). The local GRM was derived from SNPs within 1 Mb of each gene and the global GRM was derived from SNPs that are located on non-gene chromosomes and are eQTLs in the Framingham Heart Study (FHS) cohort (n=5257, FDR < 0.05) `r citep("10.1038/ng.3220")`. The mean local h^2^ was 0.13 and 54.6\% of genes had a positive 95\% confidence interval (CI), while the mean global h^2^ was 0.076 and just 4.2\% of genes had a positive CI (`r figr("jointH2", TRUE, type="Fig")`). Add max h2 (se) for both.
+We estimated the heritability of gene expression in whole blood from the Depression Genes and Networks (DGN) cohort (n=922) `r citep("10.1101/gr.155192.113")` using a mixed-effects model (see Materials and Methods) and calculated variances using restricted maximum likelihood as implemented in GCTA `r citep("10.1016/j.ajhg.2010.11.011")`. We fit a joint model with a local and a global genetic relationship matrix (GRM). The local GRM was derived from SNPs within 1 Mb of each gene and the global GRM was derived from SNPs that are located on non-gene chromosomes and are eQTLs in the Framingham Heart Study (FHS) cohort (n=5257, FDR < 0.05) `r citep("10.1038/ng.3220")`. The mean local h^2^ was 0.13 and 54.6\% of genes had a positive 95\% confidence interval (CI), while the mean global h^2^ was 0.076 and just 4.2\% of genes had a positive CI (`r figr("jointH2", TRUE, type="Fig")`). The maximum local h^2^ was 0.93 with a standard error (SE) of 0.009 while the maximum global h^2^ was 0.91 with a SE of 0.16.
+
+local max=0.85(0.02)
+trans max=0.60(0.32)
 
 ## The effect of local genetic variation on gene expression is sparse rather than polygenic
 
