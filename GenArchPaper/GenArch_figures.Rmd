@@ -264,7 +264,7 @@ ggplot(g_gtexEN, aes(x = R2 , y = g_gtexEN[,3], group=alpha, color=alpha)) + fac
 cten<-read.table(my.dir %&% 'cross-tissue_exp_10-foldCV_elasticNet_R2_for_ggplot2.txt',header=T,check.names=F)
 ngenesall <- length(unique(cten$gene))
 g_cten<-gather(cten,alpha,R2,3:5)
-a<-ggplot(g_cten, aes(x = R2 , y = g_cten[,3], group=alpha, color=alpha)) + geom_point(show_guide = TRUE) + xlab(expression(paste("alpha R"^2))) + ylab(expression(paste("lasso (",alpha,"=1) R"^2))) + geom_smooth(method = "lm")+geom_abline(intercept=0, slope=1,color='black')+ coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05))+ ggtitle("GTEx cross-tissue (" %&% ngenesall %&% " genes)")+theme_gray(18)
+a<-ggplot(g_cten, aes(y = R2 , x = g_cten[,3], group=alpha, color=alpha)) + geom_point(show_guide = TRUE) + ylab(expression(paste("alpha R"^2))) + xlab(expression(paste("lasso (",alpha,"=1) R"^2))) + geom_smooth(method = "lm")+geom_abline(intercept=0, slope=1,color='black')+ coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05))+ ggtitle("GTEx cross-tissue (" %&% ngenesall %&% " genes)")+theme_gray(18)
 a
 png(filename="GTEx-cross-tissue-EN_lassoR2_v_alphaR2.png")
 a
