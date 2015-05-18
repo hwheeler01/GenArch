@@ -1,0 +1,164 @@
+---
+title: Genetic architecture of transcriptome regulation and orthogonal tissue decompositon
+author: Heather E. Wheeler^1^, Nicholas Knoblauch^2^, GTEx Consortium, Nancy J. Cox^3^,
+  Dan L. Nicolae^1^, Hae Kyung Im^1^
+date: '`r Sys.time()` ^1^Department of Medicine, University of Chicago, ^2^Committee
+  on Genetics, Genomics, and Systems Biology, University of Chicago, ^3^Division of
+  Genetic Medicine, Vanderbilt University'
+output:
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: no
+  html_document:
+    fig_caption: yes
+    force_captions: yes
+    highlight: pygments
+    number_sections: no
+    theme: cerulean
+  word_document: default
+csl: plos.csl
+bibliography: GenArch_references.bib
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+  # devtools::install_github("cboettig/knitcitations@v1")
+  library(knitcitations); cleanbib()
+  cite_options(citation_format = "pandoc", check.entries=FALSE)
+  library(bibtex)
+  library(ggplot2)
+  library(reshape2)
+  library(dplyr)
+  library(png)
+  library(grid)
+  library(kfigr)
+  "%&%" = function(a,b) paste(a,b,sep="")
+  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
+  fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
+```
+
+# Abstract
+
+*Lorem ipsum dolor sit amet, est ad doctus eligendi scriptorem. Mel erat falli ut. Feugiat legendos adipisci vix at, usu at laoreet argumentum suscipiantur. An eos adhuc aliquip scriptorem, te adhuc dolor liberavisse sea. Ponderum vivendum te nec, id agam brute disputando mei.*
+
+
+
+# Introduction
+
+Lorem ipsum dolor sit amet, est ad doctus eligendi scriptorem. Mel erat falli ut. Feugiat legendos adipisci vix at, usu at laoreet argumentum suscipiantur. An eos adhuc aliquip scriptorem, te adhuc dolor liberavisse sea. Ponderum vivendum te nec, id agam brute disputando mei.
+
+Putant numquam tacimates at eum. Aliquip torquatos ex vis, mei et quando debitis appareat, impetus accumsan corrumpit in usu. Nam mucius facilis singulis id, duo ei autem imperdiet instructior. Cu ceteros alienum mel, id vix putant impedit, ex idque eruditi forensibus eum. Posse dicunt id usu. Ei iracundia constituto sed, duo ne exerci ignota, an eum unum conceptam.
+
+Has audire salutandi no, ut eam dicat libris dicunt. Pri hendrerit quaerendum adversarium ea, dicat atqui munere et sea. Illum insolens eos ne, eu enim graece rationibus mea. At postea utamur mel, eius nonumes percipitur at vis. Numquam similique in per, te quo saepe utroque pericula.
+
+Ea nonumy volumus usu, no mel inermis dissentias. Dico partiendo vituperatoribus eum et. Mea accusam convenire te, usu populo qualisque gloriatur ut. Eu eum oratio altera option, ad mea ignota scriptorem. Ne suas latine vix, eos oblique sanctus pertinax cu.
+
+# Results
+
+## Local genetic variation explains a large proportion of gene expression variance
+We estimated the heritability of gene expression in whole blood from the Depression Genes and Networks (DGN) cohort (n=922) `r citep("10.1101/gr.155192.113")` using a mixed-effects model (see Materials and Methods) and calculated variances using restricted maximum likelihood as implemented in GCTA `r citep("10.1016/j.ajhg.2010.11.011")`. We fit a joint model with a local and a global genetic relationship matrix (GRM). The local GRM was derived from SNPs within 1 Mb of each gene and the global GRM was derived from SNPs that are located on non-gene chromosomes and are eQTLs in the Framingham Heart Study (FHS) cohort (n=5257, FDR < 0.05) `r citep("10.1038/ng.3220")`. The mean local h^2^ was 0.13 and 54.6\% of genes had a positive 95\% confidence interval (CI), while the mean global h^2^ was 0.076 and just 4.2\% of genes had a positive CI (`r figr("jointH2", TRUE, type="Fig")`). The maximum local h^2^ was 0.93 with a standard error (SE) of 0.009 while the maximum global h^2^ was 0.91 with a SE of 0.16.
+
+local max=0.85(0.02)
+trans max=0.60(0.32)
+
+## The effect of local genetic variation on gene expression is sparse rather than polygenic
+
+## Cross-tissue and tissue-specific gene expression by orthogonal tissue decomposition
+
+
+## Citations
+
+The relationship was first described by
+`r citet("10.1111/j.1461-0248.2005.00827.x")`. However, there are also opinions
+that the relationship is spurious `r citep("10.1111/j.2041-210x.2012.00264.x")`.
+We used R for our calculations `r citep(citation())`, and we used package `knitcitations` `r citep(citation("knitcitations"))` to make the bibliography.
+
+
+# Discussion
+
+Lorem ipsum dolor sit amet, est ad doctus eligendi scriptorem. Mel erat falli ut. Feugiat legendos adipisci vix at, usu at laoreet argumentum suscipiantur. An eos adhuc aliquip scriptorem, te adhuc dolor liberavisse sea. Ponderum vivendum te nec, id agam brute disputando mei.
+
+Putant numquam tacimates at eum. Aliquip torquatos ex vis, mei et quando debitis appareat, impetus accumsan corrumpit in usu. Nam mucius facilis singulis id, duo ei autem imperdiet instructior. Cu ceteros alienum mel, id vix putant impedit, ex idque eruditi forensibus eum. Posse dicunt id usu. Ei iracundia constituto sed, duo ne exerci ignota, an eum unum conceptam.
+
+Has audire salutandi no, ut eam dicat libris dicunt. Pri hendrerit quaerendum adversarium ea, dicat atqui munere et sea. Illum insolens eos ne, eu enim graece rationibus mea. At postea utamur mel, eius nonumes percipitur at vis. Numquam similique in per, te quo saepe utroque pericula.
+
+Ea nonumy volumus usu, no mel inermis dissentias. Dico partiendo vituperatoribus eum et. Mea accusam convenire te, usu populo qualisque gloriatur ut. Eu eum oratio altera option, ad mea ignota scriptorem. Ne suas latine vix, eos oblique sanctus pertinax cu.
+
+# Methods
+
+Lorem ipsum dolor sit amet, est ad doctus eligendi scriptorem. Mel erat falli ut. Feugiat legendos adipisci vix at, usu at laoreet argumentum suscipiantur. An eos adhuc aliquip scriptorem, te adhuc dolor liberavisse sea. Ponderum vivendum te nec, id agam brute disputando mei.
+
+Putant numquam tacimates at eum. Aliquip torquatos ex vis, mei et quando debitis appareat, impetus accumsan corrumpit in usu. Nam mucius facilis singulis id, duo ei autem imperdiet instructior. Cu ceteros alienum mel, id vix putant impedit, ex idque eruditi forensibus eum. Posse dicunt id usu. Ei iracundia constituto sed, duo ne exerci ignota, an eum unum conceptam.
+
+## Equations
+
+The deterministic part of the model is defined by this **in-line equation** as 
+$\mu_i = \beta_0 + \beta_1x$, and the stochastic part by the **centered equation**: 
+
+$$ \frac{1}{\sqrt{2\pi}\sigma}e^{-(x-\mu_i)^2/(2\sigma^2)} $$
+
+## Tables
+
+```{r kable, echo=FALSE}
+library(knitr)
+
+x <- rnorm(100)
+y <- 2*x + rnorm(100)
+out <- lm(y ~ x)
+kable(summary(out)$coef, digits=2, caption="This is a GLM summary table.")
+```
+
+```{r xtable, results="asis", echo=FALSE, eval=FALSE, message=FALSE}
+library(xtable)
+tab <- xtable(summary(out)$coef, digits=c(0, 2, 2, 1, 2), 
+              caption="This is a GLM summary table.")
+print(tab, type="latex")
+```
+
+## Plots
+
+```{r jointH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN whole blood expression joint heritability (h^2^). Local (SNPs within 1 Mb of each gene) and global (SNPs that are eQTLs in the Framingham Heart Study on other chromosomes [FDR < 0.05]) h^2^ for gene expression were jointly estimated. (**A**) Global h^2^ compared to local h^2^ per gene. (**B**) Local and (**C**) global gene expression h^2^ estimates ordered by increasing h^2^. The 95% confidence interval (CI) of each h^2^ estimate is in gray and genes with a lower bound greater than zero are in blue.",fig.width=3,fig.height=8}
+fig1<-readPNG(fig.dir %&% 'Fig1.png')
+grid.raster(fig1)
+```
+
+```{r transH2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="DGN whole blood expression joint heritability (h^2^) with known trans-eQTLs. Local (SNPs within 1 Mb of each gene) and known trans (SNPs that are trans-eQTLs in the Framingham Heart Study for each gene [FDR < 0.05]) h^2^ for gene expression were jointly estimated. (**A**) Known trans h^2^ compared to local h^2^ per gene. (**B**) Local and (**C**) known trans gene expression h^2^ estimates ordered by increasing h^2^. The 95% confidence interval (CI) of each h^2^ estimate is in gray and genes with a lower bound greater than zero are in blue.",fig.width=3,fig.height=8}
+fig2<-readPNG(fig.dir %&% 'Fig2.png')
+grid.raster(fig2)
+```
+
+```{r EN,echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-validated predictive performance across the elastic net. (**A**) 10-fold cross-validated R^2^ of predicted vs. observed expression in DGN whole blood compared to a range of elastic net mixing parameters ($\\alpha$) for 341 genes on chromosome 22. (**B**) Predictive R^2^ for $\\alpha = 0$ (ridge regression) compared to $\\alpha = 0.5$. (**C**) Predictive R^2^ for $\\alpha = 1$ (lasso) compared to $\\alpha = 0.5$."}
+fig3<-readPNG(fig.dir %&% 'Fig3.png')
+grid.raster(fig3)
+```
+
+```{r otdTWh2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue heritability (h^2^) compared to tissue-wide h^2^.  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-wide local h^2^ is estimated using the measured gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=5,fig.height=8}
+fig4<-readPNG(fig.dir %&% 'Fig4.png')
+grid.raster(fig4)
+```
+
+```{r otdTWh2SE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue and tissue-wide comparison of heritability (h^2^, **A**) and standard error (SE, **B**).  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-wide local h^2^ is estimated using the measured gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=4,fig.height=8}
+fig5<-readPNG(fig.dir %&% 'Fig5.png')
+grid.raster(fig5)
+```
+
+```{r otdTSh2, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue heritability (h^2^) compared to tissue-specific h^2^.  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-specifc local h^2^ is estimated using the tissue-specific component (residuals) of the mixed effects model for gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=5,fig.height=8}
+figS1<-readPNG(fig.dir %&% 'FigS1.png')
+grid.raster(figS1)
+```
+
+```{r otdTSh2SE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue and tissue-specific comparison of heritability (h^2^, **A**) and standard error (SE, **B**) estimation.  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-specifc local h^2^ is estimated using the tissue-specific component (residuals) of the mixed effects model for gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=4,fig.height=8}
+figS2<-readPNG(fig.dir %&% 'FigS2.png')
+grid.raster(figS2)
+```
+
+
+# References
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE} 
+  write.bibtex(file="GenArch_references.bib")
+```
+
+
+
+
