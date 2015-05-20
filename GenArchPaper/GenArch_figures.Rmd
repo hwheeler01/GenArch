@@ -134,7 +134,7 @@ ngenes<-dim(data)[1]
 print("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes)")
 data_long<-melt(data,by=gene)
 ## Using gene as id variables
-a <- ggplot(data_long, aes(x = as.numeric(levels(variable))[variable] , y = value), group=gene) + geom_line(lwd=0.5,show_guide = FALSE,linetype=1) + aes(color = gene) + xlab(expression(paste("elastic net mixing parameter (",alpha, ")"))) + ylab(expression(paste("10-fold cross-validation R"^2))) + theme_gray(base_size = 18) + coord_cartesian(ylim=c(-0.02,1.02),xlim=c(-0.02,1.02))+ geom_point(show_guide = FALSE)
+a <- ggplot(data_long, aes(x = as.numeric(levels(variable))[variable] , y = value), group=gene) + geom_line(lwd=0.5,show_guide = FALSE,linetype=1) + aes(color = gene) + xlab(expression(paste("elastic net mixing parameter (",alpha, ")"))) + ylab(expression(paste("10-fold cross-validation R"^2))) + theme_gray(base_size = 18) + coord_cartesian(ylim=c(0.3,1),xlim=c(-0.02,1.02))+ geom_point(show_guide = FALSE)
 print(a)
 
 b<-ggplot(data,aes(x=data[,12],y=data[,2]))+geom_point()+ ylab(expression(paste("R"^2," (",alpha," = 0)"))) + xlab(expression(paste("R"^2," (",alpha," = 0.5)"))) + geom_abline(intercept=0, slope=1,color='red') + theme_gray(base_size = 18) + coord_cartesian(ylim=c(-0.02,1.02),xlim=c(-0.02,1.02))
