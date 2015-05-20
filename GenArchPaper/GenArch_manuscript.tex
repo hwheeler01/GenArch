@@ -79,7 +79,7 @@ Im\textsuperscript{1}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-05-15 16:23:28 \textsuperscript{1}Department of Medicine,
+  \date{2015-05-19 16:14:53 \textsuperscript{1}Department of Medicine,
 University of Chicago, \textsuperscript{2}Committee on Genetics,
 Genomics, and Systems Biology, University of Chicago,
 \textsuperscript{3}Division of Genetic Medicine, Vanderbilt University}
@@ -140,9 +140,18 @@ fit a joint model with a local and a global genetic relationship matrix
 the global GRM was derived from SNPs that are located on non-gene
 chromosomes and are eQTLs in the Framingham Heart Study (FHS) cohort
 (n=5257, FDR \textless{} 0.05) {[}3{]}. The mean local
-h\textsuperscript{2} was 0.13 and 54.6\% of genes had a positive 95\%
+h\textsuperscript{2} was 0.130 and 54.6\% of genes had a positive 95\%
 confidence interval (CI), while the mean global h\textsuperscript{2} was
-0.076 and just 4.2\% of genes had a positive CI (Fig 1).
+0.076 and just 4.2\% of genes had a positive CI (Fig 1). The maximum
+local h\textsuperscript{2} was 0.93 with a standard error (SE) of 0.009
+while the maximum global h\textsuperscript{2} was 0.91 with a SE of
+0.16. Similar results were observed for the 1194 genes with
+\emph{trans}-eQTLs (FHS FDR \textless{} 0.05) when the global GRM was
+limited to known \emph{trans}-eQTLs (Fig 2). That is, the mean local
+h\textsuperscript{2} was 0.133 and 61.3\% of genes had a positive 95\%
+confidence interval (CI), while the mean \emph{trans}
+h\textsuperscript{2} was just 0.021 and 4.2\% of genes tested had a
+positive CI.
 
 \subsection{The effect of local genetic variation on gene expression is
 sparse rather than
@@ -218,16 +227,16 @@ the \textbf{centered equation}:
 Pr(\textgreater{}\textbar{}t\textbar{})
 \\\addlinespace
 \midrule\endhead
-(Intercept) & -0.07 & 0.10 & -0.78 & 0.43
+(Intercept) & 0.02 & 0.10 & 0.26 & 0.8
 \\\addlinespace
-x & 1.78 & 0.09 & 19.56 & 0.00
+x & 2.01 & 0.09 & 21.46 & 0.0
 \\\addlinespace
 \bottomrule
 \addlinespace
 \caption{This is a GLM summary table.}
 \end{longtable}
 
-\subsection{Plots}\label{plots}
+\section{Figures}\label{figures}
 
 \begin{figure}[htbp]
 \centering
@@ -242,22 +251,6 @@ compared to local h\textsuperscript{2} per gene. (\textbf{B}) Local and
 ordered by increasing h\textsuperscript{2}. The 95\% confidence interval
 (CI) of each h\textsuperscript{2} estimate is in gray and genes with a
 lower bound greater than zero are in blue.}
-\end{figure}
-
-\begin{figure}[htbp]
-\centering
-\includegraphics{GenArch_manuscript_files/figure-latex/transH2-1.pdf}
-\caption{DGN whole blood expression joint heritability
-(h\textsuperscript{2}) with known trans-eQTLs. Local (SNPs within 1 Mb
-of each gene) and known trans (SNPs that are trans-eQTLs in the
-Framingham Heart Study for each gene {[}FDR \textless{} 0.05{]})
-h\textsuperscript{2} for gene expression were jointly estimated.
-(\textbf{A}) Known trans h\textsuperscript{2} compared to local
-h\textsuperscript{2} per gene. (\textbf{B}) Local and (\textbf{C}) known
-trans gene expression h\textsuperscript{2} estimates ordered by
-increasing h\textsuperscript{2}. The 95\% confidence interval (CI) of
-each h\textsuperscript{2} estimate is in gray and genes with a lower
-bound greater than zero are in blue.}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -295,6 +288,24 @@ cross-tissue component (random effects) of the mixed effects model for
 gene expression and SNPs within 1 Mb of each gene. Tissue-wide local
 h\textsuperscript{2} is estimated using the measured gene expression for
 each respective tissue and SNPs within 1 Mb of each gene.}
+\end{figure}
+
+\section{Supplemental Figures}\label{supplemental-figures}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{GenArch_manuscript_files/figure-latex/transH2-1.pdf}
+\caption{DGN whole blood expression joint heritability
+(h\textsuperscript{2}) with known trans-eQTLs. Local (SNPs within 1 Mb
+of each gene) and known trans (SNPs that are trans-eQTLs in the
+Framingham Heart Study for each gene {[}FDR \textless{} 0.05{]})
+h\textsuperscript{2} for gene expression were jointly estimated.
+(\textbf{A}) Known trans h\textsuperscript{2} compared to local
+h\textsuperscript{2} per gene. (\textbf{B}) Local and (\textbf{C}) known
+trans gene expression h\textsuperscript{2} estimates ordered by
+increasing h\textsuperscript{2}. The 95\% confidence interval (CI) of
+each h\textsuperscript{2} estimate is in gray and genes with a lower
+bound greater than zero are in blue.}
 \end{figure}
 
 \begin{figure}[htbp]
