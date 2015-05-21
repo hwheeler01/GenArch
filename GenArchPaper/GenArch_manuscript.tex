@@ -79,7 +79,7 @@ Im\textsuperscript{1}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-05-20 16:03:49 \textsuperscript{1}Department of Medicine,
+  \date{2015-05-21 15:52:43 \textsuperscript{1}Department of Medicine,
 University of Chicago, \textsuperscript{2}Committee on Genetics,
 Genomics, and Systems Biology, University of Chicago,
 \textsuperscript{3}Division of Genetic Medicine, Vanderbilt University}
@@ -155,13 +155,26 @@ expression in each of the nine tissues, which we term tissue-wide
 expression. Again, the cross-tissue heritabilities were larger and the
 standard errors were smaller than the tissue-wide estimates (Fig 5),
 though less striking than the tissue-specific comparison. The percentage
-of h\textsuperscript{2} estimates with positive CIs was still larger for
-cross-tissue expression (17.3\%) than the tissue-specific expressions
-(all less than 9\%, Fig 6).
+of tissue-wide h\textsuperscript{2} estimates with positive CIs ranged
+from 4.4-8.6\% and thus were all larger than the tissue-specific postive
+CI percentages, but smaller than the cross-tissue percentage (Fig 6).
 
 \subsection{The effect of local genetic variation on gene expression is
 sparse rather than
 polygenic}\label{the-effect-of-local-genetic-variation-on-gene-expression-is-sparse-rather-than-polygenic}
+
+We performed 10-fold cross-validation using the elastic net to test the
+predictive performance of local SNPs for gene expression across a range
+of mixing parameters, $\alpha$. The $\alpha$ that gives the largest
+cross-validation R\textsuperscript{2} informs the sparsity of each gene
+expression trait. That is, at one extreme, if the optimal $\alpha=0$
+(equivalent to ridge regression), the gene expression trait is highly
+polygenic, whereas if the optimal $\alpha=1$ (equivalent to LASSO), the
+trait is highly sparse. We found that for most gene expression traits,
+the cross-validated R\textsuperscript{2} was suboptimal for $\alpha=0$
+and $\alpha=0.05$, but nearly identically optimal for $\alpha=0.5$ and
+$\alpha=1$ in the DGN cohort (Fig 7). Therefore, the effect of local
+genetic variation on gene expression is sparse rather than polygenic.
 
 \subsection{Citations}\label{citations}
 
@@ -194,10 +207,19 @@ our calculations {[}6{]}, and we used package \texttt{knitcitations}
   polygenicity/sparsity
 \end{enumerate}
 
-Future 1. simulation to show sparsity well represented by alpha 2. use
-number of PC's (computed using only local snps) that maximize prediction
-performance. This will count independent signals. 3. FHS heritability.
-could this improve trans heritability?
+Future
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  simulation to show sparsity well represented by alpha
+\item
+  use number of PC's (computed using only local snps) that maximize
+  prediction performance. This will count independent signals.
+\item
+  FHS heritability. could this improve trans heritability?
+\end{enumerate}
 
 \section{Methods}\label{methods}
 
@@ -249,19 +271,15 @@ the \textbf{centered equation}:
 
 \subsection{Tables}\label{tables}
 
-\begin{verbatim}
-## Warning: package 'knitr' was built under R version 3.1.3
-\end{verbatim}
-
 \begin{longtable}[c]{@{}lrrrr@{}}
 \toprule\addlinespace
 & Estimate & Std. Error & t value &
 Pr(\textgreater{}\textbar{}t\textbar{})
 \\\addlinespace
 \midrule\endhead
-(Intercept) & 0.04 & 0.09 & 0.42 & 0.67
+(Intercept) & -0.02 & 0.1 & -0.20 & 0.84
 \\\addlinespace
-x & 2.10 & 0.09 & 24.29 & 0.00
+x & 2.04 & 0.1 & 20.88 & 0.00
 \\\addlinespace
 \bottomrule
 \addlinespace
@@ -359,10 +377,8 @@ and SNPs within 1 Mb of each gene.}
 vs.~observed expression in DGN whole blood compared to a range of
 elastic net mixing parameters ($\alpha$) for genes on chromosome 22 with
 R\textsuperscript{2} \textgreater{} 0.3. (\textbf{B}) Predictive
-R\textsuperscript{2} for $\alpha = 0$ (ridge regression) compared to
-$\alpha = 0.5$ for 341 genes on chromosome 22. (\textbf{C}) Predictive
-R\textsuperscript{2} for $\alpha = 1$ (lasso) compared to
-$\alpha = 0.5$.}
+R\textsuperscript{2} for several values of $\alpha$ compared to
+$\alpha = 1$ (LASSO) for 341 genes on chromosome 22.}
 \end{figure}
 
 \section{Supplemental Figures}\label{supplemental-figures}
@@ -399,7 +415,7 @@ doi:\href{http://dx.doi.org/10.1111/j.2041-210x.2012.00264.x}{10.1111/j.2041-210
 
 6. R Core Team. R: A language and environment for statistical computing
 {[}Internet{]}. Vienna, Austria: R Foundation for Statistical Computing;
-2014. Available: \url{http://www.R-project.org/}
+2015. Available: \url{http://www.R-project.org/}
 
 7. Boettiger C. knitcitations: Citations for knitr markdown files
 {[}Internet{]}. 2014. Available:

@@ -134,25 +134,21 @@ ngenes<-dim(data)[1]
 print("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes)")
 data_long<-melt(data,by=gene)
 ## Using gene as id variables
-a <- ggplot(data_long, aes(x = as.numeric(levels(variable))[variable] , y = value), group=gene) + geom_line(lwd=0.5,show_guide = FALSE,linetype=1) + aes(color = gene) + xlab(expression(paste("elastic net mixing parameter (",alpha, ")"))) + ylab(expression(paste("10-fold cross-validation R"^2))) + theme_gray(base_size = 18) + coord_cartesian(ylim=c(0.3,1),xlim=c(-0.02,1.02))+ geom_point(show_guide = FALSE)
+a <- ggplot(data_long, aes(x = as.numeric(levels(variable))[variable] , y = value), group=gene) + geom_line(lwd=0.5,show_guide = FALSE,linetype=1) + aes(color = gene) + xlab(expression(paste("elastic net mixing parameter (",alpha, ")"))) + ylab(expression(paste("10-fold cross-validation R"^2))) + theme_gray(base_size = 20) + coord_cartesian(ylim=c(0.3,1),xlim=c(-0.02,1.02))+ geom_point(show_guide = FALSE)
 print(a)
 
-b<-ggplot(data,aes(x=data[,12],y=data[,2]))+geom_point()+ ylab(expression(paste("R"^2," (",alpha," = 0)"))) + xlab(expression(paste("R"^2," (",alpha," = 0.5)"))) + geom_abline(intercept=0, slope=1,color='red') + theme_gray(base_size = 18) + coord_cartesian(ylim=c(-0.02,1.02),xlim=c(-0.02,1.02))
+data2 <- select(data,gene,2:3,12,22)
+gdata <- gather(data2,alpha,R2,2:4)
+b<- ggplot(gdata, aes(y = R2 , x = gdata[,2], group=alpha, color=alpha)) + geom_point(show_guide = TRUE) + ylab(expression(paste("alpha R"^2))) + xlab(expression(paste("LASSO (",alpha,"=1) R"^2))) + geom_smooth(method = "lm")+geom_abline(intercept=0, slope=1,color='black')+ coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_gray(base_size = 20) + theme(legend.justification=c(0,1), legend.position=c(0,1))
 
-c<-ggplot(data,aes(x=data[,12],y=data[,22]))+geom_point()+ ylab(expression(paste("R"^2," (",alpha," = 1)"))) + xlab(expression(paste("R"^2," (",alpha," = 0.5)"))) + geom_abline(intercept=0, slope=1,color='red') + theme_gray(base_size = 18) + coord_cartesian(ylim=c(-0.02,1.02),xlim=c(-0.02,1.02))
+multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),cols=2)
 
-data_pairs <- cbind(data[,3],data[,12],data[,21],data[,22])
-colnames(data_pairs)<-c("alpha_0.05","alpha_0.5","alpha_0.95","alpha_1")
-ggpairs(data_pairs)
-
-multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=3)
-
-tiff(filename=fig.dir %&% "Fig3.tiff",width=960,height=320)
-multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=3)
+tiff(filename=fig.dir %&% "Fig3.tiff",width=960,height=480)
+multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),cols=2)
 dev.off()
 
-png(filename=fig.dir %&% "Fig3.png",width=960,height=320)
-multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=3)
+png(filename=fig.dir %&% "Fig3.png",width=960,height=480)
+multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),cols=2)
 dev.off()
 ```
 
