@@ -147,6 +147,13 @@ data2 <- select(data,gene,2:3,12,22)
 gdata <- gather(data2,alpha,R2,2:4)
 b<- ggplot(gdata, aes(y = R2 , x = gdata[,2], group=alpha, color=alpha)) + geom_point(show_guide = TRUE) + ylab(expression(paste("alpha R"^2))) + xlab(expression(paste("LASSO (",alpha,"=1) R"^2))) + geom_smooth(method = "lm")+geom_abline(intercept=0, slope=1,color='black')+ coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_gray(base_size = 20) + theme(legend.justification=c(0,1), legend.position=c(0,1))
 
+blandaltman<-ggplot(gdata, aes(x = (gdata[,2]+gdata[,4])/2 , y = gdata[,2]-gdata[,4], group=alpha, color=alpha)) + geom_point(show_guide = TRUE) + ylab(expression(paste("R"^2, " difference (LASSO - alpha)"))) + xlab(expression(paste("R"^2, " mean (LASSO and alpha)"))) + geom_smooth(method = "lm")+ theme_gray(base_size = 20) + theme(legend.justification=c(0,1), legend.position=c(0,1))
+blandaltman
+
+png(filename=fig.dir %&% "DGNchr22blandAltmanEN.png",width=480,height=480)
+blandaltman
+dev.off()
+
 multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),cols=2)
 
 tiff(filename=fig.dir %&% "Fig3.tiff",width=960,height=480)
