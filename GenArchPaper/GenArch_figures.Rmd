@@ -25,7 +25,7 @@ otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05
 fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
 
 ##Plot FDR based results
-a<-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("local h"^2)) + ylab(expression("global h"^2)) + coord_cartesian(ylim=c(0,1),xlim=c(0,1)) + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
+a<-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("local h"^2)) + ylab(expression("global h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
 
 ##plot joint h2 estimates
 local <- fdrother %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
@@ -43,7 +43,7 @@ data <- mutate(data,nonzeroCI=cigt0,position=1:nrow(data))
 my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.60, hjust=0,gp=gpar(fontsize=14)))
 my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
 
-b<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(0,1))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
+b<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
 
 global <- fdrother %>% select(glo.jt.h2,glo.jt.se) %>% arrange(glo.jt.h2) 
 names(global) = c('h2','se')
@@ -60,7 +60,7 @@ data <- mutate(data,nonzeroCI=cigt0,position=1:nrow(data))
 my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.60, hjust=0,gp=gpar(fontsize=14)))
 my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
 
-c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("global h"^2)) + xlab(expression("genes ordered by global h"^2))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
+c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("global h"^2)) + xlab(expression("genes ordered by global h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
 
 multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=1)
 
@@ -72,6 +72,12 @@ png(filename=fig.dir %&% "Fig1.png",width=360,height=960)
 multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=1)
 dev.off()
 ```
+DGN-WB marginal heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Global h^2^ is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).
+```{r marginal,fig.width=5,fig.height=5}
+##Plot FDR based results
+ggplot(fdrother,aes(x=local.h2,y=global.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("DGN marginal local h"^2)) + ylab(expression("DGN marginal global h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
+```
+
 ##Fig2
 DGN-WB joint heritability with known trans-eQTLs. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Known trans h^2^ is estimated with SNPs that are trans-eQTLs in the Framingham Heart Study for each gene (FDR < 0.05).
 ```{r transH2,fig.width=6,fig.height=16, echo=TRUE, warning=FALSE, message=FALSE}
@@ -80,7 +86,7 @@ transfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05
 fdrtrans<-read.table(transfile,header=T) ##FHS trans-eQTLs for gene w/fdr<0.05 used to define Known trans GRM
 
 ##Plot FDR based results
-a<-ggplot(fdrtrans,aes(x=loc.jt.h2,y=trans.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("local h"^2)) + ylab(expression("known trans h"^2)) + coord_cartesian(ylim=c(0,1),xlim=c(0,1)) + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
+a<-ggplot(fdrtrans,aes(x=loc.jt.h2,y=trans.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("local h"^2)) + ylab(expression("known trans h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
 ##plot joint h2 estimates
 local <- fdrtrans %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
 names(local) = c('h2','se')
@@ -97,7 +103,7 @@ data <- mutate(data,nonzeroCI=cigt0,position=1:nrow(data))
 my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.60, hjust=0,gp=gpar(fontsize=14)))
 my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
 
-b<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax,color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(0,1),xlim=c(-30,1280))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
+b<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax,color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-30,1280))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
 
 global <- fdrtrans %>% select(trans.jt.h2,trans.jt.se) %>% arrange(trans.jt.h2) 
 names(global) = c('h2','se')
@@ -114,7 +120,7 @@ data <- mutate(data,nonzeroCI=cigt0,position=1:nrow(data))
 my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.60, hjust=0,gp=gpar(fontsize=14)))
 my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
 
-c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax,color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("known trans h"^2)) + xlab(expression("genes ordered by known trans h"^2))+coord_cartesian(ylim=c(0,1),xlim=c(-30,1280))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
+c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax,color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("known trans h"^2)) + xlab(expression("genes ordered by known trans h"^2))+coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-30,1280))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
 
 multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=1)
 
@@ -128,7 +134,7 @@ dev.off()
 ```
 ##Fig3
 Polygenic v. sparse  by elastic net.
-```{r EN,fig.width=5,fig.height=5, echo=TRUE, warning=FALSE, message=FALSE}
+```{r EN, echo=TRUE, warning=FALSE, message=FALSE}
 data<-read.table(my.dir %&% 'working_DGN-WB_exp_10-foldCV_1-reps_elasticNet_eachAlphaR2_hapmap2snps_chr22_2015-01-21.txt',header=T,check.names=F)
 ngenes<-dim(data)[1]
 print("Elastic Net DGN-WB chr22 (" %&% ngenes %&% " genes)")
@@ -165,7 +171,7 @@ gTW_h2_se <- cbind(gTW_h2,gTW_se[,3])
 colnames(gTW_h2_se) <- c("ensid","Tissue","h2","se")
 ngenes<-nrow(gTW_h2_se)/length(unique(gTW_h2_se$Tissue))
 gTW_h2_se <- gTW_h2_se %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(Tissue,h2) %>% mutate(place=rep(1:ngenes,10),nonzeroCI=ymin>0) 
-fig4<-ggplot(gTW_h2_se,aes(x=place,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + facet_wrap(~Tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+ theme(legend.justification=c(0,1), legend.position=c(0,1))+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),strip.text.x = element_text(size = 18),legend.text=element_text(size=14),legend.title=element_text(size=14))
+fig4<-ggplot(gTW_h2_se,aes(x=place,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + facet_wrap(~Tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+theme(legend.justification=c(0,1),legend.position=c(0,1))+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),strip.text.x = element_text(size = 18),legend.text=element_text(size=14),legend.title=element_text(size=14))
 
 ###calc % nonzero for each tissue TISSUE-WIDE
 ### ADD to plot legend

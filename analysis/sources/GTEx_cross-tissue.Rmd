@@ -160,7 +160,7 @@ colnames(histse) <- c('ensid','Tissue','se')
 ggplot(histse, aes(x = se, fill = Tissue, color = Tissue)) + geom_density(alpha=0.3)
 ```
 
-```{r,joindata,fig.width=6,fig.height=9}
+```{r,joindata,fig.width=9,fig.height=9}
 se3<-inner_join(allse,ts_allse,by="ensid")
 h23<-inner_join(allh2,ts_allh2,by="ensid")
 

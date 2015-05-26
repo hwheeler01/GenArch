@@ -1,13 +1,10 @@
 \documentclass[]{article}
-\usepackage[T1]{fontenc}
 \usepackage{lmodern}
 \usepackage{amssymb,amsmath}
 \usepackage{ifxetex,ifluatex}
 \usepackage{fixltx2e} % provides \textsubscript
-% Set line spacing
-% use upquote if available, for straight quotes in verbatim environments
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
   \usepackage[utf8]{inputenc}
 \else % if luatex or xelatex
   \ifxetex
@@ -19,29 +16,24 @@
   \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
   \newcommand{\euro}{€}
 \fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 % use microtype if available
-\IfFileExists{microtype.sty}{\usepackage{microtype}}{}
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
 \usepackage[margin=1in]{geometry}
 \usepackage{longtable,booktabs}
 \usepackage{graphicx}
-% Redefine \includegraphics so that, unless explicit options are
-% given, the image width will not exceed the width of the page.
-% Images get their normal width if they fit onto the page, but
-% are scaled down if they would overflow the margins.
 \makeatletter
-\def\ScaleIfNeeded{%
-  \ifdim\Gin@nat@width>\linewidth
-    \linewidth
-  \else
-    \Gin@nat@width
-  \fi
-}
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
 \makeatother
-\let\Oldincludegraphics\includegraphics
-{%
- \catcode`\@=11\relax%
- \gdef\includegraphics{\@ifnextchar[{\Oldincludegraphics}{\Oldincludegraphics[width=\ScaleIfNeeded]}}%
-}%
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
 \ifxetex
   \usepackage[setpagesize=false, % page size defined by xetex
               unicode=false, % unicode breaks when used with xetex
@@ -64,8 +56,20 @@
 \setlength{\emergencystretch}{3em}  % prevent overfull lines
 \setcounter{secnumdepth}{0}
 
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
 %%% Change title format to be more compact
 \usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
 \setlength{\droptitle}{-2em}
   \title{Genetic architecture of transcriptome regulation and orthogonal tissue
 decompositon}
@@ -79,11 +83,10 @@ Im\textsuperscript{1}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-05-21 15:52:43 \textsuperscript{1}Department of Medicine,
+  \date{2015-05-26 09:50:46 \textsuperscript{1}Department of Medicine,
 University of Chicago, \textsuperscript{2}Committee on Genetics,
 Genomics, and Systems Biology, University of Chicago,
 \textsuperscript{3}Division of Genetic Medicine, Vanderbilt University}
-
 
 
 
@@ -165,16 +168,17 @@ polygenic}\label{the-effect-of-local-genetic-variation-on-gene-expression-is-spa
 
 We performed 10-fold cross-validation using the elastic net to test the
 predictive performance of local SNPs for gene expression across a range
-of mixing parameters, $\alpha$. The $\alpha$ that gives the largest
+of mixing parameters, \(\alpha\). The \(\alpha\) that gives the largest
 cross-validation R\textsuperscript{2} informs the sparsity of each gene
-expression trait. That is, at one extreme, if the optimal $\alpha=0$
+expression trait. That is, at one extreme, if the optimal \(\alpha=0\)
 (equivalent to ridge regression), the gene expression trait is highly
-polygenic, whereas if the optimal $\alpha=1$ (equivalent to LASSO), the
-trait is highly sparse. We found that for most gene expression traits,
-the cross-validated R\textsuperscript{2} was suboptimal for $\alpha=0$
-and $\alpha=0.05$, but nearly identically optimal for $\alpha=0.5$ and
-$\alpha=1$ in the DGN cohort (Fig 7). Therefore, the effect of local
-genetic variation on gene expression is sparse rather than polygenic.
+polygenic, whereas if the optimal \(\alpha=1\) (equivalent to LASSO),
+the trait is highly sparse. We found that for most gene expression
+traits, the cross-validated R\textsuperscript{2} was suboptimal for
+\(\alpha=0\) and \(\alpha=0.05\), but nearly identically optimal for
+\(\alpha=0.5\) and \(\alpha=1\) in the DGN cohort (Fig 7). Therefore,
+the effect of local genetic variation on gene expression is sparse
+rather than polygenic.
 
 \subsection{Citations}\label{citations}
 
@@ -264,7 +268,7 @@ net}\label{determining-polygenicity-versus-sparsity-using-the-elastic-net}
 \subsection{Equations}\label{equations}
 
 The deterministic part of the model is defined by this \textbf{in-line
-equation} as $\mu_i = \beta_0 + \beta_1x$, and the stochastic part by
+equation} as \(\mu_i = \beta_0 + \beta_1x\), and the stochastic part by
 the \textbf{centered equation}:
 
 \[ \frac{1}{\sqrt{2\pi}\sigma}e^{-(x-\mu_i)^2/(2\sigma^2)} \]
@@ -272,18 +276,20 @@ the \textbf{centered equation}:
 \subsection{Tables}\label{tables}
 
 \begin{longtable}[c]{@{}lrrrr@{}}
-\toprule\addlinespace
+\caption{This is a GLM summary table.}\tabularnewline
+\toprule
 & Estimate & Std. Error & t value &
-Pr(\textgreater{}\textbar{}t\textbar{})
-\\\addlinespace
-\midrule\endhead
-(Intercept) & -0.02 & 0.1 & -0.20 & 0.84
-\\\addlinespace
-x & 2.04 & 0.1 & 20.88 & 0.00
-\\\addlinespace
+Pr(\textgreater{}\textbar{}t\textbar{})\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+& Estimate & Std. Error & t value &
+Pr(\textgreater{}\textbar{}t\textbar{})\tabularnewline
+\midrule
+\endhead
+(Intercept) & 0.06 & 0.11 & 0.55 & 0.59\tabularnewline
+x & 2.02 & 0.11 & 18.07 & 0.00\tabularnewline
 \bottomrule
-\addlinespace
-\caption{This is a GLM summary table.}
 \end{longtable}
 
 \section{Figures}\label{figures}
@@ -375,10 +381,10 @@ and SNPs within 1 Mb of each gene.}
 \caption{Cross-validated predictive performance across the elastic net.
 (\textbf{A}) 10-fold cross-validated R\textsuperscript{2} of predicted
 vs.~observed expression in DGN whole blood compared to a range of
-elastic net mixing parameters ($\alpha$) for genes on chromosome 22 with
-R\textsuperscript{2} \textgreater{} 0.3. (\textbf{B}) Predictive
-R\textsuperscript{2} for several values of $\alpha$ compared to
-$\alpha = 1$ (LASSO) for 341 genes on chromosome 22.}
+elastic net mixing parameters (\(\alpha\)) for genes on chromosome 22
+with R\textsuperscript{2} \textgreater{} 0.3. (\textbf{B}) Predictive
+R\textsuperscript{2} for several values of \(\alpha\) compared to
+\(\alpha = 1\) (LASSO) for 341 genes on chromosome 22.}
 \end{figure}
 
 \section{Supplemental Figures}\label{supplemental-figures}
@@ -409,7 +415,7 @@ uncertainty in marine reserve design. Ecol Letters. Wiley-Blackwell;
 doi:\href{http://dx.doi.org/10.1111/j.1461-0248.2005.00827.x}{10.1111/j.1461-0248.2005.00827.x}
 
 5. Keil P, Belmaker J, Wilson AM, Unitt P, Jetz W. Downscaling of
-species distribution models: a hierarchical approach. Freckleton R,
+species distribution models: A hierarchical approach. Freckleton R,
 editor. Methods Ecol Evol. Wiley-Blackwell; 2012;4: 82--94.
 doi:\href{http://dx.doi.org/10.1111/j.2041-210x.2012.00264.x}{10.1111/j.2041-210x.2012.00264.x}
 
@@ -417,8 +423,8 @@ doi:\href{http://dx.doi.org/10.1111/j.2041-210x.2012.00264.x}{10.1111/j.2041-210
 {[}Internet{]}. Vienna, Austria: R Foundation for Statistical Computing;
 2015. Available: \url{http://www.R-project.org/}
 
-7. Boettiger C. knitcitations: Citations for knitr markdown files
-{[}Internet{]}. 2014. Available:
+7. Boettiger C. Knitcitations: Citations for knitr markdown files
+{[}Internet{]}. 2015. Available:
 \url{http://CRAN.R-project.org/package=knitcitations}
 
 8. Howie B, Fuchsberger C, Stephens M, Marchini J, Abecasis GR. Fast and
@@ -426,7 +432,7 @@ accurate genotype imputation in genome-wide association studies through
 pre-phasing. Nat Genet. Nature Publishing Group; 2012;44: 955--959.
 doi:\href{http://dx.doi.org/10.1038/ng.2354}{10.1038/ng.2354}
 
-9. Fuchsberger C, Abecasis GR, Hinds DA. minimac2: faster genotype
+9. Fuchsberger C, Abecasis GR, Hinds DA. Minimac2: Faster genotype
 imputation. Bioinformatics. Oxford University Press (OUP); 2014;31:
 782--784.
 doi:\href{http://dx.doi.org/10.1093/bioinformatics/btu704}{10.1093/bioinformatics/btu704}
