@@ -147,21 +147,28 @@ data2 <- select(data,gene,2:3,12,22)
 gdata <- gather(data2,alpha,R2,2:4)
 b<- ggplot(gdata, aes(y = R2 , x = gdata[,2], group=alpha, color=alpha)) + geom_point(show_guide = TRUE) + ylab(expression(paste("alpha R"^2))) + xlab(expression(paste("LASSO (",alpha,"=1) R"^2))) + geom_smooth(method = "lm")+geom_abline(intercept=0, slope=1,color='black')+ coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_gray(base_size = 20) + theme(legend.justification=c(0,1), legend.position=c(0,1))
 
-blandaltman<-ggplot(gdata, aes(x = (gdata[,2]+gdata[,4])/2 , y = gdata[,2]-gdata[,4], group=alpha, color=alpha)) + geom_point(show_guide = TRUE) + ylab(expression(paste("R"^2, " difference (LASSO - alpha)"))) + xlab(expression(paste("R"^2, " mean (LASSO and alpha)"))) + geom_smooth(method = "lm")+ theme_gray(base_size = 20) + theme(legend.justification=c(0,1), legend.position=c(0,1))
+blandaltman<-ggplot(gdata, aes(x = gdata[,2] , y = gdata[,2]-gdata[,4], group=alpha, color=alpha)) + geom_point(show_guide = TRUE) + ylab(expression(paste("R"^2, " difference (LASSO - alpha)"))) + xlab(expression(paste("R"^2, " (LASSO)"))) + theme_gray(base_size = 20) + theme(legend.justification=c(0,1), legend.position=c(0,1))
 blandaltman
+
+###what is the point below zero?
+newgdata<-mutate(gdata, diff=`1`-R2) %>% arrange(diff)
+head(newgdata)
+filter(newgdata,gene=='GTSE1')
+##G-2 And S-Phase Expressed 1, The protein encoded by this gene is only expressed in the S and G2 phases of the cell cycle, where it colocalizes with cytoplasmic tubulin and microtubules. In response to DNA damage, the encoded protein accumulates in the nucleus and binds the tumor suppressor protein p53, shuttling it out of the nucleus and repressing its ability to induce apoptosis.
 
 png(filename=fig.dir %&% "DGNchr22blandAltmanEN.png",width=480,height=480)
 blandaltman
 dev.off()
 
+#old fig3
 multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),cols=2)
 
 tiff(filename=fig.dir %&% "Fig3.tiff",width=960,height=480)
-multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),cols=2)
+multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),blandaltman+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),cols=2)
 dev.off()
 
 png(filename=fig.dir %&% "Fig3.png",width=960,height=480)
-multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),cols=2)
+multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),blandaltman+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),cols=2)
 dev.off()
 ```
 
@@ -270,24 +277,20 @@ ggplot(g_gtexEN, aes(x = R2 , y = g_gtexEN[,3], group=alpha, color=alpha)) + fac
 ```
 ###GTEx cross-tissue elastic net
 ```{r gtexCTen,fig.width=5,fig.height=4}
+
 cten<-read.table(my.dir %&% 'cross-tissue_exp_10-foldCV_elasticNet_R2_for_ggplot2.txt',header=T,check.names=F)
 ngenesall <- length(unique(cten$gene))
 g_cten<-gather(cten,alpha,R2,3:5)
-a<-ggplot(g_cten, aes(y = R2 , x = g_cten[,3], group=alpha, color=alpha)) + geom_point(show_guide = TRUE) + ylab(expression(paste("alpha R"^2))) + xlab(expression(paste("lasso (",alpha,"=1) R"^2))) + geom_smooth(method = "lm")+geom_abline(intercept=0, slope=1,color='black')+ coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05))+ ggtitle("GTEx cross-tissue (" %&% ngenesall %&% " genes)")+theme_gray(18)
+a<-ggplot(g_cten, aes(y = `1` - R2, x = `1`, group=alpha, color=alpha)) + geom_point(show_guide = TRUE) + ylab(expression(paste("R"^2, " difference (LASSO - alpha)"))) + xlab(expression(paste("R"^2, " (LASSO)"))) +ggtitle("GTEx cross-tissue (" %&% ngenesall %&% " genes)")+theme_gray(18)
 a
 png(filename="GTEx-cross-tissue-EN_lassoR2_v_alphaR2.png")
 a
 dev.off()
 
-chr22EN <- filter(cten,gene %in% chr22$V6)
-ngenes <- length(unique(chr22EN$gene))
-g_chr22EN <- gather(chr22EN,alpha,R2,3:6)
-b<-ggplot(g_chr22EN, aes(x = as.numeric(levels(alpha))[alpha] , y = R2, group=gene)) + geom_point(show_guide = FALSE) + geom_line(lwd = 0.5, show_guide = FALSE) + aes(color = gene) + xlab(expression(alpha)) + ylab(expression(R^2)) + ggtitle("GTEx cross-tissue chr22 (" %&% ngenes %&% " genes)")+theme_gray(18)
-b
-png(filename="GTEx-cross-tissue-EN_chr22.png")
-b
-dev.off()
-
+###what are points below zero?
+new_cten<-mutate(g_cten, diff=`1`-R2) %>% arrange(diff)
+head(new_cten,n=10L)
+filter(new_cten,gene=='RBFADN')
 ```
 
 ##FigS1

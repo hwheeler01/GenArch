@@ -24,6 +24,29 @@
 \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
 \usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{{#1}}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{{#1}}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{{#1}}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{{#1}}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{{#1}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{{#1}}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{{#1}}}
+\newcommand{\RegionMarkerTok}[1]{{#1}}
+\newcommand{\ErrorTok}[1]{\textbf{{#1}}}
+\newcommand{\NormalTok}[1]{{#1}}
 \usepackage{longtable,booktabs}
 \usepackage{graphicx}
 \makeatletter
@@ -83,7 +106,7 @@ Im\textsuperscript{1}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-05-26 09:50:46 \textsuperscript{1}Department of Medicine,
+  \date{2015-05-29 14:29:36 \textsuperscript{1}Department of Medicine,
 University of Chicago, \textsuperscript{2}Committee on Genetics,
 Genomics, and Systems Biology, University of Chicago,
 \textsuperscript{3}Division of Genetic Medicine, Vanderbilt University}
@@ -166,26 +189,19 @@ CI percentages, but smaller than the cross-tissue percentage (Fig 6).
 sparse rather than
 polygenic}\label{the-effect-of-local-genetic-variation-on-gene-expression-is-sparse-rather-than-polygenic}
 
-We performed 10-fold cross-validation using the elastic net to test the
-predictive performance of local SNPs for gene expression across a range
-of mixing parameters, \(\alpha\). The \(\alpha\) that gives the largest
-cross-validation R\textsuperscript{2} informs the sparsity of each gene
-expression trait. That is, at one extreme, if the optimal \(\alpha=0\)
-(equivalent to ridge regression), the gene expression trait is highly
-polygenic, whereas if the optimal \(\alpha=1\) (equivalent to LASSO),
-the trait is highly sparse. We found that for most gene expression
-traits, the cross-validated R\textsuperscript{2} was suboptimal for
-\(\alpha=0\) and \(\alpha=0.05\), but nearly identically optimal for
-\(\alpha=0.5\) and \(\alpha=1\) in the DGN cohort (Fig 7). Therefore,
-the effect of local genetic variation on gene expression is sparse
-rather than polygenic.
-
-\subsection{Citations}\label{citations}
-
-The relationship was first described by Reference 4. However, there are
-also opinions that the relationship is spurious {[}5{]}. We used R for
-our calculations {[}6{]}, and we used package \texttt{knitcitations}
-{[}7{]} to make the bibliography.
+We performed 10-fold cross-validation using the elastic net {[}4{]} to
+test the predictive performance of local SNPs for gene expression across
+a range of mixing parameters, \(\alpha\). The \(\alpha\) that gives the
+largest cross-validation R\textsuperscript{2} informs the sparsity of
+each gene expression trait. That is, at one extreme, if the optimal
+\(\alpha=0\) (equivalent to ridge regression), the gene expression trait
+is highly polygenic, whereas if the optimal \(\alpha=1\) (equivalent to
+LASSO), the trait is highly sparse. We found that for most gene
+expression traits, the cross-validated R\textsuperscript{2} was
+suboptimal for \(\alpha=0\) and \(\alpha=0.05\), but nearly identically
+optimal for \(\alpha=0.5\) and \(\alpha=1\) in the DGN cohort (Fig 7).
+Therefore, the effect of local genetic variation on gene expression is
+sparse rather than polygenic.
 
 \section{Discussion}\label{discussion}
 
@@ -237,12 +253,14 @@ individuals from the Depression Genes and Networks (DGN) cohort {[}1{]},
 all of European ancestry. For our analyses, we used the HCP (hidden
 covariates with prior) normalized gene-level expression data used for
 the \emph{trans}-eQTL analysis in Battle et al. {[}1{]} and downloaded
-from the NIMH repository. Approximately 650K SNPs (minor allele
-frequency {[}MAF{]} \textgreater{} 0.05, Hardy-Weinberg Equilibrium {[}P
-\textgreater{} 0.05{]}, non-ambiguous strand {[}no A/T or C/G SNPs{]})
-comprised the input set of SNPs for imputation, which was performed on
-the University of Michigan Imputation-Server
-(\url{https://imputationserver.sph.umich.edu/start.html}) {[}8,9{]} with
+from the NIMH repository. The 922 individuals were unrelated (all
+pairwise \(\hat{\pi}\) \textless{} 0.05) and thus all included in
+downstream analyses. Imputation of approximately 650K input SNPs (minor
+allele frequency {[}MAF{]} \textgreater{} 0.05, Hardy-Weinberg
+Equilibrium {[}P \textgreater{} 0.05{]}, non-ambiguous strand {[}no A/T
+or C/G SNPs{]}) was performed on the University of Michigan
+Imputation-Server
+(\url{https://imputationserver.sph.umich.edu/start.html}) {[}5,6{]} with
 the following parameters: 1000G Phase 1 v3 ShapeIt2 (no singletons)
 reference panel, SHAPEIT phasing, and EUR population. Approximately 1.9M
 non-ambiguous strand SNPs with MAF \textgreater{} 0.05, imputation
@@ -252,26 +270,117 @@ analyses.
 
 \subsubsection{GTEx Dataset}\label{gtex-dataset}
 
+We obtained RNA-Seq gene expression levels from 8555 tissue samples (53
+unique tissue types) from 544 unique subjects in the GTEx Project
+{[}7{]} data release on 2014-06-13. Of the individuals with gene
+expression data, genome-wide genotypes (imputed with 1000 Genomes) were
+available for 450 individuals. While all 8555 tissue samples were used
+in the OTD model (described below) to generate cross-tissue and
+tissue-specific components of gene expression, we used the nine tissues
+with the largest sample sizes when quantifying tissue-specific effects.
+Tissues and sample sizes (both RNA-seq and genotypes available) included
+cross-tissue (n=450), skeletal muscle (n=361), whole blood (n=339), skin
+from the sun-exposed portion of the lower leg (n=303), subcutaneous
+adipose (n=298), tibial artery (n=285), lung (279), thyroid (n=279),
+tibial nerve (n=256) and left ventricle heart (n=190). Approximately
+2.6M non-ambiguous strand SNPs included in HapMap Phase II were retained
+for subsequent analyses.
+
 \subsection{Partitioning local and global heritability of gene
 expression}\label{partitioning-local-and-global-heritability-of-gene-expression}
+
+To investigate the proximity of gene expression regulation to each gene,
+we partitioned the proportion of gene expression variance explained by
+SNPs in the DGN cohort into two components: local (SNPs within 1Mb of
+the gene) and global (eQTLs on non-gene chromosomes) as defined by the
+GENCODE {[}8{]} version 12 gene annotation. We calculated the proportion
+of the variance (narrow-sense heritability) explained by each component
+using the following mixed-effects model:
+
+\[ Y_g = \sum_{k = \in local}w_{k,g} X_k + \sum_{k = \in global}w_{k,g} X_k + \epsilon \]
+
+Assuming a random effects for \(w_{k,g} \approx N(0, \sigma^2_w)\) and
+\(\epsilon \approx N(0, \sigma^2_{\epsilon} I_n)\), where \(I_n\) is the
+identity matrix, we calculated the total variability explained by local
+and global components by estimating \(\sigma^2_w\) with restricted
+maximum likelihood (REML) using GCTA software {[}2{]}. For heritability
+analyses in the GTEx cohort, we removed the \(global\) term from the
+model and only estimated marginal \(local\) h\textsuperscript{2} due to
+the smaller sample sizes of both cross-tissue and tissue-specific
+expression levels compared to DGN.
 
 \subsection{Orthogonal tissue
 decomposition}\label{orthogonal-tissue-decomposition}
 
-We will use a mixed effects model to estimate these components and
-enforce orthogonality of the components. This approach is an extension
-of our method to develop an intrinsic growth phenotype13.
+To better understand the context specificity of gene expression
+regulation, we developed a method called orthogonal tissue decomposition
+(OTD). This approach is an extension of our method to develop an
+intrinsic growth phenotype {[}9{]}. We applied OTD to GTEx Project
+{[}7{]} data and decomposed the expression of each gene into
+cross-tissue and tissue-specific components. The tissue availability is
+unbalanced across individuals because of the difficulties of sample
+collection and the uneven quality of the tissues. OTD decomposes the
+expression traits into orthogonal components as represented by the
+following model:
+
+\[ Y_i = T_{i,cross} + T_{i,tissue} \]
+
+Specifically, to generate cross-tissue and tissue-specific expression
+levels, we used the \texttt{lmer} function in the R {[}10{]} package
+\texttt{lme4} {[}11,12{]} to fit the following mixed-effects model:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit <-}\StringTok{ }\NormalTok{lme4::}\KeywordTok{lmer}\NormalTok{(expression ~}\StringTok{ }\NormalTok{(}\DecValTok{1}\NormalTok{|SUBJID) +}\StringTok{ }\NormalTok{TISSUE +}\StringTok{ }\NormalTok{GENDER +}\StringTok{ }\NormalTok{PEERs)}
+\end{Highlighting}
+\end{Shaded}
+
+The model included tissue-wide gene expression levels in 8555 GTEx
+tissue samples from 544 unique subjects. A total of 17,647
+Protein-coding genes (defined by GENCODE {[}8{]} version 18) with a mean
+gene expression level across tissues greater than 0.1 RPKM (reads per
+kilobase of transcript per million reads mapped) were included in the
+model. \texttt{SUBJID} was a random effect and the covariates
+\texttt{TISSUE}, \texttt{GENDER}, and \texttt{PEERs} were fixed effects
+used to predict tissue-wide expression levels (\texttt{expression} in
+the model). \texttt{PEERs} included the top 15 PEER factors estimated
+across all tissues using the R package \texttt{PEER} {[}13{]} to control
+for batch effects and experimental confounders. Cross-tissue expression
+was defined as the random effects from the model (\texttt{ranef(fit)})
+and tissue-specific expression as the residuals (\texttt{resid(fit})).
 
 \subsection{Determining polygenicity versus sparsity using the elastic
 net}\label{determining-polygenicity-versus-sparsity-using-the-elastic-net}
 
-\subsection{Equations}\label{equations}
+\textbf{WORK ON THIS} \texttt{glmnet} solves the following problem {\[
+\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right],
+\]} over a grid of values of {\(\lambda\)} covering the entire range.
 
-The deterministic part of the model is defined by this \textbf{in-line
-equation} as \(\mu_i = \beta_0 + \beta_1x\), and the stochastic part by
-the \textbf{centered equation}:
+The elastic-net penalty is controlled by {\(\alpha\)}, and bridges the
+gap between lasso ({\(\alpha=1\)}, the default) and ridge
+({\(\alpha=0\)}). The tuning parameter {\(\lambda\)} controls the
+overall strength of the penalty.
 
-\[ \frac{1}{\sqrt{2\pi}\sigma}e^{-(x-\mu_i)^2/(2\sigma^2)} \]
+We performed 10-fold cross-validation using the elastic net {[}4{]} to
+test the predictive performance of local SNPs for gene expression across
+a range of mixing parameters, \(\alpha\).
+
+\subsection{Enrichment analysis}\label{enrichment-analysis}
+
+\begin{itemize}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  For top CT and TS genes:
+\end{itemize}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\itemsep1pt\parskip0pt\parsep0pt
+\item
+  GO enrichment
+\item
+  GWAS catalog enrichment (i.e.~top T2D, T1D, schizo, etc. genes)
+\end{enumerate}
 
 \subsection{Tables}\label{tables}
 
@@ -287,8 +396,8 @@ Pr(\textgreater{}\textbar{}t\textbar{})\tabularnewline
 Pr(\textgreater{}\textbar{}t\textbar{})\tabularnewline
 \midrule
 \endhead
-(Intercept) & 0.06 & 0.11 & 0.55 & 0.59\tabularnewline
-x & 2.02 & 0.11 & 18.07 & 0.00\tabularnewline
+(Intercept) & 0.09 & 0.11 & 0.90 & 0.37\tabularnewline
+x & 1.94 & 0.10 & 19.06 & 0.00\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -383,8 +492,9 @@ and SNPs within 1 Mb of each gene.}
 vs.~observed expression in DGN whole blood compared to a range of
 elastic net mixing parameters (\(\alpha\)) for genes on chromosome 22
 with R\textsuperscript{2} \textgreater{} 0.3. (\textbf{B}) Predictive
-R\textsuperscript{2} for several values of \(\alpha\) compared to
-\(\alpha = 1\) (LASSO) for 341 genes on chromosome 22.}
+R\textsuperscript{2} difference between LASSO (\(\alpha = 1\)) and
+several values of \(\alpha\) compared to LASSO predictive
+R\textsuperscript{2} for 341 genes on chromosome 22.}
 \end{figure}
 
 \section{Supplemental Figures}\label{supplemental-figures}
@@ -409,32 +519,55 @@ variation in human whole blood. Nat Genet. Nature Publishing Group;
 2015;47: 345--352.
 doi:\href{http://dx.doi.org/10.1038/ng.3220}{10.1038/ng.3220}
 
-4. Halpern BS, Regan HM, Possingham HP, McCarthy MA. Accounting for
-uncertainty in marine reserve design. Ecol Letters. Wiley-Blackwell;
-2006;9: 2--11.
-doi:\href{http://dx.doi.org/10.1111/j.1461-0248.2005.00827.x}{10.1111/j.1461-0248.2005.00827.x}
+4. Zou H, Hastie T. Regularization and variable selection via the
+elastic net. Journal of the Royal Statistical Society: Series B
+(Statistical Methodology). Wiley-Blackwell; 2005;67: 301--320.
+doi:\href{http://dx.doi.org/10.1111/j.1467-9868.2005.00503.x}{10.1111/j.1467-9868.2005.00503.x}
 
-5. Keil P, Belmaker J, Wilson AM, Unitt P, Jetz W. Downscaling of
-species distribution models: A hierarchical approach. Freckleton R,
-editor. Methods Ecol Evol. Wiley-Blackwell; 2012;4: 82--94.
-doi:\href{http://dx.doi.org/10.1111/j.2041-210x.2012.00264.x}{10.1111/j.2041-210x.2012.00264.x}
-
-6. R Core Team. R: A language and environment for statistical computing
-{[}Internet{]}. Vienna, Austria: R Foundation for Statistical Computing;
-2015. Available: \url{http://www.R-project.org/}
-
-7. Boettiger C. Knitcitations: Citations for knitr markdown files
-{[}Internet{]}. 2015. Available:
-\url{http://CRAN.R-project.org/package=knitcitations}
-
-8. Howie B, Fuchsberger C, Stephens M, Marchini J, Abecasis GR. Fast and
+5. Howie B, Fuchsberger C, Stephens M, Marchini J, Abecasis GR. Fast and
 accurate genotype imputation in genome-wide association studies through
 pre-phasing. Nat Genet. Nature Publishing Group; 2012;44: 955--959.
 doi:\href{http://dx.doi.org/10.1038/ng.2354}{10.1038/ng.2354}
 
-9. Fuchsberger C, Abecasis GR, Hinds DA. Minimac2: Faster genotype
+6. Fuchsberger C, Abecasis GR, Hinds DA. Minimac2: Faster genotype
 imputation. Bioinformatics. Oxford University Press (OUP); 2014;31:
 782--784.
 doi:\href{http://dx.doi.org/10.1093/bioinformatics/btu704}{10.1093/bioinformatics/btu704}
+
+7. Ardlie KG, Deluca DS, Segre AV, Sullivan TJ, Young TR, Gelfand ET, et
+al. The genotype-tissue expression (GTEx) pilot analysis: Multitissue
+gene regulation in humans. Science. American Association for the
+Advancement of Science (AAAS); 2015;348: 648--660.
+doi:\href{http://dx.doi.org/10.1126/science.1262110}{10.1126/science.1262110}
+
+8. Harrow J, Frankish A, Gonzalez JM, Tapanari E, Diekhans M, Kokocinski
+F, et al. GENCODE: The reference human genome annotation for the ENCODE
+project. Genome Research. Cold Spring Harbor Laboratory Press; 2012;22:
+1760--1774.
+doi:\href{http://dx.doi.org/10.1101/gr.135350.111}{10.1101/gr.135350.111}
+
+9. Im HK, Gamazon ER, Stark AL, Huang RS, Cox NJ, Dolan ME. Mixed
+effects modeling of proliferation rates in cell-based models:
+Consequence for pharmacogenomics and cancer. Akey JM, editor. PLoS
+Genetics. Public Library of Science (PLoS); 2012;8: e1002525.
+doi:\href{http://dx.doi.org/10.1371/journal.pgen.1002525}{10.1371/journal.pgen.1002525}
+
+10. R Core Team. R: A language and environment for statistical computing
+{[}Internet{]}. Vienna, Austria: R Foundation for Statistical Computing;
+2015. Available: \url{http://www.R-project.org/}
+
+11. Bates D, Maechler M, Bolker B, Walker S. lme4: Linear mixed-effects
+models using eigen and s4 {[}Internet{]}. 2014. Available:
+\url{http://CRAN.R-project.org/package=lme4}
+
+12. Bates D, Maechler M, Bolker BM, Walker S. lme4: Linear mixed-effects
+models using eigen and s4 {[}Internet{]}. 2014. Available:
+\url{http://arxiv.org/abs/1406.5823}
+
+13. Stegle O, Parts L, Piipari M, Winn J, Durbin R. Using probabilistic
+estimation of expression residuals (PEER) to obtain increased power and
+interpretability of gene expression analyses. Nature Protocols. Nature
+Publishing Group; 2012;7: 500--507.
+doi:\href{http://dx.doi.org/10.1038/nprot.2011.457}{10.1038/nprot.2011.457}
 
 \end{document}

@@ -1,0 +1,11 @@
+---
+title: "Untitled"
+author: "Heather E. Wheeler"
+date: "May 29, 2015"
+output: pdf_document
+---
+`glmnet` solves the following problem <span class="math">\[
+\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right],
+\]</span> over a grid of values of <span class="math">\(\lambda\)</span> covering the entire range. 
+
+The <em>elastic-net</em> penalty is controlled by <span class="math">\(\alpha\)</span>, and bridges the gap between lasso (<span class="math">\(\alpha=1\)</span>, the default) and ridge (<span class="math">\(\alpha=0\)</span>). The tuning parameter <span class="math">\(\lambda\)</span> controls the overall strength of the penalty.
