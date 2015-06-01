@@ -101,14 +101,16 @@ fit <- lme4::lmer(expression ~ (1|SUBJID) + TISSUE + GENDER + PEERs)
 The model included tissue-wide gene expression levels in 8555 GTEx tissue samples from 544 unique subjects. A total of 17,647 Protein-coding genes (defined by GENCODE `r citep("10.1101/gr.135350.111")` version 18) with a mean gene expression level across tissues greater than 0.1 RPKM (reads per kilobase of transcript per million reads mapped) were included in the model. `SUBJID` was a random effect and the covariates `TISSUE`, `GENDER`, and `PEERs` were fixed effects used to predict tissue-wide expression levels (`expression` in the model). `PEERs` included the top 15 PEER factors estimated across all tissues using the R package `PEER` `r citep("10.1038/nprot.2011.457")` to control for batch effects and experimental confounders. Cross-tissue expression was defined as the random effects from the model (`ranef(fit)`) and tissue-specific expression as the residuals (`resid(fit`)).
 
 ## Determining polygenicity versus sparsity using the elastic net
-**WORK ON THIS**
-`glmnet` solves the following problem <span class="math">\[
-\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right],
-\]</span> over a grid of values of <span class="math">\(\lambda\)</span> covering the entire range. 
+We applied the elastic net `r citep("10.1111/j.1467-9868.2005.00503.x")` to model the effect of local genetic variation (SNPs within 1 Mb of gene) on the genetic architecture of gene expression. We used the `cv.glmnet` function in the R package `glmnet` `r citep(citation("glmnet"))` to perform 10-fold cross-validation of the elastic net across a range of mixing paramaters ($\alpha$) to find the $\alpha$ that maximized predictive performance, measured by Pearson's R^2^. Specifically, `glmnet` solves the following problem:
 
-The <em>elastic-net</em> penalty is controlled by <span class="math">\(\alpha\)</span>, and bridges the gap between lasso (<span class="math">\(\alpha=1\)</span>, the default) and ridge (<span class="math">\(\alpha=0\)</span>). The tuning parameter <span class="math">\(\lambda\)</span> controls the overall strength of the penalty.
+**[[Haky, should/can we simplify this equation? I just took it from <http://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html>, but they don't explain all the terms]]**
+<span class="math">\[\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right], \]</span>
 
-We performed 10-fold cross-validation using the elastic net `r citep("10.1111/j.1467-9868.2005.00503.x")` to test the predictive performance of local SNPs for gene expression across a range of mixing parameters, $\alpha$.
+over a grid of values of $\lambda$ covering the entire range `r citep(citation("glmnet"))`. This tuning parameter $\lambda$ controls the overall strength of the penalty. 
+
+The elastic net penalty is controlled by mixing parameter $\alpha$, which spans LASSO ($\alpha=1$, the default) `r citep("http://www.jstor.org/stable/2346178")` at one extreme and ridge regression ($\alpha=0$) `r citep("10.1080/00401706.1970.10488635")` at the other. The ridge penalty shrinks the coefficients of correlated SNPs towards each other, while the LASSO tends to pick one of the correlated SNPs and discard the others. Thus, an optimal prediction R^2^ for $\alpha=0$ means the gene expression trait is highly polygenic, while an optimal prediction R^2^ for $\alpha=1$ means the trait is highly sparse. An optimal prediction R^2^ in between (e.g. $\alpha=0.5$) means the trait has a mixed genetic architecture.
+
+In the DGN cohort, we tested 21 values of the mixing parameter ($\alpha=0, 0.05, 0.1, ..., 0.90, 0.95, 1$) for optimal prediction of gene expression of the 341 genes on chromosome 22. For the rest of the autosomes in DGN and for cross-tissue, tissue-specific, and tissue-wide expression in the GTEx cohort, we tested $\alpha=0.05, 0.5, 0.95, 1$. **[[Nick, is this correct?]]**
 
 ## Enrichment analysis
 - For top CT and TS genes:
@@ -166,7 +168,7 @@ fig4<-readPNG(fig.dir %&% 'Fig4.png')
 grid.raster(fig4)
 ```
 
-```{r EN,echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-validated predictive performance across the elastic net. (**A**) 10-fold cross-validated R^2^ of predicted vs. observed expression in DGN whole blood compared to a range of elastic net mixing parameters ($\\alpha$) for genes on chromosome 22 with R^2^ > 0.3. (**B**) Predictive R^2^ difference between LASSO ($\\alpha = 1$) and several values of $\\alpha$ compared to LASSO predictive R^2^ for 341 genes on chromosome 22."}
+```{r EN,echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-validated predictive performance across the elastic net. (**A**) 10-fold cross-validated R^2^ of predicted vs. observed expression in DGN whole blood compared to a range of elastic net mixing parameters ($\\alpha$) for genes on chromosome 22 with R^2^ > 0.3. (**B**) Predictive R^2^ difference between LASSO ($\\alpha = 1$) and several other values of $\\alpha$ compared to LASSO predictive R^2^ for 341 genes on chromosome 22."}
 fig3<-readPNG(fig.dir %&% 'Fig3.png')
 grid.raster(fig3)
 ```

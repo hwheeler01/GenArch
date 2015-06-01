@@ -106,7 +106,7 @@ Im\textsuperscript{1}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-05-29 14:29:36 \textsuperscript{1}Department of Medicine,
+  \date{2015-06-01 10:17:11 \textsuperscript{1}Department of Medicine,
 University of Chicago, \textsuperscript{2}Committee on Genetics,
 Genomics, and Systems Biology, University of Chicago,
 \textsuperscript{3}Division of Genetic Medicine, Vanderbilt University}
@@ -352,18 +352,42 @@ and tissue-specific expression as the residuals (\texttt{resid(fit})).
 \subsection{Determining polygenicity versus sparsity using the elastic
 net}\label{determining-polygenicity-versus-sparsity-using-the-elastic-net}
 
-\textbf{WORK ON THIS} \texttt{glmnet} solves the following problem {\[
-\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right],
-\]} over a grid of values of {\(\lambda\)} covering the entire range.
+We applied the elastic net {[}4{]} to model the effect of local genetic
+variation (SNPs within 1 Mb of gene) on the genetic architecture of gene
+expression. We used the \texttt{cv.glmnet} function in the R package
+\texttt{glmnet} {[}14,15{]} to perform 10-fold cross-validation of the
+elastic net across a range of mixing paramaters (\(\alpha\)) to find the
+\(\alpha\) that maximized predictive performance, measured by Pearson's
+R\textsuperscript{2}. Specifically, \texttt{glmnet} solves the following
+problem:
 
-The elastic-net penalty is controlled by {\(\alpha\)}, and bridges the
-gap between lasso ({\(\alpha=1\)}, the default) and ridge
-({\(\alpha=0\)}). The tuning parameter {\(\lambda\)} controls the
-overall strength of the penalty.
+\textbf{{[}{[}Haky, should/can we simplify this equation? I just took it
+from \url{http://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html}, but
+they don't explain all the terms{]}{]}}
+{\[\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right], \]}
 
-We performed 10-fold cross-validation using the elastic net {[}4{]} to
-test the predictive performance of local SNPs for gene expression across
-a range of mixing parameters, \(\alpha\).
+over a grid of values of \(\lambda\) covering the entire range
+{[}14,15{]}. This tuning parameter \(\lambda\) controls the overall
+strength of the penalty.
+
+The elastic net penalty is controlled by mixing parameter \(\alpha\),
+which spans LASSO (\(\alpha=1\), the default) {[}16{]} at one extreme
+and ridge regression (\(\alpha=0\)) {[}17{]} at the other. The ridge
+penalty shrinks the coefficients of correlated SNPs towards each other,
+while the LASSO tends to pick one of the correlated SNPs and discard the
+others. Thus, an optimal prediction R\textsuperscript{2} for
+\(\alpha=0\) means the gene expression trait is highly polygenic, while
+an optimal prediction R\textsuperscript{2} for \(\alpha=1\) means the
+trait is highly sparse. An optimal prediction R\textsuperscript{2} in
+between (e.g. \(\alpha=0.5\)) means the trait has a mixed genetic
+architecture.
+
+In the DGN cohort, we tested 21 values of the mixing parameter
+(\(\alpha=0, 0.05, 0.1, ..., 0.90, 0.95, 1\)) for optimal prediction of
+gene expression of the 341 genes on chromosome 22. For the rest of the
+autosomes in DGN and for cross-tissue, tissue-specific, and tissue-wide
+expression in the GTEx cohort, we tested \(\alpha=0.05, 0.5, 0.95, 1\).
+\textbf{{[}{[}Nick, is this correct?{]}{]}}
 
 \subsection{Enrichment analysis}\label{enrichment-analysis}
 
@@ -396,8 +420,8 @@ Pr(\textgreater{}\textbar{}t\textbar{})\tabularnewline
 Pr(\textgreater{}\textbar{}t\textbar{})\tabularnewline
 \midrule
 \endhead
-(Intercept) & 0.09 & 0.11 & 0.90 & 0.37\tabularnewline
-x & 1.94 & 0.10 & 19.06 & 0.00\tabularnewline
+(Intercept) & 0.13 & 0.1 & 1.27 & 0.21\tabularnewline
+x & 2.03 & 0.1 & 19.64 & 0.00\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -493,7 +517,7 @@ vs.~observed expression in DGN whole blood compared to a range of
 elastic net mixing parameters (\(\alpha\)) for genes on chromosome 22
 with R\textsuperscript{2} \textgreater{} 0.3. (\textbf{B}) Predictive
 R\textsuperscript{2} difference between LASSO (\(\alpha = 1\)) and
-several values of \(\alpha\) compared to LASSO predictive
+several other values of \(\alpha\) compared to LASSO predictive
 R\textsuperscript{2} for 341 genes on chromosome 22.}
 \end{figure}
 
@@ -569,5 +593,24 @@ estimation of expression residuals (PEER) to obtain increased power and
 interpretability of gene expression analyses. Nature Protocols. Nature
 Publishing Group; 2012;7: 500--507.
 doi:\href{http://dx.doi.org/10.1038/nprot.2011.457}{10.1038/nprot.2011.457}
+
+14. Friedman J, Hastie T, Tibshirani R. Regularization paths for
+generalized linear models via coordinate descent. Journal of Statistical
+Software. 2010;33: 1--22. Available:
+\url{http://www.jstatsoft.org/v33/i01/}
+
+15. Simon N, Friedman J, Hastie T, Tibshirani R. Regularization paths
+for cox's proportional hazards model via coordinate descent. Journal of
+Statistical Software. 2011;39: 1--13. Available:
+\url{http://www.jstatsoft.org/v39/i05/}
+
+16. Regression shrinkage and selection via the lasso on jSTOR
+{[}Internet{]}. \url{http://www.jstor.org/stable/2346178}; 2015.
+Available: \url{http://www.jstor.org/stable/2346178}
+
+17. Hoerl AE, Kennard RW. Ridge regression: Applications to
+nonorthogonal problems. Technometrics. Informa UK Limited; 1970;12:
+69--82.
+doi:\href{http://dx.doi.org/10.1080/00401706.1970.10488635}{10.1080/00401706.1970.10488635}
 
 \end{document}

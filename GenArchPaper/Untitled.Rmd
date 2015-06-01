@@ -8,4 +8,6 @@ output: pdf_document
 \min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right],
 \]</span> over a grid of values of <span class="math">\(\lambda\)</span> covering the entire range. 
 
-The <em>elastic-net</em> penalty is controlled by <span class="math">\(\alpha\)</span>, and bridges the gap between lasso (<span class="math">\(\alpha=1\)</span>, the default) and ridge (<span class="math">\(\alpha=0\)</span>). The tuning parameter <span class="math">\(\lambda\)</span> controls the overall strength of the penalty.
+The elastic-net penalty is controlled by $\alpha$, and bridges the gap between lasso ($\alpha=1$, the default) and ridge ($\alpha=0$). The tuning parameter $\lambda$ controls the overall strength of the penalty.
+
+$\alpha=0, 0.05, 0.1, ..., 0.90, 0.95, 1$
