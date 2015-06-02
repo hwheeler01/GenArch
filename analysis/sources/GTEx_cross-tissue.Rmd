@@ -160,7 +160,7 @@ colnames(histse) <- c('ensid','Tissue','se')
 ggplot(histse, aes(x = se, fill = Tissue, color = Tissue)) + geom_density(alpha=0.3)
 ```
 
-```{r,joindata,fig.width=6,fig.height=9}
+```{r,joindata,fig.width=9,fig.height=9}
 se3<-inner_join(allse,ts_allse,by="ensid")
 h23<-inner_join(allh2,ts_allh2,by="ensid")
 
@@ -217,5 +217,14 @@ write.table(h2TW,file=my.dir %&% "GTEx_Tissue-Wide_local_h2.txt",quote=F,row.nam
 write.table(seTW,file= my.dir %&% "GTEx_Tissue-Wide_local_se.txt",quote=F,row.names=F)
 write.table(h2TS,file=my.dir %&% "GTEx_Tissue-Specific_local_h2.txt",quote=F,row.names=F)
 write.table(seTS,file=my.dir %&% "GTEx_Tissue-Specific_local_se.txt",quote=F,row.names=F)
+
+TW<-inner_join(h2TW,seTW,by="ensid")
+comboTW <- transmute(TW,EnsemblGeneID=ensid,h2.CrossTissue=CrossTissue.x,se.CrossTissue=CrossTissue.y,h2.AdiposeSubcutaneous=AdiposeSubcutaneous.x,se.AdiposeSubcutaneous=AdiposeSubcutaneous.y,h2.ArteryTibial=ArteryTibial.x,se.ArteryTibial=ArteryTibial.y,h2.HeartLeftVentricle=HeartLeftVentricle.x,se.HeartLeftVentricle=HeartLeftVentricle.y,h2.Lung=Lung.x,se.Lung=Lung.y,h2.MuscleSkeletal=MuscleSkeletal.x,se.MuscleSkeletal=MuscleSkeletal.y,h2.NerveTibial=NerveTibial.x,se.NerveTibial=NerveTibial.y,h2.SkinSunExposedLowerleg=SkinSunExposedLowerleg.x,se.SkinSunExposedLowerleg=SkinSunExposedLowerleg.y,h2.Thyroid=Thyroid.x,se.Thyroid=Thyroid.y,h2.WholeBlood=WholeBlood.x,se.WholeBlood=WholeBlood.y)
+
+TS<-inner_join(h2TS,seTS,by="ensid")
+comboTS <- transmute(TS,EnsemblGeneID=ensid,h2.CrossTissue=CrossTissue.x,se.CrossTissue=CrossTissue.y,h2.AdiposeSubcutaneous=AdiposeSubcutaneous.x,se.AdiposeSubcutaneous=AdiposeSubcutaneous.y,h2.ArteryTibial=ArteryTibial.x,se.ArteryTibial=ArteryTibial.y,h2.HeartLeftVentricle=HeartLeftVentricle.x,se.HeartLeftVentricle=HeartLeftVentricle.y,h2.Lung=Lung.x,se.Lung=Lung.y,h2.MuscleSkeletal=MuscleSkeletal.x,se.MuscleSkeletal=MuscleSkeletal.y,h2.NerveTibial=NerveTibial.x,se.NerveTibial=NerveTibial.y,h2.SkinSunExposedLowerleg=SkinSunExposedLowerleg.x,se.SkinSunExposedLowerleg=SkinSunExposedLowerleg.y,h2.Thyroid=Thyroid.x,se.Thyroid=Thyroid.y,h2.WholeBlood=WholeBlood.x,se.WholeBlood=WholeBlood.y)
+
+write.table(comboTW,file= my.dir %&% "GTEx_Tissue-Wide_local_h2_se.txt",quote=F,row.names=F,sep="\t")
+write.table(comboTS,file=my.dir %&% "GTEx_Tissue-Specific_local_h2_se.txt",quote=F,row.names=F,sep="\t")
 
 ```
