@@ -12,15 +12,14 @@ output: html_document
   library(tidyr)
   library(GGally)
   library(grid)
-  library(readr)
-  "%&%" = function(a,b) paste(a,b,sep="")
+    "%&%" = function(a,b) paste(a,b,sep="")
   source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
   my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
   out.dir <- '~/GitHub/GenArch/GenArchPaper/OTD_enrichment/'
 ```
 
 ###Pull h2 estimate CI>0 genes for each tissue & rm .\\d+ from ensid
-```{r, CIgt0}
+```{r, CIgt0,eval=FALSE}
 for(tistype in c("Tissue-Specific","Tissue-Wide")){
   tsfile <- my.dir %&% 'GTEx_' %&% tistype %&% '_local_h2_se_geneinfo_no_description.txt'
   ts <- read.table(tsfile,sep='\t',header=T)
@@ -63,7 +62,7 @@ for(tistype in c("Tissue-Specific","Tissue-Wide")){
 write(data$ensid, file=out.dir %&% "full_tested_ensid_list.txt",ncolumns=1)
 ```
 ###Define known genes for 7 WTCCC diseases based on the GWAS catalog and make list of ALL genes in catalog
-```{r, known}
+```{r, known, eval=FALSE}
   #catalog used:
   gwasfile <- my.dir %&% 'gwas_catalog_v1.0-downloaded_2015-06-02.tsv'
 #  gwas <- data.frame(read.table(gwasfile,header=TRUE,sep='\t',quote="",comment.char="",as.is=TRUE)) #for reference
@@ -122,7 +121,7 @@ for(thresh in c("non-zeroCI","h2_0.1","h2_0.05","h2_0.01")){
 }
 ```
 ###distribution of h2 for disease vs non disease
-```{r, dist}
+```{r, dist, warning=FALSE, message=FALSE}
 dislist <- c("BD","CAD","HT","T1D","T2D","CD","RA","ALL")
 tislist <- c("CrossTissue","AdiposeSubcutaneous","ArteryTibial","HeartLeftVentricle","Lung","MuscleSkeletal","NerveTibial","SkinSunExposed(Lowerleg)","Thyroid","WholeBlood")
 typelist<-c("Tissue-Specific","Tissue-Wide")
@@ -140,7 +139,10 @@ for(thresh in c(0.1,0.01)){
       }
       p<-ggplot(finaldf,aes(x=finaldf[,3],fill=diseaseGene,color=diseaseGene)) + facet_wrap(~disease,ncol=2) + geom_density(alpha=0.3) + xlab("h2") + ggtitle(tistype %&% ' ' %&% tis %&% ' h2 > ' %&% thresh)
       print(p)
+      p<-ggplot(finaldf,aes(y=finaldf[,3],x=diseaseGene)) + facet_wrap(~disease,ncol=4) + geom_jitter(aes(colour=diseaseGene),alpha=0.3,position = position_jitter(width = .15)) + geom_boxplot(alpha=0,outlier.size=NA) + xlab("diseaseGene") + ylab("h2") + ggtitle(tistype %&% ' ' %&% tis %&% ' h2 > ' %&% thresh) +theme_bw() + theme(legend.position="none") 
+      print(p)
     }
   }
 }
+
 ```
