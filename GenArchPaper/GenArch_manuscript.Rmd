@@ -15,16 +15,16 @@ bibliography: GenArch_references.bib
 ---
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
-  # devtools::install_github("cboettig/knitcitations@v1")
   library(knitcitations); cleanbib()
   cite_options(citation_format = "pandoc", check.entries=FALSE)
   library(bibtex)
   library(ggplot2)
   library(reshape2)
-  library(dplyr)
   library(png)
   library(grid)
   library(kfigr)
+  library(lme4)
+  library(dplyr)
   "%&%" = function(a,b) paste(a,b,sep="")
   source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
   fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
@@ -38,6 +38,8 @@ bibliography: GenArch_references.bib
 
 # Introduction
 
+Regulatory variation has been shown to play a key role in the genetics of complex traits `r citep(c("10.1371/journal.pgen.1000888","10.1371/journal.pgen.1000895","10.1016/j.ajhg.2014.10.004"))`. While many common diseases have been shown to be polygenic `r citep(c("10.1038/nature08185","10.1038/ng.2232","10.1038/ng.2383"))`, it is unclear whether gene expression levels are also polygenic or have simpler genetic architectures and how much these expression architectures vary across genes `r citep("10.1038/nrg3891")`. Most human expression quantitative trait loci (eQTL) studies have focused on how local genetic variation affects gene expression in order to reduce the multiple testing burden that would be required for a global analysis `r citep("10.1371/journal.pgen.1002639","10.1038/nrg3891")`. Furthermore, when both local and distal eQTLs are reported `r citep("10.1038/ng2142","10.1371/journal.pgen.1002078","10.1038/ng.2951")`, effect sizes and replicability are much higher for local eQTLs. 
+most human to this point local and in blood.
 cite Kruglyak review, Price PGen 11, Wright NatGen 14
 
 # Results
@@ -51,7 +53,7 @@ In order to better understand the context specificity of gene expression regulat
 We also compared the cross-tissue h^2^ from the OTD to h^2^ estimates from the pre-OTD measures of gene expression in each of the nine tissues, which we term tissue-wide expression. Again, the cross-tissue heritabilities were larger and the standard errors were smaller than the tissue-wide estimates (`r figr("TWotdH2SE", prefix=TRUE, link=TRUE, type="Fig")`), though less striking than the tissue-specific comparison. The percentage of tissue-wide h^2^ estimates with positive CIs ranged from 4.4-8.6\% and thus were all larger than the tissue-specific postive CI percentages, but smaller than the cross-tissue percentage (`r figr("otdTWh2", prefix=TRUE, link=TRUE, type="Fig")`).
 
 ## The effect of local genetic variation on gene expression is sparse rather than polygenic
-We performed 10-fold cross-validation using the elastic net `r citep("10.1111/j.1467-9868.2005.00503.x")` to test the predictive performance of local SNPs for gene expression across a range of mixing parameters, $\alpha$. The $\alpha$ that gives the largest cross-validation R^2^ informs the sparsity of each gene expression trait. That is, at one extreme, if the optimal $\alpha=0$ (equivalent to ridge regression), the gene expression trait is highly polygenic, whereas if the optimal $\alpha=1$ (equivalent to LASSO), the trait is highly sparse. We found that for most gene expression traits, the cross-validated R^2^ was suboptimal for $\alpha=0$ and $\alpha=0.05$, but nearly identically optimal for $\alpha=0.5$ and $\alpha=1$ in the DGN cohort (`r figr("EN",prefix=TRUE,link=TRUE,type="Fig")`). Therefore, the effect of local genetic variation on gene expression is sparse rather than polygenic.
+We performed 10-fold cross-validation using the elastic net `r citep("10.1111/j.1467-9868.2005.00503.x")` to test the predictive performance of local SNPs for gene expression across a range of mixing parameters, $\alpha$. The $\alpha$ that gives the largest cross-validation R^2^ informs the sparsity of each gene expression trait. That is, at one extreme, if the optimal $\alpha=0$ (equivalent to ridge regression), the gene expression trait is highly polygenic, whereas if the optimal $\alpha=1$ (equivalent to LASSO), the trait is highly sparse. We found that for most gene expression traits, the cross-validated R^2^ was suboptimal for $\alpha=0$ and $\alpha=0.05$, but nearly identically optimal for $\alpha=0.5$ and $\alpha=1$ in the DGN cohort (`r figr("EN",prefix=TRUE,link=TRUE,type="Fig")`). **[[Mention outlier]]*. Therefore, the effect of local genetic variation on gene expression is sparse rather than polygenic.
 
 # Discussion
 

@@ -1,141 +1,161 @@
-type disease tissue observed_overlap mean_overlap emp_pval
-Tissue-Specific BD CrossTissue 33 32.395 0.394
-Tissue-Specific BD AdiposeSubcutaneous 4 2.382 0.094
-Tissue-Specific BD ArteryTibial 6 3.414 0.045
-Tissue-Specific BD HeartLeftVentricle 1 3.303 0.854
-Tissue-Specific BD Lung 2 2.479 0.449
-Tissue-Specific BD MuscleSkeletal 3 5.288 0.779
-Tissue-Specific BD NerveTibial 4 4.227 0.425
-Tissue-Specific BD SkinSunExposed(Lowerleg) 6 4.984 0.238
-Tissue-Specific BD Thyroid 10 5.004 0.014
-Tissue-Specific BD WholeBlood 8 8.275 0.437
-Tissue-Specific CAD CrossTissue 17 22.548 0.89
-Tissue-Specific CAD AdiposeSubcutaneous 3 1.597 0.067
-Tissue-Specific CAD ArteryTibial 2 2.425 0.435
-Tissue-Specific CAD HeartLeftVentricle 6 2.282 0.011
-Tissue-Specific CAD Lung 0 1.746 0.835
-Tissue-Specific CAD MuscleSkeletal 4 3.612 0.301
-Tissue-Specific CAD NerveTibial 1 2.947 0.795
-Tissue-Specific CAD SkinSunExposed(Lowerleg) 2 3.383 0.661
-Tissue-Specific CAD Thyroid 4 3.404 0.258
-Tissue-Specific CAD WholeBlood 6 5.511 0.309
-Tissue-Specific HT CrossTissue 3 3.91 0.574
-Tissue-Specific HT AdiposeSubcutaneous 0 0.273 0.245
-Tissue-Specific HT ArteryTibial 1 0.438 0.073
-Tissue-Specific HT HeartLeftVentricle 2 0.391 0.006
-Tissue-Specific HT Lung 0 0.31 0.264
-Tissue-Specific HT MuscleSkeletal 0 0.639 0.488
-Tissue-Specific HT NerveTibial 0 0.553 0.421
-Tissue-Specific HT SkinSunExposed(Lowerleg) 1 0.598 0.116
-Tissue-Specific HT Thyroid 1 0.636 0.129
-Tissue-Specific HT WholeBlood 0 0.963 0.627
-Tissue-Specific T1D CrossTissue 8 10.606 0.759
-Tissue-Specific T1D AdiposeSubcutaneous 1 0.839 0.202
-Tissue-Specific T1D ArteryTibial 2 1.194 0.117
-Tissue-Specific T1D HeartLeftVentricle 2 1.106 0.104
-Tissue-Specific T1D Lung 1 0.799 0.201
-Tissue-Specific T1D MuscleSkeletal 0 1.735 0.828
-Tissue-Specific T1D NerveTibial 0 1.444 0.78
-Tissue-Specific T1D SkinSunExposed(Lowerleg) 2 1.595 0.227
-Tissue-Specific T1D Thyroid 0 1.572 0.791
-Tissue-Specific T1D WholeBlood 7 2.722 0.007
-Tissue-Specific T2D CrossTissue 16 17.311 0.574
-Tissue-Specific T2D AdiposeSubcutaneous 2 1.32 0.141
-Tissue-Specific T2D ArteryTibial 2 1.821 0.27
-Tissue-Specific T2D HeartLeftVentricle 4 1.765 0.036
-Tissue-Specific T2D Lung 4 1.32 0.01
-Tissue-Specific T2D MuscleSkeletal 3 2.834 0.307
-Tissue-Specific T2D NerveTibial 1 2.348 0.684
-Tissue-Specific T2D SkinSunExposed(Lowerleg) 3 2.563 0.259
-Tissue-Specific T2D Thyroid 6 2.647 0.009
-Tissue-Specific T2D WholeBlood 5 4.404 0.269
-Tissue-Specific CD CrossTissue 30 40.804 0.974
-Tissue-Specific CD AdiposeSubcutaneous 1 3.01 0.792
-Tissue-Specific CD ArteryTibial 7 4.358 0.065
-Tissue-Specific CD HeartLeftVentricle 4 4.261 0.417
-Tissue-Specific CD Lung 1 3.182 0.806
-Tissue-Specific CD MuscleSkeletal 11 6.616 0.038
-Tissue-Specific CD NerveTibial 1 5.5 0.978
-Tissue-Specific CD SkinSunExposed(Lowerleg) 6 6.203 0.435
-Tissue-Specific CD Thyroid 5 6.238 0.585
-Tissue-Specific CD WholeBlood 11 10.418 0.356
-Tissue-Specific RA CrossTissue 17 19.04 0.64
-Tissue-Specific RA AdiposeSubcutaneous 1 1.37 0.382
-Tissue-Specific RA ArteryTibial 1 2.05 0.601
-Tissue-Specific RA HeartLeftVentricle 5 1.97 0.013
-Tissue-Specific RA Lung 4 1.458 0.007
-Tissue-Specific RA MuscleSkeletal 4 2.985 0.18
-Tissue-Specific RA NerveTibial 5 2.47 0.041
-Tissue-Specific RA SkinSunExposed(Lowerleg) 3 2.945 0.341
-Tissue-Specific RA Thyroid 4 2.88 0.165
-Tissue-Specific RA WholeBlood 8 4.886 0.057
-Tissue-Wide BD CrossTissue 33 32.643 0.432
-Tissue-Wide BD AdiposeSubcutaneous 7 13.138 0.959
-Tissue-Wide BD ArteryTibial 15 13.088 0.236
-Tissue-Wide BD HeartLeftVentricle 7 8.524 0.624
-Tissue-Wide BD Lung 14 10.902 0.125
-Tissue-Wide BD MuscleSkeletal 9 12.347 0.788
-Tissue-Wide BD NerveTibial 16 16.362 0.483
-Tissue-Wide BD SkinSunExposed(Lowerleg) 15 13.433 0.263
-Tissue-Wide BD Thyroid 25 14.747 0.002
-Tissue-Wide BD WholeBlood 8 11.125 0.778
-Tissue-Wide CAD CrossTissue 17 22.339 0.883
-Tissue-Wide CAD AdiposeSubcutaneous 6 9.077 0.818
-Tissue-Wide CAD ArteryTibial 9 8.991 0.399
-Tissue-Wide CAD HeartLeftVentricle 5 5.828 0.537
-Tissue-Wide CAD Lung 3 7.426 0.946
-Tissue-Wide CAD MuscleSkeletal 12 8.584 0.093
-Tissue-Wide CAD NerveTibial 5 11.234 0.973
-Tissue-Wide CAD SkinSunExposed(Lowerleg) 3 9.127 0.99
-Tissue-Wide CAD Thyroid 11 10.366 0.351
-Tissue-Wide CAD WholeBlood 8 7.665 0.353
-Tissue-Wide HT CrossTissue 3 3.918 0.57
-Tissue-Wide HT AdiposeSubcutaneous 1 1.59 0.473
-Tissue-Wide HT ArteryTibial 1 1.569 0.468
-Tissue-Wide HT HeartLeftVentricle 1 1.007 0.286
-Tissue-Wide HT Lung 1 1.334 0.397
-Tissue-Wide HT MuscleSkeletal 1 1.466 0.429
-Tissue-Wide HT NerveTibial 1 2.01 0.623
-Tissue-Wide HT SkinSunExposed(Lowerleg) 1 1.649 0.493
-Tissue-Wide HT Thyroid 2 1.733 0.246
-Tissue-Wide HT WholeBlood 1 1.321 0.407
-Tissue-Wide T1D CrossTissue 8 10.521 0.739
-Tissue-Wide T1D AdiposeSubcutaneous 3 4.245 0.622
-Tissue-Wide T1D ArteryTibial 3 4.124 0.604
-Tissue-Wide T1D HeartLeftVentricle 2 2.758 0.531
-Tissue-Wide T1D Lung 0 3.592 0.982
-Tissue-Wide T1D MuscleSkeletal 3 4.034 0.58
-Tissue-Wide T1D NerveTibial 2 5.463 0.914
-Tissue-Wide T1D SkinSunExposed(Lowerleg) 2 4.494 0.827
-Tissue-Wide T1D Thyroid 2 4.826 0.873
-Tissue-Wide T1D WholeBlood 3 3.655 0.493
-Tissue-Wide T2D CrossTissue 16 17.269 0.581
-Tissue-Wide T2D AdiposeSubcutaneous 5 6.962 0.692
-Tissue-Wide T2D ArteryTibial 9 6.875 0.152
-Tissue-Wide T2D HeartLeftVentricle 7 4.553 0.089
-Tissue-Wide T2D Lung 6 5.886 0.387
-Tissue-Wide T2D MuscleSkeletal 7 6.611 0.369
-Tissue-Wide T2D NerveTibial 7 8.793 0.659
-Tissue-Wide T2D SkinSunExposed(Lowerleg) 10 7.148 0.1
-Tissue-Wide T2D Thyroid 9 7.963 0.284
-Tissue-Wide T2D WholeBlood 6 6.004 0.405
-Tissue-Wide CD CrossTissue 30 41.164 0.969
-Tissue-Wide CD AdiposeSubcutaneous 11 16.275 0.892
-Tissue-Wide CD ArteryTibial 9 16.44 0.96
-Tissue-Wide CD HeartLeftVentricle 6 10.5 0.913
-Tissue-Wide CD Lung 10 13.7 0.814
-Tissue-Wide CD MuscleSkeletal 13 15.62 0.725
-Tissue-Wide CD NerveTibial 14 20.732 0.928
-Tissue-Wide CD SkinSunExposed(Lowerleg) 18 17.114 0.359
-Tissue-Wide CD Thyroid 14 18.722 0.857
-Tissue-Wide CD WholeBlood 15 14.115 0.342
-Tissue-Wide RA CrossTissue 17 18.997 0.645
-Tissue-Wide RA AdiposeSubcutaneous 8 7.634 0.347
-Tissue-Wide RA ArteryTibial 8 7.593 0.352
-Tissue-Wide RA HeartLeftVentricle 7 5.011 0.133
-Tissue-Wide RA Lung 4 6.402 0.779
-Tissue-Wide RA MuscleSkeletal 9 7.237 0.187
-Tissue-Wide RA NerveTibial 15 9.368 0.02
-Tissue-Wide RA SkinSunExposed(Lowerleg) 7 7.947 0.55
-Tissue-Wide RA Thyroid 12 8.646 0.092
-Tissue-Wide RA WholeBlood 9 6.465 0.111
+type dis tis obsOverlap meanOverlap lCI uCI empPval
+Tissue-Specific ALL Lung 82 56.293 44 69 0
+Tissue-Wide ALL WholeBlood 290 239.259 213 265 0
+Tissue-Specific HT Lung 2 0.24 0 1 0.001
+Tissue-Specific T2D Lung 5 1.167 0 4 0.001
+Tissue-Specific CD MuscleSkeletal 17 8.114 3 14 0.001
+Tissue-Specific ALL Thyroid 140 111.608 95 130.025 0.002
+Tissue-Specific T1D WholeBlood 6 2.051 0 5 0.005
+Tissue-Specific CAD HeartLeftVentricle 4 1.365 0 4 0.011
+Tissue-Specific CAD MuscleSkeletal 5 1.936 0 5 0.012
+Tissue-Specific ALL HeartLeftVentricle 90 75.202 60 89 0.013
+Tissue-Specific ALL MuscleSkeletal 128 108.954 92 127 0.013
+Tissue-Wide ALL Lung 260 234.773 210.975 259 0.02
+Tissue-Specific T1D HeartLeftVentricle 3 1.274 0 4 0.032
+Tissue-Specific T2D SkinSunExposed(Lowerleg) 5 2.362 0 6 0.035
+Tissue-Specific RA HeartLeftVentricle 5 2.551 0 6 0.037
+Tissue-Specific HT HeartLeftVentricle 1 0.337 0 2 0.044
+Tissue-Specific RA WholeBlood 7 4.047 1 8 0.047
+Tissue-Specific ALL WholeBlood 139 123.622 105 141.025 0.048
+Tissue-Specific T2D WholeBlood 5 2.592 0 6 0.054
+Tissue-Wide BD Lung 2 0.926 0 3 0.055
+Tissue-Wide ALL HeartLeftVentricle 206 188.728 166 213 0.058
+Tissue-Wide ALL ArteryTibial 316 295.473 270 323.025 0.07
+Tissue-Specific ALL ArteryTibial 88 77.518 62 93 0.071
+Tissue-Specific RA SkinSunExposed(Lowerleg) 6 3.675 1 8 0.076
+Tissue-Specific T2D MuscleSkeletal 4 2.303 0 6 0.082
+Tissue-Specific BD Thyroid 1 0.49 0 2 0.084
+Tissue-Specific HT Thyroid 1 0.492 0 2 0.088
+Tissue-Specific RA NerveTibial 5 3.117 0 7 0.09
+Tissue-Wide HT Lung 2 1.108 0 3 0.092
+Tissue-Wide HT NerveTibial 3 1.735 0 5 0.094
+Tissue-Wide CD WholeBlood 23 17.937 10 26 0.097
+Tissue-Specific T2D AdiposeSubcutaneous 2 1.116 0 4 0.107
+Tissue-Specific RA Lung 3 1.835 0 5 0.108
+Tissue-Wide CAD MuscleSkeletal 7 4.739 1 9 0.109
+Tissue-Wide ALL MuscleSkeletal 284 267.942 241 297 0.11
+Tissue-Wide ALL NerveTibial 388 369.601 340 400 0.12
+Tissue-Specific CD ArteryTibial 8 5.769 2 11 0.124
+Tissue-Specific RA Thyroid 5 3.62 0 8 0.14
+Tissue-Wide ALL Thyroid 350 334.658 305 365.025 0.153
+Tissue-Wide RA WholeBlood 10 7.845 3 14 0.159
+Tissue-Specific CD WholeBlood 12 9.391 4 16 0.162
+Tissue-Wide BD HeartLeftVentricle 1 0.756 0 3 0.162
+Tissue-Wide BD Thyroid 2 1.402 0 4 0.171
+Tissue-Specific BD AdiposeSubcutaneous 0 0.205 0 1 0.189
+Tissue-Specific ALL NerveTibial 102 95.412 79 112 0.201
+Tissue-Specific CD HeartLeftVentricle 7 5.595 1 11 0.202
+Tissue-Specific HT AdiposeSubcutaneous 0 0.232 0 1 0.208
+Tissue-Specific BD Lung 0 0.239 0 2 0.21
+Tissue-Specific T2D Thyroid 3 2.402 0 6 0.21
+Tissue-Wide HT Thyroid 2 1.592 0 4 0.214
+Tissue-Specific T2D HeartLeftVentricle 2 1.609 0 4 0.217
+Tissue-Specific CD SkinSunExposed(Lowerleg) 10 8.45 4 14 0.22
+Tissue-Specific CAD NerveTibial 2 1.647 0 4 0.228
+Tissue-Wide T2D WholeBlood 6 5.06 1 10 0.233
+Tissue-Specific T1D AdiposeSubcutaneous 1 0.949 0 3 0.234
+Tissue-Wide T2D Lung 6 4.977 1 10 0.237
+Tissue-Specific RA AdiposeSubcutaneous 2 1.732 0 5 0.244
+Tissue-Specific BD HeartLeftVentricle 0 0.295 0 2 0.255
+Tissue-Specific CAD AdiposeSubcutaneous 1 0.975 0 3 0.258
+Tissue-Wide CD Lung 20 17.721 10 26 0.261
+Tissue-Wide ALL AdiposeSubcutaneous 293 284.57 258 310.025 0.266
+Tissue-Specific T1D Lung 1 0.997 0 3 0.27
+Tissue-Wide CD MuscleSkeletal 22 19.991 12 29 0.271
+Tissue-Wide T2D ArteryTibial 7 6.295 2 11 0.305
+Tissue-Specific BD ArteryTibial 0 0.357 0 2 0.308
+Tissue-Specific CD Thyroid 9 8.322 3 14 0.313
+Tissue-Wide T2D MuscleSkeletal 6 5.638 2 11 0.316
+Tissue-Specific HT ArteryTibial 0 0.389 0 2 0.322
+Tissue-Wide T2D SkinSunExposed(Lowerleg) 7 6.422 2 12 0.325
+Tissue-Wide RA AdiposeSubcutaneous 10 9.234 4 15 0.326
+Tissue-Specific BD NerveTibial 0 0.398 0 2 0.331
+Tissue-Specific CAD SkinSunExposed(Lowerleg) 2 2.014 0 5 0.337
+Tissue-Specific HT NerveTibial 0 0.439 0 2 0.354
+Tissue-Wide BD ArteryTibial 1 1.259 0 4 0.358
+Tissue-Wide HT MuscleSkeletal 1 1.252 0 4 0.364
+Tissue-Specific BD SkinSunExposed(Lowerleg) 0 0.44 0 2 0.37
+Tissue-Specific CAD WholeBlood 2 2.249 0 6 0.37
+Tissue-Specific BD MuscleSkeletal 0 0.492 0 2 0.38
+Tissue-Specific BD WholeBlood 0 0.456 0 2 0.382
+Tissue-Specific T1D ArteryTibial 1 1.315 0 4 0.385
+Tissue-Wide HT AdiposeSubcutaneous 1 1.37 0 4 0.389
+Tissue-Wide CAD WholeBlood 4 4.165 1 8 0.399
+Tissue-Specific CD Lung 4 4.281 1 8 0.41
+Tissue-Specific HT MuscleSkeletal 0 0.515 0 2 0.413
+Tissue-Wide RA NerveTibial 12 11.984 6 19 0.42
+Tissue-Specific ALL SkinSunExposed(Lowerleg) 114 112.887 93 131 0.422
+Tissue-Specific HT SkinSunExposed(Lowerleg) 0 0.54 0 2 0.434
+Tissue-Wide BD NerveTibial 1 1.482 0 4 0.44
+Tissue-Specific HT CrossTissue 3 3.467 1 7 0.447
+Tissue-Wide CD HeartLeftVentricle 14 14.236 8 22 0.447
+Tissue-Wide CAD SkinSunExposed(Lowerleg) 5 5.329 1 10 0.453
+Tissue-Specific HT WholeBlood 0 0.599 0 2 0.46
+Tissue-Wide ALL SkinSunExposed(Lowerleg) 303 302.19 274 329 0.464
+Tissue-Wide HT CrossTissue 3 3.484 0 7 0.467
+Tissue-Specific T2D ArteryTibial 1 1.616 0 4 0.49
+Tissue-Wide CD SkinSunExposed(Lowerleg) 22 22.799 14 32 0.494
+Tissue-Specific T2D CrossTissue 15 15.711 9 23 0.516
+Tissue-Wide RA Thyroid 10 11.052 5 18 0.54
+Tissue-Wide T2D CrossTissue 15 15.949 9 23 0.55
+Tissue-Wide CD NerveTibial 26 27.635 18 38 0.567
+Tissue-Wide T2D HeartLeftVentricle 3 4.029 1 8 0.572
+Tissue-Wide T1D ArteryTibial 4 5.134 1.975 10 0.574
+Tissue-Wide T1D WholeBlood 3 4.094 1 8 0.581
+Tissue-Wide HT HeartLeftVentricle 0 0.864 0 3 0.582
+Tissue-Wide RA HeartLeftVentricle 5 6.162 2 11 0.582
+Tissue-Specific CAD Thyroid 1 1.94 0 5 0.583
+Tissue-Specific T1D SkinSunExposed(Lowerleg) 1 2.007 0 5 0.589
+Tissue-Wide BD CrossTissue 2 3.128 0 6.02499999999998 0.621
+Tissue-Specific T2D NerveTibial 1 2.056 0 5 0.627
+Tissue-Specific CAD Lung 0 0.977 0 3 0.633
+Tissue-Specific BD CrossTissue 2 3.073 0 6 0.641
+Tissue-Wide BD WholeBlood 0 1 0 3 0.649
+Tissue-Wide HT WholeBlood 0 1.099 0 3 0.653
+Tissue-Wide ALL CrossTissue 732 741.386 699 782.025 0.659
+Tissue-Specific ALL CrossTissue 732 741.885 700 783 0.661
+Tissue-Wide CAD HeartLeftVentricle 2 3.366 1 7 0.666
+Tissue-Wide T1D HeartLeftVentricle 2 3.403 0 7 0.671
+Tissue-Wide BD AdiposeSubcutaneous 0 1.132 0 4 0.676
+Tissue-Wide BD MuscleSkeletal 0 1.121 0 3.02499999999998 0.687
+Tissue-Wide T1D MuscleSkeletal 3 4.651 1 9 0.696
+Tissue-Specific RA ArteryTibial 1 2.507 0 6 0.718
+Tissue-Wide T2D Thyroid 5 7.207 3 13 0.724
+Tissue-Wide BD SkinSunExposed(Lowerleg) 0 1.246 0 4 0.725
+Tissue-Specific ALL AdiposeSubcutaneous 48 52.1 41 64.025 0.737
+Tissue-Wide T2D AdiposeSubcutaneous 4 6.082 2 11 0.745
+Tissue-Wide HT ArteryTibial 0 1.35 0 4 0.746
+Tissue-Specific CAD ArteryTibial 0 1.372 0 4 0.75
+Tissue-Wide RA ArteryTibial 7 9.792 4 16 0.766
+Tissue-Wide CD Thyroid 21 25.336 17 35 0.78
+Tissue-Wide HT SkinSunExposed(Lowerleg) 0 1.464 0 4 0.786
+Tissue-Wide RA Lung 5 7.606 3 13 0.786
+Tissue-Specific CD CrossTissue 49 55.651 43 69 0.812
+Tissue-Specific T1D NerveTibial 0 1.637 0 4.02499999999998 0.816
+Tissue-Wide CD CrossTissue 49 56.065 43 70 0.827
+Tissue-Specific T1D MuscleSkeletal 0 1.86 0 5 0.846
+Tissue-Wide CAD Thyroid 3 5.726 2 11 0.846
+Tissue-Wide T1D Thyroid 3 5.949 2 11 0.855
+Tissue-Specific T1D Thyroid 0 1.855 0 5 0.862
+Tissue-Wide RA CrossTissue 19 24.457 16 34 0.864
+Tissue-Specific RA MuscleSkeletal 1 3.571 0 8 0.872
+Tissue-Wide CD AdiposeSubcutaneous 16 21.287 13 30 0.873
+Tissue-Specific RA CrossTissue 19 24.485 17 33 0.876
+Tissue-Wide T1D AdiposeSubcutaneous 2 4.944 1 9 0.88
+Tissue-Wide RA MuscleSkeletal 5 8.745 4 14 0.886
+Tissue-Wide T1D SkinSunExposed(Lowerleg) 2 5.217 1 10 0.901
+Tissue-Specific CD AdiposeSubcutaneous 1 3.936 1 8 0.911
+Tissue-Wide T2D NerveTibial 4 7.907 3 13 0.912
+Tissue-Wide T1D Lung 1 4.06 1 8 0.914
+Tissue-Specific CD NerveTibial 3 7.166 2 13 0.929
+Tissue-Wide RA SkinSunExposed(Lowerleg) 5 10.053 4 17 0.938
+Tissue-Wide CAD AdiposeSubcutaneous 1 4.939 1 10 0.957
+Tissue-Wide T1D NerveTibial 2 6.402 2 11 0.962
+Tissue-Wide CAD CrossTissue 7 13.074 7 20 0.963
+Tissue-Wide CAD ArteryTibial 1 5.087 1 10 0.966
+Tissue-Wide T1D CrossTissue 7 12.686 7 19 0.966
+Tissue-Specific CAD CrossTissue 7 13.014 7 19 0.968
+Tissue-Wide CD ArteryTibial 14 22.53 14 32 0.97
+Tissue-Specific T1D CrossTissue 7 12.929 7 19 0.973
+Tissue-Wide CAD Lung 0 4.065 1 9 0.98
+Tissue-Wide CAD NerveTibial 1 6.386 2 11 0.989

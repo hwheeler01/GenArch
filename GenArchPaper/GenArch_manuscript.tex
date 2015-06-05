@@ -106,7 +106,7 @@ Im\textsuperscript{1}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-06-01 10:17:11 \textsuperscript{1}Department of Medicine,
+  \date{2015-06-05 14:03:19 \textsuperscript{1}Department of Medicine,
 University of Chicago, \textsuperscript{2}Committee on Genetics,
 Genomics, and Systems Biology, University of Chicago,
 \textsuperscript{3}Division of Genetic Medicine, Vanderbilt University}
@@ -128,7 +128,13 @@ mei.}
 
 \section{Introduction}\label{introduction}
 
-cite Kruglyak review, Price PGen 11, Wright NatGen 14
+Regulatory variation has been shown to play a key role in the genetics
+of complex traits {[}1--3{]}. While many common diseases have been shown
+to be polygenic {[}4--6{]}, it is unclear whether gene expression levels
+are also polygenic or have simpler genetic architectures and how
+expression architectures vary across genes {[}7{]}. most human to this
+point local and in blood. cite Kruglyak review, Price PGen 11, Wright
+NatGen 14
 
 \section{Results}\label{results}
 
@@ -137,14 +143,14 @@ expression
 variance}\label{local-genetic-variation-explains-a-large-proportion-of-gene-expression-variance}
 
 We estimated the heritability of gene expression in whole blood from the
-Depression Genes and Networks (DGN) cohort (n=922) {[}1{]} using a
+Depression Genes and Networks (DGN) cohort (n=922) {[}8{]} using a
 mixed-effects model (see Methods) and calculated variances using
-restricted maximum likelihood as implemented in GCTA {[}2{]}. We fit a
+restricted maximum likelihood as implemented in GCTA {[}9{]}. We fit a
 joint model with a local and a global genetic relationship matrix (GRM).
 The local GRM was derived from SNPs within 1 Mb of each gene and the
 global GRM was derived from SNPs that are located on non-gene
 chromosomes and are eQTLs in the Framingham Heart Study (FHS) cohort
-(n=5257, FDR \textless{} 0.05) {[}3{]}. The mean local
+(n=5257, FDR \textless{} 0.05) {[}10{]}. The mean local
 h\textsuperscript{2} was 0.130 and 54.6\% of genes had a positive 95\%
 confidence interval (CI), while the mean global h\textsuperscript{2} was
 0.076 and just 4.2\% of genes had a positive CI (Fig 1). The maximum
@@ -189,7 +195,7 @@ CI percentages, but smaller than the cross-tissue percentage (Fig 6).
 sparse rather than
 polygenic}\label{the-effect-of-local-genetic-variation-on-gene-expression-is-sparse-rather-than-polygenic}
 
-We performed 10-fold cross-validation using the elastic net {[}4{]} to
+We performed 10-fold cross-validation using the elastic net {[}11{]} to
 test the predictive performance of local SNPs for gene expression across
 a range of mixing parameters, \(\alpha\). The \(\alpha\) that gives the
 largest cross-validation R\textsuperscript{2} informs the sparsity of
@@ -249,10 +255,10 @@ Data}\label{genomic-and-transcriptomic-data}
 \subsubsection{DGN Dataset}\label{dgn-dataset}
 
 We obtained whole blood RNA-Seq and genome-wide genotype data for 922
-individuals from the Depression Genes and Networks (DGN) cohort {[}1{]},
+individuals from the Depression Genes and Networks (DGN) cohort {[}8{]},
 all of European ancestry. For our analyses, we used the HCP (hidden
 covariates with prior) normalized gene-level expression data used for
-the \emph{trans}-eQTL analysis in Battle et al. {[}1{]} and downloaded
+the \emph{trans}-eQTL analysis in Battle et al. {[}8{]} and downloaded
 from the NIMH repository. The 922 individuals were unrelated (all
 pairwise \(\hat{\pi}\) \textless{} 0.05) and thus all included in
 downstream analyses. Imputation of approximately 650K input SNPs (minor
@@ -260,8 +266,8 @@ allele frequency {[}MAF{]} \textgreater{} 0.05, Hardy-Weinberg
 Equilibrium {[}P \textgreater{} 0.05{]}, non-ambiguous strand {[}no A/T
 or C/G SNPs{]}) was performed on the University of Michigan
 Imputation-Server
-(\url{https://imputationserver.sph.umich.edu/start.html}) {[}5,6{]} with
-the following parameters: 1000G Phase 1 v3 ShapeIt2 (no singletons)
+(\url{https://imputationserver.sph.umich.edu/start.html}) {[}12,13{]}
+with the following parameters: 1000G Phase 1 v3 ShapeIt2 (no singletons)
 reference panel, SHAPEIT phasing, and EUR population. Approximately 1.9M
 non-ambiguous strand SNPs with MAF \textgreater{} 0.05, imputation
 R\textsuperscript{2} \textgreater{} 0.8 and, to reduce computational
@@ -272,7 +278,7 @@ analyses.
 
 We obtained RNA-Seq gene expression levels from 8555 tissue samples (53
 unique tissue types) from 544 unique subjects in the GTEx Project
-{[}7{]} data release on 2014-06-13. Of the individuals with gene
+{[}14{]} data release on 2014-06-13. Of the individuals with gene
 expression data, genome-wide genotypes (imputed with 1000 Genomes) were
 available for 450 individuals. While all 8555 tissue samples were used
 in the OTD model (described below) to generate cross-tissue and
@@ -293,9 +299,9 @@ To investigate the proximity of gene expression regulation to each gene,
 we partitioned the proportion of gene expression variance explained by
 SNPs in the DGN cohort into two components: local (SNPs within 1Mb of
 the gene) and global (eQTLs on non-gene chromosomes) as defined by the
-GENCODE {[}8{]} version 12 gene annotation. We calculated the proportion
-of the variance (narrow-sense heritability) explained by each component
-using the following mixed-effects model:
+GENCODE {[}15{]} version 12 gene annotation. We calculated the
+proportion of the variance (narrow-sense heritability) explained by each
+component using the following mixed-effects model:
 
 \[ Y_g = \sum_{k = \in local}w_{k,g} X_k + \sum_{k = \in global}w_{k,g} X_k + \epsilon \]
 
@@ -303,7 +309,7 @@ Assuming a random effects for \(w_{k,g} \approx N(0, \sigma^2_w)\) and
 \(\epsilon \approx N(0, \sigma^2_{\epsilon} I_n)\), where \(I_n\) is the
 identity matrix, we calculated the total variability explained by local
 and global components by estimating \(\sigma^2_w\) with restricted
-maximum likelihood (REML) using GCTA software {[}2{]}. For heritability
+maximum likelihood (REML) using GCTA software {[}9{]}. For heritability
 analyses in the GTEx cohort, we removed the \(global\) term from the
 model and only estimated marginal \(local\) h\textsuperscript{2} due to
 the smaller sample sizes of both cross-tissue and tissue-specific
@@ -315,8 +321,8 @@ decomposition}\label{orthogonal-tissue-decomposition}
 To better understand the context specificity of gene expression
 regulation, we developed a method called orthogonal tissue decomposition
 (OTD). This approach is an extension of our method to develop an
-intrinsic growth phenotype {[}9{]}. We applied OTD to GTEx Project
-{[}7{]} data and decomposed the expression of each gene into
+intrinsic growth phenotype {[}16{]}. We applied OTD to GTEx Project
+{[}14{]} data and decomposed the expression of each gene into
 cross-tissue and tissue-specific components. The tissue availability is
 unbalanced across individuals because of the difficulties of sample
 collection and the uneven quality of the tissues. OTD decomposes the
@@ -326,8 +332,8 @@ following model:
 \[ Y_i = T_{i,cross} + T_{i,tissue} \]
 
 Specifically, to generate cross-tissue and tissue-specific expression
-levels, we used the \texttt{lmer} function in the R {[}10{]} package
-\texttt{lme4} {[}11,12{]} to fit the following mixed-effects model:
+levels, we used the \texttt{lmer} function in the R {[}17{]} package
+\texttt{lme4} {[}18,19{]} to fit the following mixed-effects model:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -337,14 +343,14 @@ levels, we used the \texttt{lmer} function in the R {[}10{]} package
 
 The model included tissue-wide gene expression levels in 8555 GTEx
 tissue samples from 544 unique subjects. A total of 17,647
-Protein-coding genes (defined by GENCODE {[}8{]} version 18) with a mean
-gene expression level across tissues greater than 0.1 RPKM (reads per
-kilobase of transcript per million reads mapped) were included in the
-model. \texttt{SUBJID} was a random effect and the covariates
+Protein-coding genes (defined by GENCODE {[}15{]} version 18) with a
+mean gene expression level across tissues greater than 0.1 RPKM (reads
+per kilobase of transcript per million reads mapped) were included in
+the model. \texttt{SUBJID} was a random effect and the covariates
 \texttt{TISSUE}, \texttt{GENDER}, and \texttt{PEERs} were fixed effects
 used to predict tissue-wide expression levels (\texttt{expression} in
 the model). \texttt{PEERs} included the top 15 PEER factors estimated
-across all tissues using the R package \texttt{PEER} {[}13{]} to control
+across all tissues using the R package \texttt{PEER} {[}20{]} to control
 for batch effects and experimental confounders. Cross-tissue expression
 was defined as the random effects from the model (\texttt{ranef(fit)})
 and tissue-specific expression as the residuals (\texttt{resid(fit})).
@@ -352,10 +358,10 @@ and tissue-specific expression as the residuals (\texttt{resid(fit})).
 \subsection{Determining polygenicity versus sparsity using the elastic
 net}\label{determining-polygenicity-versus-sparsity-using-the-elastic-net}
 
-We applied the elastic net {[}4{]} to model the effect of local genetic
+We applied the elastic net {[}11{]} to model the effect of local genetic
 variation (SNPs within 1 Mb of gene) on the genetic architecture of gene
 expression. We used the \texttt{cv.glmnet} function in the R package
-\texttt{glmnet} {[}14,15{]} to perform 10-fold cross-validation of the
+\texttt{glmnet} {[}21,22{]} to perform 10-fold cross-validation of the
 elastic net across a range of mixing paramaters (\(\alpha\)) to find the
 \(\alpha\) that maximized predictive performance, measured by Pearson's
 R\textsuperscript{2}. Specifically, \texttt{glmnet} solves the following
@@ -367,12 +373,12 @@ they don't explain all the terms{]}{]}}
 {\[\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right], \]}
 
 over a grid of values of \(\lambda\) covering the entire range
-{[}14,15{]}. This tuning parameter \(\lambda\) controls the overall
+{[}21,22{]}. This tuning parameter \(\lambda\) controls the overall
 strength of the penalty.
 
 The elastic net penalty is controlled by mixing parameter \(\alpha\),
-which spans LASSO (\(\alpha=1\), the default) {[}16{]} at one extreme
-and ridge regression (\(\alpha=0\)) {[}17{]} at the other. The ridge
+which spans LASSO (\(\alpha=1\), the default) {[}23{]} at one extreme
+and ridge regression (\(\alpha=0\)) {[}24{]} at the other. The ridge
 penalty shrinks the coefficients of correlated SNPs towards each other,
 while the LASSO tends to pick one of the correlated SNPs and discard the
 others. Thus, an optimal prediction R\textsuperscript{2} for
@@ -420,8 +426,8 @@ Pr(\textgreater{}\textbar{}t\textbar{})\tabularnewline
 Pr(\textgreater{}\textbar{}t\textbar{})\tabularnewline
 \midrule
 \endhead
-(Intercept) & 0.13 & 0.1 & 1.27 & 0.21\tabularnewline
-x & 2.03 & 0.1 & 19.64 & 0.00\tabularnewline
+(Intercept) & -0.13 & 0.1 & -1.29 & 0.2\tabularnewline
+x & 2.04 & 0.1 & 20.73 & 0.0\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -526,89 +532,127 @@ R\textsuperscript{2} for 341 genes on chromosome 22.}
 \section*{References}\label{references}
 \addcontentsline{toc}{section}{References}
 
-1. Battle A, Mostafavi S, Zhu X, Potash JB, Weissman MM, McCormick C, et
+1. Nicolae DL, Gamazon E, Zhang W, Duan S, Dolan ME, Cox NJ.
+Trait-associated SNPs are more likely to be eQTLs: Annotation to enhance
+discovery from GWAS. Gibson G, editor. PLoS Genetics. Public Library of
+Science (PLoS); 2010;6: e1000888.
+doi:\href{http://dx.doi.org/10.1371/journal.pgen.1000888}{10.1371/journal.pgen.1000888}
+
+2. Nica AC, Montgomery SB, Dimas AS, Stranger BE, Beazley C, Barroso I,
+et al. Candidate causal regulatory effects by integration of expression
+QTLs with complex trait genetic associations. Gibson G, editor. PLoS
+Genetics. Public Library of Science (PLoS); 2010;6: e1000895.
+doi:\href{http://dx.doi.org/10.1371/journal.pgen.1000895}{10.1371/journal.pgen.1000895}
+
+3. Gusev A, Lee SH, Trynka G, Finucane H, Vilhj{\a'a}lmsson BJ, Xu H, et
+al. Partitioning heritability of regulatory and cell-type-specific
+variants across 11 common diseases. The American Journal of Human
+Genetics. Elsevier BV; 2014;95: 535--552.
+doi:\href{http://dx.doi.org/10.1016/j.ajhg.2014.10.004}{10.1016/j.ajhg.2014.10.004}
+
+4. Purcell SM, Wray NR, Stone JL, Visscher PM, Sullivan MCOPF, Sklar P,
+et al. Common polygenic variation contributes to risk of schizophrenia
+and bipolar disorder. Nature. Nature Publishing Group; 2009;
+doi:\href{http://dx.doi.org/10.1038/nature08185}{10.1038/nature08185}
+
+5. Stahl EA, Wegmann D, Trynka G, Gutierrez-Achury J, Do R, Voight BF,
+et al. Bayesian inference analyses of the polygenic architecture of
+rheumatoid arthritis. Nat Genet. Nature Publishing Group; 2012;44:
+483--489. doi:\href{http://dx.doi.org/10.1038/ng.2232}{10.1038/ng.2232}
+
+6. Morris AP, Voight BF, Teslovich TM, Ferreira T, Segr{\a`e} AV,
+Steinthorsdottir V, et al. Large-scale association analysis provides
+insights into the genetic architecture and pathophysiology of type 2
+diabetes. Nat Genet. Nature Publishing Group; 2012;44: 981--990.
+doi:\href{http://dx.doi.org/10.1038/ng.2383}{10.1038/ng.2383}
+
+7. Albert FW, Kruglyak L. The role of regulatory variation in complex
+traits and disease. Nat Rev Genet. Nature Publishing Group; 2015;16:
+197--212. doi:\href{http://dx.doi.org/10.1038/nrg3891}{10.1038/nrg3891}
+
+8. Battle A, Mostafavi S, Zhu X, Potash JB, Weissman MM, McCormick C, et
 al. Characterizing the genetic basis of transcriptome diversity through
 RNA-sequencing of 922 individuals. Genome Research. Cold Spring Harbor
 Laboratory Press; 2013;24: 14--24.
 doi:\href{http://dx.doi.org/10.1101/gr.155192.113}{10.1101/gr.155192.113}
 
-2. Yang J, Lee SH, Goddard ME, Visscher PM. GCTA: A tool for genome-wide
+9. Yang J, Lee SH, Goddard ME, Visscher PM. GCTA: A tool for genome-wide
 complex trait analysis. The American Journal of Human Genetics. Elsevier
 BV; 2011;88: 76--82.
 doi:\href{http://dx.doi.org/10.1016/j.ajhg.2010.11.011}{10.1016/j.ajhg.2010.11.011}
 
-3. Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et al.
+10. Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et al.
 Identification of common genetic variants controlling transcript isoform
 variation in human whole blood. Nat Genet. Nature Publishing Group;
 2015;47: 345--352.
 doi:\href{http://dx.doi.org/10.1038/ng.3220}{10.1038/ng.3220}
 
-4. Zou H, Hastie T. Regularization and variable selection via the
+11. Zou H, Hastie T. Regularization and variable selection via the
 elastic net. Journal of the Royal Statistical Society: Series B
 (Statistical Methodology). Wiley-Blackwell; 2005;67: 301--320.
 doi:\href{http://dx.doi.org/10.1111/j.1467-9868.2005.00503.x}{10.1111/j.1467-9868.2005.00503.x}
 
-5. Howie B, Fuchsberger C, Stephens M, Marchini J, Abecasis GR. Fast and
-accurate genotype imputation in genome-wide association studies through
-pre-phasing. Nat Genet. Nature Publishing Group; 2012;44: 955--959.
-doi:\href{http://dx.doi.org/10.1038/ng.2354}{10.1038/ng.2354}
+12. Howie B, Fuchsberger C, Stephens M, Marchini J, Abecasis GR. Fast
+and accurate genotype imputation in genome-wide association studies
+through pre-phasing. Nat Genet. Nature Publishing Group; 2012;44:
+955--959. doi:\href{http://dx.doi.org/10.1038/ng.2354}{10.1038/ng.2354}
 
-6. Fuchsberger C, Abecasis GR, Hinds DA. Minimac2: Faster genotype
+13. Fuchsberger C, Abecasis GR, Hinds DA. Minimac2: Faster genotype
 imputation. Bioinformatics. Oxford University Press (OUP); 2014;31:
 782--784.
 doi:\href{http://dx.doi.org/10.1093/bioinformatics/btu704}{10.1093/bioinformatics/btu704}
 
-7. Ardlie KG, Deluca DS, Segre AV, Sullivan TJ, Young TR, Gelfand ET, et
-al. The genotype-tissue expression (GTEx) pilot analysis: Multitissue
+14. Ardlie KG, Deluca DS, Segre AV, Sullivan TJ, Young TR, Gelfand ET,
+et al. The genotype-tissue expression (GTEx) pilot analysis: Multitissue
 gene regulation in humans. Science. American Association for the
 Advancement of Science (AAAS); 2015;348: 648--660.
 doi:\href{http://dx.doi.org/10.1126/science.1262110}{10.1126/science.1262110}
 
-8. Harrow J, Frankish A, Gonzalez JM, Tapanari E, Diekhans M, Kokocinski
-F, et al. GENCODE: The reference human genome annotation for the ENCODE
-project. Genome Research. Cold Spring Harbor Laboratory Press; 2012;22:
-1760--1774.
+15. Harrow J, Frankish A, Gonzalez JM, Tapanari E, Diekhans M,
+Kokocinski F, et al. GENCODE: The reference human genome annotation for
+the ENCODE project. Genome Research. Cold Spring Harbor Laboratory
+Press; 2012;22: 1760--1774.
 doi:\href{http://dx.doi.org/10.1101/gr.135350.111}{10.1101/gr.135350.111}
 
-9. Im HK, Gamazon ER, Stark AL, Huang RS, Cox NJ, Dolan ME. Mixed
+16. Im HK, Gamazon ER, Stark AL, Huang RS, Cox NJ, Dolan ME. Mixed
 effects modeling of proliferation rates in cell-based models:
 Consequence for pharmacogenomics and cancer. Akey JM, editor. PLoS
 Genetics. Public Library of Science (PLoS); 2012;8: e1002525.
 doi:\href{http://dx.doi.org/10.1371/journal.pgen.1002525}{10.1371/journal.pgen.1002525}
 
-10. R Core Team. R: A language and environment for statistical computing
+17. R Core Team. R: A language and environment for statistical computing
 {[}Internet{]}. Vienna, Austria: R Foundation for Statistical Computing;
 2015. Available: \url{http://www.R-project.org/}
 
-11. Bates D, Maechler M, Bolker B, Walker S. lme4: Linear mixed-effects
+18. Bates D, Maechler M, Bolker B, Walker S. lme4: Linear mixed-effects
 models using eigen and s4 {[}Internet{]}. 2014. Available:
 \url{http://CRAN.R-project.org/package=lme4}
 
-12. Bates D, Maechler M, Bolker BM, Walker S. lme4: Linear mixed-effects
+19. Bates D, Maechler M, Bolker BM, Walker S. lme4: Linear mixed-effects
 models using eigen and s4 {[}Internet{]}. 2014. Available:
 \url{http://arxiv.org/abs/1406.5823}
 
-13. Stegle O, Parts L, Piipari M, Winn J, Durbin R. Using probabilistic
+20. Stegle O, Parts L, Piipari M, Winn J, Durbin R. Using probabilistic
 estimation of expression residuals (PEER) to obtain increased power and
 interpretability of gene expression analyses. Nature Protocols. Nature
 Publishing Group; 2012;7: 500--507.
 doi:\href{http://dx.doi.org/10.1038/nprot.2011.457}{10.1038/nprot.2011.457}
 
-14. Friedman J, Hastie T, Tibshirani R. Regularization paths for
+21. Friedman J, Hastie T, Tibshirani R. Regularization paths for
 generalized linear models via coordinate descent. Journal of Statistical
 Software. 2010;33: 1--22. Available:
 \url{http://www.jstatsoft.org/v33/i01/}
 
-15. Simon N, Friedman J, Hastie T, Tibshirani R. Regularization paths
+22. Simon N, Friedman J, Hastie T, Tibshirani R. Regularization paths
 for cox's proportional hazards model via coordinate descent. Journal of
 Statistical Software. 2011;39: 1--13. Available:
 \url{http://www.jstatsoft.org/v39/i05/}
 
-16. Regression shrinkage and selection via the lasso on jSTOR
+23. Regression shrinkage and selection via the lasso on jSTOR
 {[}Internet{]}. \url{http://www.jstor.org/stable/2346178}; 2015.
 Available: \url{http://www.jstor.org/stable/2346178}
 
-17. Hoerl AE, Kennard RW. Ridge regression: Applications to
+24. Hoerl AE, Kennard RW. Ridge regression: Applications to
 nonorthogonal problems. Technometrics. Informa UK Limited; 1970;12:
 69--82.
 doi:\href{http://dx.doi.org/10.1080/00401706.1970.10488635}{10.1080/00401706.1970.10488635}

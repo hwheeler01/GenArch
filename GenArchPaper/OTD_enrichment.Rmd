@@ -19,7 +19,7 @@ output: html_document
 ```
 
 ###Pull h2 estimate CI>0 genes for each tissue & rm .\\d+ from ensid
-```{r, CIgt0,eval=FALSE}
+```{r, CIgt0}
 for(tistype in c("Tissue-Specific","Tissue-Wide")){
   tsfile <- my.dir %&% 'GTEx_' %&% tistype %&% '_local_h2_se_geneinfo_no_description.txt'
   ts <- read.table(tsfile,sep='\t',header=T)
@@ -39,30 +39,20 @@ for(tistype in c("Tissue-Specific","Tissue-Wide")){
     write.table(cidata[,5], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_non-zeroCIgenes_ensid_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
     write.table(cidata[,1], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_non-zeroCIgenes_gene_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
     
-    h2data <- data[data[,3]>0.1,] ##pull genes with h2 > 0.1
-    print(tislist[i] %&% " " %&% tistype %&% ": " %&% dim(h2data)[1] %&% " h2 > 0.1 genes")
-    write.table(h2data, file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.1genes_info.txt",quote=FALSE,row.names = FALSE)
-    write.table(h2data[,5], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.1genes_ensid_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
-    write.table(h2data[,1], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.1genes_gene_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
-    
-    h2data <- data[data[,3]>0.05,] ##pull genes with h2 > 0.05
-    print(tislist[i] %&% " " %&% tistype %&% ": " %&% dim(h2data)[1] %&% " h2 > 0.05 genes")
-    write.table(h2data, file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.05genes_info.txt",quote=FALSE,row.names = FALSE)
-    write.table(h2data[,5], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.05genes_ensid_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
-    write.table(h2data[,1], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.05genes_gene_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
-    
-    h2data <- data[data[,3]>0.01,] ##pull genes with h2 > 0.01
-    print(tislist[i] %&% " " %&% tistype %&% ": " %&% dim(h2data)[1] %&% " h2 > 0.01 genes")
-    write.table(h2data, file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.01genes_info.txt",quote=FALSE,row.names = FALSE)
-    write.table(h2data[,5], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.01genes_ensid_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
-    write.table(h2data[,1], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.01genes_gene_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
+    for(thresh in c(0,0.01,0.05,0.1)){
+      h2data <- data[data[,3]>thresh,] ##pull genes with h2 > thresh
+    print(tislist[i] %&% " " %&% tistype %&% ": " %&% dim(h2data)[1] %&% " h2 > " %&% thresh %&% " genes")
+    write.table(h2data, file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_" %&% thresh %&% "genes_info.txt",quote=FALSE,row.names = FALSE)
+    write.table(h2data[,5], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_" %&% thresh %&% "genes_ensid_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
+    write.table(h2data[,1], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_" %&% thresh %&% "genes_gene_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
+    } 
   }
 }
   
 write(data$ensid, file=out.dir %&% "full_tested_ensid_list.txt",ncolumns=1)
 ```
 ###Define known genes for 7 WTCCC diseases based on the GWAS catalog and make list of ALL genes in catalog
-```{r, known, eval=FALSE}
+```{r perl, known, eval=TRUE, warning=FALSE, message=FALSE}
   #catalog used:
   gwasfile <- my.dir %&% 'gwas_catalog_v1.0-downloaded_2015-06-02.tsv'
 #  gwas <- data.frame(read.table(gwasfile,header=TRUE,sep='\t',quote="",comment.char="",as.is=TRUE)) #for reference
@@ -72,7 +62,7 @@ write(data$ensid, file=out.dir %&% "full_tested_ensid_list.txt",ncolumns=1)
 ```
 
 ###Disease gene enrichment in top h2 genes by tissue
-```{r, disenrich, eval=FALSE}
+```{r enrich, disenrich, eval=TRUE}
 lci<-function(x) quantile(x, c(.025, 0.975),na.rm=T)[[1]]
 uci<-function(x) quantile(x, c(.025, 0.975),na.rm=T)[[2]]
 ##is testvec signficanty enriched for setvec? make n samples of size(testvec) from fullvec and count overlap
@@ -97,7 +87,8 @@ set.seed(42)
 fullgenelist <- as.character(ts$AssociatedGeneName)
 
 dislist <- c("BD","CAD","HT","T1D","T2D","CD","RA","ALL")
-nperms <- 10000
+nperms <- 1000 
+**rerun with 10000**
 
 for(thresh in c("non-zeroCI","h2_0.1","h2_0.05","h2_0.01")){
   results <- data.frame(type=character(0),dis=character(0),tis=character(0),obsOverlap=double(0),meanOverlap=double(0),lCI=double(0),uCI=double(0),empPval=double(0))
@@ -121,12 +112,12 @@ for(thresh in c("non-zeroCI","h2_0.1","h2_0.05","h2_0.01")){
 }
 ```
 ###distribution of h2 for disease vs non disease
-```{r, dist, warning=FALSE, message=FALSE}
+```{r dist, dist, warning=FALSE, message=FALSE}
 dislist <- c("BD","CAD","HT","T1D","T2D","CD","RA","ALL")
 tislist <- c("CrossTissue","AdiposeSubcutaneous","ArteryTibial","HeartLeftVentricle","Lung","MuscleSkeletal","NerveTibial","SkinSunExposed(Lowerleg)","Thyroid","WholeBlood")
 typelist<-c("Tissue-Specific","Tissue-Wide")
 
-for(thresh in c(0.1,0.01)){
+for(thresh in c(0.1,0.05,0)){
   for(tistype in typelist){
     for(tis in tislist){
       info <- read.table(out.dir %&% tis %&% '_' %&% tistype %&% '_h2_' %&% thresh %&% 'genes_info.txt',header=T)

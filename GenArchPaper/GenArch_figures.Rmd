@@ -369,3 +369,22 @@ png(filename=fig.dir %&% "FigS2.png",width=480,height=960)
 multiplot(figS2a,figS2b)
 dev.off()
 ```
+
+##FigSx h2 v. exp level 
+**[[ADD h2 vs. variance]]**
+```{r h2vlevel, echo=TRUE, warning=FALSE, message=FALSE}
+h2 <- read.table('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/DGN-WB.localGRM.h2.exp.2014-08-30.txt',header=T)
+exp <- read.table('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/DGN-WB.mean.median.expression.2015-02-23.txt',header=T)
+all <- inner_join(h2,exp,by='gene')
+ngenes<-dim(all)[[1]]
+fig<-ggplot(all,aes(x=expmeans,y=h2)) + geom_point() + xlab("Mean expression") + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " genes)") + theme_bw(20)
+fig
+
+tiff(filename=fig.dir %&% "FigSx-h2_v_exp.tiff",width=480,height=480)
+fig
+dev.off()
+
+png(filename=fig.dir %&% "FigSx-h2_v_exp.png",width=480,height=480)
+fig
+dev.off()
+```
