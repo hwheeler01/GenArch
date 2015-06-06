@@ -13,4 +13,6 @@ vignettes/*.html
 vignettes/*.pdf
 
 .Rdata
-*.txt
+*list.txt
+
+*info.txt

@@ -13,13 +13,12 @@ output: html_document
   library(GGally)
   library(grid)
     "%&%" = function(a,b) paste(a,b,sep="")
-  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
   my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
   out.dir <- '~/GitHub/GenArch/GenArchPaper/OTD_enrichment/'
 ```
 
 ###Pull h2 estimate CI>0 genes for each tissue & rm .\\d+ from ensid
-```{r, CIgt0}
+```{r, CIgt0, eval=TRUE}
 for(tistype in c("Tissue-Specific","Tissue-Wide")){
   tsfile <- my.dir %&% 'GTEx_' %&% tistype %&% '_local_h2_se_geneinfo_no_description.txt'
   ts <- read.table(tsfile,sep='\t',header=T)
@@ -52,7 +51,7 @@ for(tistype in c("Tissue-Specific","Tissue-Wide")){
 write(data$ensid, file=out.dir %&% "full_tested_ensid_list.txt",ncolumns=1)
 ```
 ###Define known genes for 7 WTCCC diseases based on the GWAS catalog and make list of ALL genes in catalog
-```{r perl, known, eval=TRUE, warning=FALSE, message=FALSE}
+```{r perl, known, eval=FALSE, warning=FALSE, message=FALSE}
   #catalog used:
   gwasfile <- my.dir %&% 'gwas_catalog_v1.0-downloaded_2015-06-02.tsv'
 #  gwas <- data.frame(read.table(gwasfile,header=TRUE,sep='\t',quote="",comment.char="",as.is=TRUE)) #for reference
@@ -87,8 +86,7 @@ set.seed(42)
 fullgenelist <- as.character(ts$AssociatedGeneName)
 
 dislist <- c("BD","CAD","HT","T1D","T2D","CD","RA","ALL")
-nperms <- 1000 
-**rerun with 10000**
+nperms <- 10000 
 
 for(thresh in c("non-zeroCI","h2_0.1","h2_0.05","h2_0.01")){
   results <- data.frame(type=character(0),dis=character(0),tis=character(0),obsOverlap=double(0),meanOverlap=double(0),lCI=double(0),uCI=double(0),empPval=double(0))
@@ -106,7 +104,7 @@ for(thresh in c("non-zeroCI","h2_0.1","h2_0.05","h2_0.01")){
     }
   }
   sortres <- arrange(results,empPval)
-  write.table(sortres,file=out.dir %&% "GWAS_catalog_disease_gene_enrichment_in_" %&% thresh %&% "_genes_by_tissue_" %&% nperms %&% "perms.txt",row.names=FALSE,quote=FALSE)
+  write.table(sortres,file=out.dir %&% "GWAS_catalog_disease_gene5e-8_enrichment_in_" %&% thresh %&% "_genes_by_tissue_" %&% nperms %&% "perms.txt",row.names=FALSE,quote=FALSE)
   print("GWAS catalog disease gene enrichment in " %&% thresh %&% " genes by tissue " %&% nperms %&% " perms:")
   print(head(sortres,n=20L))
 }

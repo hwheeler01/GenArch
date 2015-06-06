@@ -1,5 +1,5 @@
 ---
-title: Genetic architecture of transcriptome regulation and orthogonal tissue decompositon
+title: Genetic architecture of gene expression regulation via orthogonal tissue decompositon
 author: Heather E. Wheeler^1^, Nicholas Knoblauch^2^, GTEx Consortium, Nancy J. Cox^3^,
   Dan L. Nicolae^1^, Hae Kyung Im^1^
 date: '`r Sys.time()` ^1^Department of Medicine, University of Chicago, ^2^Committee
@@ -15,6 +15,7 @@ bibliography: GenArch_references.bib
 ---
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
+  # devtools::install_github("cboettig/knitcitations@v1")
   library(knitcitations); cleanbib()
   cite_options(citation_format = "pandoc", check.entries=FALSE)
   library(bibtex)
@@ -37,10 +38,14 @@ bibliography: GenArch_references.bib
 
 
 # Introduction
+Regulatory variation has been shown to play a key role in the genetics of complex traits `r citep(c("10.1371/journal.pgen.1000888","10.1371/journal.pgen.1000895","10.1016/j.ajhg.2014.10.004"))`. While many common diseases have been shown to be polygenic `r citep(c("10.1038/nature08185","10.1038/ng.2232","10.1038/ng.2383"))`, it is unclear whether gene expression levels are also polygenic or instead have simpler genetic architectures and how much these expression architectures vary across genes `r citep("10.1038/nrg3891")`. Most human expression quantitative trait loci (eQTL) studies have focused on how local genetic variation affects gene expression in order to reduce the multiple testing burden that would be required for a global analysis `r citep(c("10.1371/journal.pgen.1002639","10.1038/nrg3891"))`. Furthermore, when both local and distal eQTLs are reported `r citep(c("10.1038/ng2142","10.1371/journal.pgen.1002078","10.1038/ng.2951"))`, effect sizes and replicability are much higher for local eQTLs. Indeed, while the heritability of gene expression attributable to local genetic variation has been estimated accurately, large standard errors have prevented accurate estimation of the contribution of distal genetic variation to gene expression variation `r citep(c("10.1371/journal.pgen.1001317", "10.1038/ng.2951"))`.
 
-Regulatory variation has been shown to play a key role in the genetics of complex traits `r citep(c("10.1371/journal.pgen.1000888","10.1371/journal.pgen.1000895","10.1016/j.ajhg.2014.10.004"))`. While many common diseases have been shown to be polygenic `r citep(c("10.1038/nature08185","10.1038/ng.2232","10.1038/ng.2383"))`, it is unclear whether gene expression levels are also polygenic or have simpler genetic architectures and how much these expression architectures vary across genes `r citep("10.1038/nrg3891")`. Most human expression quantitative trait loci (eQTL) studies have focused on how local genetic variation affects gene expression in order to reduce the multiple testing burden that would be required for a global analysis `r citep("10.1371/journal.pgen.1002639","10.1038/nrg3891")`. Furthermore, when both local and distal eQTLs are reported `r citep("10.1038/ng2142","10.1371/journal.pgen.1002078","10.1038/ng.2951")`, effect sizes and replicability are much higher for local eQTLs. 
-most human to this point local and in blood.
-cite Kruglyak review, Price PGen 11, Wright NatGen 14
+Most human eQTL studies have been performed in whole blood or lymphoblastoid cell lines due to ease of access or culturabilty `r citep(c("10.1038/nature04244","10.1038/ng2142","10.1101/gr.155192.113"))`. The Genotype-Tissue Expression (GTEx) Project aims to examine the genetics of gene expression more comprehensively and recently published a pilot analysis of RNA sequencing data from 1641 samples across 43 tissues from 175 individuals `r citep("10.1126/science.1262110")`. In order to better understand the genetic architecture of tissue-specific and cross-tissue gene regulation, we developed a model called orthogonal tissue decomposition (OTD) and applied it to the rich GTEx dataset.
+
+Specifically, in this paper we show that local
+
+
+
 
 # Results
 
