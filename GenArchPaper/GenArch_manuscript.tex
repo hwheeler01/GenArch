@@ -106,7 +106,7 @@ Im\textsuperscript{1}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-06-06 14:28:24 \textsuperscript{1}Department of Medicine,
+  \date{2015-06-08 15:17:58 \textsuperscript{1}Department of Medicine,
 University of Chicago, \textsuperscript{2}Committee on Genetics,
 Genomics, and Systems Biology, University of Chicago,
 \textsuperscript{3}Division of Genetic Medicine, Vanderbilt University}
@@ -153,7 +153,24 @@ better understand the genetic architecture of tissue-specific and
 cross-tissue gene regulation, we developed a model called orthogonal
 tissue decomposition (OTD) and applied it to the rich GTEx dataset.
 
-Specifically, in this paper we show that local
+We also assessed the ability of various models with different underlying
+assumptions to predict gene expression in order to understand the
+underlying genetic architecture of gene expression. Gene expression
+traits with sparse architecture should be better predicted with sparse
+models such as LASSO (Least Absolute Shrinkage and Selection Operator)
+{[}16{]} while highly polygenic traits should be better predicted with
+ridge regression {[}17{]} or similarly polygenic models.
+
+Specifically, in this paper we show that local heritability can be
+accurately estimated across tissues, but distal heritability cannot
+reliably estimated at current sample sizes. We also show that for local
+gene regulation, the genetic architecture is sparse rather than
+polygenic. We found that estimates of the local heritability of
+cross-tissue gene expression generated with our OTD model have larger
+magnitude and improved standard errors compared to single tissue
+estimates due to the borrowing of information across all samples. We
+also found evidence that genes with large tissue-specific heritability
+are enriched in common complex disease genes discovered via GWAS.
 
 \section{Results}\label{results}
 
@@ -164,19 +181,19 @@ variance}\label{local-genetic-variation-explains-a-large-proportion-of-gene-expr
 We estimated the heritability of gene expression in whole blood from the
 Depression Genes and Networks (DGN) cohort (n=922) {[}14{]} using a
 mixed-effects model (see Methods) and calculated variances using
-restricted maximum likelihood as implemented in GCTA {[}16{]}. We fit a
-joint model with a local and a global genetic relationship matrix (GRM).
+restricted maximum likelihood as implemented in GCTA {[}18{]}. We fit a
+joint model with a local and a distal genetic relationship matrix (GRM).
 The local GRM was derived from SNPs within 1 Mb of each gene and the
-global GRM was derived from SNPs that are located on non-gene
+distal GRM was derived from SNPs that are located on non-gene
 chromosomes and are eQTLs in the Framingham Heart Study (FHS) cohort
-(n=5257, FDR \textless{} 0.05) {[}17{]}. The mean local
+(n=5257, FDR \textless{} 0.05) {[}19{]}. The mean local
 h\textsuperscript{2} was 0.130 and 54.6\% of genes had a positive 95\%
-confidence interval (CI), while the mean global h\textsuperscript{2} was
+confidence interval (CI), while the mean distal h\textsuperscript{2} was
 0.076 and just 4.2\% of genes had a positive CI (Fig 1). The maximum
 local h\textsuperscript{2} was 0.93 with a standard error (SE) of 0.009
-while the maximum global h\textsuperscript{2} was 0.91 with a SE of
+while the maximum distal h\textsuperscript{2} was 0.91 with a SE of
 0.16. Similar results were observed for the 1194 genes with
-\emph{trans}-eQTLs (FHS FDR \textless{} 0.05) when the global GRM was
+\emph{trans}-eQTLs (FHS FDR \textless{} 0.05) when the distal GRM was
 limited to known \emph{trans}-eQTLs (Fig 2). That is, the mean local
 h\textsuperscript{2} was 0.133 and 61.3\% of genes had a positive 95\%
 confidence interval (CI), while the mean \emph{trans}
@@ -214,7 +231,7 @@ CI percentages, but smaller than the cross-tissue percentage (Fig 6).
 sparse rather than
 polygenic}\label{the-effect-of-local-genetic-variation-on-gene-expression-is-sparse-rather-than-polygenic}
 
-We performed 10-fold cross-validation using the elastic net {[}18{]} to
+We performed 10-fold cross-validation using the elastic net {[}20{]} to
 test the predictive performance of local SNPs for gene expression across
 a range of mixing parameters, \(\alpha\). The \(\alpha\) that gives the
 largest cross-validation R\textsuperscript{2} informs the sparsity of
@@ -285,7 +302,7 @@ allele frequency {[}MAF{]} \textgreater{} 0.05, Hardy-Weinberg
 Equilibrium {[}P \textgreater{} 0.05{]}, non-ambiguous strand {[}no A/T
 or C/G SNPs{]}) was performed on the University of Michigan
 Imputation-Server
-(\url{https://imputationserver.sph.umich.edu/start.html}) {[}19,20{]}
+(\url{https://imputationserver.sph.umich.edu/start.html}) {[}21,22{]}
 with the following parameters: 1000G Phase 1 v3 ShapeIt2 (no singletons)
 reference panel, SHAPEIT phasing, and EUR population. Approximately 1.9M
 non-ambiguous strand SNPs with MAF \textgreater{} 0.05, imputation
@@ -304,32 +321,33 @@ in the OTD model (described below) to generate cross-tissue and
 tissue-specific components of gene expression, we used the nine tissues
 with the largest sample sizes when quantifying tissue-specific effects.
 Tissues and sample sizes (both RNA-seq and genotypes available) included
-cross-tissue (n=450), skeletal muscle (n=361), whole blood (n=339), skin
-from the sun-exposed portion of the lower leg (n=303), subcutaneous
-adipose (n=298), tibial artery (n=285), lung (279), thyroid (n=279),
-tibial nerve (n=256) and left ventricle heart (n=190). Approximately
-2.6M non-ambiguous strand SNPs included in HapMap Phase II were retained
-for subsequent analyses.
+cross-tissue (\(n=450\)), skeletal muscle (\(n=361\)), whole blood
+(\(n=339\), skin from the sun-exposed portion of the lower leg
+(\(n=303\)), subcutaneous adipose (\(n=298\)), tibial artery
+(\(n=285\)), lung (\(n=279\)), thyroid (\(n=279\)), tibial nerve
+(\(n=256\)) and left ventricle heart (\(n=190\)). Approximately 2.6M
+non-ambiguous strand SNPs included in HapMap Phase II were retained for
+subsequent analyses.
 
-\subsection{Partitioning local and global heritability of gene
-expression}\label{partitioning-local-and-global-heritability-of-gene-expression}
+\subsection{Partitioning local and distal heritability of gene
+expression}\label{partitioning-local-and-distal-heritability-of-gene-expression}
 
 To investigate the proximity of gene expression regulation to each gene,
 we partitioned the proportion of gene expression variance explained by
 SNPs in the DGN cohort into two components: local (SNPs within 1Mb of
-the gene) and global (eQTLs on non-gene chromosomes) as defined by the
-GENCODE {[}21{]} version 12 gene annotation. We calculated the
+the gene) and distal (eQTLs on non-gene chromosomes) as defined by the
+GENCODE {[}23{]} version 12 gene annotation. We calculated the
 proportion of the variance (narrow-sense heritability) explained by each
 component using the following mixed-effects model:
 
-\[ Y_g = \sum_{k = \in local}w_{k,g} X_k + \sum_{k = \in global}w_{k,g} X_k + \epsilon \]
+\[ Y_g = \sum_{k = \in local}w_{k,g} X_k + \sum_{k = \in distal}w_{k,g} X_k + \epsilon \]
 
 Assuming a random effects for \(w_{k,g} \approx N(0, \sigma^2_w)\) and
 \(\epsilon \approx N(0, \sigma^2_{\epsilon} I_n)\), where \(I_n\) is the
 identity matrix, we calculated the total variability explained by local
-and global components by estimating \(\sigma^2_w\) with restricted
-maximum likelihood (REML) using GCTA software {[}16{]}. For heritability
-analyses in the GTEx cohort, we removed the \(global\) term from the
+and distal components by estimating \(\sigma^2_w\) with restricted
+maximum likelihood (REML) using GCTA software {[}18{]}. For heritability
+analyses in the GTEx cohort, we removed the \(distal\) term from the
 model and only estimated marginal \(local\) h\textsuperscript{2} due to
 the smaller sample sizes of both cross-tissue and tissue-specific
 expression levels compared to DGN.
@@ -340,7 +358,7 @@ decomposition}\label{orthogonal-tissue-decomposition}
 To better understand the context specificity of gene expression
 regulation, we developed a method called orthogonal tissue decomposition
 (OTD). This approach is an extension of our method to develop an
-intrinsic growth phenotype {[}22{]}. We applied OTD to GTEx Project
+intrinsic growth phenotype {[}24{]}. We applied OTD to GTEx Project
 {[}15{]} data and decomposed the expression of each gene into
 cross-tissue and tissue-specific components. The tissue availability is
 unbalanced across individuals because of the difficulties of sample
@@ -351,8 +369,8 @@ following model:
 \[ Y_i = T_{i,cross} + T_{i,tissue} \]
 
 Specifically, to generate cross-tissue and tissue-specific expression
-levels, we used the \texttt{lmer} function in the R {[}23{]} package
-\texttt{lme4} {[}24,25{]} to fit the following mixed-effects model:
+levels, we used the \texttt{lmer} function in the R {[}25{]} package
+\texttt{lme4} {[}26,27{]} to fit the following mixed-effects model:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -362,14 +380,14 @@ levels, we used the \texttt{lmer} function in the R {[}23{]} package
 
 The model included tissue-wide gene expression levels in 8555 GTEx
 tissue samples from 544 unique subjects. A total of 17,647
-Protein-coding genes (defined by GENCODE {[}21{]} version 18) with a
+Protein-coding genes (defined by GENCODE {[}23{]} version 18) with a
 mean gene expression level across tissues greater than 0.1 RPKM (reads
 per kilobase of transcript per million reads mapped) were included in
 the model. \texttt{SUBJID} was a random effect and the covariates
 \texttt{TISSUE}, \texttt{GENDER}, and \texttt{PEERs} were fixed effects
 used to predict tissue-wide expression levels (\texttt{expression} in
 the model). \texttt{PEERs} included the top 15 PEER factors estimated
-across all tissues using the R package \texttt{PEER} {[}26{]} to control
+across all tissues using the R package \texttt{PEER} {[}28{]} to control
 for batch effects and experimental confounders. Cross-tissue expression
 was defined as the random effects from the model (\texttt{ranef(fit)})
 and tissue-specific expression as the residuals (\texttt{resid(fit})).
@@ -377,10 +395,10 @@ and tissue-specific expression as the residuals (\texttt{resid(fit})).
 \subsection{Determining polygenicity versus sparsity using the elastic
 net}\label{determining-polygenicity-versus-sparsity-using-the-elastic-net}
 
-We applied the elastic net {[}18{]} to model the effect of local genetic
+We applied the elastic net {[}20{]} to model the effect of local genetic
 variation (SNPs within 1 Mb of gene) on the genetic architecture of gene
 expression. We used the \texttt{cv.glmnet} function in the R package
-\texttt{glmnet} {[}27,28{]} to perform 10-fold cross-validation of the
+\texttt{glmnet} {[}29,30{]} to perform 10-fold cross-validation of the
 elastic net across a range of mixing paramaters (\(\alpha\)) to find the
 \(\alpha\) that maximized predictive performance, measured by Pearson's
 R\textsuperscript{2}. Specifically, \texttt{glmnet} solves the following
@@ -392,12 +410,12 @@ they don't explain all the terms{]}{]}}
 {\[\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right], \]}
 
 over a grid of values of \(\lambda\) covering the entire range
-{[}27,28{]}. This tuning parameter \(\lambda\) controls the overall
+{[}29,30{]}. This tuning parameter \(\lambda\) controls the overall
 strength of the penalty.
 
 The elastic net penalty is controlled by mixing parameter \(\alpha\),
-which spans LASSO (\(\alpha=1\), the default) {[}29{]} at one extreme
-and ridge regression (\(\alpha=0\)) {[}30{]} at the other. The ridge
+which spans LASSO (\(\alpha=1\), the default) {[}16{]} at one extreme
+and ridge regression (\(\alpha=0\)) {[}17{]} at the other. The ridge
 penalty shrinks the coefficients of correlated SNPs towards each other,
 while the LASSO tends to pick one of the correlated SNPs and discard the
 others. Thus, an optimal prediction R\textsuperscript{2} for
@@ -445,8 +463,8 @@ Pr(\textgreater{}\textbar{}t\textbar{})\tabularnewline
 Pr(\textgreater{}\textbar{}t\textbar{})\tabularnewline
 \midrule
 \endhead
-(Intercept) & 0.04 & 0.1 & 0.39 & 0.7\tabularnewline
-x & 1.94 & 0.1 & 18.96 & 0.0\tabularnewline
+(Intercept) & -0.06 & 0.1 & -0.60 & 0.55\tabularnewline
+x & 2.12 & 0.1 & 22.09 & 0.00\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -456,12 +474,12 @@ x & 1.94 & 0.1 & 18.96 & 0.0\tabularnewline
 \centering
 \includegraphics{GenArch_manuscript_files/figure-latex/jointH2-1.pdf}
 \caption{DGN whole blood expression joint heritability
-(h\textsuperscript{2}). Local (SNPs within 1 Mb of each gene) and global
+(h\textsuperscript{2}). Local (SNPs within 1 Mb of each gene) and distal
 (SNPs that are eQTLs in the Framingham Heart Study on other chromosomes
 {[}FDR \textless{} 0.05{]}) h\textsuperscript{2} for gene expression
-were jointly estimated. (\textbf{A}) Global h\textsuperscript{2}
+were jointly estimated. (\textbf{A}) Distal h\textsuperscript{2}
 compared to local h\textsuperscript{2} per gene. (\textbf{B}) Local and
-(\textbf{C}) global gene expression h\textsuperscript{2} estimates
+(\textbf{C}) distal gene expression h\textsuperscript{2} estimates
 ordered by increasing h\textsuperscript{2}. The 95\% confidence interval
 (CI) of each h\textsuperscript{2} estimate is in gray and genes with a
 lower bound greater than zero are in blue.}
@@ -637,79 +655,79 @@ gene regulation in humans. Science. American Association for the
 Advancement of Science (AAAS); 2015;348: 648--660.
 doi:\href{http://dx.doi.org/10.1126/science.1262110}{10.1126/science.1262110}
 
-16. Yang J, Lee SH, Goddard ME, Visscher PM. GCTA: A tool for
+16. Regression shrinkage and selection via the lasso on jSTOR
+{[}Internet{]}. \url{http://www.jstor.org/stable/2346178}; 2015.
+Available: \url{http://www.jstor.org/stable/2346178}
+
+17. Hoerl AE, Kennard RW. Ridge regression: Applications to
+nonorthogonal problems. Technometrics. Informa UK Limited; 1970;12:
+69--82.
+doi:\href{http://dx.doi.org/10.1080/00401706.1970.10488635}{10.1080/00401706.1970.10488635}
+
+18. Yang J, Lee SH, Goddard ME, Visscher PM. GCTA: A tool for
 genome-wide complex trait analysis. The American Journal of Human
 Genetics. Elsevier BV; 2011;88: 76--82.
 doi:\href{http://dx.doi.org/10.1016/j.ajhg.2010.11.011}{10.1016/j.ajhg.2010.11.011}
 
-17. Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et al.
+19. Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et al.
 Identification of common genetic variants controlling transcript isoform
 variation in human whole blood. Nat Genet. Nature Publishing Group;
 2015;47: 345--352.
 doi:\href{http://dx.doi.org/10.1038/ng.3220}{10.1038/ng.3220}
 
-18. Zou H, Hastie T. Regularization and variable selection via the
+20. Zou H, Hastie T. Regularization and variable selection via the
 elastic net. Journal of the Royal Statistical Society: Series B
 (Statistical Methodology). Wiley-Blackwell; 2005;67: 301--320.
 doi:\href{http://dx.doi.org/10.1111/j.1467-9868.2005.00503.x}{10.1111/j.1467-9868.2005.00503.x}
 
-19. Howie B, Fuchsberger C, Stephens M, Marchini J, Abecasis GR. Fast
+21. Howie B, Fuchsberger C, Stephens M, Marchini J, Abecasis GR. Fast
 and accurate genotype imputation in genome-wide association studies
 through pre-phasing. Nat Genet. Nature Publishing Group; 2012;44:
 955--959. doi:\href{http://dx.doi.org/10.1038/ng.2354}{10.1038/ng.2354}
 
-20. Fuchsberger C, Abecasis GR, Hinds DA. Minimac2: Faster genotype
+22. Fuchsberger C, Abecasis GR, Hinds DA. Minimac2: Faster genotype
 imputation. Bioinformatics. Oxford University Press (OUP); 2014;31:
 782--784.
 doi:\href{http://dx.doi.org/10.1093/bioinformatics/btu704}{10.1093/bioinformatics/btu704}
 
-21. Harrow J, Frankish A, Gonzalez JM, Tapanari E, Diekhans M,
+23. Harrow J, Frankish A, Gonzalez JM, Tapanari E, Diekhans M,
 Kokocinski F, et al. GENCODE: The reference human genome annotation for
 the ENCODE project. Genome Research. Cold Spring Harbor Laboratory
 Press; 2012;22: 1760--1774.
 doi:\href{http://dx.doi.org/10.1101/gr.135350.111}{10.1101/gr.135350.111}
 
-22. Im HK, Gamazon ER, Stark AL, Huang RS, Cox NJ, Dolan ME. Mixed
+24. Im HK, Gamazon ER, Stark AL, Huang RS, Cox NJ, Dolan ME. Mixed
 effects modeling of proliferation rates in cell-based models:
 Consequence for pharmacogenomics and cancer. Akey JM, editor. PLoS
 Genetics. Public Library of Science (PLoS); 2012;8: e1002525.
 doi:\href{http://dx.doi.org/10.1371/journal.pgen.1002525}{10.1371/journal.pgen.1002525}
 
-23. R Core Team. R: A language and environment for statistical computing
+25. R Core Team. R: A language and environment for statistical computing
 {[}Internet{]}. Vienna, Austria: R Foundation for Statistical Computing;
 2015. Available: \url{http://www.R-project.org/}
 
-24. Bates D, Maechler M, Bolker B, Walker S. lme4: Linear mixed-effects
+26. Bates D, Maechler M, Bolker B, Walker S. lme4: Linear mixed-effects
 models using eigen and s4 {[}Internet{]}. 2014. Available:
 \url{http://CRAN.R-project.org/package=lme4}
 
-25. Bates D, Maechler M, Bolker BM, Walker S. lme4: Linear mixed-effects
+27. Bates D, Maechler M, Bolker BM, Walker S. lme4: Linear mixed-effects
 models using eigen and s4 {[}Internet{]}. 2014. Available:
 \url{http://arxiv.org/abs/1406.5823}
 
-26. Stegle O, Parts L, Piipari M, Winn J, Durbin R. Using probabilistic
+28. Stegle O, Parts L, Piipari M, Winn J, Durbin R. Using probabilistic
 estimation of expression residuals (PEER) to obtain increased power and
 interpretability of gene expression analyses. Nature Protocols. Nature
 Publishing Group; 2012;7: 500--507.
 doi:\href{http://dx.doi.org/10.1038/nprot.2011.457}{10.1038/nprot.2011.457}
 
-27. Friedman J, Hastie T, Tibshirani R. Regularization paths for
+29. Friedman J, Hastie T, Tibshirani R. Regularization paths for
 generalized linear models via coordinate descent. Journal of Statistical
 Software. 2010;33: 1--22. Available:
 \url{http://www.jstatsoft.org/v33/i01/}
 
-28. Simon N, Friedman J, Hastie T, Tibshirani R. Regularization paths
+30. Simon N, Friedman J, Hastie T, Tibshirani R. Regularization paths
 for cox's proportional hazards model via coordinate descent. Journal of
 Statistical Software. 2011;39: 1--13. Available:
 \url{http://www.jstatsoft.org/v39/i05/}
-
-29. Regression shrinkage and selection via the lasso on jSTOR
-{[}Internet{]}. \url{http://www.jstor.org/stable/2346178}; 2015.
-Available: \url{http://www.jstor.org/stable/2346178}
-
-30. Hoerl AE, Kennard RW. Ridge regression: Applications to
-nonorthogonal problems. Technometrics. Informa UK Limited; 1970;12:
-69--82.
-doi:\href{http://dx.doi.org/10.1080/00401706.1970.10488635}{10.1080/00401706.1970.10488635}
 
 \end{document}

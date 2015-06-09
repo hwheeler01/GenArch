@@ -18,14 +18,14 @@ output: html_document
   fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
 ```
 ##Fig1
-DGN-WB joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Global h^2^ is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).
+DGN-WB joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. distal h^2^ is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).
 ```{r jointH2,fig.width=6,fig.height=16, echo=TRUE, warning=FALSE, message=FALSE}
 otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt'
 
 fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
 
 ##Plot FDR based results
-a<-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("local h"^2)) + ylab(expression("global h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
+a<-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("local h"^2)) + ylab(expression("distal h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
 
 ##plot joint h2 estimates
 local <- fdrother %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
@@ -60,7 +60,7 @@ data <- mutate(data,nonzeroCI=cigt0,position=1:nrow(data))
 my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.60, hjust=0,gp=gpar(fontsize=14)))
 my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
 
-c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("global h"^2)) + xlab(expression("genes ordered by global h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
+c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
 
 multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=1)
 
@@ -72,10 +72,10 @@ png(filename=fig.dir %&% "Fig1.png",width=360,height=960)
 multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=1)
 dev.off()
 ```
-DGN-WB marginal heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. Global h^2^ is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).
+DGN-WB marginal heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. distal h^2^ is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).
 ```{r marginal,fig.width=5,fig.height=5}
 ##Plot FDR based results
-ggplot(fdrother,aes(x=local.h2,y=global.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("DGN marginal local h"^2)) + ylab(expression("DGN marginal global h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
+ggplot(fdrother,aes(x=local.h2,y=global.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("DGN marginal local h"^2)) + ylab(expression("DGN marginal distal h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
 ```
 
 ##Fig2
@@ -373,18 +373,34 @@ dev.off()
 ##FigSx h2 v. exp level 
 **[[ADD h2 vs. variance]]**
 ```{r h2vlevel, echo=TRUE, warning=FALSE, message=FALSE}
+se <- function(x) sqrt(var(x)/length(x))
 h2 <- read.table('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/DGN-WB.localGRM.h2.exp.2014-08-30.txt',header=T)
-exp <- read.table('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/DGN-WB.mean.median.expression.2015-02-23.txt',header=T)
-all <- inner_join(h2,exp,by='gene')
+rawcounts <- read.table('/Volumes/im-lab/nas40t2/Data/Transcriptome/WB1K/data_used_for_eqtl_study/raw_counts.txt',header=T)
+expmean<-data.frame(mean.exp=colMeans(rawcounts),se.exp=apply(rawcounts,2,se)) %>%mutate(gene=as.factor(colnames(rawcounts)))
+all <- inner_join(expmean,h2,by='gene',copy=TRUE)
 ngenes<-dim(all)[[1]]
-fig<-ggplot(all,aes(x=expmeans,y=h2)) + geom_point() + xlab("Mean expression") + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " genes)") + theme_bw(20)
-fig
+a<-ggplot(all,aes(x=log10(mean.exp),y=h2)) + geom_point() + xlab(expression(paste("log"[10],"(mean expression raw counts)"))) + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " genes)") + theme_bw(20)+ geom_smooth(method = "lm")
+a
+summary(lm(h2~mean.exp,all))
+b<-ggplot(all,aes(x=log10(se.exp),y=h2)) + geom_point() + xlab(expression(paste("log"[10],"(SE expression raw counts)"))) + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " genes)") + theme_bw(20)+ geom_smooth(method = "lm")
+b
+summary(lm(h2~se.exp,all))
 
-tiff(filename=fig.dir %&% "FigSx-h2_v_exp.tiff",width=480,height=480)
-fig
+tiff(filename=fig.dir %&% "FigSx-h2_v_exp_rawcounts.tiff",width=960,height=480)
+multiplot(a,b,cols=2)
 dev.off()
 
-png(filename=fig.dir %&% "FigSx-h2_v_exp.png",width=480,height=480)
-fig
+png(filename=fig.dir %&% "FigSx-h2_v_exp_rawcounts.png",width=960,height=480)
+multiplot(a,b,cols=2)
 dev.off()
+
+###only include genes with h2>0.1
+filall<-filter(all,h2>0.1)
+ngenes<-dim(filall)[[1]]
+a<-ggplot(filall,aes(x=log10(mean.exp),y=h2)) + geom_point() + xlab(expression(paste("log"[10],"(mean expression raw counts)"))) + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " h2 > 0.1 genes)") + theme_bw(20)+ geom_smooth(method = "lm")
+a
+summary(lm(h2~mean.exp,filall))
+b<-ggplot(filall,aes(x=log10(se.exp),y=h2)) + geom_point() + xlab(expression(paste("log"[10],"(SE expression raw counts)"))) + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " h2 > 0.1 genes)") + theme_bw(20)+ geom_smooth(method = "lm")
+b
+summary(lm(h2~se.exp,filall))
 ```
