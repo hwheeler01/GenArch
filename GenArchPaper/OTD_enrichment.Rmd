@@ -13,13 +13,12 @@ output: html_document
   library(GGally)
   library(grid)
     "%&%" = function(a,b) paste(a,b,sep="")
-  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
   my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
   out.dir <- '~/GitHub/GenArch/GenArchPaper/OTD_enrichment/'
 ```
 
 ###Pull h2 estimate CI>0 genes for each tissue & rm .\\d+ from ensid
-```{r, CIgt0,eval=FALSE}
+```{r, CIgt0, eval=TRUE}
 for(tistype in c("Tissue-Specific","Tissue-Wide")){
   tsfile <- my.dir %&% 'GTEx_' %&% tistype %&% '_local_h2_se_geneinfo_no_description.txt'
   ts <- read.table(tsfile,sep='\t',header=T)
@@ -39,40 +38,31 @@ for(tistype in c("Tissue-Specific","Tissue-Wide")){
     write.table(cidata[,5], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_non-zeroCIgenes_ensid_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
     write.table(cidata[,1], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_non-zeroCIgenes_gene_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
     
-    h2data <- data[data[,3]>0.1,] ##pull genes with h2 > 0.1
-    print(tislist[i] %&% " " %&% tistype %&% ": " %&% dim(h2data)[1] %&% " h2 > 0.1 genes")
-    write.table(h2data, file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.1genes_info.txt",quote=FALSE,row.names = FALSE)
-    write.table(h2data[,5], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.1genes_ensid_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
-    write.table(h2data[,1], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.1genes_gene_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
-    
-    h2data <- data[data[,3]>0.05,] ##pull genes with h2 > 0.05
-    print(tislist[i] %&% " " %&% tistype %&% ": " %&% dim(h2data)[1] %&% " h2 > 0.05 genes")
-    write.table(h2data, file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.05genes_info.txt",quote=FALSE,row.names = FALSE)
-    write.table(h2data[,5], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.05genes_ensid_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
-    write.table(h2data[,1], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.05genes_gene_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
-    
-    h2data <- data[data[,3]>0.01,] ##pull genes with h2 > 0.01
-    print(tislist[i] %&% " " %&% tistype %&% ": " %&% dim(h2data)[1] %&% " h2 > 0.01 genes")
-    write.table(h2data, file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.01genes_info.txt",quote=FALSE,row.names = FALSE)
-    write.table(h2data[,5], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.01genes_ensid_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
-    write.table(h2data[,1], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_0.01genes_gene_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
+    for(thresh in c(0,0.01,0.05,0.1)){
+      h2data <- data[data[,3]>thresh,] ##pull genes with h2 > thresh
+    print(tislist[i] %&% " " %&% tistype %&% ": " %&% dim(h2data)[1] %&% " h2 > " %&% thresh %&% " genes")
+    write.table(h2data, file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_" %&% thresh %&% "genes_info.txt",quote=FALSE,row.names = FALSE)
+    write.table(h2data[,5], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_" %&% thresh %&% "genes_ensid_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
+    write.table(h2data[,1], file=out.dir %&% tislist[i] %&% "_" %&% tistype %&% "_h2_" %&% thresh %&% "genes_gene_list.txt",quote=FALSE,row.names = FALSE, col.names = FALSE)
+    } 
   }
 }
   
 write(data$ensid, file=out.dir %&% "full_tested_ensid_list.txt",ncolumns=1)
 ```
 ###Define known genes for 7 WTCCC diseases based on the GWAS catalog and make list of ALL genes in catalog
-```{r, known, eval=FALSE}
+```{r perl, known, eval=FALSE, warning=FALSE, message=FALSE}
   #catalog used:
   gwasfile <- my.dir %&% 'gwas_catalog_v1.0-downloaded_2015-06-02.tsv'
 #  gwas <- data.frame(read.table(gwasfile,header=TRUE,sep='\t',quote="",comment.char="",as.is=TRUE)) #for reference
-  runPERL <- "perl " %&% my.dir %&% "24_define_disease_genes.pl " %&% gwasfile
+for(pthresh in c(5e-08,1e-05)){
+  runPERL <- "perl " %&% my.dir %&% "24_define_disease_genes.pl " %&% gwasfile %&% " " %&% pthresh
   system(runPERL)
-
+}
 ```
 
 ###Disease gene enrichment in top h2 genes by tissue
-```{r, disenrich, eval=FALSE}
+```{r enrich, disenrich, eval=FALSE}
 lci<-function(x) quantile(x, c(.025, 0.975),na.rm=T)[[1]]
 uci<-function(x) quantile(x, c(.025, 0.975),na.rm=T)[[2]]
 ##is testvec signficanty enriched for setvec? make n samples of size(testvec) from fullvec and count overlap
@@ -97,52 +87,60 @@ set.seed(42)
 fullgenelist <- as.character(ts$AssociatedGeneName)
 
 dislist <- c("BD","CAD","HT","T1D","T2D","CD","RA","ALL")
-nperms <- 10000
+tislist <- scan(my.dir %&% 'GTEx_nine_tissues','c')
+tislist <- gsub("-","",tislist)
+tislist <- c("CrossTissue",tislist)
+nperms <- 10000 
 
-for(thresh in c("non-zeroCI","h2_0.1","h2_0.05","h2_0.01")){
-  results <- data.frame(type=character(0),dis=character(0),tis=character(0),obsOverlap=double(0),meanOverlap=double(0),lCI=double(0),uCI=double(0),empPval=double(0))
-  for(tistype in c("Tissue-Specific","Tissue-Wide")){
-    for(i in seq_along(dislist)){
-      dis <- dislist[i]
-      disgenes <- scan(out.dir %&% "gwas." %&% dis %&% ".tsv","character")
-      for(j in seq_along(tislist)){
-        tis <- tislist[j]
-        tisgenes <- scan(out.dir %&% tis %&% '_' %&% tistype %&% '_' %&% thresh %&% 'genes_gene_list.txt','character')
-        res <- enrichment(disgenes,tisgenes,fullgenelist,nperms=nperms)
-        resvec <- data.frame(type=tistype,dis=dis,tis=tis,obsOverlap=res[1],meanOverlap=res[2],lCI=res[3],uCI=res[4],empPval=res[5])
-        results <- rbind(results,resvec)
+for(gwasthresh in c(5e-08,1e-05)){
+  for(thresh in c("non-zeroCI","h2_0.1","h2_0.05","h2_0.01")){
+    results <- data.frame(type=character(0),dis=character(0),tis=character(0),obsOverlap=double(0),meanOverlap=double(0),lCI=double(0),uCI=double(0),empPval=double(0))
+    for(tistype in c("Tissue-Specific","Tissue-Wide")){
+      for(i in seq_along(dislist)){
+        dis <- dislist[i]
+        disgenes <- scan(out.dir %&% "gwas." %&% dis %&% "." %&% gwasthresh %&% ".tsv","character")
+        for(j in seq_along(tislist)){
+          tis <- tislist[j]
+          tisgenes <- scan(out.dir %&% tis %&% '_' %&% tistype %&% '_' %&% thresh %&% 'genes_gene_list.txt','character')
+          res <- enrichment(disgenes,tisgenes,fullgenelist,nperms=nperms)
+          resvec <- data.frame(type=tistype,dis=dis,tis=tis,obsOverlap=res[1],meanOverlap=res[2],lCI=res[3],uCI=res[4],empPval=res[5])
+          results <- rbind(results,resvec)
+        }
       }
     }
+    sortres <- arrange(results,empPval)
+    write.table(sortres,file=out.dir %&% "GWAS_catalog_disease_gene" %&% gwasthresh %&%  "_enrichment_in_" %&% thresh %&% "_genes_by_tissue_" %&% nperms %&% "perms.txt",row.names=FALSE,quote=FALSE)
+    print("GWAS catalog disease gene enrichment in " %&% thresh %&% " genes by tissue " %&% nperms %&% " perms:")
+    print(head(sortres,n=20L))
   }
-  sortres <- arrange(results,empPval)
-  write.table(sortres,file=out.dir %&% "GWAS_catalog_disease_gene_enrichment_in_" %&% thresh %&% "_genes_by_tissue_" %&% nperms %&% "perms.txt",row.names=FALSE,quote=FALSE)
-  print("GWAS catalog disease gene enrichment in " %&% thresh %&% " genes by tissue " %&% nperms %&% " perms:")
-  print(head(sortres,n=20L))
 }
 ```
 ###distribution of h2 for disease vs non disease
-```{r, dist, warning=FALSE, message=FALSE}
+```{r dist, dist, warning=FALSE, message=FALSE}
 dislist <- c("BD","CAD","HT","T1D","T2D","CD","RA","ALL")
 tislist <- c("CrossTissue","AdiposeSubcutaneous","ArteryTibial","HeartLeftVentricle","Lung","MuscleSkeletal","NerveTibial","SkinSunExposed(Lowerleg)","Thyroid","WholeBlood")
 typelist<-c("Tissue-Specific","Tissue-Wide")
 
-for(thresh in c(0.1,0.01)){
+#pdf(file="OTD_h2_plots.pdf")
+for(thresh in c(0.1,0)){
   for(tistype in typelist){
     for(tis in tislist){
-      info <- read.table(out.dir %&% tis %&% '_' %&% tistype %&% '_h2_' %&% thresh %&% 'genes_info.txt',header=T)
-      finaldf <- data.frame(AssociatedGeneName=character(0),EnsemblGeneID=character(0),h2=double(0),se=double(0),ensid=character(0),diseaseGene=logical(0L),disease=character(0))
-      for(dis in dislist){
-        setvec <- scan(out.dir %&% "gwas." %&% dis %&% ".tsv","character")
-        disinfo <- info %>% mutate(diseaseGene=(info[,1] %in% setvec),disease=dis)
-        colnames(disinfo) <- c("AssociatedGeneName","EnsemblGeneID","h2","se","ensid","diseaseGene","disease")
-        finaldf <- rbind(finaldf,disinfo)
+      for(gwasthresh in c(5e-08,1e-05)){
+        info <- read.table(out.dir %&% tis %&% '_' %&% tistype %&% '_h2_' %&% thresh %&% 'genes_info.txt',header=T)
+        finaldf <- data.frame(AssociatedGeneName=character(0),EnsemblGeneID=character(0),h2=double(0),se=double(0),ensid=character(0),diseaseGene=logical(0L),disease=character(0))
+        for(dis in dislist){
+          setvec <- scan(out.dir %&% "gwas." %&% dis %&% "." %&% gwasthresh %&% ".tsv","character")
+          disinfo <- info %>% mutate(diseaseGene=(info[,1] %in% setvec),disease=dis)
+          colnames(disinfo) <- c("AssociatedGeneName","EnsemblGeneID","h2","se","ensid","diseaseGene","disease")
+          finaldf <- rbind(finaldf,disinfo)
+        }
+        p<-ggplot(finaldf,aes(x=finaldf[,3],fill=diseaseGene,color=diseaseGene)) + facet_wrap(~disease,ncol=2) + geom_density(alpha=0.3) + xlab("h2") + ggtitle(tistype %&% ' ' %&% tis %&% '\nh2 > ' %&% thresh %&% '; ' %&% 'GWAS P < ' %&% gwasthresh)
+        print(p)
+        p<-ggplot(finaldf,aes(y=finaldf[,3],x=diseaseGene)) + facet_wrap(~disease,ncol=4) + geom_jitter(aes(colour=diseaseGene),alpha=0.3,position = position_jitter(width = .15)) + geom_boxplot(alpha=0,outlier.size=NA) + xlab("diseaseGene") + ylab("h2") + ggtitle(tistype %&% ' ' %&% tis %&% '\nh2 > ' %&% thresh %&% '; ' %&% 'GWAS P < ' %&% gwasthresh) +theme_bw() + theme(legend.position="none") 
+        print(p)
       }
-      p<-ggplot(finaldf,aes(x=finaldf[,3],fill=diseaseGene,color=diseaseGene)) + facet_wrap(~disease,ncol=2) + geom_density(alpha=0.3) + xlab("h2") + ggtitle(tistype %&% ' ' %&% tis %&% ' h2 > ' %&% thresh)
-      print(p)
-      p<-ggplot(finaldf,aes(y=finaldf[,3],x=diseaseGene)) + facet_wrap(~disease,ncol=4) + geom_jitter(aes(colour=diseaseGene),alpha=0.3,position = position_jitter(width = .15)) + geom_boxplot(alpha=0,outlier.size=NA) + xlab("diseaseGene") + ylab("h2") + ggtitle(tistype %&% ' ' %&% tis %&% ' h2 > ' %&% thresh) +theme_bw() + theme(legend.position="none") 
-      print(p)
     }
   }
 }
-
+#dev.off()
 ```
