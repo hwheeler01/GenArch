@@ -1,0 +1,15 @@
+Genetic Architecture of Gene Expression Traits Across Multiple Tissues via Orthogonal Decomposition
+
+Heather E. Wheeler1, Nicholas Knoblauch2, GTEx Consortium, Nancy J. Cox3, Dan L. Nicolae1, Hae Kyung Im1 
+
+1Department of Medicine, University of Chicago, 2Committee on Genetics, Genomics, and Systems Biology, University of Chicago, 3Division of Genetic Medicine, Vanderbilt University 
+
+There is growing consensus that a large portion of the genetic controls of phenotypes is exerted through the regulation of gene expression levels. To better understand this mechanism, we explored the genetic architecture of gene expression traits across multiple tissues using RNAseq data from GTEx and other sources.
+
+First we sought to quantify the relative proportion of local vs distal regulation of gene expression by estimating heritability, proportion of variance explained, by local vs. distal genetic variation. With current sample sizes of under 1000 we are able to estimate with confidence the expression levels regulated by variants in the vicinity of the the gene but not the distal component. Although estimates of relative contributions have been reported, they are not reliable given that the confidence intervals covered the full possible range, 0 to 1. With 922 whole blood RNAseq samples, 54% of genes were found to have local heritability significantly different from 0. The mean local heritability was 0.13.
+
+Traits with sparse architecture should be better predicted with sparse models such as LASSO while highly polygenic traits should be better predicted with ridge regression or similarly polygenic models. Elastic net model combines both models by mixing these two penalized regression approaches, LASSO and ridge regression. A mixing parameter in the elastic net model controls the degree of sparsity of the model. For each tissue in GTEx, we varied the mixing parameter and assessed the prediction performance. We found that for the majority of genes ridge regression performs worse than elastic net or lasso supporting the hypothesis that for most genes the local genetic architecture is sparse rather than polygenic.
+
+To investigate the regulation common across tissues and regulation specific to each tissue, we performed an orthogonal decomposition of expression levels using a mixed effects model. We estimated local heritability for each of these derived phenotypes, i.e. the cross tissue and tissue specific expression levels. We found these estimates have larger magnitude and improved standard errors given the borrowing of information across all samples. We also found evidence that genes with large tissue specific heritability are enriched in disease genes for the 7 WTCCC diseases.
+
+In conclusion, local heritability estimates can be reliable obtained across tissues but not the distal component. For local regulation, the architecture is sparse rather than polygenic. Finally, an interesting enrichment of high tissue specific heritability of disease-associated genes merits further investigation.
