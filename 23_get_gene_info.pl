@@ -10,8 +10,8 @@ while(<A>){
     $info{$ensid} = $descr . "\t" . $gene;
 }
 
-open(B, "GTEx_Tissue-Specific_local_h2_se.txt");
-open(OUT, ">GTEx_Tissue-Specific_local_h2_se_geneinfo.txt");
+open(B, "GTEx_Tissue-Wide_local_h2_se.txt");
+open(OUT, ">GTEx_Tissue-Wide_local_h2_se_geneinfo.txt");
 
 while(defined(my $line=<B>)){
     my ($e) = split(/\t/,$line);

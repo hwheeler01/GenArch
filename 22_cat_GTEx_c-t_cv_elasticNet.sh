@@ -34,3 +34,5 @@ cut -f 7 cross-tissue_exp_10-foldCV_elasticNet_alpha1_hapmapSnpsCEU_chr1-22_2015
 
 awk '{print $1,"cross-tissue",$2}' a > e
 paste -d' ' e b c d > cross-tissue_exp_10-foldCV_elasticNet_R2_for_ggplot2.txt
+
+rm a b c d e
