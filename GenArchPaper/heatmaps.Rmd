@@ -1,0 +1,40 @@
+---
+title: "heatmaps"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+  library(ggplot2)
+  library(reshape2)
+  library(dplyr)
+  library(tidyr)
+  library(GGally)
+  library(grid)
+  library(RColorBrewer)
+  "%&%" = function(a,b) paste(a,b,sep="")
+  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
+  my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
+  fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
+```
+
+- see <http://www.r-bloggers.com/drawing-heatmaps-in-r/>
+
+##Cross-Tissue compared to Tissue-Specific h^2^
+```{r heatmapTS}
+h2TS<-read.table(my.dir %&% "GTEx_Tissue-Specific_local_h2.txt",header=T)
+colnames(h2TS) <- c('ensid','CrossT','AdiSub','ArtTib','Heart','Lung','MusSke','NerTib','Skin','Thyroid','Blood')
+h2TS <- arrange(h2TS, CrossT)
+matTS <- as.matrix(h2TS[,2:dim(h2TS)[2]])
+heatmap(matTS,Rowv=NA,col = cm.colors(256),margins = c(5, 0),labRow=NA)
+```
+
+##Cross-Tissue compared to Tissue-Wide h^2^
+```{r heatmapTW}
+h2TS<-read.table(my.dir %&% "GTEx_Tissue-Wide_local_h2.txt",header=T)
+colnames(h2TS) <- c('ensid','CrossT','AdiSub','ArtTib','Heart','Lung','MusSke','NerTib','Skin','Thyroid','Blood')
+h2TS <- arrange(h2TS, CrossT)
+matTS <- as.matrix(h2TS[,2:dim(h2TS)[2]])
+heatmap(matTS,Rowv=NA,col = cm.colors(256),margins = c(5, 0),labRow=NA)
+```
