@@ -76,10 +76,8 @@ resultsarray <- array(0,c(length(explist),19))
 dimnames(resultsarray)[[1]] <- explist
 resultscol <- c("gene","h50","pve50","rho50","pge50","pi50","n_gamma50","h025","pve025","rho025","pge025","pi025","n_gamma025","h975","pve975","rho975","pge975","pi975","n_gamma975")
 dimnames(resultsarray)[[2]] <- resultscol
-working1M <- out.dir %&% "working_" %&% tis %&% "_exp_BSLMM_1M_iterations_chr" %&% chrom %&% whichlist %&% "_" %&% date %&% ".txt"
-write(resultscol,file=working1M,ncolumns=19,sep="\t")
 
-working100K <- out.dir %&% "working_" %&% tis %&% "_exp_BSLMM_100K_iterations_chr" %&% chrom %&% whichlist %&% "_" %&% date %&% ".txt"
+working100K <- out.dir %&% "working_" %&% tis %&% "_exp_BSLMM-s100K_iterations_chr" %&% chrom %&% whichlist %&% "_" %&% date %&% ".txt"
 write(resultscol,file=working100K,ncolumns=19,sep="\t")
 
 for(i in 1:length(explist)){
@@ -100,32 +98,24 @@ for(i in 1:length(explist)){
     genofile <- cbind(cisbim[,1],cisbim[,5:dim(cisbim)[2]])
     phenofile <- data.frame(exp.w.geno[,gene])
 
-    write.table(annotfile, file=out.dir %&% "tmp.annot." %&% chrom %&% "." %&% whichlist, quote=F, row.names=F, col.names=F, sep=",")
-    write.table(genofile, file=out.dir %&% "tmp.geno." %&% chrom %&% "." %&% whichlist, quote=F, row.names=F, col.names=F, sep=",")
-    write.table(phenofile, file=out.dir %&% "tmp.pheno." %&% chrom %&% "." %&% whichlist, quote=F, row.names=F, col.names=F, sep=",")
+    write.table(annotfile, file=out.dir %&% "tmp.annot." %&% chrom %&% ".s." %&% whichlist, quote=F, row.names=F, col.names=F, sep=",")
+    write.table(genofile, file=out.dir %&% "tmp.geno." %&% chrom %&% ".s." %&% whichlist, quote=F, row.names=F, col.names=F, sep=",")
+    write.table(phenofile, file=out.dir %&% "tmp.pheno." %&% chrom %&% ".s." %&% whichlist, quote=F, row.names=F, col.names=F, sep=",")
 
-    runBSLMM <- "gemma -g " %&% out.dir %&% "tmp.geno." %&% chrom %&% "." %&% whichlist %&% " -p " %&% out.dir %&% "tmp.pheno." %&% chrom %&% "." %&% whichlist %&% " -a " %&% out.dir %&% "tmp.annot." %&% chrom %&% "." %&% whichlist %&% " -bslmm 1 -seed 12345 -o tmp." %&% chrom %&% "." %&% whichlist
+    runBSLMM <- "gemma -g " %&% out.dir %&% "tmp.geno." %&% chrom %&% ".s." %&% whichlist %&% " -p " %&% out.dir %&% "tmp.pheno." %&% chrom %&% ".s." %&% whichlist %&% " -a " %&% out.dir %&% "tmp.annot." %&% chrom %&% ".s." %&% whichlist %&% " -bslmm 1 -seed 12345 -s 100000 -o tmp." %&% chrom %&% ".s." %&% whichlist
     system(runBSLMM)
 
-    hyp <- read.table(out.dir %&% "output/tmp." %&% chrom %&% "." %&% whichlist %&% ".hyp.txt",header=T)
+    hyp <- read.table(out.dir %&% "output/tmp." %&% chrom %&% ".s." %&% whichlist %&% ".hyp.txt",header=T)
     hyp50 <- hyp[(dim(hyp)[1]/2+1):dim(hyp)[1],] #take second half of sampling iterations
     quantres <- apply(hyp50,2,getquant)
     res <- c(gene,quantres[1,],quantres[2,],quantres[3,])
 
-    hyp10 <- hyp[5001:10000,] #for comparison to 1M (equivalent to second half of 100K iterations)
-    quantres10 <- apply(hyp10,2,getquant)
-    res10 <- c(gene,quantres10[1,],quantres10[2,],quantres10[3,])
-
   }else{
     res <- c(gene,rep(NA,18))
-    res10 <- c(gene,rep(NA,18))
   }
   names(res) <- c("gene","h50","pve50","rho50","pge50","pi50","n_gamma50","h025","pve025","rho025","pge025","pi025","n_gamma025","h975","pve975","rho975","pge975","pi975","n_gamma975") 
   resultsarray[gene,] <- res
-  write(res,file=working1M,ncolumns=19,append=T,sep="\t")
-
-  names(res10) <- c("gene","h50","pve50","rho50","pge50","pi50","n_gamma50","h025","pve025","rho025","pge025","pi025","n_gamma025","h975","pve975","rho975","pge975","pi975","n_gamma975")
-  write(res10,file=working100K,ncolumns=19,append=T,sep="\t")
+  write(res,file=working100K,ncolumns=19,append=T,sep="\t")
 }
 
-write.table(resultsarray,file=out.dir %&% tis %&% "_exp_BSLMM_1M_iterations_chr" %&% chrom %&% whichlist %&% "_" %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
+write.table(resultsarray,file=out.dir %&% tis %&% "_exp_BSLMM-s100K_iterations_chr" %&% chrom %&% whichlist %&% "_" %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
