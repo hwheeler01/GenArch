@@ -1,0 +1,70 @@
+---
+title: "BSLMM DGN results"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r,warning=FALSE,message=FALSE}
+"%&%" = function(a,b) paste(a,b,sep="")
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/BSLMM_exp/'
+```
+
+###**Compare 1M iterations (only 1421 genes finished in 100hrs) to 100K iterations (most genes finished in <100hrs, some still running)**
+```{r, compIterations,warning=FALSE,message=FALSE}
+mil<-read.table(my.dir %&% 'working_DGN-WB_exp_BSLMM_1M_iterations_genes_finished_in_100hrs_2015-06-16.txt',header=T)
+hun<-read.table(my.dir %&% 'DGN-WB_exp_BSLMM-s100K_iterations_all_genes_2015-06-14.txt',header=T)
+hun<-hun[complete.cases(hun),]
+all<-inner_join(mil,hun,by='gene')
+dim(all)
+##plot diff in median PVE
+ggplot(all,aes(x=pve50.x,y=pve50.y)) + geom_point() + xlab("median PVE (1M iterations)") + ylab("median PVE (100K iterations)") + geom_abline(c(0,1))
+ggplot(all,aes(x=pve50.x,y=pve50.x-pve50.y)) + geom_point() + xlab("median PVE (1M iterations)") + ylab("med PVE (1M) - med PVE (100K)")
+##plot diff in upper 95% credible interval PVE
+ggplot(all,aes(x=pve975.x,y=pve975.y)) + geom_point() + xlab("upper CI PVE (1M iterations)") + ylab("upper CI PVE (100K iterations)") + geom_abline(c(0,1))
+ggplot(all,aes(x=pve975.x,y=pve975.x-pve975.y)) + geom_point() + xlab("upper CI PVE (1M iterations)") + ylab("upper CI PVE (1M) - upper CI PVE (100K)")
+##plot diff in lower 95% credible interval PVE
+ggplot(all,aes(x=pve025.x,y=pve025.y)) + geom_point() + xlab("lower CI PVE (1M iterations)") + ylab("lower CI PVE (100K iterations)") + geom_abline(c(0,1))
+ggplot(all,aes(x=pve025.x,y=pve025.x-pve025.y)) + geom_point() + xlab("lower CI PVE (1M iterations)") + ylab("lower CI PVE (1M) - lower CI PVE (100K)")
+
+##plot diff in median PGE
+ggplot(all,aes(x=pge50.x,y=pge50.y)) + geom_point() + xlab("median PGE (1M iterations)") + ylab("median PGE (100K iterations)") + geom_abline(c(0,1))
+ggplot(all,aes(x=pge50.x,y=pge50.x-pge50.y)) + geom_point() + xlab("median PGE (1M iterations)") + ylab("med PGE (1M) - med PGE (100K)")
+##plot diff in upper 95% credible interval PGE
+ggplot(all,aes(x=pge975.x,y=pge975.y)) + geom_point() + xlab("upper CI PGE (1M iterations)") + ylab("upper CI PGE (100K iterations)") + geom_abline(c(0,1))
+ggplot(all,aes(x=pge975.x,y=pge975.x-pge975.y)) + geom_point() + xlab("upper CI PGE (1M iterations)") + ylab("upper CI PGE (1M) - upper CI PGE (100K)")
+##plot diff in lower 95% credible interval PGE
+ggplot(all,aes(x=pge025.x,y=pge025.y)) + geom_point() + xlab("lower CI PGE (1M iterations)") + ylab("lower CI PGE (100K iterations)") + geom_abline(c(0,1))
+ggplot(all,aes(x=pge025.x,y=pge025.x-pge025.y)) + geom_point() + xlab("lower CI PGE (1M iterations)") + ylab("lower CI PGE (1M) - lower CI PGE (100K)")
+```
+
+###**Plot PVE and PGE (100K iterations)**
+####arrange by median PVE
+```{r pvePGEhun,warning=FALSE,message=FALSE}
+data <- hun %>% arrange(pve50) %>% mutate(position=1:length(pve50),`pge025>0.01`=pge025>0.01) 
+head(data,n=3L)
+tail(data,n=3L)
+ggplot(data,aes(x=position,y=pve50,ymin=pve025,ymax=pve975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ggplot(data,aes(x=position,y=pge50,ymin=pge025,ymax=pge975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ggplot(data,aes(x=position,y=n_gamma50,ymin=n_gamma025,ymax=n_gamma975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+```
+
+####arrange by median PGE
+```{r pgeHUN,warning=FALSE,message=FALSE}
+data <- hun %>% arrange(pge50) %>% mutate(position=1:length(pge50),`pge025>0.01`=pge025>0.01) 
+head(data,n=3L)
+tail(data,n=3L)
+ggplot(data,aes(x=position,y=pve50,ymin=pve025,ymax=pve975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ggplot(data,aes(x=position,y=pge50,ymin=pge025,ymax=pge975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ggplot(data,aes(x=position,y=n_gamma50,ymin=n_gamma025,ymax=n_gamma975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+```
+
+####check correlations
+```{r corr,warning=FALSE,message=FALSE}
+ggplot(data,aes(x=pve50,y=pge50,ymin=pge025,ymax=pge975,col=`pge025>0.01`)) + geom_pointrange(col='gray') + geom_point() 
+cor.test(hun$pge50,hun$pve50)
+ggplot(data,aes(x=log10(n_gamma50),y=pge50,col=`pge025>0.01`)) + geom_point(alpha=0.3)
+```
