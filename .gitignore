@@ -16,3 +16,5 @@ vignettes/*.pdf
 *list.txt
 
 *info.txt
+*allResults.txt
+*for_ggplot2.txt
