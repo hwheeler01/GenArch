@@ -1,0 +1,61 @@
+---
+title: "BSLMM GTEx results"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r,warning=FALSE,message=FALSE}
+"%&%" = function(a,b) paste(a,b,sep="")
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+my.dir <- '~/GitHub/GenArch/GenArchPaper/BSLMM/'
+h2.TS <- read.table(my.dir %&% 'bslmm_gtex_results/GTEx_Tissue-Specific_local_h2_se_geneinfo.txt',header=TRUE, sep='\t')
+h2.TW <- read.table(my.dir %&% 'bslmm_gtex_results/GTEx_Tissue-Wide_local_h2_se_geneinfo.txt',header=TRUE, sep='\t')
+```
+
+###**Cross-tissue by OTD**
+####arrange by median PVE
+```{r pvePGEhun,warning=FALSE,message=FALSE}
+hun <- read.table(my.dir %&% 'bslmm_gtex_results/cross-tissue_exp_BSLMM-s100K_iterations_all_chr1-22_2015-07-20.txt',header=T)
+data <- hun %>% arrange(pve50) %>% mutate(position=1:length(pve50),`pge025>0.01`=pge025>0.01) 
+data <- data[complete.cases(data),]
+genenames <- h2.TW %>% select(gene=EnsemblGeneID,genename=AssociatedGeneName)
+data <- left_join(data,genenames,by='gene')
+#head(data,n=3L)
+#tail(data,n=3L)
+ggplot(data,aes(x=position,y=pve50,ymin=pve025,ymax=pve975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ggplot(data,aes(x=position,y=pge50,ymin=pge025,ymax=pge975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ggplot(data,aes(x=position,y=n_gamma50,ymin=n_gamma025,ymax=n_gamma975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+```
+
+####arrange by median PGE
+```{r pgeHUN,warning=FALSE,message=FALSE}
+hun <- read.table(my.dir %&% 'bslmm_gtex_results/cross-tissue_exp_BSLMM-s100K_iterations_all_chr1-22_2015-07-20.txt',header=T)
+data <- hun %>% arrange(pge50) %>% mutate(position=1:length(pge50),`pge025>0.01`=pge025>0.01) 
+data <- data[complete.cases(data),]
+genenames <- h2.TW %>% select(gene=EnsemblGeneID,genename=AssociatedGeneName)
+data <- left_join(data,genenames,by='gene')
+#head(data,n=3L)
+#tail(data,n=3L)
+ggplot(data,aes(x=position,y=pve50,ymin=pve025,ymax=pve975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ggplot(data,aes(x=position,y=pge50,ymin=pge025,ymax=pge975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ggplot(data,aes(x=position,y=n_gamma50,ymin=n_gamma025,ymax=n_gamma975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+```
+
+####check correlations
+```{r corr,warning=FALSE,message=FALSE}
+ggplot(data,aes(x=pve50,y=pge50,ymin=pge025,ymax=pge975,col=`pge025>0.01`)) + geom_pointrange(col='gray') + geom_point() 
+cor.test(hun$pge50,hun$pve50)
+ggplot(data,aes(x=log10(n_gamma50),y=pge50,col=`pge025>0.01`)) + geom_point(alpha=0.3)
+```
+
+####Compare GCTA marginal h2 to BSLMM median PVE (local SNPs)
+```{r h2vPVE,fig.height=6,fig.width=6}
+gcta <- h2.TW %>% select(gene=EnsemblGeneID,genename=AssociatedGeneName,local.h2=h2.CrossTissue)
+all <- inner_join(hun,gcta,by='gene') %>% arrange(desc(pve50))
+dim(all)
+ggplot(all,aes(x=local.h2,y=pve50))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(0,1),ylim=c(0,1))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1),color='red')
+cor.test(all$local.h2,all$pve50)
+```
