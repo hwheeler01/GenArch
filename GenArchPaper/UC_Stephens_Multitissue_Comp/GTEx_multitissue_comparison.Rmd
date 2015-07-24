@@ -1,0 +1,149 @@
+---
+title: "GTEx_multitissue_comparison"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+Stephens lab data accessed from <http://www.gtexportal.org/static/datasets/gtex_analysis_pilot_v3/multi_tissue_eqtls/Multi_tissue_eQTL_GTEx_Pilot_Phase_datasets.tar> on 20150722.
+
+From README: "We are using the eQTL posterior probabilities from the UC Multi-tissue eQTL method (doi:10.1371/journal.pgen.1003486) for each of the 9 tissues analyzed in the pilot phase (Adipose_subcutaneous, Artery_Tibal, Whole_Blood, Heart_Left_Ventricle, Lung, Muscle_Skeletal, Nerve_Tibial, Skin_Lower_Leg_Sun_Exposed, Thyroid) in the file `res_final_uc_com_genes_com_snps.txt.gz`. These values may be interpreted as Pr(SNP is eQTL in tissue s | data). 9875 eGenes are presented, with the "top" (most significant) SNP in each gene used."
+
+```{r, getData, message=FALSE}
+library(dplyr)
+library(plyr)
+library(tidyr)
+library(ggplot2)
+library(GGally)
+"%&%" = function(a,b) paste(a,b,sep="")
+mt.dir <- "~/GitHub/GenArch/GenArchPaper/UC_Stephens_Multitissue_Comp/"
+#tarbell mt.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/Multi_tissue_eQTL_GTEx_Pilot_Phase_datasets/"
+h2.dir <- "~/GitHub/GenArch/GenArchPaper/BSLMM/bslmm_gtex_results/"
+#tarbell h2.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/"
+bslmm.dir <- "~/GitHub/GenArch/GenArchPaper/BSLMM/bslmm_gtex_results/"
+#tarbell bslmm.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/BSLMM_exp/"
+mt <- read.table(mt.dir %&% "res_final_uc_com_genes_com_snps.txt.gz",header=TRUE)
+head(mt)
+dim(mt)
+#remove version number in order to compare ensembl IDs
+a <- substr(mt$gene,1,15)
+mt <- mutate(mt,gene=a)
+h2.ts <- read.table(bslmm.dir %&% "GTEx_Tissue-Specific_local_h2_se_geneinfo.txt",header=TRUE,sep="\t")
+#remove version number in order to compare ensembl IDs
+a <- substr(h2.ts$EnsemblGeneID,1,15)
+h2.ts <- mutate(h2.ts,gene=a)
+h2.tw <- read.table(bslmm.dir %&% "GTEx_Tissue-Wide_local_h2_se_geneinfo.txt",header=TRUE,sep="\t")
+h2.tw <- mutate(h2.tw,gene=EnsemblGeneID)
+#remove version number in order to compare ensembl IDs
+a <- substr(h2.tw$EnsemblGeneID,1,15)
+h2.tw <- mutate(h2.tw,gene=a)
+```
+
+#Compare Pr(SNP is eQTL in tissue s | data) to local h2 for each gene
+##Tissue-Specific h2 (from OTD)
+
+```{r, ts, message=FALSE}
+data <- inner_join(mt,h2.ts,by='gene')
+dim(data)
+##only half overlap, why? gcta didn't converge? multi-tissue model didn't converge?
+
+#test one tissue h2 at a time
+tislist <- c('h2.AdiposeSubcutaneous','h2.ArteryTibial','h2.HeartLeftVentricle','h2.Lung','h2.MuscleSkeletal','h2.NerveTibial','h2.SkinSunExposedLowerleg','h2.Thyroid','h2.WholeBlood')
+
+for(tis in tislist){
+  h2.tis <- h2.ts %>% select(gene,one_of(tis)) ##one_of allows character vector
+  newdata <- inner_join(mt,h2.tis,by='gene')
+  gdata <- gather(newdata,"tissue","Pr",3:11)
+  colnames(gdata)[3] <- "h2"
+  p <- ggplot(gdata,aes(x=h2,y=Pr))+facet_wrap(~tissue)+geom_point(alpha=0.4)+stat_smooth()+
+    coord_cartesian(ylim=c(-0.05,1.2))+xlab(tis)
+  cors <- ddply(gdata, .(tissue), summarise, cor = signif(cor(h2, Pr), 2))
+  p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=-Inf, y=Inf, hjust=-0.2, vjust=1.2, size=3)
+  pvals <- ddply(gdata, .(tissue), summarise, cor = signif(cor.test(h2, Pr)$p.value, 2))
+  p2 <- p1 + geom_text(data=pvals, aes(label=paste("p = ", cor, sep="")), x=Inf, y=Inf, hjust=1.2, vjust=1.2, size=3)
+  print(p2)
+}
+```
+
+##Cross-Tissue h2 (from OTD)
+```{r, ct, message=FALSE}
+tis <- 'h2.CrossTissue'
+h2.tis <- h2.ts %>% select(gene,one_of(tis)) ##one_of allows character vector
+newdata <- inner_join(mt,h2.tis,by='gene')
+gdata <- gather(newdata,"tissue","Pr",3:11)
+colnames(gdata)[3] <- "h2"
+p <- ggplot(gdata,aes(x=h2,y=Pr))+facet_wrap(~tissue)+geom_point(alpha=0.4)+stat_smooth()+
+  coord_cartesian(ylim=c(-0.05,1.2))+xlab(tis)
+cors <- ddply(gdata, .(tissue), summarise, cor = signif(cor(h2, Pr), 2))
+p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=-Inf, y=Inf, hjust=-0.2, vjust=1.2, size=3)
+pvals <- ddply(gdata, .(tissue), summarise, cor = signif(cor.test(h2, Pr)$p.value, 2))
+p2 <- p1 + geom_text(data=pvals, aes(label=paste("p = ", cor, sep="")), x=Inf, y=Inf, hjust=1.2, vjust=1.2, size=3)
+print(p2)
+```
+
+##Tissue-Wide h2
+```{r, tw, message=FALSE}
+#test one tissue h2 at a time
+tislist <- c('h2.AdiposeSubcutaneous','h2.ArteryTibial','h2.HeartLeftVentricle','h2.Lung','h2.MuscleSkeletal','h2.NerveTibial','h2.SkinSunExposedLowerleg','h2.Thyroid','h2.WholeBlood')
+for(tis in tislist){
+  h2.tis <- h2.tw %>% select(gene,one_of(tis)) ##one_of allows character vector
+  newdata <- inner_join(mt,h2.tis,by='gene')
+  gdata <- gather(newdata,"tissue","Pr",3:11)
+  colnames(gdata)[3] <- "h2"
+  p <- ggplot(gdata,aes(x=h2,y=Pr))+facet_wrap(~tissue)+geom_point(alpha=0.4)+stat_smooth()+
+    coord_cartesian(ylim=c(-0.05,1.2))+xlab(tis)
+  cors <- ddply(gdata, .(tissue), summarise, cor = signif(cor(h2, Pr), 2))
+  p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=-Inf, y=Inf, hjust=-0.2, vjust=1.2, size=3)
+  pvals <- ddply(gdata, .(tissue), summarise, cor = signif(cor.test(h2, Pr)$p.value, 2))
+  p2 <- p1 + geom_text(data=pvals, aes(label=paste("p = ", cor, sep="")), x=Inf, y=Inf, hjust=1.2, vjust=1.2, size=3)
+  print(p2)
+}
+```
+
+##Calculate coefficient of variation of Pr and correlate with **cross-tissue and tissue-specific** h2 
+- CV = coefficent of variation = sd/mean
+- lower CV means more likely to be multi-tissue eQTL (expect neg. cor. for CV vs. cross-tissue h2)
+```{r, cvOTD, message=FALSE}
+meanmt <- apply(mt[,3:11],1,mean)
+sdmt <- apply(mt[,3:11],1,sd)
+cv <- sdmt/meanmt
+newmt<-mutate(mt,CV=cv)
+
+tislist <- c('h2.CrossTissue','h2.AdiposeSubcutaneous','h2.ArteryTibial','h2.HeartLeftVentricle','h2.Lung','h2.MuscleSkeletal','h2.NerveTibial','h2.SkinSunExposedLowerleg','h2.Thyroid','h2.WholeBlood')
+for(tis in tislist){
+  h2.tis <- h2.ts %>% select(gene,one_of(tis)) ##one_of allows character vector
+  newdata <- inner_join(newmt,h2.tis,by='gene')
+  colnames(newdata)[13] <- "h2"
+  p <- ggplot(newdata,aes(x=h2,y=CV))+geom_point(alpha=0.4)+stat_smooth()+
+    xlab(tis)+ylab("Coef of variation (sd/mean) of Pr")
+  cors <- data.frame(cor=signif(cor(newdata$h2, newdata$CV), 2))
+  p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=-Inf, y=Inf, hjust=-0.2, vjust=1.2, size=4)
+  pvals <- data.frame(cor=signif(cor.test(newdata$h2, newdata$CV)$p.value, 2))
+  p2 <- p1 + geom_text(data=pvals, aes(label=paste("p = ", cor, sep="")), x=Inf, y=Inf, hjust=1.2, vjust=1.2, size=4)
+  print(p2)
+}
+```
+
+##Compare coefficient of variation of Pr to **tissue-wide** h2 
+```{r, cvTW, message=FALSE}
+meanmt <- apply(mt[,3:11],1,mean)
+sdmt <- apply(mt[,3:11],1,sd)
+cv <- sdmt/meanmt
+newmt<-mutate(mt,CV=cv)
+
+tislist <- c('h2.AdiposeSubcutaneous','h2.ArteryTibial','h2.HeartLeftVentricle','h2.Lung','h2.MuscleSkeletal','h2.NerveTibial','h2.SkinSunExposedLowerleg','h2.Thyroid','h2.WholeBlood')
+for(tis in tislist){
+  h2.tis <- h2.tw %>% select(gene,one_of(tis)) ##one_of allows character vector
+  newdata <- inner_join(newmt,h2.tis,by='gene')
+  colnames(newdata)[13] <- "h2"
+  p <- ggplot(newdata,aes(x=h2,y=CV))+geom_point(alpha=0.4)+stat_smooth()+
+    xlab(tis)+ylab("Coef of variation (sd/mean) of Pr")
+  cors <- data.frame(cor=signif(cor(newdata$h2, newdata$CV), 2))
+  p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=-Inf, y=Inf, hjust=-0.2, vjust=1.2, size=4)
+  pvals <- data.frame(cor=signif(cor.test(newdata$h2, newdata$CV)$p.value, 2))
+  p2 <- p1 + geom_text(data=pvals, aes(label=paste("p = ", cor, sep="")), x=Inf, y=Inf, hjust=1.2, vjust=1.2, size=4)
+  print(p2)
+}
+```
+
+##To Do: plot Pr vs. BSLMM PVE medians, maybe more genes will overlap?

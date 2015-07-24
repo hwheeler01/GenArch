@@ -19,3 +19,4 @@ vignettes/*.pdf
 *allResults.txt
 *for_ggplot2.txt
 *all_chr*.txt
+*txt.gz
