@@ -20,3 +20,5 @@ vignettes/*.pdf
 *for_ggplot2.txt
 *all_chr*.txt
 *txt.gz
+*h2.txt
+*BSLMM.txt
