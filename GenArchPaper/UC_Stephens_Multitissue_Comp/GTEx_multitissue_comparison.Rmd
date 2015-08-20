@@ -10,8 +10,8 @@ Stephens lab data accessed from <http://www.gtexportal.org/static/datasets/gtex_
 From README: "We are using the eQTL posterior probabilities from the UC Multi-tissue eQTL method (doi:10.1371/journal.pgen.1003486) for each of the 9 tissues analyzed in the pilot phase (Adipose_subcutaneous, Artery_Tibal, Whole_Blood, Heart_Left_Ventricle, Lung, Muscle_Skeletal, Nerve_Tibial, Skin_Lower_Leg_Sun_Exposed, Thyroid) in the file `res_final_uc_com_genes_com_snps.txt.gz`. These values may be interpreted as Pr(SNP is eQTL in tissue s | data). 9875 eGenes are presented, with the "top" (most significant) SNP in each gene used."
 
 ```{r, getData, message=FALSE}
-library(dplyr)
 library(plyr)
+library(dplyr)
 library(tidyr)
 library(ggplot2)
 library(GGally)

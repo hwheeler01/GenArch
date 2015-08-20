@@ -1,10 +1,10 @@
 ---
 title: Genetic architecture of gene expression regulation via orthogonal tissue decompositon
-author: Heather E. Wheeler^1^, Nicholas Knoblauch^2^, GTEx Consortium, Nancy J. Cox^3^,
-  Dan L. Nicolae^1^, Hae Kyung Im^1^
-date: '`r Sys.time()` ^1^Department of Medicine, University of Chicago, ^2^Committee
-  on Genetics, Genomics, and Systems Biology, University of Chicago, ^3^Division of
-  Genetic Medicine, Vanderbilt University'
+author: Heather E. Wheeler^1,2^, GTEx Consortium, Nicholas Knoblauch^3^, Nancy J. Cox^4^,
+  Dan L. Nicolae^5^, Hae Kyung Im^5^
+date: '`r Sys.time()` ^1^Department of Biology and ^2^Department of Computer Science, Loyola University Chicago, ^3^Committee
+  on Genetics, Genomics, and Systems Biology, University of Chicago, ^4^Division of
+  Genetic Medicine, Vanderbilt University, ^5^Section of Genetic Medicine, Department of Medicine, University of Chicago'
 output:
   pdf_document:
     fig_caption: yes
@@ -27,7 +27,7 @@ bibliography: GenArch_references.bib
   library(lme4)
   library(dplyr)
   "%&%" = function(a,b) paste(a,b,sep="")
-  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
+  source('~/GitHub/GenArch/GenArchPaper/multiplot.R')
   fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
 ```
 
@@ -35,29 +35,31 @@ bibliography: GenArch_references.bib
 
 *Lorem ipsum dolor sit amet, est ad doctus eligendi scriptorem. Mel erat falli ut. Feugiat legendos adipisci vix at, usu at laoreet argumentum suscipiantur. An eos adhuc aliquip scriptorem, te adhuc dolor liberavisse sea. Ponderum vivendum te nec, id agam brute disputando mei.*
 
-
-
 # Introduction
 Regulatory variation has been shown to play a key role in the genetics of complex traits `r citep(c("10.1371/journal.pgen.1000888","10.1371/journal.pgen.1000895","10.1016/j.ajhg.2014.10.004"))`. While many common diseases have been shown to be polygenic `r citep(c("10.1038/nature08185","10.1038/ng.2232","10.1038/ng.2383"))`, it is unclear whether gene expression levels are also polygenic or instead have simpler genetic architectures and how much these expression architectures vary across genes `r citep("10.1038/nrg3891")`. Most human expression quantitative trait loci (eQTL) studies have focused on how local genetic variation affects gene expression in order to reduce the multiple testing burden that would be required for a global analysis `r citep(c("10.1371/journal.pgen.1002639","10.1038/nrg3891"))`. Furthermore, when both local and distal eQTLs are reported `r citep(c("10.1038/ng2142","10.1371/journal.pgen.1002078","10.1038/ng.2951"))`, effect sizes and replicability are much higher for local eQTLs. Indeed, while the heritability of gene expression attributable to local genetic variation has been estimated accurately, large standard errors have prevented accurate estimation of the contribution of distal genetic variation to gene expression variation `r citep(c("10.1371/journal.pgen.1001317", "10.1038/ng.2951"))`.
 
-Most human eQTL studies have been performed in whole blood or lymphoblastoid cell lines due to ease of access or culturabilty `r citep(c("10.1038/nature04244","10.1038/ng2142","10.1101/gr.155192.113"))`. The Genotype-Tissue Expression (GTEx) Project aims to examine the genetics of gene expression more comprehensively and recently published a pilot analysis of RNA sequencing data from 1641 samples across 43 tissues from 175 individuals `r citep("10.1126/science.1262110")`. In order to better understand the genetic architecture of tissue-specific and cross-tissue gene regulation, we developed a model called orthogonal tissue decomposition (OTD) and applied it to the rich GTEx dataset. 
+Most human eQTL studies have been performed in whole blood or lymphoblastoid cell lines due to ease of access or culturabilty `r citep(c("10.1038/nature04244","10.1038/ng2142","10.1101/gr.155192.113"))`. The Genotype-Tissue Expression (GTEx) Project aims to examine the genetics of gene expression more comprehensively and recently published a pilot analysis of RNA sequencing data from 1641 samples across 43 tissues from 175 individuals `r citep("10.1126/science.1262110")`. In order to better understand the genetic architecture of tissue-specific and cross-tissue gene regulation, we developed a mixed effects model called orthogonal tissue decomposition (OTD) to determine the cross-tissue and tissue-specific components of gene expression in the rich GTEx dataset. These components were used to develop predcitors of cross-tissue and tissue-specific gene expression for use in our gene-based association method PrediXcan `r citep("10.1038/ng.3367")`.
 
-We also assessed the ability of various models with different underlying assumptions to predict gene expression in order to understand the underlying genetic architecture of gene expression. Gene expression traits with sparse architecture should be better predicted with sparse models such as LASSO (Least Absolute Shrinkage and Selection Operator) `r citep("http://www.jstor.org/stable/2346178")` while highly polygenic traits should be better predicted with ridge regression `r citep("10.1080/00401706.1970.10488635")` or similarly polygenic models.
+We also assessed the ability of various models with different underlying assumptions to predict gene expression in order to understand the underlying genetic architecture of gene expression. Gene expression traits with sparse architecture should be better predicted with sparse models such as LASSO (Least Absolute Shrinkage and Selection Operator) `r citep("http://www.jstor.org/stable/2346178")` while highly polygenic traits should be better predicted with ridge regression  or similarly polygenic models `r citep(c("10.1080/00401706.1970.10488635","10.1038/nrg2898","10.1002/gepi.21808"))`. Using the hybrid approach of BSLMM (Bayesian Sparse Linear Mixed Model) `r citep("10.1371/journal.pgen.1003264")`, we quantified the proportion of the sparse component that makes up the total proportion of expression variance explained by sparse and polygenic  effects.
 
-Specifically, in this paper we show that local heritability can be accurately estimated across tissues, but distal heritability cannot reliably estimated at current sample sizes. We also show that for local gene regulation, the genetic architecture is sparse rather than polygenic. We found that estimates of the local heritability of cross-tissue gene expression generated with our OTD model have larger magnitude and improved standard errors compared to single tissue estimates due to the borrowing of information across all samples. We also found evidence that genes with large tissue-specific heritability are enriched in common complex disease genes discovered via GWAS.
+Specifically, in this paper we show that local heritability can be accurately estimated across tissues, but distal heritability cannot reliably estimated at current sample sizes. We also show that for local gene regulation, the genetic architecture is mostly sparse rather than polygenic. We found that estimates of the local heritability of cross-tissue gene expression generated with our OTD model have larger magnitude and improved standard errors compared to single tissue estimates due to the borrowing of information across all samples. Comparing our OTD results to a previously performed joint multi-tissue eQTL analysis method `r citep("10.1371/journal.pgen.1003486")`, we show that genes with high cross-tissue heritability are more likely to have cross-tissue eQTLs, confirming that OTD is capturing the cross-tissue component of gene expression. We also found evidence that genes with large tissue-specific heritability are enriched in common complex disease genes discovered via GWAS. [[Redo with PVE estimates from BSLMM]]
 
 # Results
 
 ## Local genetic variation explains a large proportion of gene expression variance
 We estimated the heritability of gene expression in whole blood from the Depression Genes and Networks (DGN) cohort (n=922) `r citep("10.1101/gr.155192.113")` using a mixed-effects model (see Methods) and calculated variances using restricted maximum likelihood as implemented in GCTA `r citep("10.1016/j.ajhg.2010.11.011")`. We fit a joint model with a local and a distal genetic relationship matrix (GRM). The local GRM was derived from SNPs within 1 Mb of each gene and the distal GRM was derived from SNPs that are located on non-gene chromosomes and are eQTLs in the Framingham Heart Study (FHS) cohort (n=5257, FDR < 0.05) `r citep("10.1038/ng.3220")`. The mean local h^2^ was 0.130 and 54.6\% of genes had a positive 95\% confidence interval (CI), while the mean distal h^2^ was 0.076 and just 4.2\% of genes had a positive CI (`r figr("jointH2", prefix=TRUE, link=TRUE, type="Fig")`). The maximum local h^2^ was 0.93 with a standard error (SE) of 0.009 while the maximum distal h^2^ was 0.91 with a SE of 0.16. Similar results were observed for the 1194 genes with *trans*-eQTLs (FHS FDR < 0.05) when the distal GRM was limited to known *trans*-eQTLs (`r figr("transH2", prefix=TRUE, link=TRUE, type="Fig")`). That is, the mean local h^2^ was 0.133 and 61.3\% of genes had a positive 95\% confidence interval (CI), while the mean *trans* h^2^ was just 0.021 and 4.2\% of genes tested had a positive CI.
 
+## The effect of local genetic variation on gene expression is sparse rather than polygenic
+We performed 10-fold cross-validation using the elastic net `r citep("10.1111/j.1467-9868.2005.00503.x")` to test the predictive performance of local SNPs for gene expression across a range of mixing parameters, $\alpha$. The $\alpha$ that gives the largest cross-validation R^2^ informs the sparsity of each gene expression trait. That is, at one extreme, if the optimal $\alpha=0$ (equivalent to ridge regression), the gene expression trait is highly polygenic, whereas if the optimal $\alpha=1$ (equivalent to LASSO), the trait is highly sparse. We found that for most gene expression traits, the cross-validated R^2^ was suboptimal for $\alpha=0$ and $\alpha=0.05$, but nearly identically optimal for $\alpha=0.5$ and $\alpha=1$ in the DGN cohort (`r figr("EN",prefix=TRUE,link=TRUE,type="Fig")`). This suggests that for most genes, the effect of local genetic variation on gene expression is sparse rather than polygenic.
+
+To further examine sparsity and polygenicity, we used BSLMM `r citep("10.1371/journal.pgen.1003264")` to define the total proportion of variance in expression explained by sparse and polygenic effects together (PVE) and the proportion of this genetic variance explained by sparse effects (PGE) for each gene in the DGN cohort. The PVE can be thought of as a Bayesian estimate of chip heritability and, indeed, there is a strong correlation between BSLMM-estimated PVE and GCTA-estimated h^2^ (`r figr("dgnBSLMM",prefix=TRUE,link=TRUE,type="Fig")`A, R=0.96). For genes with large PVE, the PGE also was large, indicative of a sparse genetic architecture. For example, all genes with PVE > 0.50 had PGE > 0.82 and their median PGE was 0.989 (`r figr("dgnBSLMM",prefix=TRUE,link=TRUE,type="Fig")`B). The median PGE for genes with PVE > 0.1 was 0.949. Fittingly, for most (96.3\%) of the genes with PVE estimates > 0.10, the median number of SNPs included in the model was no more than 10 (`r figr("dgnBSLMM",prefix=TRUE,link=TRUE,type="Fig")`C).
+
 ## Cross-tissue and tissue-specific gene expression by orthogonal tissue decomposition
 In order to better understand the context specificity of gene expression regulation, we developed a method called orthogonal tissue decomposition (OTD), which uses a mixed effects model to generate cross-tissue and tissue-specific gene expression levels (see Methods). Using a marginal model with just the local GRM, we estimated the local h^2^ of cross-tissue gene expression and tissue-specific gene expression in the nine tissues with the most samples. The cross-tissue heritabilities were larger and the standard errors were smaller than the tissue-specific estimates (`r figr("TSotdH2SE", prefix=TRUE, link=TRUE, type="Fig")`). The percentage of h^2^ estimates with positive CIs was much larger for cross-tissue expression (17.3\%) than the tissue-specific expressions (all less than 3\%, `r figr("otdTSh2", prefix=TRUE, link=TRUE, type="Fig")`).
 
 We also compared the cross-tissue h^2^ from the OTD to h^2^ estimates from the pre-OTD measures of gene expression in each of the nine tissues, which we term tissue-wide expression. Again, the cross-tissue heritabilities were larger and the standard errors were smaller than the tissue-wide estimates (`r figr("TWotdH2SE", prefix=TRUE, link=TRUE, type="Fig")`), though less striking than the tissue-specific comparison. The percentage of tissue-wide h^2^ estimates with positive CIs ranged from 4.4-8.6\% and thus were all larger than the tissue-specific postive CI percentages, but smaller than the cross-tissue percentage (`r figr("otdTWh2", prefix=TRUE, link=TRUE, type="Fig")`).
 
-## The effect of local genetic variation on gene expression is sparse rather than polygenic
-We performed 10-fold cross-validation using the elastic net `r citep("10.1111/j.1467-9868.2005.00503.x")` to test the predictive performance of local SNPs for gene expression across a range of mixing parameters, $\alpha$. The $\alpha$ that gives the largest cross-validation R^2^ informs the sparsity of each gene expression trait. That is, at one extreme, if the optimal $\alpha=0$ (equivalent to ridge regression), the gene expression trait is highly polygenic, whereas if the optimal $\alpha=1$ (equivalent to LASSO), the trait is highly sparse. We found that for most gene expression traits, the cross-validated R^2^ was suboptimal for $\alpha=0$ and $\alpha=0.05$, but nearly identically optimal for $\alpha=0.5$ and $\alpha=1$ in the DGN cohort (`r figr("EN",prefix=TRUE,link=TRUE,type="Fig")`). **[[Mention outlier]]*. Therefore, the effect of local genetic variation on gene expression is sparse rather than polygenic.
+Also, the correlation between tissue-specific OTD gene expression heritability and the posterior probability that the gene has an eQTL in that tissue is strongest in each respective tissue. 
 
 # Discussion
 
@@ -93,6 +95,20 @@ $$ Y_g = \sum_{k = \in local}w_{k,g} X_k + \sum_{k = \in distal}w_{k,g} X_k + \e
 
 Assuming a random effects for $w_{k,g} \approx N(0, \sigma^2_w)$ and $\epsilon \approx N(0, \sigma^2_{\epsilon} I_n)$, where $I_n$ is the identity matrix, we calculated the total variability explained by local and distal components by estimating $\sigma^2_w$ with restricted maximum likelihood (REML) using GCTA software `r citep("10.1016/j.ajhg.2010.11.011")`. For heritability analyses in the GTEx cohort, we removed the $distal$ term from the model and only estimated marginal $local$ h^2^ due to the smaller sample sizes of both cross-tissue and tissue-specific expression levels compared to DGN.
 
+## Determining polygenicity versus sparsity using the elastic net
+We applied the elastic net `r citep("10.1111/j.1467-9868.2005.00503.x")` to model the effect of local genetic variation (SNPs within 1 Mb of gene) on the genetic architecture of gene expression. We used the `cv.glmnet` function in the R package `glmnet` `r citep(citation("glmnet"))` to perform 10-fold cross-validation of the elastic net across a range of mixing paramaters ($\alpha$) to find the $\alpha$ that maximized predictive performance, measured by Pearson's R^2^. Specifically, `glmnet` solves the following problem:
+
+**[[Haky, should/can we simplify this equation? I just took it from <http://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html>, but they don't explain all the terms]]**
+<span class="math">\[\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right], \]</span>
+
+over a grid of values of $\lambda$ covering the entire range `r citep(citation("glmnet"))`. This tuning parameter $\lambda$ controls the overall strength of the penalty. 
+
+The elastic net penalty is controlled by mixing parameter $\alpha$, which spans LASSO ($\alpha=1$, the default) `r citep("http://www.jstor.org/stable/2346178")` at one extreme and ridge regression ($\alpha=0$) `r citep("10.1080/00401706.1970.10488635")` at the other. The ridge penalty shrinks the coefficients of correlated SNPs towards each other, while the LASSO tends to pick one of the correlated SNPs and discard the others. Thus, an optimal prediction R^2^ for $\alpha=0$ means the gene expression trait is highly polygenic, while an optimal prediction R^2^ for $\alpha=1$ means the trait is highly sparse. An optimal prediction R^2^ in between (e.g. $\alpha=0.5$) means the trait has a mixed genetic architecture.
+
+In the DGN cohort, we tested 21 values of the mixing parameter ($\alpha=0, 0.05, 0.1, ..., 0.90, 0.95, 1$) for optimal prediction of gene expression of the 341 genes on chromosome 22. For the rest of the autosomes in DGN and for cross-tissue, tissue-specific, and tissue-wide expression in the GTEx cohort, we tested $\alpha=0.05, 0.5, 0.95, 1$. **[[add when finished, need to do DGN alpha=0.05 and 0.95]]**
+
+## Quantifying sparsity with Bayesian Sparse Linear Mixed Models
+
 ## Orthogonal tissue decomposition 
 To better understand the context specificity of gene expression regulation, we developed a method called orthogonal tissue decomposition (OTD). This approach is an extension of our method to develop an intrinsic growth phenotype `r citep("10.1371/journal.pgen.1002525")`. We applied OTD to GTEx Project `r citep("10.1126/science.1262110")` data and decomposed the expression of each gene into cross-tissue and tissue-specific components. The tissue availability is unbalanced across individuals because of the difficulties of sample collection and the uneven quality of the tissues.  OTD decomposes the expression traits into orthogonal components as represented by the following model:
 
@@ -106,22 +122,13 @@ fit <- lme4::lmer(expression ~ (1|SUBJID) + TISSUE + GENDER + PEERs)
 
 The model included tissue-wide gene expression levels in 8555 GTEx tissue samples from 544 unique subjects. A total of 17,647 Protein-coding genes (defined by GENCODE `r citep("10.1101/gr.135350.111")` version 18) with a mean gene expression level across tissues greater than 0.1 RPKM (reads per kilobase of transcript per million reads mapped) were included in the model. `SUBJID` was a random effect and the covariates `TISSUE`, `GENDER`, and `PEERs` were fixed effects used to predict tissue-wide expression levels (`expression` in the model). `PEERs` included the top 15 PEER factors estimated across all tissues using the R package `PEER` `r citep("10.1038/nprot.2011.457")` to control for batch effects and experimental confounders. Cross-tissue expression was defined as the random effects from the model (`ranef(fit)`) and tissue-specific expression as the residuals (`resid(fit`)).
 
-## Determining polygenicity versus sparsity using the elastic net
-We applied the elastic net `r citep("10.1111/j.1467-9868.2005.00503.x")` to model the effect of local genetic variation (SNPs within 1 Mb of gene) on the genetic architecture of gene expression. We used the `cv.glmnet` function in the R package `glmnet` `r citep(citation("glmnet"))` to perform 10-fold cross-validation of the elastic net across a range of mixing paramaters ($\alpha$) to find the $\alpha$ that maximized predictive performance, measured by Pearson's R^2^. Specifically, `glmnet` solves the following problem:
 
-**[[Haky, should/can we simplify this equation? I just took it from <http://web.stanford.edu/~hastie/glmnet/glmnet_alpha.html>, but they don't explain all the terms]]**
-<span class="math">\[\min_{\beta_0,\beta} \frac{1}{N} \sum_{i=1}^{N} w_i l(y_i,\beta_0+\beta^T x_i) + \lambda\left[(1-\alpha)||\beta||_2^2/2 + \alpha ||\beta||_1\right], \]</span>
-
-over a grid of values of $\lambda$ covering the entire range `r citep(citation("glmnet"))`. This tuning parameter $\lambda$ controls the overall strength of the penalty. 
-
-The elastic net penalty is controlled by mixing parameter $\alpha$, which spans LASSO ($\alpha=1$, the default) `r citep("http://www.jstor.org/stable/2346178")` at one extreme and ridge regression ($\alpha=0$) `r citep("10.1080/00401706.1970.10488635")` at the other. The ridge penalty shrinks the coefficients of correlated SNPs towards each other, while the LASSO tends to pick one of the correlated SNPs and discard the others. Thus, an optimal prediction R^2^ for $\alpha=0$ means the gene expression trait is highly polygenic, while an optimal prediction R^2^ for $\alpha=1$ means the trait is highly sparse. An optimal prediction R^2^ in between (e.g. $\alpha=0.5$) means the trait has a mixed genetic architecture.
-
-In the DGN cohort, we tested 21 values of the mixing parameter ($\alpha=0, 0.05, 0.1, ..., 0.90, 0.95, 1$) for optimal prediction of gene expression of the 341 genes on chromosome 22. For the rest of the autosomes in DGN and for cross-tissue, tissue-specific, and tissue-wide expression in the GTEx cohort, we tested $\alpha=0.05, 0.5, 0.95, 1$. **[[Nick, is this correct?]]**
 
 ## Enrichment analysis
 - For top CT and TS genes:
 1. GO enrichment
 2. GWAS catalog enrichment (i.e. top T2D, T1D, schizo, etc. genes)
+[[redo GWAS catalog enrichment with CT and TS top PVE]]
 
 ## Tables
 
@@ -153,6 +160,15 @@ fig2<-readPNG(fig.dir %&% 'Fig2.png')
 grid.raster(fig2)
 ```
 
+```{r EN,echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-validated predictive performance across the elastic net. (**A**) 10-fold cross-validated R^2^ of predicted vs. observed expression in DGN whole blood compared to a range of elastic net mixing parameters ($\\alpha$) for genes on chromosome 22 with R^2^ > 0.3. (**B**) Predictive R^2^ difference between LASSO ($\\alpha = 1$) and several other values of $\\alpha$ compared to LASSO predictive R^2^ for 341 genes on chromosome 22."}
+fig3<-readPNG(fig.dir %&% 'Fig3.png')
+grid.raster(fig3)
+```
+
+```{r dgnBSLMM,echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Bayesian Sparse Linear Mixed Models reveal the sparsity of gene expression architecture. (**A**) BSLMM-estimated PVE (total proportion of variance explained) compared to GCTA-estimated heritability per gene (R=0.96) (**B**) Comparison of median PGE (proportion of PVE explained by sparse effects) to median PVE (total proportion of variance explained) for expression of each gene. The 95% credible set of each PGE estimate is in gray and genes with a lower credible set (LCS) greater than 0.01 are in blue. (**C**) Comparison of the median number of SNPs included in the model of each gene to median PVE. The 95% credible set of each SNP-number estimate is in gray and genes with a median of 10 or fewer SNPs are in blue.",fig.width=3,fig.height=8}
+fig<-readPNG(fig.dir %&% 'Fig-DGN-BSLMM.png')
+grid.raster(fig)
+```
 
 ```{r TSotdH2SE, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-tissue and tissue-specific comparison of heritability (h^2^, **A**) and standard error (SE, **B**) estimation.  Cross-tissue local h^2^ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-specifc local h^2^ is estimated using the tissue-specific component (residuals) of the mixed effects model for gene expression for each respective tissue and SNPs within 1 Mb of each gene.",fig.width=4,fig.height=8}
 figS2<-readPNG(fig.dir %&% 'FigS2.png')
@@ -174,10 +190,7 @@ fig4<-readPNG(fig.dir %&% 'Fig4.png')
 grid.raster(fig4)
 ```
 
-```{r EN,echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Cross-validated predictive performance across the elastic net. (**A**) 10-fold cross-validated R^2^ of predicted vs. observed expression in DGN whole blood compared to a range of elastic net mixing parameters ($\\alpha$) for genes on chromosome 22 with R^2^ > 0.3. (**B**) Predictive R^2^ difference between LASSO ($\\alpha = 1$) and several other values of $\\alpha$ compared to LASSO predictive R^2^ for 341 genes on chromosome 22."}
-fig3<-readPNG(fig.dir %&% 'Fig3.png')
-grid.raster(fig3)
-```
+
 
 
 #Supplemental Figures
