@@ -47,6 +47,7 @@
 \newcommand{\RegionMarkerTok}[1]{{#1}}
 \newcommand{\ErrorTok}[1]{\textbf{{#1}}}
 \newcommand{\NormalTok}[1]{{#1}}
+\usepackage{longtable,booktabs}
 \usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -104,7 +105,7 @@ Nicolae\textsuperscript{5}, Hae Kyung Im\textsuperscript{5}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-08-20 14:56:17 \textsuperscript{1}Department of Biology and
+  \date{2015-08-21 17:00:14 \textsuperscript{1}Department of Biology and
 \textsuperscript{2}Department of Computer Science, Loyola University
 Chicago, \textsuperscript{3}Committee on Genetics, Genomics, and Systems
 Biology, University of Chicago, \textsuperscript{4}Division of Genetic
@@ -273,9 +274,26 @@ of tissue-wide h\textsuperscript{2} estimates with positive CIs ranged
 from 4.4-8.6\% and thus were all larger than the tissue-specific postive
 CI percentages, but smaller than the cross-tissue percentage (Fig 8).
 
-Also, the correlation between tissue-specific OTD gene expression
-heritability and the posterior probability that the gene has an eQTL in
-that tissue is strongest in each respective tissue.
+We compared our OTD results to those from a joint multi-tissue eQTL
+analysis method {[}22{]}, which was previously performed on a subset of
+the GTEx data (REF? in press?). The results of this analysis include
+eQTL posterior probabilities for each of the nine tissues, which can be
+interpreted as the probability a SNP is an eQTL in tissue \emph{x} given
+the data. Using the top eQTL for each gene, we defined an entropy
+statistic (see Methods) that combines the nine posterior probabilities
+into one value such that higher entropy values mean the gene is more
+likely to be regulated by the same eQTL across all nine tissues, rather
+than in just a subset of the nine. We observed a strong correlation
+between entropy and both the cross-tissue expression heritability (R =
+0.082, Fig 9A) and PVE (R = 0.12, Fig 9B) estimates, using the
+cross-tissue expression derived from the OTD. Thus, genes with high
+cross-tissue heritability are more likely to have cross-tissue eQTLs,
+confirming that OTD is capturing the cross-tissue component of gene
+expression. Also, the correlation between tissue-specific OTD gene
+expression PVE and the posterior probability that the gene has an eQTL
+in that tissue is strongest in each respective tissue, confirming that
+OTD also captures tissue-specific components of gene expression (Table
+1).
 
 \section{Discussion}\label{discussion}
 
@@ -488,6 +506,42 @@ and tissue-specific expression as the residuals (\texttt{resid(fit})).
 
 \subsection{Tables}\label{tables}
 
+\begin{longtable}[c]{@{}lrrrrrrrrr@{}}
+\caption{Pearson correlation between the posterior probability the top
+multi-tissue eQTL regulates its gene in a given tissue (Flutre et al.
+method) and the PVE of tissue-specific gene expression from the
+orthogonal tissue decomposition (OTD).}\tabularnewline
+\toprule
+& OTD: Adipose & Artery & Heart & Lung & Muscle & Nerve & Skin & Thyroid
+& WholeBlood\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+& OTD: Adipose & Artery & Heart & Lung & Muscle & Nerve & Skin & Thyroid
+& WholeBlood\tabularnewline
+\midrule
+\endhead
+eQTL: Adipose & 0.086 & 0.072 & -0.019 & 0.034 & 0.017 & 0.070 & 0.025 &
+-0.055 & -0.135\tabularnewline
+Artery & 0.074 & 0.109 & -0.016 & 0.033 & 0.032 & 0.065 & 0.025 & -0.047
+& -0.145\tabularnewline
+Heart & 0.026 & 0.043 & 0.057 & 0.009 & 0.100 & 0.040 & 0.000 & -0.041 &
+-0.118\tabularnewline
+Lung & 0.048 & 0.040 & -0.038 & 0.095 & -0.001 & 0.045 & 0.011 & -0.037
+& -0.096\tabularnewline
+Muscle & 0.028 & 0.036 & 0.041 & -0.011 & 0.121 & 0.027 & 0.010 & -0.035
+& -0.094\tabularnewline
+Nerve & 0.078 & 0.074 & -0.025 & 0.038 & 0.010 & 0.104 & 0.029 & -0.045
+& -0.142\tabularnewline
+Skin & 0.038 & 0.042 & -0.043 & 0.020 & 0.001 & 0.046 & 0.084 & -0.049 &
+-0.116\tabularnewline
+Thyroid & 0.043 & 0.051 & -0.032 & 0.050 & -0.001 & 0.054 & 0.001 &
+0.086 & -0.168\tabularnewline
+WholeBlood & -0.023 & -0.035 & -0.028 & 0.025 & -0.010 & 0.002 & 0.010 &
+-0.070 & 0.163\tabularnewline
+\bottomrule
+\end{longtable}
+
 \section{Figures}\label{figures}
 
 \begin{figure}[htbp]
@@ -598,6 +652,16 @@ h\textsuperscript{2} is estimated using the cross-tissue component
 within 1 Mb of each gene. Tissue-wide local h\textsuperscript{2} is
 estimated using the measured gene expression for each respective tissue
 and SNPs within 1 Mb of each gene.}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics{GenArch_manuscript_files/figure-latex/entropyCT-1.pdf}
+\caption{Entropy of the posterior probabilities from the Flutre et al.
+multi-tissue eQTL method compared to the estimates of (\textbf{A})
+heritability and (\textbf{B}) PVE of cross-tissue gene expression
+derived from the orthogonal tissue decomposition. The generalized
+additive model smoothing line is in red.}
 \end{figure}
 
 \section{Supplemental Figures}\label{supplemental-figures}
@@ -779,11 +843,11 @@ doi:\href{http://dx.doi.org/10.1371/journal.pgen.1002525}{10.1371/journal.pgen.1
 2015. Available: \url{http://www.R-project.org/}
 
 33. Bates D, Maechler M, Bolker B, Walker S. lme4: Linear mixed-effects
-models using Eigen and S4 {[}Internet{]}. 2015. Available:
+models using eigen and s4 {[}Internet{]}. 2014. Available:
 \url{http://CRAN.R-project.org/package=lme4}
 
-34. Bates D, Maechler M, Bolker BM, Walker S. Fitting linear
-mixed-effects models using lme4 {[}Internet{]}. 2015. Available:
+34. Bates D, Maechler M, Bolker BM, Walker S. lme4: Linear mixed-effects
+models using eigen and s4 {[}Internet{]}. 2014. Available:
 \url{http://arxiv.org/abs/1406.5823}
 
 35. Stegle O, Parts L, Piipari M, Winn J, Durbin R. Using probabilistic

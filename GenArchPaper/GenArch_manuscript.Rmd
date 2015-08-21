@@ -26,6 +26,8 @@ bibliography: GenArch_references.bib
   library(kfigr)
   library(lme4)
   library(dplyr)
+  library(knitr)
+  library(xtable)
   "%&%" = function(a,b) paste(a,b,sep="")
   source('~/GitHub/GenArch/GenArchPaper/multiplot.R')
   fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
@@ -59,7 +61,7 @@ In order to better understand the context specificity of gene expression regulat
 
 We also compared the cross-tissue h^2^ from the OTD to h^2^ estimates from the pre-OTD measures of gene expression in each of the nine tissues, which we term tissue-wide expression. Again, the cross-tissue heritabilities were larger and the standard errors were smaller than the tissue-wide estimates (`r figr("TWotdH2SE", prefix=TRUE, link=TRUE, type="Fig")`), though less striking than the tissue-specific comparison. The percentage of tissue-wide h^2^ estimates with positive CIs ranged from 4.4-8.6\% and thus were all larger than the tissue-specific postive CI percentages, but smaller than the cross-tissue percentage (`r figr("otdTWh2", prefix=TRUE, link=TRUE, type="Fig")`).
 
-Also, the correlation between tissue-specific OTD gene expression heritability and the posterior probability that the gene has an eQTL in that tissue is strongest in each respective tissue. 
+We compared our OTD results to those from a joint multi-tissue eQTL analysis method `r citep("10.1371/journal.pgen.1003486")`, which was previously performed on a subset of the GTEx data (REF? in press?). The results of this analysis include eQTL posterior probabilities for each of the nine tissues, which can be interpreted as the probability a SNP is an eQTL in tissue *x* given the data. Using the top eQTL for each gene, we defined an entropy statistic (see Methods) that combines the nine posterior probabilities into one value such that higher entropy values mean the gene is more likely to be regulated by the same eQTL across all nine tissues, rather than in just a subset of the nine. We observed a strong correlation between entropy and both the cross-tissue expression heritability (R = 0.082, `r figr("entropyCT", prefix=TRUE, link=TRUE, type="Fig")`A) and PVE (R = 0.12, `r figr("entropyCT", prefix=TRUE, link=TRUE, type="Fig")`B) estimates, using the cross-tissue expression derived from the OTD.   Thus, genes with high cross-tissue heritability are more likely to have cross-tissue eQTLs, confirming that OTD is capturing the cross-tissue component of gene expression. Also, the correlation between tissue-specific OTD gene expression PVE and the posterior probability that the gene has an eQTL in that tissue is strongest in each respective tissue, confirming that OTD also captures tissue-specific components of gene expression (Table 1). 
 
 # Discussion
 
@@ -141,6 +143,12 @@ out <- lm(y ~ x)
 kable(summary(out)$coef, digits=2, caption="This is a GLM summary table.")
 ```
 
+```{r PrPVE,message=FALSE,echo=FALSE}
+tab <- read.table(fig.dir %&% 'Table-cor-StephensPr-OTDtsPVE.txt',header=TRUE,sep="\t",as.is=TRUE)
+colnames(tab)[1] <- "OTD: Adipose"
+kable(tab, caption="Pearson correlation between the posterior probability the top multi-tissue eQTL regulates its gene in a given tissue (Flutre et al. method) and the PVE of tissue-specific gene expression from the orthogonal tissue decomposition (OTD).")
+```
+
 ```{r xtable, results="asis", echo=FALSE, eval=FALSE, message=FALSE}
 library(xtable)
 tab <- xtable(summary(out)$coef, digits=c(0, 2, 2, 1, 2), 
@@ -190,7 +198,10 @@ fig4<-readPNG(fig.dir %&% 'Fig4.png')
 grid.raster(fig4)
 ```
 
-
+```{r entropyCT, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Entropy of the posterior probabilities from the Flutre et al. multi-tissue eQTL method compared to the estimates of (**A**) heritability and (**B**) PVE of cross-tissue gene expression derived from the orthogonal tissue decomposition. The generalized additive model smoothing line is in red."}
+fig <- readPNG(fig.dir %&% 'Fig-CT-entropy.png')
+grid.raster(fig)
+```
 
 
 #Supplemental Figures

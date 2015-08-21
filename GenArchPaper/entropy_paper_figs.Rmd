@@ -1,0 +1,108 @@
+---
+title: "entropy_paper_figs"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r, getData, message=FALSE}
+library(plyr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(GGally)
+library(knitr)
+"%&%" = function(a,b) paste(a,b,sep="")
+source('~/GitHub/GenArch/GenArchPaper/multiplot.R')
+fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
+mt.dir <- "~/GitHub/GenArch/GenArchPaper/UC_Stephens_Multitissue_Comp/"
+#tarbell mt.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/Multi_tissue_eQTL_GTEx_Pilot_Phase_datasets/"
+h2.dir <- "~/GitHub/GenArch/GenArchPaper/BSLMM/bslmm_gtex_results/"
+#tarbell h2.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/"
+bslmm.dir <- "~/GitHub/GenArch/GenArchPaper/BSLMM/bslmm_gtex_results/"
+#tarbell bslmm.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/BSLMM_exp/"
+mt <- read.table(mt.dir %&% "res_final_uc_com_genes_com_snps.txt.gz",header=TRUE)
+head(mt)
+dim(mt)
+#remove version number in order to compare ensembl IDs
+a <- substr(mt$gene,1,15)
+mt <- mutate(mt,gene=a)
+h2.ts <- read.table(bslmm.dir %&% "GTEx_Tissue-Specific_local_h2.txt",header=TRUE)
+#remove version number in order to compare ensembl IDs
+a <- substr(h2.ts$ensid,1,15)
+h2.ts <- mutate(h2.ts,gene=a)
+h2.tw <- read.table(bslmm.dir %&% "GTEx_Tissue-Wide_local_h2.txt",header=TRUE)
+#remove version number in order to compare ensembl IDs
+a <- substr(h2.tw$ensid,1,15)
+h2.tw <- mutate(h2.tw,gene=a)
+##Get BSLMM results
+pve.ts <- read.table(bslmm.dir %&% "GTEx_Tissue-Specific_local_PVE_by_BSLMM.txt",header=TRUE)
+#remove version number in order to compare ensembl IDs
+pve.ts <- mutate(pve.ts,gene=substr(pve.ts$gene,1,15))
+pve.tw <- read.table(bslmm.dir %&% "GTEx_Tissue-Wide_local_PVE_by_BSLMM.txt",header=TRUE)
+#remove version number in order to compare ensembl IDs
+pve.tw <- mutate(pve.tw,gene=substr(pve.tw$gene,1,15))
+```
+
+##Calculate entropy of Pr and correlate with **cross-tissue and tissue-specific** h2 
+- higher entropy means more likely to be multi-tissue eQTL (expect positive cor. for entropy vs. cross-tissue h2)
+```{r,entropTSh2}
+entropy <- function(pr){
+  pi <- pr/sum(pr)
+  pi[pi==0] <- 1e-06 ##allows log transformation
+  -1*sum(pi*log(pi))
+}
+
+mtPr <- mt[,3:11]
+mtS <- apply(mtPr,1,entropy) ##calc entropy for each row
+hist(mtS)
+summary(mtS)
+geneS <- select(mt,gene) %>% mutate(entropy=mtS) ##put gene and entropy together
+
+tislist <- c('CrossTissue')
+for(tis in tislist){
+  h2.tis <- h2.ts %>% select(gene,one_of(tis)) ##one_of allows character vector
+  newdata <- inner_join(geneS,h2.tis,by='gene')
+  colnames(newdata)[3] <- "h2"
+  p <- ggplot(newdata,aes(x=h2,y=entropy))+geom_point(alpha=0.3)+stat_smooth(fill='pink',color='red')+xlab(expression(paste("Cross-Tissue ", "h"^{2}))) + ylab("Entropy")
+  cors <- data.frame(cor=signif(cor(newdata$h2, newdata$entropy), 2))
+  p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=Inf, y=-Inf, hjust=1.2, vjust=-1, size=5)
+  print(cor.test(newdata$h2, newdata$entropy))
+  a <- p1 + theme_bw(16) #+ coord_cartesian(ylim=c(1.75,2.25))
+  print(a)
+}
+
+for(tis in tislist){
+  pve.tis <- pve.ts %>% select(gene,one_of(tis)) ##one_of allows character vector
+  newdata <- inner_join(geneS,pve.tis,by='gene')
+  colnames(newdata)[3] <- "pve"
+  p <- ggplot(newdata,aes(x=pve,y=entropy))+geom_point(alpha=0.3)+stat_smooth(fill='pink',color='red')+xlab("Cross-Tissue PVE") + ylab("Entropy")
+  cors <- data.frame(cor=signif(cor(newdata$pve, newdata$entropy, use="p"), 2))
+  p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=Inf, y=-Inf, hjust=1.2, vjust=-1, size=5)
+  print(cor.test(newdata$pve, newdata$entropy))
+  b <- p1 + theme_bw(16) #+ coord_cartesian(ylim=c(1.75,2.25))
+  print(b)
+}
+
+tiff(filename=fig.dir %&% "Fig-CT-entropy.tiff",width=720,height=360)
+multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=18)),b + ggtitle('B\n')+ theme(plot.title=element_text(hjust=0),text=element_text(size=18)),cols=2)
+dev.off()
+
+png(filename=fig.dir %&% "Fig-CT-entropy.png",width=720,height=360)
+multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=18)),b + ggtitle('B\n')+ theme(plot.title=element_text(hjust=0),text=element_text(size=18)),cols=2)
+dev.off()
+```
+
+###Table of Pr vs PVE correlations
+```{r PrPVE}
+mtPVE <- inner_join(mt,pve.ts,by='gene')
+corMat <- round(cor(mtPVE[,3:dim(mtPVE)[2]],use="p"),3)
+###Pr rows, PVE cols
+mat2 <- corMat[1:9,11:dim(corMat)[2]]
+colnames(mat2)<-c('OTD: Adipose','Artery','Heart','Lung','Muscle','Nerve','Skin','Thyroid','WholeBlood')
+rownames(mat2)<-c('Adipose','Artery','WholeBlood','Heart','Lung','Muscle','Nerve','Skin','Thyroid')
+mat2 <- mat2[ order(row.names(mat2)), ]
+rownames(mat2)[1] <- 'eQTL: Adipose'
+write.table(mat2,fig.dir %&% "Table-cor-StephensPr-OTDtsPVE.txt",quote=F,sep="\t")
+kable(mat2)
+```
