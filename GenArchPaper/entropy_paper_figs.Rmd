@@ -12,6 +12,7 @@ library(tidyr)
 library(ggplot2)
 library(GGally)
 library(knitr)
+library(corrplot)
 "%&%" = function(a,b) paste(a,b,sep="")
 source('~/GitHub/GenArch/GenArchPaper/multiplot.R')
 fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
@@ -64,9 +65,9 @@ for(tis in tislist){
   h2.tis <- h2.ts %>% select(gene,one_of(tis)) ##one_of allows character vector
   newdata <- inner_join(geneS,h2.tis,by='gene')
   colnames(newdata)[3] <- "h2"
-  p <- ggplot(newdata,aes(x=h2,y=entropy))+geom_point(alpha=0.3)+stat_smooth(fill='pink',color='red')+xlab(expression(paste("Cross-Tissue ", "h"^{2}))) + ylab("Entropy")
+  p <- ggplot(newdata,aes(y=h2,x=entropy))+geom_point(alpha=0.3)+stat_smooth(fill='pink',color='red')+ylab(expression(paste("Cross-Tissue ", "h"^{2}))) + xlab("Entropy")
   cors <- data.frame(cor=signif(cor(newdata$h2, newdata$entropy), 2))
-  p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=Inf, y=-Inf, hjust=1.2, vjust=-1, size=5)
+  p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=-Inf, y=Inf, hjust=-0.5, vjust=2, size=5)
   print(cor.test(newdata$h2, newdata$entropy))
   a <- p1 + theme_bw(16) #+ coord_cartesian(ylim=c(1.75,2.25))
   print(a)
@@ -76,9 +77,9 @@ for(tis in tislist){
   pve.tis <- pve.ts %>% select(gene,one_of(tis)) ##one_of allows character vector
   newdata <- inner_join(geneS,pve.tis,by='gene')
   colnames(newdata)[3] <- "pve"
-  p <- ggplot(newdata,aes(x=pve,y=entropy))+geom_point(alpha=0.3)+stat_smooth(fill='pink',color='red')+xlab("Cross-Tissue PVE") + ylab("Entropy")
+  p <- ggplot(newdata,aes(y=pve,x=entropy))+geom_point(alpha=0.3)+stat_smooth(fill='pink',color='red')+ylab("Cross-Tissue PVE") + xlab("Entropy")
   cors <- data.frame(cor=signif(cor(newdata$pve, newdata$entropy, use="p"), 2))
-  p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=Inf, y=-Inf, hjust=1.2, vjust=-1, size=5)
+  p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=-Inf, y=Inf, hjust=-0.5, vjust=2, size=5)
   print(cor.test(newdata$pve, newdata$entropy))
   b <- p1 + theme_bw(16) #+ coord_cartesian(ylim=c(1.75,2.25))
   print(b)
@@ -105,4 +106,13 @@ mat2 <- mat2[ order(row.names(mat2)), ]
 rownames(mat2)[1] <- 'eQTL: Adipose'
 write.table(mat2,fig.dir %&% "Table-cor-StephensPr-OTDtsPVE.txt",quote=F,sep="\t")
 kable(mat2)
+corrplot(mat2,method="circle",cl.lim = c(-0.2, 0.2),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
+
+tiff(filename=fig.dir %&% "Fig-cor-StephensPr-OTDtsPVE.tiff",width=480,height=480)
+corrplot(mat2,method="circle",cl.lim = c(-0.2, 0.2),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
+dev.off()
+
+png(filename=fig.dir %&% "Fig-cor-StephensPr-OTDtsPVE.png",width=480,height=480)
+corrplot(mat2,method="circle",cl.lim = c(-0.2, 0.2),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
+dev.off()
 ```

@@ -47,7 +47,6 @@
 \newcommand{\RegionMarkerTok}[1]{{#1}}
 \newcommand{\ErrorTok}[1]{\textbf{{#1}}}
 \newcommand{\NormalTok}[1]{{#1}}
-\usepackage{longtable,booktabs}
 \usepackage{graphicx}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -105,7 +104,7 @@ Nicolae\textsuperscript{5}, Hae Kyung Im\textsuperscript{5}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-08-21 17:00:14 \textsuperscript{1}Department of Biology and
+  \date{2015-08-27 16:46:35 \textsuperscript{1}Department of Biology and
 \textsuperscript{2}Department of Computer Science, Loyola University
 Chicago, \textsuperscript{3}Committee on Genetics, Genomics, and Systems
 Biology, University of Chicago, \textsuperscript{4}Division of Genetic
@@ -292,8 +291,8 @@ confirming that OTD is capturing the cross-tissue component of gene
 expression. Also, the correlation between tissue-specific OTD gene
 expression PVE and the posterior probability that the gene has an eQTL
 in that tissue is strongest in each respective tissue, confirming that
-OTD also captures tissue-specific components of gene expression (Table
-1).
+OTD also captures tissue-specific components of gene expression (Fig
+10).
 
 \section{Discussion}\label{discussion}
 
@@ -444,7 +443,31 @@ expression in the GTEx cohort, we tested \(\alpha=0.05, 0.5, 0.95, 1\).
 0.95{]}{]}}
 
 \subsection{Quantifying sparsity with Bayesian Sparse Linear Mixed
-Models}\label{quantifying-sparsity-with-bayesian-sparse-linear-mixed-models}
+Models
+(BSLMM)}\label{quantifying-sparsity-with-bayesian-sparse-linear-mixed-models-bslmm}
+
+We used BSLMM {[}21{]} to model the effect of local genetic variation
+(SNPs within 1 Mb of gene) on the genetic architecture of gene
+expression. The BSLMM consists of a standard linear mixed model, with
+one random effect term, and with sparsity inducing priors on the
+regression coefficients {[}21{]}. We used the software GEMMA {[}31{]} to
+implement BSLMM for each gene using the following parameters:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gemma -g [localGenoFile] -p [geneExpFile] -a [snpAnnotFile] -bslmm }\DecValTok{1} \NormalTok{-s }\DecValTok{100000} \NormalTok{-o [outFile]}
+\end{Highlighting}
+\end{Shaded}
+
+The \texttt{-bslmm 1} option specifies a linear BSLMM and the
+\texttt{-s 100000} option specifies the number of sampling steps per
+gene. The BSLMM estimates the PVE (the total proportion of variance in
+phenotype explained by the sparse effects and random effects terms
+together) and PGE (the proportion of genetic variance explained by the
+sparse effects terms). From the second half of the sampling iterations
+for each gene, we report the median and the 95\% credible sets of the
+PVE, PGE, and the \textbar{}\(\gamma\)\textbar{} parameter (the number
+of SNPs with non-zero coefficients).
 
 \subsection{Orthogonal tissue
 decomposition}\label{orthogonal-tissue-decomposition}
@@ -452,7 +475,7 @@ decomposition}\label{orthogonal-tissue-decomposition}
 To better understand the context specificity of gene expression
 regulation, we developed a method called orthogonal tissue decomposition
 (OTD). This approach is an extension of our method to develop an
-intrinsic growth phenotype {[}31{]}. We applied OTD to GTEx Project
+intrinsic growth phenotype {[}32{]}. We applied OTD to GTEx Project
 {[}15{]} data and decomposed the expression of each gene into
 cross-tissue and tissue-specific components. The tissue availability is
 unbalanced across individuals because of the difficulties of sample
@@ -463,8 +486,8 @@ following model:
 \[ Y_i = T_{i,cross} + T_{i,tissue} \]
 
 Specifically, to generate cross-tissue and tissue-specific expression
-levels, we used the \texttt{lmer} function in the R {[}32{]} package
-\texttt{lme4} {[}33,34{]} to fit the following mixed-effects model:
+levels, we used the \texttt{lmer} function in the R {[}33{]} package
+\texttt{lme4} {[}34,35{]} to fit the following mixed-effects model:
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -481,10 +504,13 @@ the model. \texttt{SUBJID} was a random effect and the covariates
 \texttt{TISSUE}, \texttt{GENDER}, and \texttt{PEERs} were fixed effects
 used to predict tissue-wide expression levels (\texttt{expression} in
 the model). \texttt{PEERs} included the top 15 PEER factors estimated
-across all tissues using the R package \texttt{PEER} {[}35{]} to control
+across all tissues using the R package \texttt{PEER} {[}36{]} to control
 for batch effects and experimental confounders. Cross-tissue expression
 was defined as the random effects from the model (\texttt{ranef(fit)})
 and tissue-specific expression as the residuals (\texttt{resid(fit})).
+
+\subsection{Comparison of OTD PVE to multi-tissue eQTL
+results}\label{comparison-of-otd-pve-to-multi-tissue-eqtl-results}
 
 \subsection{Enrichment analysis}\label{enrichment-analysis}
 
@@ -505,42 +531,6 @@ and tissue-specific expression as the residuals (\texttt{resid(fit})).
 \end{enumerate}
 
 \subsection{Tables}\label{tables}
-
-\begin{longtable}[c]{@{}lrrrrrrrrr@{}}
-\caption{Pearson correlation between the posterior probability the top
-multi-tissue eQTL regulates its gene in a given tissue (Flutre et al.
-method) and the PVE of tissue-specific gene expression from the
-orthogonal tissue decomposition (OTD).}\tabularnewline
-\toprule
-& OTD: Adipose & Artery & Heart & Lung & Muscle & Nerve & Skin & Thyroid
-& WholeBlood\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-& OTD: Adipose & Artery & Heart & Lung & Muscle & Nerve & Skin & Thyroid
-& WholeBlood\tabularnewline
-\midrule
-\endhead
-eQTL: Adipose & 0.086 & 0.072 & -0.019 & 0.034 & 0.017 & 0.070 & 0.025 &
--0.055 & -0.135\tabularnewline
-Artery & 0.074 & 0.109 & -0.016 & 0.033 & 0.032 & 0.065 & 0.025 & -0.047
-& -0.145\tabularnewline
-Heart & 0.026 & 0.043 & 0.057 & 0.009 & 0.100 & 0.040 & 0.000 & -0.041 &
--0.118\tabularnewline
-Lung & 0.048 & 0.040 & -0.038 & 0.095 & -0.001 & 0.045 & 0.011 & -0.037
-& -0.096\tabularnewline
-Muscle & 0.028 & 0.036 & 0.041 & -0.011 & 0.121 & 0.027 & 0.010 & -0.035
-& -0.094\tabularnewline
-Nerve & 0.078 & 0.074 & -0.025 & 0.038 & 0.010 & 0.104 & 0.029 & -0.045
-& -0.142\tabularnewline
-Skin & 0.038 & 0.042 & -0.043 & 0.020 & 0.001 & 0.046 & 0.084 & -0.049 &
--0.116\tabularnewline
-Thyroid & 0.043 & 0.051 & -0.032 & 0.050 & -0.001 & 0.054 & 0.001 &
-0.086 & -0.168\tabularnewline
-WholeBlood & -0.023 & -0.035 & -0.028 & 0.025 & -0.010 & 0.002 & 0.010 &
--0.070 & 0.163\tabularnewline
-\bottomrule
-\end{longtable}
 
 \section{Figures}\label{figures}
 
@@ -664,6 +654,16 @@ derived from the orthogonal tissue decomposition. The generalized
 additive model smoothing line is in red.}
 \end{figure}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics{GenArch_manuscript_files/figure-latex/corrplot-1.pdf}
+\caption{Pearson correlation (R) between the posterior probability the
+top multi-tissue eQTL regulates its gene in a given tissue (eQTL, Flutre
+et al. method) and the PVE of tissue-specific gene expression from the
+orthogonal tissue decomposition (OTD). Area of each circle is
+proportional to the absolute value of R.}
+\end{figure}
+
 \section{Supplemental Figures}\label{supplemental-figures}
 
 \section*{References}\label{references}
@@ -761,9 +761,9 @@ using reference transcriptome data. Nature Genetics. Nature Publishing
 Group; 2015;
 doi:\href{http://dx.doi.org/10.1038/ng.3367}{10.1038/ng.3367}
 
-17. Regression shrinkage and selection via the lasso on jSTOR
-{[}Internet{]}. \url{http://www.jstor.org/stable/2346178}; 2015.
-Available: \url{http://www.jstor.org/stable/2346178}
+17. Unknown. Unknown {[}Internet{]}.
+\url{http://www.jstor.org/stable/2346178}; 2015. Available:
+\url{http://www.jstor.org/stable/2346178}
 
 18. Hoerl AE, Kennard RW. Ridge regression: Applications to
 nonorthogonal problems. Technometrics. Informa UK Limited; 1970;12:
@@ -832,25 +832,29 @@ for cox's proportional hazards model via coordinate descent. Journal of
 Statistical Software. 2011;39: 1--13. Available:
 \url{http://www.jstatsoft.org/v39/i05/}
 
-31. Im HK, Gamazon ER, Stark AL, Huang RS, Cox NJ, Dolan ME. Mixed
+31. Zhou X, Stephens M. Genome-wide efficient mixed-model analysis for
+association studies. Nature Genetics. Nature Publishing Group; 2012;44:
+821--824. doi:\href{http://dx.doi.org/10.1038/ng.2310}{10.1038/ng.2310}
+
+32. Im HK, Gamazon ER, Stark AL, Huang RS, Cox NJ, Dolan ME. Mixed
 effects modeling of proliferation rates in cell-based models:
 Consequence for pharmacogenomics and cancer. Akey JM, editor. PLoS
 Genetics. Public Library of Science (PLoS); 2012;8: e1002525.
 doi:\href{http://dx.doi.org/10.1371/journal.pgen.1002525}{10.1371/journal.pgen.1002525}
 
-32. R Core Team. R: A language and environment for statistical computing
+33. R Core Team. R: A language and environment for statistical computing
 {[}Internet{]}. Vienna, Austria: R Foundation for Statistical Computing;
 2015. Available: \url{http://www.R-project.org/}
 
-33. Bates D, Maechler M, Bolker B, Walker S. lme4: Linear mixed-effects
+34. Bates D, Maechler M, Bolker B, Walker S. lme4: Linear mixed-effects
 models using eigen and s4 {[}Internet{]}. 2014. Available:
 \url{http://CRAN.R-project.org/package=lme4}
 
-34. Bates D, Maechler M, Bolker BM, Walker S. lme4: Linear mixed-effects
+35. Bates D, Maechler M, Bolker BM, Walker S. lme4: Linear mixed-effects
 models using eigen and s4 {[}Internet{]}. 2014. Available:
 \url{http://arxiv.org/abs/1406.5823}
 
-35. Stegle O, Parts L, Piipari M, Winn J, Durbin R. Using probabilistic
+36. Stegle O, Parts L, Piipari M, Winn J, Durbin R. Using probabilistic
 estimation of expression residuals (PEER) to obtain increased power and
 interpretability of gene expression analyses. Nat Protoc. Nature
 Publishing Group; 2012;7: 500--507.

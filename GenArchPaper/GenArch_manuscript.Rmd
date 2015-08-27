@@ -61,7 +61,7 @@ In order to better understand the context specificity of gene expression regulat
 
 We also compared the cross-tissue h^2^ from the OTD to h^2^ estimates from the pre-OTD measures of gene expression in each of the nine tissues, which we term tissue-wide expression. Again, the cross-tissue heritabilities were larger and the standard errors were smaller than the tissue-wide estimates (`r figr("TWotdH2SE", prefix=TRUE, link=TRUE, type="Fig")`), though less striking than the tissue-specific comparison. The percentage of tissue-wide h^2^ estimates with positive CIs ranged from 4.4-8.6\% and thus were all larger than the tissue-specific postive CI percentages, but smaller than the cross-tissue percentage (`r figr("otdTWh2", prefix=TRUE, link=TRUE, type="Fig")`).
 
-We compared our OTD results to those from a joint multi-tissue eQTL analysis method `r citep("10.1371/journal.pgen.1003486")`, which was previously performed on a subset of the GTEx data (REF? in press?). The results of this analysis include eQTL posterior probabilities for each of the nine tissues, which can be interpreted as the probability a SNP is an eQTL in tissue *x* given the data. Using the top eQTL for each gene, we defined an entropy statistic (see Methods) that combines the nine posterior probabilities into one value such that higher entropy values mean the gene is more likely to be regulated by the same eQTL across all nine tissues, rather than in just a subset of the nine. We observed a strong correlation between entropy and both the cross-tissue expression heritability (R = 0.082, `r figr("entropyCT", prefix=TRUE, link=TRUE, type="Fig")`A) and PVE (R = 0.12, `r figr("entropyCT", prefix=TRUE, link=TRUE, type="Fig")`B) estimates, using the cross-tissue expression derived from the OTD.   Thus, genes with high cross-tissue heritability are more likely to have cross-tissue eQTLs, confirming that OTD is capturing the cross-tissue component of gene expression. Also, the correlation between tissue-specific OTD gene expression PVE and the posterior probability that the gene has an eQTL in that tissue is strongest in each respective tissue, confirming that OTD also captures tissue-specific components of gene expression (Table 1). 
+We compared our OTD results to those from a joint multi-tissue eQTL analysis method `r citep("10.1371/journal.pgen.1003486")`, which was previously performed on a subset of the GTEx data (REF? in press?). The results of this analysis include eQTL posterior probabilities for each of the nine tissues, which can be interpreted as the probability a SNP is an eQTL in tissue *x* given the data. Using the top eQTL for each gene, we defined an entropy statistic (see Methods) that combines the nine posterior probabilities into one value such that higher entropy values mean the gene is more likely to be regulated by the same eQTL across all nine tissues, rather than in just a subset of the nine. We observed a strong correlation between entropy and both the cross-tissue expression heritability (R = 0.082, `r figr("entropyCT", prefix=TRUE, link=TRUE, type="Fig")`A) and PVE (R = 0.12, `r figr("entropyCT", prefix=TRUE, link=TRUE, type="Fig")`B) estimates, using the cross-tissue expression derived from the OTD.   Thus, genes with high cross-tissue heritability are more likely to have cross-tissue eQTLs, confirming that OTD is capturing the cross-tissue component of gene expression. Also, the correlation between tissue-specific OTD gene expression PVE and the posterior probability that the gene has an eQTL in that tissue is strongest in each respective tissue, confirming that OTD also captures tissue-specific components of gene expression (`r figr("corrplot", prefix=TRUE, link=TRUE, type="Fig")`). 
 
 # Discussion
 
@@ -109,9 +109,16 @@ The elastic net penalty is controlled by mixing parameter $\alpha$, which spans 
 
 In the DGN cohort, we tested 21 values of the mixing parameter ($\alpha=0, 0.05, 0.1, ..., 0.90, 0.95, 1$) for optimal prediction of gene expression of the 341 genes on chromosome 22. For the rest of the autosomes in DGN and for cross-tissue, tissue-specific, and tissue-wide expression in the GTEx cohort, we tested $\alpha=0.05, 0.5, 0.95, 1$. **[[add when finished, need to do DGN alpha=0.05 and 0.95]]**
 
-## Quantifying sparsity with Bayesian Sparse Linear Mixed Models
+## Quantifying sparsity with Bayesian Sparse Linear Mixed Models (BSLMM)
+We used BSLMM `r citep("10.1371/journal.pgen.1003264")` to model the effect of local genetic variation (SNPs within 1 Mb of gene) on the genetic architecture of gene expression. The BSLMM consists of a standard linear mixed model, with one random effect term, and with sparsity inducing priors on the regression coefficients `r citep("10.1371/journal.pgen.1003264")`. We used the software GEMMA `r citep("10.1038/ng.2310")` to implement BSLMM for each gene using the following parameters:
 
-## Orthogonal tissue decomposition 
+```{r, eval=FALSE}
+gemma -g [localGenoFile] -p [geneExpFile] -a [snpAnnotFile] -bslmm 1 -s 100000 -o [outFile]
+```
+
+The `-bslmm 1` option specifies a linear BSLMM and the `-s 100000` option specifies the number of sampling steps per gene. The BSLMM estimates the PVE (the total proportion of variance in phenotype explained by the sparse effects and random effects terms together) and PGE (the proportion of genetic variance explained by the sparse effects terms). From the second half of the sampling iterations for each gene, we report the median and the 95\% credible sets of the PVE, PGE, and the |$\gamma$| parameter (the number of SNPs with non-zero coefficients).
+
+## Orthogonal tissue decomposition
 To better understand the context specificity of gene expression regulation, we developed a method called orthogonal tissue decomposition (OTD). This approach is an extension of our method to develop an intrinsic growth phenotype `r citep("10.1371/journal.pgen.1002525")`. We applied OTD to GTEx Project `r citep("10.1126/science.1262110")` data and decomposed the expression of each gene into cross-tissue and tissue-specific components. The tissue availability is unbalanced across individuals because of the difficulties of sample collection and the uneven quality of the tissues.  OTD decomposes the expression traits into orthogonal components as represented by the following model:
 
 $$ Y_i = T_{i,cross} + T_{i,tissue} $$
@@ -124,6 +131,7 @@ fit <- lme4::lmer(expression ~ (1|SUBJID) + TISSUE + GENDER + PEERs)
 
 The model included tissue-wide gene expression levels in 8555 GTEx tissue samples from 544 unique subjects. A total of 17,647 Protein-coding genes (defined by GENCODE `r citep("10.1101/gr.135350.111")` version 18) with a mean gene expression level across tissues greater than 0.1 RPKM (reads per kilobase of transcript per million reads mapped) were included in the model. `SUBJID` was a random effect and the covariates `TISSUE`, `GENDER`, and `PEERs` were fixed effects used to predict tissue-wide expression levels (`expression` in the model). `PEERs` included the top 15 PEER factors estimated across all tissues using the R package `PEER` `r citep("10.1038/nprot.2011.457")` to control for batch effects and experimental confounders. Cross-tissue expression was defined as the random effects from the model (`ranef(fit)`) and tissue-specific expression as the residuals (`resid(fit`)).
 
+## Comparison of OTD PVE to multi-tissue eQTL results
 
 
 ## Enrichment analysis
@@ -143,7 +151,7 @@ out <- lm(y ~ x)
 kable(summary(out)$coef, digits=2, caption="This is a GLM summary table.")
 ```
 
-```{r PrPVE,message=FALSE,echo=FALSE}
+```{r PrPVE,message=FALSE,echo=FALSE,eval=FALSE}
 tab <- read.table(fig.dir %&% 'Table-cor-StephensPr-OTDtsPVE.txt',header=TRUE,sep="\t",as.is=TRUE)
 colnames(tab)[1] <- "OTD: Adipose"
 kable(tab, caption="Pearson correlation between the posterior probability the top multi-tissue eQTL regulates its gene in a given tissue (Flutre et al. method) and the PVE of tissue-specific gene expression from the orthogonal tissue decomposition (OTD).")
@@ -203,6 +211,10 @@ fig <- readPNG(fig.dir %&% 'Fig-CT-entropy.png')
 grid.raster(fig)
 ```
 
+```{r corrplot, echo=FALSE, warning=FALSE, message=FALSE, fig.cap="Pearson correlation (R) between the posterior probability the top multi-tissue eQTL regulates its gene in a given tissue (eQTL, Flutre et al. method) and the PVE of tissue-specific gene expression from the orthogonal tissue decomposition (OTD). Area of each circle is proportional to the absolute value of R."}
+fig <- readPNG(fig.dir %&% 'Fig-cor-StephensPr-OTDtsPVE.png')
+grid.raster(fig)
+```
 
 #Supplemental Figures
 
