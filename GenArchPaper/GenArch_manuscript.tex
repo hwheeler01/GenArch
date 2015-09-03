@@ -104,7 +104,7 @@ Nicolae\textsuperscript{5}, Hae Kyung Im\textsuperscript{5}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-08-27 16:46:35 \textsuperscript{1}Department of Biology and
+  \date{2015-09-03 16:49:21 \textsuperscript{1}Department of Biology and
 \textsuperscript{2}Department of Computer Science, Loyola University
 Chicago, \textsuperscript{3}Committee on Genetics, Genomics, and Systems
 Biology, University of Chicago, \textsuperscript{4}Division of Genetic
@@ -120,11 +120,32 @@ Medicine, Department of Medicine, University of Chicago}
 
 \section{Abstract}\label{abstract}
 
-\emph{Lorem ipsum dolor sit amet, est ad doctus eligendi scriptorem. Mel
-erat falli ut. Feugiat legendos adipisci vix at, usu at laoreet
-argumentum suscipiantur. An eos adhuc aliquip scriptorem, te adhuc dolor
-liberavisse sea. Ponderum vivendum te nec, id agam brute disputando
-mei.}
+For many complex traits, gene regulation is likely to play a crucial
+mechanistic role given the consistent enrichment of expression
+quantitative trait loci (eQTLs) among trait-associated variants. In
+order to fully harness gene regulation mechanisms in future studies of
+complex traits, we sought to better understand the underlying genetic
+architecture of the gene regulation traits themselves. We show that
+local heritability of gene expression (variance in gene expression due
+to genetic variation within 1Mb of a gene) can be accurately estimated
+across tissues, but distal heritability cannot be reliably estimated at
+sample sizes less than 1000. Using both the elastic net and Bayesian
+sparse linear mixed modeling, we show that for local gene regulation,
+the genetic architecture is mostly sparse rather than polygenic. Using
+genome and transcriptome data from the diverse set of tissues available
+in The GTEx Project, we developed a model called Orthogonal Tissue
+Decomposition (OTD), which partitions gene expression into cross-tissue
+and tissue-specific components. Estimates of the local heritability of
+OTD-generated cross-tissue gene expression have larger magnitude and
+smaller standard errors compared to single tissue estimates due to the
+borrowing of information across all samples. We show that genes with
+high cross-tissue heritability are more likely to have cross-tissue
+eQTLs, confirming that OTD is capturing the cross-tissue component of
+gene expression. We also found evidence that genes with large
+tissue-specific heritability are enriched in common complex disease
+genes discovered via GWAS. Cross-validated predictors of cross-tissue
+and tissue-specific expression built here have been added to the
+PrediXcan database for future investigations of complex traits.
 
 \section{Introduction}\label{introduction}
 
@@ -275,8 +296,8 @@ CI percentages, but smaller than the cross-tissue percentage (Fig 8).
 
 We compared our OTD results to those from a joint multi-tissue eQTL
 analysis method {[}22{]}, which was previously performed on a subset of
-the GTEx data (REF? in press?). The results of this analysis include
-eQTL posterior probabilities for each of the nine tissues, which can be
+the GTEx data {[}15{]}. The results of this analysis include eQTL
+posterior probabilities for each of the nine tissues, which can be
 interpreted as the probability a SNP is an eQTL in tissue \emph{x} given
 the data. Using the top eQTL for each gene, we defined an entropy
 statistic (see Methods) that combines the nine posterior probabilities
@@ -295,6 +316,54 @@ OTD also captures tissue-specific components of gene expression (Fig
 10).
 
 \section{Discussion}\label{discussion}
+
+Because regulatory variation plays a key mechanistic role in the
+genetics of complex traits {[}1--3{]}, we sought to comprehensively
+characterize the genetic architecture of gene expression across tissues.
+We show that the local architecture of gene expression is sparse for
+95\% of heritable genes and that distal architecture cannot be accrately
+assessed at current sample sizes (n \textless{} 1000). {[}{[}compare
+mean h2's across studies{]}{]} Indeed, while the heritability of gene
+expression attributable to local genetic variation has been estimated
+accurately, large standard errors have prevented accurate estimation of
+the contribution of distal genetic variation to gene expression
+variation {[}11,12{]}.
+
+We developed a mixed effects model called orthogonal tissue
+decomposition (OTD) to determine the cross-tissue and tissue-specific
+components of gene expression in the rich GTEx dataset. These components
+were used to develop predcitors of cross-tissue and tissue-specific gene
+expression for use in our gene-based association method PrediXcan
+{[}16{]}. The tissue availability is unbalanced because of the
+difficulties of sample collection and the uneven quality of the tissues.
+Furthermore, by using a mixed effects model to create cross-tissue
+expression, we borrow information across tissues, which should increase
+our power to detect associations and achieve better predictive models.
+
+We also assessed the ability of various models with different underlying
+assumptions to predict gene expression in order to understand the
+underlying genetic architecture of gene expression. Gene expression
+traits with sparse architecture should be better predicted with sparse
+models such as LASSO (Least Absolute Shrinkage and Selection Operator)
+{[}17{]} while highly polygenic traits should be better predicted with
+ridge regression or similarly polygenic models {[}18--20{]}. Using the
+hybrid approach of BSLMM (Bayesian Sparse Linear Mixed Model) {[}21{]},
+we quantified the proportion of the sparse component that makes up the
+total proportion of expression variance explained by sparse and
+polygenic effects.
+
+Specifically, in this paper we show that local heritability can be
+accurately estimated across tissues, but distal heritability cannot
+reliably estimated at current sample sizes. We also show that for local
+gene regulation, the genetic architecture is mostly sparse rather than
+polygenic. We found that estimates of the local heritability of
+cross-tissue gene expression generated with our OTD model have larger
+magnitude and improved standard errors compared to single tissue
+estimates due to the borrowing of information across all samples.
+Comparing our OTD results to a previously performed joint multi-tissue
+eQTL analysis method {[}22{]}, we show that genes with high cross-tissue
+heritability are more likely to have cross-tissue eQTLs, confirming that
+OTD is capturing the cross-tissue component of gene expression.
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -511,6 +580,28 @@ and tissue-specific expression as the residuals (\texttt{resid(fit})).
 
 \subsection{Comparison of OTD PVE to multi-tissue eQTL
 results}\label{comparison-of-otd-pve-to-multi-tissue-eqtl-results}
+
+Using results from a joint multi-tissue eQTL analysis method {[}22{]}
+performed with a subset of the GTEx data (maximum n=175 in the nine
+tissues of the pilot phase, see {[}15{]}), we defined an entropy
+statistic to compare these results to those from our OTD method. The
+results of the multi-tissue analysis include eQTL posterior
+probabilities for each of the nine tissues, which can be interpreted as
+the probability a SNP is an eQTL in tissue \(t\) given the data. Using
+the top eQTL for each gene \(g\), we defined the entropy \(S_g\) as:
+
+\[ S_g = -\sum_{t}p_{t,g} \log p_{t,g} \]
+
+where \(p_{t,g}\) is the eQTL probability in tissue \(t\) normalized to
+1 for each gene \(g\). Thus, eQTLs with higher entropy statistics are
+more likely to be cross-tissue eQTLs, rather than only regulating gene
+expression in one or a few tissues. We calculated the Pearson
+correlation between \(S_g\) and the cross-tissue expression heritability
+and PVE for each gene to verify that our OTD method captures
+cross-tissue effects. We also calculated a Pearson correlation matrix
+between the posterior probabilities in each tissue from the multi-tissue
+eQTL method and the tissue-specific gene expression PVE from the OTD
+method.
 
 \subsection{Enrichment analysis}\label{enrichment-analysis}
 
@@ -758,12 +849,12 @@ doi:\href{http://dx.doi.org/10.1126/science.1262110}{10.1126/science.1262110}
 16. Gamazon ER, Wheeler HE, Shah KP, Mozaffari SV, Aquino-Michaels K,
 Carroll RJ, et al. A gene-based association method for mapping traits
 using reference transcriptome data. Nature Genetics. Nature Publishing
-Group; 2015;
+Group; 2015;47: 1091--1098.
 doi:\href{http://dx.doi.org/10.1038/ng.3367}{10.1038/ng.3367}
 
-17. Unknown. Unknown {[}Internet{]}.
-\url{http://www.jstor.org/stable/2346178}; 2015. Available:
-\url{http://www.jstor.org/stable/2346178}
+17. Regression shrinkage and selection via the lasso on jSTOR
+{[}Internet{]}. \url{http://www.jstor.org/stable/2346178}; 2015.
+Available: \url{http://www.jstor.org/stable/2346178}
 
 18. Hoerl AE, Kennard RW. Ridge regression: Applications to
 nonorthogonal problems. Technometrics. Informa UK Limited; 1970;12:
