@@ -55,14 +55,19 @@ samplelist <- intersect(fam$V1,expsamplelist)
 exp.w.geno <- t.expdata[samplelist,] ###get expression of samples with genotypes###
 explist <- colnames(exp.w.geno)
 
+ngroups = 8 ##split chr into ngroups, edit run*.sh files to match groups
+
 if(whichlist == "A"){
-  explist <- explist[1:floor(length(explist)/4)]
-}else if (whichlist == "B"){
-  explist <- explist[(floor(length(explist)/4)+1):(floor(length(explist)/4)*2)]
-}else if (whichlist == "C"){
-  explist <- explist[(floor(length(explist)/4)*2+1):(floor(length(explist)/4)*3)]
+  explist <- explist[1:floor(length(explist)/ngroups)]
 }else{
-  explist <- explist[(floor(length(explist)/4)*3+1):length(explist)]
+  for(i in 2:(ngroups-1)){
+    if(whichlist == LETTERS[i]){
+      explist <- explist[(floor(length(explist)/ngroups)*(i-1)+1):(floor(length(explist)/ngroups)*i)]
+    }
+  }
+}
+if(whichlist == LETTERS[ngroups]){
+  explist <- explist[(floor(length(explist)/ngroups)*(ngroups-1)+1):length(explist)]
 }
 
 gtfile <- gt.dir %&% 'DGN.imputed_maf0.05_R20.8.hapmapSnpsCEU.chr' %&% chrom %&% '.SNPxID'
@@ -98,14 +103,14 @@ for(i in 1:length(explist)){
     genofile <- cbind(cisbim[,1],cisbim[,5:dim(cisbim)[2]])
     phenofile <- data.frame(exp.w.geno[,gene])
 
-    write.table(annotfile, file=out.dir %&% "tmp.annot." %&% chrom %&% ".s." %&% whichlist, quote=F, row.names=F, col.names=F, sep=",")
-    write.table(genofile, file=out.dir %&% "tmp.geno." %&% chrom %&% ".s." %&% whichlist, quote=F, row.names=F, col.names=F, sep=",")
-    write.table(phenofile, file=out.dir %&% "tmp.pheno." %&% chrom %&% ".s." %&% whichlist, quote=F, row.names=F, col.names=F, sep=",")
+    write.table(annotfile, file=out.dir %&% "tmp2.annot." %&% chrom %&% ".s." %&% whichlist, quote=F, row.names=F, col.names=F, sep=",")
+    write.table(genofile, file=out.dir %&% "tmp2.geno." %&% chrom %&% ".s." %&% whichlist, quote=F, row.names=F, col.names=F, sep=",")
+    write.table(phenofile, file=out.dir %&% "tmp2.pheno." %&% chrom %&% ".s." %&% whichlist, quote=F, row.names=F, col.names=F, sep=",")
 
-    runBSLMM <- "gemma -g " %&% out.dir %&% "tmp.geno." %&% chrom %&% ".s." %&% whichlist %&% " -p " %&% out.dir %&% "tmp.pheno." %&% chrom %&% ".s." %&% whichlist %&% " -a " %&% out.dir %&% "tmp.annot." %&% chrom %&% ".s." %&% whichlist %&% " -bslmm 1 -seed 12345 -s 100000 -o tmp." %&% chrom %&% ".s." %&% whichlist
+    runBSLMM <- "gemma -g " %&% out.dir %&% "tmp2.geno." %&% chrom %&% ".s." %&% whichlist %&% " -p " %&% out.dir %&% "tmp2.pheno." %&% chrom %&% ".s." %&% whichlist %&% " -a " %&% out.dir %&% "tmp2.annot." %&% chrom %&% ".s." %&% whichlist %&% " -bslmm 1 -seed 12345 -s 100000 -o tmp2." %&% chrom %&% ".s." %&% whichlist
     system(runBSLMM)
 
-    hyp <- read.table(out.dir %&% "output/tmp." %&% chrom %&% ".s." %&% whichlist %&% ".hyp.txt",header=T)
+    hyp <- read.table(out.dir %&% "output/tmp2." %&% chrom %&% ".s." %&% whichlist %&% ".hyp.txt",header=T)
     hyp50 <- hyp[(dim(hyp)[1]/2+1):dim(hyp)[1],] #take second half of sampling iterations
     quantres <- apply(hyp50,2,getquant)
     res <- c(gene,quantres[1,],quantres[2,],quantres[3,])
