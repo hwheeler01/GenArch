@@ -1,0 +1,59 @@
+---
+title: "h2_estimates_calc_fdr"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+  library(ggplot2)
+  library(reshape2)
+  library(dplyr)
+  library(tidyr)
+  library(GGally)
+  library(grid)
+  "%&%" = function(a,b) paste(a,b,sep="")
+  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
+  my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
+  fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
+```
+
+DGN-WB joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. distal h^2^ is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).
+```{r jointH2,fig.width=6,fig.height=16, echo=TRUE, warning=FALSE, message=FALSE}
+otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt'
+
+fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
+##calc z-scores from joint estimates
+zlocjt <- fdrother$loc.jt.h2/fdrother$loc.jt.se
+zglojt <- fdrother$glo.jt.h2/fdrother$glo.jt.se
+##calc p-values from joint z-scores
+plocjt <- 2*pnorm(-abs(zlocjt))
+pglojt <- 2*pnorm(-abs(zglojt))
+##calc fdr from joint p-values
+fdrlocjt <- p.adjust(plocjt,method="fdr") #Benjamini & Hochberg (1995) ("BH" or its alias "fdr")
+fdrglojt <- p.adjust(pglojt,method="fdr")
+
+##calc % genes at several FDR thresholds
+for(fdr in c(0.05,0.1,0.2,0.3)){
+  cat("local joint % genes FDR <",fdr)
+  print(table(fdrlocjt<fdr)/sum(table(fdrlocjt)))
+  cat("\n")
+  cat("global joint % genes FDR <",fdr)
+  print(table(fdrglojt<fdr)/sum(table(fdrglojt)))
+  cat("\n")
+}
+
+##calc fdr from marginal p-values
+fdrlocal <- p.adjust(fdrother$local.p,method="fdr") #Benjamini & Hochberg (1995) ("BH" or its alias "fdr")
+fdrglobal <- p.adjust(fdrother$global.p,method="fdr")
+
+##calc % genes at several FDR thresholds
+for(fdr in c(0.05,0.1,0.2,0.3)){
+  cat("local marginal % genes FDR <",fdr)
+  print(table(fdrlocal<fdr)/sum(table(fdrlocal)))
+  cat("\n")
+  cat("global marginal % genes FDR <",fdr)
+  print(table(fdrglobal<fdr)/sum(table(fdrglobal)))
+  cat("\n")
+}
+```
