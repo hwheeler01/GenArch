@@ -1,6 +1,6 @@
 ---
 title: Genetic architecture of gene expression regulation via orthogonal tissue decompositon
-author: Heather E. Wheeler^1,2^, GTEx Consortium, Nicholas Knoblauch^3^, Nancy J. Cox^4^,
+author: Heather E. Wheeler^1,2^, Kaanan P. Shah^5, GTEx Consortium, Nicholas Knoblauch^3^, Nancy J. Cox^4^,
   Dan L. Nicolae^5^, Hae Kyung Im^5^
 date: '`r Sys.time()` ^1^Department of Biology and ^2^Department of Computer Science, Loyola University Chicago, ^3^Committee
   on Genetics, Genomics, and Systems Biology, University of Chicago, ^4^Division of
