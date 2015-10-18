@@ -77,7 +77,7 @@ for(tis in tislist){
   gdata <- gather(data,alpha,R2,2:4) %>% mutate(tissue=tis)
   finalgdata <- rbind(finalgdata,gdata)
 }
-p<-ggplot(finalgdata, aes(y = `1` - R2, x = `1`, group=alpha, color=alpha)) + facet_wrap(~tissue) + geom_point(show_guide = TRUE,size=0.8) + ylab(expression(paste("R"^2, " difference (LASSO - alpha)"))) + xlab(expression(paste("R"^2, " (LASSO)"))) +ggtitle("GTEx OTD Tissue-wide (" %&% ngenesall %&% " genes)") +theme_bw(15)
+p<-ggplot(finalgdata, aes(y = `1` - R2, x = `1`, group=alpha, color=alpha)) + facet_wrap(~tissue) + geom_point(show_guide = TRUE) + ylab(expression(paste("R"^2, " difference (LASSO - alpha)"))) + xlab(expression(paste("R"^2, " (LASSO)"))) +ggtitle("GTEx OTD Tissue-wide (" %&% ngenesall %&% " genes)") +theme_bw(15)
 p
 #ggsave(filename=fig.dir %&% "test.tiff",width=3,height=2,units = "in") I can't figure out best parameters
 png(filename=fig.dir %&% "Fig-GTEx_TW_EN_CV.png",width=720,height=480)

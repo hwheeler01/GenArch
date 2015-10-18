@@ -11,6 +11,7 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 my.dir <- '~/GitHub/GenArch/GenArchPaper/BSLMM/'
+my.vol <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/BSLMM_exp/'
 h2.TS <- read.table(my.dir %&% 'bslmm_gtex_results/GTEx_Tissue-Specific_local_h2_se_geneinfo.txt',header=TRUE, sep='\t')
 h2.TW <- read.table(my.dir %&% 'bslmm_gtex_results/GTEx_Tissue-Wide_local_h2_se_geneinfo.txt',header=TRUE, sep='\t')
 ```
@@ -58,4 +59,66 @@ all <- inner_join(hun,gcta,by='gene') %>% arrange(desc(pve50))
 dim(all)
 ggplot(all,aes(x=local.h2,y=pve50))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(0,1),ylim=c(0,1))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1),color='red')
 cor.test(all$local.h2,all$pve50)
+```
+
+####check tissue-specific correlations PGE vs PVE
+```{r tscorr,warning=FALSE,message=FALSE}
+tislist <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.tissue.list',sep="\n",what="character")
+ts <- data.frame()
+for(tis in tislist){
+  data <- read.table(my.vol %&% tis %&% '_TS_exp_BSLMM-s100K_iterations_all_chr1-22_2015-08-06.txt',header=T,sep="\t")  
+  subdata <- select(data,gene,pve50,pge50,pge025,pge975) %>% mutate(tissue=tis,`pge025>0.01`=pge025>0.01)
+  res<-cor.test(subdata$pge50,subdata$pve50)
+  cat(tis,"\tPearson R=",round(res$estimate,3),"\tP-value=",res$p.value,"\n")
+  ts <- rbind(ts,subdata)
+}
+##exclude gene with pve ~0 and pge =1
+#ts<-filter(ts,gene!="ENSG00000196409.7")
+ggplot(ts,aes(x=pve50,y=pge50,ymin=pge025,ymax=pge975,color=`pge025>0.01`) ) + facet_wrap(~tissue,ncol=3) + geom_pointrange(col='gray')+geom_point()+theme_bw()+ggtitle("BSLMM Tissue-Specific")
+```
+
+####check tissue-wide correlations PGE v PVE
+```{r twcorr,warning=FALSE,message=FALSE}
+tislist <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.tissue.list',sep="\n",what="character")
+tw <- data.frame()
+for(tis in tislist){
+  data <- read.table(my.vol %&% tis %&% '_TW_exp_BSLMM-s100K_iterations_all_chr1-22_2015-10-18.txt',header=T,sep="\t")  
+  subdata <- select(data,gene,pve50,pge50,pge025,pge975) %>% mutate(tissue=tis,`pge025>0.01`=pge025>0.01)
+  res<-cor.test(subdata$pge50,subdata$pve50)
+  cat(tis,"\tPearson R=",round(res$estimate,3),"\tP-value=",res$p.value,"\n")
+  tw <- rbind(tw,subdata)
+}
+
+ggplot(tw,aes(x=pve50,y=pge50,ymin=pge025,ymax=pge975,color=`pge025>0.01`) ) + facet_wrap(~tissue,ncol=3) + geom_pointrange(col='gray')+geom_point()+theme_bw()+ggtitle("BSLMM Tissue-Wide")
+```
+
+####plot tissue-specific PVE vs GCTA marginal h2
+```{r tsBSh2,warning=FALSE,message=FALSE}
+tislist <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.tissue.list',sep="\n",what="character")
+tislist2 <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.spaces.tissue.list',sep="\n",what="character")
+ts <- data.frame()
+for(i in 1:length(tislist)){
+  bs <- read.table(my.vol %&% tislist[i] %&% '_TS_exp_BSLMM-s100K_iterations_all_chr1-22_2015-08-06.txt',header=T,sep="\t") %>% select(gene,pve50)
+  h2 <- read.table("/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/gtex-h2-estimates/GTEx.resid.tissue-specific.h2_" %&% tislist2[i] %&% "_marginal.local_2015-03-23.txt",header=T, sep="\t") %>% select(tissue,ensid,h2) %>% mutate(gene=ensid)
+  subdata <- inner_join(h2,bs,by="gene")
+  res<-cor.test(subdata$pve50,subdata$h2)
+  cat(tislist2[i],"\tPearson R=",round(res$estimate,3),"\tP-value=",res$p.value,"\n")
+  ts <- rbind(ts,subdata)
+}
+ggplot(ts,aes(x=h2,y=pve50))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(0,1),ylim=c(0,1))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1),color='red') + facet_wrap(~tissue,ncol=3)+theme_bw()+ggtitle("Tissue-Specific")
+```
+
+####plot tissue-wide PVE vs GCTA marginal h2
+```{r twBSh2,warning=FALSE,message=FALSE}
+tislist <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.tissue.list',sep="\n",what="character")
+tw <- data.frame()
+for(i in 1:length(tislist)){
+  bs <- read.table(my.vol %&% tislist[i] %&% '_TW_exp_BSLMM-s100K_iterations_all_chr1-22_2015-10-18.txt',header=T,sep="\t") %>% select(gene,pve50)
+  h2 <- read.table("/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/gtex-h2-estimates/GTEx.tissue-wide.h2_" %&% tislist[i] %&% "_marginal.local_2015-03-24.txt",header=T, sep="\t") %>% select(tissue,ensid,h2) %>% mutate(gene=ensid)
+  subdata <- inner_join(h2,bs,by="gene")
+  res<-cor.test(subdata$pve50,subdata$h2)
+  cat(tislist[i],"\tPearson R=",round(res$estimate,3),"\tP-value=",res$p.value,"\n")
+  tw <- rbind(tw,subdata)
+}
+ggplot(tw,aes(x=h2,y=pve50))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(0,1),ylim=c(0,1))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1),color='red') + facet_wrap(~tissue,ncol=3)+theme_bw()+ggtitle("Tissue-Wide")
 ```
