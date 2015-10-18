@@ -36,7 +36,7 @@ colnames(allpve) <- c('gene','CrossTissue')
 
 for(i in 1:length(tislist)){
   tis <- tislist[i]
-  tisdata <- read.table(bslmm.dir %&% tis %&% '_TW_exp_BSLMM-s100K_iterations_all_chr1-22_2015-08-06.txt',header=T)
+  tisdata <- read.table(bslmm.dir %&% tis %&% '_TW_exp_BSLMM-s100K_iterations_all_chr1-22_2015-10-18.txt',header=T)
   tispve <- tisdata %>% select(gene,pve50)
   allpve <- left_join(allpve,tispve,by='gene')
   tis <- gsub('(','',tis,fixed=T) #replace any parentheses in tis string
