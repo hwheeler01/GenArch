@@ -1,7 +1,7 @@
 ####by Heather E. Wheeler 20150108####
 date <- Sys.Date()
 args <- commandArgs(trailingOnly=T)
-args <- c('19','C','Skin-SunExposed(Lowerleg)')
+#args <- c('19','C','Skin-SunExposed(Lowerleg)')
 "%&%" = function(a,b) paste(a,b,sep="")
 library(dplyr)
 
@@ -88,7 +88,7 @@ working100K <- out.dir %&% "working_" %&% tis %&% "_TW_exp_BSLMM-s100K_iteration
 	"_" %&% date %&% ".txt"
 write(resultscol,file=working100K,ncolumns=19,sep="\t")
 
-for(i in 1:length(explist)){
+for(i in 47:length(explist)){
   cat(i,"/",length(explist),"\n")
   gene <- explist[i]
   geneinfo <- gencode[gene,]
