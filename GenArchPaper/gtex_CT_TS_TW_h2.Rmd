@@ -22,10 +22,11 @@ GTEx OTD joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of ea
 ```{r, loc.jt.ts,fig.width=8,fig.height=8}
 tislist <- scan(my.dir %&% 'TS.ten.tissue.list',sep="\n",what="character")
 ts <- data.frame()
+set.seed(12345)
 for(tis in tislist){
   data <- read.table(my.dir %&% 'gtex-h2-estimates/GTEx.' %&% tis %&% '.h2.all.models_FHSfdr0.05.Chr1-22_globalOtherChr.2015-10-06.txt',header=T,sep="\t")  
   #replace NA with h2=0 and se=mean(se) #change h2 to mean h2?
-  loc.jt <- select(data,tissue,loc.jt.h2,loc.jt.se) %>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),mean(loc.jt.se,na.rm=TRUE),loc.jt.se)) %>% mutate(ymin = pmax(0, loc.jt.h2 - 2 * loc.jt.se), ymax = pmin(1, loc.jt.h2 + 2 * loc.jt.se)) %>% arrange(loc.jt.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(data$tissue)) 
+  loc.jt <- select(data,tissue,loc.jt.h2,loc.jt.se) %>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),sample(loc.jt.se[is.na(loc.jt.se)==FALSE],size=length(loc.jt.se[is.na(loc.jt.se)==TRUE])),loc.jt.se)) %>% mutate(ymin = pmax(0, loc.jt.h2 - 2 * loc.jt.se), ymax = pmin(1, loc.jt.h2 + 2 * loc.jt.se)) %>% arrange(loc.jt.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(data$tissue)) 
   ts <- rbind(ts,loc.jt)
 }
 
@@ -52,7 +53,7 @@ for(i in 1:10){
   cat(tis,"mean h2:",meanh2,"\n")
   h2vec <- c(h2vec,meanh2)
 }
-
+pvec<-ifelse(is.na(pvec),0,pvec)
 ann_text <- data.frame( loc.jt.h2 = rep(0.78,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, tissue = factor(colnames(a)), ymin=rep(0.9,10), ymax=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
 p2<-p+geom_text(data=ann_text,aes(label=paste("mean_h^2 ==",mean_h2,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3) 
 ann_text <- data.frame( loc.jt.h2 = rep(0.9,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, tissue = factor(colnames(a)), ymin=rep(0.9,10), ymax=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
@@ -65,7 +66,7 @@ tislist <- scan(my.dir %&% 'TS.ten.tissue.list',sep="\n",what="character")
 ts <- data.frame()
 for(tis in tislist){
   data <- read.table(my.dir %&% 'gtex-h2-estimates/GTEx.' %&% tis %&% '.h2.all.models_FHSfdr0.05.Chr1-22_globalOtherChr.2015-10-06.txt',header=T,sep="\t")  
-  glo.jt <- select(data,tissue,glo.jt.h2,glo.jt.se) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),mean(glo.jt.se,na.rm=TRUE),glo.jt.se)) %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se)) %>% arrange(glo.jt.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(data$tissue)) 
+  glo.jt <- select(data,tissue,glo.jt.h2,glo.jt.se) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),sample(glo.jt.se[is.na(glo.jt.se)==FALSE],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE])),glo.jt.se)) %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se)) %>% arrange(glo.jt.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(data$tissue)) 
   ts <- rbind(ts,glo.jt)
 }
 
@@ -92,7 +93,7 @@ for(i in 1:10){
   cat(tis,"mean h2:",meanh2,"\n")
   h2vec <- c(h2vec,meanh2)
 }
-
+pvec<-ifelse(is.na(pvec),0,pvec)
 ann_text <- data.frame( glo.jt.h2 = rep(0.78,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, tissue = factor(colnames(a)), ymin=rep(0.9,10), ymax=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
 p2<-p+geom_text(data=ann_text,aes(label=paste("mean_h^2 ==",mean_h2,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3) 
 ann_text <- data.frame( glo.jt.h2 = rep(0.9,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, tissue = factor(colnames(a)), ymin=rep(0.9,10), ymax=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
@@ -102,20 +103,20 @@ p2+geom_text(data=ann_text,aes(label=paste("percent_TRUE ==",percent,sep="")),co
 ##Tissue-Wide joint local estimates
 ```{r, loc.jt.tw,fig.width=8,fig.height=8}
 tislist <- scan(my.dir %&% 'TW.ten.tissue.list',sep="\n",what="character")
-tw <- data.frame()
+ts <- data.frame()
 for(tis in tislist){
   data <- read.table(my.dir %&% 'gtex-h2-estimates/GTEx.' %&% tis %&% '.h2.all.models_FHSfdr0.05.Chr1-22_globalOtherChr.2015-10-06.txt',header=T,sep="\t")  
-  loc.jt <- select(data,tissue,loc.jt.h2,loc.jt.se) %>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),mean(loc.jt.se,na.rm=TRUE),loc.jt.se)) %>% mutate(ymin = pmax(0, loc.jt.h2 - 2 * loc.jt.se), ymax = pmin(1, loc.jt.h2 + 2 * loc.jt.se)) %>% arrange(loc.jt.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(data$tissue)) 
-  tw <- rbind(tw,loc.jt)
+  loc.jt <- select(data,tissue,loc.jt.h2,loc.jt.se) %>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),sample(loc.jt.se[is.na(loc.jt.se)==FALSE],replace=TRUE,size=length(loc.jt.se[is.na(loc.jt.se)==TRUE])),loc.jt.se)) %>% mutate(ymin = pmax(0, loc.jt.h2 - 2 * loc.jt.se), ymax = pmin(1, loc.jt.h2 + 2 * loc.jt.se)) %>% arrange(loc.jt.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(data$tissue)) 
+  ts <- rbind(ts,loc.jt)
 }
 
-p<-ggplot(tw,aes(x=place,y=loc.jt.h2,ymin=ymin,ymax=ymax,color=nonzeroCI) ) + facet_wrap(~tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by joint local h"^2))+theme_bw() + coord_cartesian(ylim=c(0,1)) + ggtitle("CT and TW")
+p<-ggplot(ts,aes(x=place,y=loc.jt.h2,ymin=ymin,ymax=ymax,color=nonzeroCI) ) + facet_wrap(~tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by joint local h"^2))+theme_bw() + coord_cartesian(ylim=c(0,1)) + ggtitle("CT and TW")
 
 ###calc % nonzero for each tissue
 ### ADD to plot legend
 pvec<-vector()
 h2vec<-vector()
-a<-tw %>% select(tissue,nonzeroCI) %>% spread(tissue,nonzeroCI)
+a<-ts %>% select(tissue,nonzeroCI) %>% spread(tissue,nonzeroCI)
 for(i in 1:10){
   tis<-colnames(a)[i]
   cat("\n\n---",tis,"---\n")
@@ -125,14 +126,14 @@ for(i in 1:10){
   pvec <- c(pvec,per[2])
 }
 ###calc mean h2 for each tissue
-a<-tw %>% select(tissue,loc.jt.h2) %>% spread(tissue,loc.jt.h2)
+a<-ts %>% select(tissue,loc.jt.h2) %>% spread(tissue,loc.jt.h2)
 for(i in 1:10){
   tis<-colnames(a)[i]
   meanh2 <- signif(mean(a[,i],na.rm=TRUE),3)
   cat(tis,"mean h2:",meanh2,"\n")
   h2vec <- c(h2vec,meanh2)
 }
-
+pvec<-ifelse(is.na(pvec),0,pvec)
 ann_text <- data.frame( loc.jt.h2 = rep(0.78,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, tissue = factor(colnames(a)), ymin=rep(0.9,10), ymax=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
 p2<-p+geom_text(data=ann_text,aes(label=paste("mean_h^2 ==",mean_h2,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3) 
 ann_text <- data.frame( loc.jt.h2 = rep(0.9,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, tissue = factor(colnames(a)), ymin=rep(0.9,10), ymax=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
@@ -142,20 +143,20 @@ p2+geom_text(data=ann_text,aes(label=paste("percent_TRUE ==",percent,sep="")),co
 ##Tissue-Wide joint global estimates
 ```{r, glo.jt.tw,fig.width=8,fig.height=8}
 tislist <- scan(my.dir %&% 'TW.ten.tissue.list',sep="\n",what="character")
-tw <- data.frame()
+ts <- data.frame()
 for(tis in tislist){
   data <- read.table(my.dir %&% 'gtex-h2-estimates/GTEx.' %&% tis %&% '.h2.all.models_FHSfdr0.05.Chr1-22_globalOtherChr.2015-10-06.txt',header=T,sep="\t")  
-  glo.jt <- select(data,tissue,glo.jt.h2,glo.jt.se) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),mean(glo.jt.se,na.rm=TRUE),glo.jt.se)) %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se)) %>% arrange(glo.jt.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(data$tissue)) 
-  tw <- rbind(tw,glo.jt)
+  glo.jt <- select(data,tissue,glo.jt.h2,glo.jt.se) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),sample(glo.jt.se[is.na(glo.jt.se)==FALSE],replace=TRUE,size=length(glo.jt.se[is.na(glo.jt.se)==TRUE])),glo.jt.se)) %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se)) %>% arrange(glo.jt.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(data$tissue)) 
+  ts <- rbind(ts,glo.jt)
 }
 
-p<-ggplot(tw,aes(x=place,y=glo.jt.h2,ymin=ymin,ymax=ymax,color=nonzeroCI) ) + facet_wrap(~tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+ylab(expression("global h"^2)) + xlab(expression("genes ordered by joint global h"^2))+theme_bw() + coord_cartesian(ylim=c(0,1)) + ggtitle("CT and TW")
+p<-ggplot(ts,aes(x=place,y=glo.jt.h2,ymin=ymin,ymax=ymax,color=nonzeroCI) ) + facet_wrap(~tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+ylab(expression("global h"^2)) + xlab(expression("genes ordered by joint global h"^2))+theme_bw() + coord_cartesian(ylim=c(0,1)) + ggtitle("CT and TW")
 
 ###calc % nonzero for each tissue
 ### ADD to plot legend
 pvec<-vector()
 h2vec<-vector()
-a<-tw %>% select(tissue,nonzeroCI) %>% spread(tissue,nonzeroCI)
+a<-ts %>% select(tissue,nonzeroCI) %>% spread(tissue,nonzeroCI)
 for(i in 1:10){
   tis<-colnames(a)[i]
   cat("\n\n---",tis,"---\n")
@@ -165,14 +166,14 @@ for(i in 1:10){
   pvec <- c(pvec,per[2])
 }
 ###calc mean h2 for each tissue
-a<-tw %>% select(tissue,glo.jt.h2) %>% spread(tissue,glo.jt.h2)
+a<-ts %>% select(tissue,glo.jt.h2) %>% spread(tissue,glo.jt.h2)
 for(i in 1:10){
   tis<-colnames(a)[i]
   meanh2 <- signif(mean(a[,i],na.rm=TRUE),3)
   cat(tis,"mean h2:",meanh2,"\n")
   h2vec <- c(h2vec,meanh2)
 }
-
+pvec<-ifelse(is.na(pvec),0,pvec)
 ann_text <- data.frame( glo.jt.h2 = rep(0.78,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, tissue = factor(colnames(a)), ymin=rep(0.9,10), ymax=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
 p2<-p+geom_text(data=ann_text,aes(label=paste("mean_h^2 ==",mean_h2,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3) 
 ann_text <- data.frame( glo.jt.h2 = rep(0.9,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, tissue = factor(colnames(a)), ymin=rep(0.9,10), ymax=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
