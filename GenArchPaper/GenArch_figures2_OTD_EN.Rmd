@@ -48,11 +48,10 @@ ggplot(finalgdata, aes(y = `1` - R2, x = `1`, group=alpha, color=alpha)) + facet
 ```
 
 ###Plot CT and TS together
-```{r CTTS}
+```{r CTTS,eval=FALSE}
 ctsort <- select(g_cten,gene,`1`,alpha,R2) %>% mutate(tissue=g_cten$`cross-tissue`)
 ctts <- rbind(ctsort,finalgdata)
-p<-ggplot(ctts, aes(y = `1` - R2, x = `1`, group=alpha, color=alpha)) + facet_wrap(~tissue,nrow=2) + geom_point(show_guide = TRUE) + ylab(expression(paste("R"^2, " difference (LASSO - alpha)"))) + xlab(expression(paste("R"^2, " (LASSO)"))) +ggtitle("GTEx OTD Tissue-specific (" %&% ngenesall %&% " genes)") +theme_bw(15)
-p
+p<-ggplot(ctts, aes(y = `1` - R2, x = `1`, group=alpha, color=alpha)) + facet_wrap(~tissue,nrow=2) + geom_point(show_guide = TRUE) + ylab(expression(paste("R"^2, " difference (LASSO - alpha)"))) + xlab(expression(paste("R"^2, " (LASSO)"))) +ggtitle("GTEx OTD Tissue-specific (" %&% ngenesall %&% " genes)") +theme_bw(15)+ theme(legend.justification=c(1,1), legend.position=c(1,1))
 png(filename=fig.dir %&% "Fig-GTEx_CT-TS_EN_CV.png",width=960,height=480)
 p
 dev.off()
@@ -62,7 +61,7 @@ dev.off()
 ```
 
 ###Plot GTEx Tissue-Wide Elastic Net results
-```{r TWglmnet}
+```{r TWglmnet,eval=FALSE}
 tislist <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.tissue.list','c')
 finalgdata <- data.frame()
 for(tis in tislist){
@@ -77,13 +76,13 @@ for(tis in tislist){
   gdata <- gather(data,alpha,R2,2:4) %>% mutate(tissue=tis)
   finalgdata <- rbind(finalgdata,gdata)
 }
-p<-ggplot(finalgdata, aes(y = `1` - R2, x = `1`, group=alpha, color=alpha)) + facet_wrap(~tissue) + geom_point(show_guide = TRUE) + ylab(expression(paste("R"^2, " difference (LASSO - alpha)"))) + xlab(expression(paste("R"^2, " (LASSO)"))) +ggtitle("GTEx OTD Tissue-wide (" %&% ngenesall %&% " genes)") +theme_bw(15)
-p
+p<-ggplot(finalgdata, aes(y = `1` - R2, x = `1`, group=alpha, color=alpha)) + facet_wrap(~tissue) + geom_point(show_guide = TRUE) + ylab(expression(paste("R"^2, " difference (LASSO - alpha)"))) + xlab(expression(paste("R"^2, " (LASSO)"))) +ggtitle("GTEx OTD Tissue-wide (" %&% ngenesall %&% " genes)") +theme_bw(15)+ theme(legend.justification=c(0,1), legend.position=c(0,1))
+
 #ggsave(filename=fig.dir %&% "test.tiff",width=3,height=2,units = "in") I can't figure out best parameters
-png(filename=fig.dir %&% "Fig-GTEx_TW_EN_CV.png",width=720,height=480)
+png(filename=fig.dir %&% "Fig-GTEx_TW_EN_CV.png",width=600,height=600)
 p
 dev.off()
-tiff(filename=fig.dir %&% "Fig-GTEx_TW_EN_CV.tiff",width=720,height=480)
+tiff(filename=fig.dir %&% "Fig-GTEx_TW_EN_CV.tiff",width=600,height=600)
 p
 dev.off()
 ```

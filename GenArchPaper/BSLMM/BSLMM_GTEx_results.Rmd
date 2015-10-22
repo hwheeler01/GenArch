@@ -11,6 +11,7 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 my.dir <- '~/GitHub/GenArch/GenArchPaper/BSLMM/'
+fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
 my.vol <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/BSLMM_exp/'
 h2.TS <- read.table(my.dir %&% 'bslmm_gtex_results/GTEx_Tissue-Specific_local_h2_se_geneinfo.txt',header=TRUE, sep='\t')
 h2.TW <- read.table(my.dir %&% 'bslmm_gtex_results/GTEx_Tissue-Wide_local_h2_se_geneinfo.txt',header=TRUE, sep='\t')
@@ -20,36 +21,32 @@ h2.TW <- read.table(my.dir %&% 'bslmm_gtex_results/GTEx_Tissue-Wide_local_h2_se_
 ####arrange by median PVE
 ```{r pvePGEhun,warning=FALSE,message=FALSE}
 hun <- read.table(my.dir %&% 'bslmm_gtex_results/cross-tissue_exp_BSLMM-s100K_iterations_all_chr1-22_2015-07-20.txt',header=T)
-data <- hun %>% arrange(pve50) %>% mutate(position=1:length(pve50),`pge025>0.01`=pge025>0.01) 
-data <- data[complete.cases(data),]
+ct <- hun %>% arrange(pve50) %>% mutate(position=1:length(pve50),`pge025>0.01`=pge025>0.01) 
+ct <- ct[complete.cases(ct),]
 genenames <- h2.TW %>% select(gene=EnsemblGeneID,genename=AssociatedGeneName)
-data <- left_join(data,genenames,by='gene')
-#head(data,n=3L)
-#tail(data,n=3L)
-ggplot(data,aes(x=position,y=pve50,ymin=pve025,ymax=pve975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
-ggplot(data,aes(x=position,y=pge50,ymin=pge025,ymax=pge975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
-ggplot(data,aes(x=position,y=n_gamma50,ymin=n_gamma025,ymax=n_gamma975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ct <- left_join(ct,genenames,by='gene')
+ggplot(ct,aes(x=position,y=pve50,ymin=pve025,ymax=pve975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ggplot(ct,aes(x=position,y=pge50,ymin=pge025,ymax=pge975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ggplot(ct,aes(x=position,y=n_gamma50,ymin=n_gamma025,ymax=n_gamma975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
 ```
 
 ####arrange by median PGE
 ```{r pgeHUN,warning=FALSE,message=FALSE}
 hun <- read.table(my.dir %&% 'bslmm_gtex_results/cross-tissue_exp_BSLMM-s100K_iterations_all_chr1-22_2015-07-20.txt',header=T)
-data <- hun %>% arrange(pge50) %>% mutate(position=1:length(pge50),`pge025>0.01`=pge025>0.01) 
-data <- data[complete.cases(data),]
+ct <- hun %>% arrange(pge50) %>% mutate(position=1:length(pge50),`pge025>0.01`=pge025>0.01) 
+ct <- ct[complete.cases(ct),]
 genenames <- h2.TW %>% select(gene=EnsemblGeneID,genename=AssociatedGeneName)
-data <- left_join(data,genenames,by='gene')
-#head(data,n=3L)
-#tail(data,n=3L)
-ggplot(data,aes(x=position,y=pve50,ymin=pve025,ymax=pve975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
-ggplot(data,aes(x=position,y=pge50,ymin=pge025,ymax=pge975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
-ggplot(data,aes(x=position,y=n_gamma50,ymin=n_gamma025,ymax=n_gamma975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ct <- left_join(ct,genenames,by='gene')
+ggplot(ct,aes(x=position,y=pve50,ymin=pve025,ymax=pve975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ggplot(ct,aes(x=position,y=pge50,ymin=pge025,ymax=pge975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
+ggplot(ct,aes(x=position,y=n_gamma50,ymin=n_gamma025,ymax=n_gamma975,col=`pge025>0.01`)) + geom_pointrange(col='gray')+geom_point()
 ```
 
 ####check correlations
 ```{r corr,warning=FALSE,message=FALSE}
-ggplot(data,aes(x=pve50,y=pge50,ymin=pge025,ymax=pge975,col=`pge025>0.01`)) + geom_pointrange(col='gray') + geom_point() 
+ggplot(ct,aes(x=pve50,y=pge50,ymin=pge025,ymax=pge975,col=`pge025>0.01`)) + geom_pointrange(col='gray') + geom_point() 
 cor.test(hun$pge50,hun$pve50)
-ggplot(data,aes(x=log10(n_gamma50),y=pge50,col=`pge025>0.01`)) + geom_point(alpha=0.3)
+ggplot(ct,aes(x=log10(n_gamma50),y=pge50,col=`pge025>0.01`)) + geom_point(alpha=0.3)
 ```
 
 ####Compare GCTA marginal h2 to BSLMM median PVE (local SNPs)
@@ -62,7 +59,7 @@ cor.test(all$local.h2,all$pve50)
 ```
 
 ####check tissue-specific correlations PGE vs PVE
-```{r tscorr,warning=FALSE,message=FALSE}
+```{r tscorr,warning=FALSE,message=FALSE,eval=FALSE}
 tislist <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.tissue.list',sep="\n",what="character")
 ts <- data.frame()
 for(tis in tislist){
@@ -72,13 +69,50 @@ for(tis in tislist){
   cat(tis,"\tPearson R=",round(res$estimate,3),"\tP-value=",res$p.value,"\n")
   ts <- rbind(ts,subdata)
 }
-##exclude gene with pve ~0 and pge =1
-#ts<-filter(ts,gene!="ENSG00000196409.7")
 ggplot(ts,aes(x=pve50,y=pge50,ymin=pge025,ymax=pge975,color=`pge025>0.01`) ) + facet_wrap(~tissue,ncol=3) + geom_pointrange(col='gray')+geom_point()+theme_bw()+ggtitle("BSLMM Tissue-Specific")
+
+##combine CT and TS PGE vs. PVE in one plot
+subct <- select(ct,gene,pve50,pge50,pge025,pge975) %>% mutate(tissue="cross-tissue",`pge025>0.01`=pge025>0.01)
+ctts <- rbind(subct,ts) %>% mutate(tissue=factor(tissue,levels=c("cross-tissue","Adipose-Subcutaneous","Artery-Tibial","Heart-LeftVentricle","Lung","Muscle-Skeletal","Nerve-Tibial","Skin-SunExposed(Lowerleg)","Thyroid","WholeBlood")))
+p<-ggplot(ctts,aes(x=pve50,y=pge50,ymin=pge025,ymax=pge975,color=`pge025>0.01`)) + facet_wrap(~tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+theme_bw()+ggtitle("BSLMM CT and TS") + coord_cartesian(xlim=c(-0.05,1.05))
+
+###calc % nonzero for each tissue
+### ADD to plot legend
+pvec<-vector()
+h2vec<-vector()
+a<-ctts %>% select(tissue,`pge025>0.01`) %>% spread(tissue,`pge025>0.01`)
+for(i in 1:10){
+  tis<-colnames(a)[i]
+  cat("\n\n---",tis,"---\n")
+  print(table(a[,i]))
+  per <- signif(table(a[,i])/sum(table(a[,i])),3)*100
+  print(per)
+  pvec <- c(pvec,per[2])
+}
+###calc mean PVE for each tissue
+a<-ctts %>% select(tissue,pve50) %>% spread(tissue,pve50)
+for(i in 1:10){
+  tis<-colnames(a)[i]
+  meanh2 <- signif(mean(a[,i],na.rm=TRUE),3)
+  cat(tis,"mean PVE:",meanh2,"\n")
+  h2vec <- c(h2vec,meanh2)
+}
+pvec<-ifelse(is.na(pvec),0,pvec)
+ann_text <- data.frame( pge50 = rep(0.08,10), pve50 = rep(0.55,10), percent= pvec, mean_PVE = h2vec, tissue = factor(colnames(a)), pge025=rep(0.9,10), pge975=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
+p2<-p+geom_text(data=ann_text,aes(label=paste("mean_PVE ==",mean_PVE,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3) 
+ann_text <- data.frame( pge50 = rep(0.20,10), pve50 = rep(0.55,10), percent= pvec, mean_PVE = h2vec, tissue = factor(colnames(a)), pge025=rep(0.9,10), pge975=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
+p3<-p2+geom_text(data=ann_text,aes(label=paste("percent_TRUE ==",percent,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3)+ theme(legend.justification=c(1,1), legend.position=c(1,1))
+
+png(filename=fig.dir %&% "Fig-GTEx_CT-TS_BSLMM.png",width=600,height=600)
+p3
+dev.off()
+tiff(filename=fig.dir %&% "Fig-GTEx_CT-TS_BSLMM.tiff",width=600,height=600)
+p3
+dev.off()
 ```
 
 ####check tissue-wide correlations PGE v PVE
-```{r twcorr,warning=FALSE,message=FALSE}
+```{r twcorr,warning=FALSE,message=FALSE,eval=FALSE}
 tislist <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.tissue.list',sep="\n",what="character")
 tw <- data.frame()
 for(tis in tislist){
@@ -89,11 +123,45 @@ for(tis in tislist){
   tw <- rbind(tw,subdata)
 }
 
-ggplot(tw,aes(x=pve50,y=pge50,ymin=pge025,ymax=pge975,color=`pge025>0.01`) ) + facet_wrap(~tissue,ncol=3) + geom_pointrange(col='gray')+geom_point()+theme_bw()+ggtitle("BSLMM Tissue-Wide")
+p<-ggplot(tw,aes(x=pve50,y=pge50,ymin=pge025,ymax=pge975,color=`pge025>0.01`) ) + facet_wrap(~tissue,ncol=3) + geom_pointrange(col='gray')+geom_point()+theme_bw()+ggtitle("BSLMM Tissue-Wide")
+
+###calc % nonzero for each tissue
+### ADD to plot legend
+pvec<-vector()
+h2vec<-vector()
+a<-tw %>% select(tissue,`pge025>0.01`) %>% spread(tissue,`pge025>0.01`)
+for(i in 1:9){
+  tis<-colnames(a)[i]
+  cat("\n\n---",tis,"---\n")
+  print(table(a[,i]))
+  per <- signif(table(a[,i])/sum(table(a[,i])),3)*100
+  print(per)
+  pvec <- c(pvec,per[2])
+}
+###calc mean PVE for each tissue
+a<-tw %>% select(tissue,pve50) %>% spread(tissue,pve50)
+for(i in 1:9){
+  tis<-colnames(a)[i]
+  meanh2 <- signif(mean(a[,i],na.rm=TRUE),3)
+  cat(tis,"mean PVE:",meanh2,"\n")
+  h2vec <- c(h2vec,meanh2)
+}
+pvec<-ifelse(is.na(pvec),0,pvec)
+ann_text <- data.frame( pge50 = rep(0.08,9), pve50 = rep(0.05,9), percent= pvec, mean_PVE = h2vec, tissue = factor(colnames(a)), pge025=rep(0.9,9), pge975=rep(0.9,9), nonzeroCI=rep(NA,9), se=rep(0.9,9))
+p2<-p+geom_text(data=ann_text,aes(label=paste("mean_PVE ==",mean_PVE,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3) 
+ann_text <- data.frame( pge50 = rep(0.20,9), pve50 = rep(0.05,9), percent= pvec, mean_PVE = h2vec, tissue = factor(colnames(a)), pge025=rep(0.9,9), pge975=rep(0.9,9), nonzeroCI=rep(NA,9), se=rep(0.9,9))
+p3<-p2+geom_text(data=ann_text,aes(label=paste("percent_TRUE ==",percent,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3)+ theme(legend.justification=c(1,0), legend.position=c(1,0))
+
+png(filename=fig.dir %&% "Fig-GTEx_TW_BSLMM.png",width=720,height=480)
+p3
+dev.off()
+tiff(filename=fig.dir %&% "Fig-GTEx_TW_BSLMM.tiff",width=720,height=480)
+p3
+dev.off()
 ```
 
 ####plot tissue-specific PVE vs GCTA marginal h2
-```{r tsBSh2,warning=FALSE,message=FALSE}
+```{r tsBSh2,warning=FALSE,message=FALSE,eval=FALSE}
 tislist <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.tissue.list',sep="\n",what="character")
 tislist2 <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.spaces.tissue.list',sep="\n",what="character")
 ts <- data.frame()
@@ -105,11 +173,26 @@ for(i in 1:length(tislist)){
   cat(tislist2[i],"\tPearson R=",round(res$estimate,3),"\tP-value=",res$p.value,"\n")
   ts <- rbind(ts,subdata)
 }
-ggplot(ts,aes(x=h2,y=pve50))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(0,1),ylim=c(0,1))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1),color='red') + facet_wrap(~tissue,ncol=3)+theme_bw()+ggtitle("Tissue-Specific")
+ggplot(ts,aes(x=h2,y=pve50))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1),color='red') + facet_wrap(~tissue,ncol=3)+theme_bw()+ggtitle("Tissue-Specific")
+
+####combine CT and TS PVE vs. h2 in one plot
+suball <- select(all,gene,local.h2,pve50) %>% mutate(tissue="cross-tissue")
+colnames(suball)<-c("gene","h2","pve50","tissue")
+subts <- select(ts,gene,h2,pve50,tissue)
+ctts <- rbind(suball,subts) %>% mutate(tissue=factor(tissue,levels=c("cross-tissue","Adipose - Subcutaneous","Artery - Tibial","Heart - Left Ventricle","Lung","Muscle - Skeletal","Nerve - Tibial","Skin - Sun Exposed (Lower leg)","Thyroid","Whole Blood")))
+
+p<-ggplot(ctts,aes(x=h2,y=pve50))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1),color='red') + facet_wrap(~tissue,ncol=5)+theme_bw()+ggtitle("CT and TS")
+
+png(filename=fig.dir %&% "Fig-GTEx_CT_TS_PVE_v_h2.png",width=1000,height=450)
+p
+dev.off()
+tiff(filename=fig.dir %&% "Fig-GTEx_CT_TS_PVE_v_h2.tiff",width=1000,height=450)
+p
+dev.off()
 ```
 
 ####plot tissue-wide PVE vs GCTA marginal h2
-```{r twBSh2,warning=FALSE,message=FALSE}
+```{r twBSh2,warning=FALSE,message=FALSE,eval=FALSE}
 tislist <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.tissue.list',sep="\n",what="character")
 tw <- data.frame()
 for(i in 1:length(tislist)){
@@ -120,5 +203,12 @@ for(i in 1:length(tislist)){
   cat(tislist[i],"\tPearson R=",round(res$estimate,3),"\tP-value=",res$p.value,"\n")
   tw <- rbind(tw,subdata)
 }
-ggplot(tw,aes(x=h2,y=pve50))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(0,1),ylim=c(0,1))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1),color='red') + facet_wrap(~tissue,ncol=3)+theme_bw()+ggtitle("Tissue-Wide")
+p<-ggplot(tw,aes(x=h2,y=pve50))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1),color='red') + facet_wrap(~tissue,ncol=3)+theme_bw()+ggtitle("Tissue-Wide")
+
+png(filename=fig.dir %&% "Fig-GTEx_TW_PVE_v_h2.png",width=600,height=600)
+p
+dev.off()
+tiff(filename=fig.dir %&% "Fig-GTEx_TW_PVE_v_h2.tiff",width=600,height=600)
+p
+dev.off()
 ```
