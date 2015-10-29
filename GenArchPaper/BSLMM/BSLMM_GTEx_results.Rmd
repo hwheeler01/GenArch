@@ -195,20 +195,25 @@ dev.off()
 ```{r twBSh2,warning=FALSE,message=FALSE,eval=FALSE}
 tislist <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.tissue.list',sep="\n",what="character")
 tw <- data.frame()
+rvec<-vector()
 for(i in 1:length(tislist)){
   bs <- read.table(my.vol %&% tislist[i] %&% '_TW_exp_BSLMM-s100K_iterations_all_chr1-22_2015-10-18.txt',header=T,sep="\t") %>% select(gene,pve50)
   h2 <- read.table("/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/gtex-h2-estimates/GTEx.tissue-wide.h2_" %&% tislist[i] %&% "_marginal.local_2015-03-24.txt",header=T, sep="\t") %>% select(tissue,ensid,h2) %>% mutate(gene=ensid)
   subdata <- inner_join(h2,bs,by="gene")
   res<-cor.test(subdata$pve50,subdata$h2)
   cat(tislist[i],"\tPearson R=",round(res$estimate,3),"\tP-value=",res$p.value,"\n")
+  rvec <- cbind(r2vec,unname(round(res$estimate,3)))
   tw <- rbind(tw,subdata)
 }
 p<-ggplot(tw,aes(x=h2,y=pve50))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1),color='red') + facet_wrap(~tissue,ncol=3)+theme_bw()+ggtitle("Tissue-Wide")
 
+ann_text <- data.frame( h2 = rep(0.75,9), pve50 = rep(0.05,9), R= rvec[1:9], tissue = factor(tislist), ensid=rep(0.9,9),gene=rep(0.9,9))
+p2<-p+geom_text(data=ann_text,aes(label=paste("R==",R,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3)+ theme(legend.justification=c(1,0), legend.position=c(1,0))
+
 png(filename=fig.dir %&% "Fig-GTEx_TW_PVE_v_h2.png",width=600,height=600)
-p
+p2
 dev.off()
 tiff(filename=fig.dir %&% "Fig-GTEx_TW_PVE_v_h2.tiff",width=600,height=600)
-p
+p2
 dev.off()
 ```

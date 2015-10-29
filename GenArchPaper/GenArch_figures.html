@@ -63,7 +63,7 @@ img {
 <div id="header">
 <h1 class="title">GenArch_figures</h1>
 <h4 class="author"><em>Heather E. Wheeler</em></h4>
-<h4 class="date"><em>2015-10-22 16:16:43</em></h4>
+<h4 class="date"><em>2015-10-29 09:53:39</em></h4>
 </div>
 
 
@@ -82,10 +82,10 @@ img {
 <p>DGN-WB joint heritability. Local h<sup>2</sup> is estimated with SNPs within 1 Mb of each gene. distal h<sup>2</sup> is estimated with SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR &lt; 0.05).</p>
 <pre class="r"><code>otherfile&lt;-my.dir %&amp;% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt'
 
-&lt;-read.table(otherfile,header=T) ##FHS eQTLs w/fdr&lt;0.05 on non-gene chromosomes used to define global GRM
+fdrother&lt;-read.table(otherfile,header=T) ##FHS eQTLs w/fdr&lt;0.05 on non-gene chromosomes used to define global GRM
 
 ##Plot FDR based results
-a&lt;-ggplot(,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression(&quot;local h&quot;^2)) + ylab(expression(&quot;distal h&quot;^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_bw() + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face=&quot;bold&quot;))
+a&lt;-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression(&quot;local h&quot;^2)) + ylab(expression(&quot;distal h&quot;^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_bw() + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face=&quot;bold&quot;))
 
 ##plot joint h2 estimates
 local &lt;- fdrother %&gt;% select(loc.jt.h2,loc.jt.se) %&gt;% arrange(loc.jt.h2) 

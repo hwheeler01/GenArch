@@ -1,0 +1,79 @@
+---
+title: "rpkm_h2_comps"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+  library(ggplot2)
+  library(reshape2)
+  library(dplyr)
+  library(tidyr)
+  library(GGally)
+  library(grid)
+  "%&%" = function(a,b) paste(a,b,sep="")
+  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
+  my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
+  fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
+```
+
+##FigSx DGN h2 v. exp level 
+```{r h2vlevel, echo=TRUE, warning=FALSE, message=FALSE,eval=TRUE}
+se <- function(x) sqrt(var(x)/length(x))
+h2 <- read.table('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/DGN-WB.localGRM.h2.exp.2014-08-30.txt',header=T)
+rawcounts <- read.table('/Volumes/im-lab/nas40t2/Data/Transcriptome/WB1K/data_used_for_eqtl_study/raw_counts.txt',header=T)
+expmean<-data.frame(mean.exp=colMeans(rawcounts),se.exp=apply(rawcounts,2,se)) %>%mutate(gene=as.factor(colnames(rawcounts)))
+all <- inner_join(expmean,h2,by='gene',copy=TRUE)
+ngenes<-dim(all)[[1]]
+a<-ggplot(all,aes(x=log10(mean.exp),y=h2)) + geom_point() + xlab(expression(paste("log"[10],"(mean expression raw counts)"))) + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " genes)") + theme_bw(20)+ geom_smooth(method = "lm")
+a
+summary(lm(h2~mean.exp,all))
+b<-ggplot(all,aes(x=log10(se.exp),y=h2)) + geom_point() + xlab(expression(paste("log"[10],"(SE expression raw counts)"))) + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " genes)") + theme_bw(20)+ geom_smooth(method = "lm")
+b
+summary(lm(h2~se.exp,all))
+
+tiff(filename=fig.dir %&% "FigSx-h2_v_exp_rawcounts.tiff",width=960,height=480)
+multiplot(a,b,cols=2)
+dev.off()
+
+png(filename=fig.dir %&% "FigSx-h2_v_exp_rawcounts.png",width=960,height=480)
+multiplot(a,b,cols=2)
+dev.off()
+
+###only include genes with h2>0.1
+filall<-filter(all,h2>0.1)
+ngenes<-dim(filall)[[1]]
+a<-ggplot(filall,aes(x=log10(mean.exp),y=h2)) + geom_point() + xlab(expression(paste("log"[10],"(mean expression raw counts)"))) + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " h2 > 0.1 genes)") + theme_bw(20)+ geom_smooth(method = "lm")
+a
+summary(lm(h2~mean.exp,filall))
+b<-ggplot(filall,aes(x=log10(se.exp),y=h2)) + geom_point() + xlab(expression(paste("log"[10],"(SE expression raw counts)"))) + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " h2 > 0.1 genes)") + theme_bw(20)+ geom_smooth(method = "lm")
+b
+summary(lm(h2~se.exp,filall))
+```
+
+we do not see h2 dependence on expression level in contrast to what is reported for array based h2 estimates--ask Haky where this is reported, I couldn't find a fig in Price or Wright.
+
+TO DO: plot a) array based h2 vs. RPKM in gtex, use alkes and or fred wright's h2 estimates b) RNAseq h2 vs RPKM in gtex
+
+```{r gtex}
+##get GTEx TW local h2
+twh2 <- read.table(my.dir %&% "GTEx_Tissue-Wide_local_h2_se_geneinfo_no_description.txt",header=TRUE) 
+twh2 <- mutate(twh2,gene=AssociatedGeneName)
+
+##get price h2 (custom-made human array containing 23,720 unique oligonucleotide probes, http://www.nature.com/nature/journal/v452/n7186/full/nature06758.html)
+price <- read.table("~/GitHub/GenArch/GenArchPaper/compare2price_h2/journal.pgen.1001317.s005.TXT",header=TRUE,sep="\t")
+head(price)
+##Which column to plot? cis? overall? try both
+## IFA = Icelandic Family Adipose
+## IFB = Icelandic Family Blood
+
+a<-inner_join(twh2,price,"gene")
+dim(a)
+ggplot(a,aes(h2.WholeBlood,IFBh2cis)) + geom_point(alpha=1/4) + geom_smooth(method="lm") + theme_bw()
+cor.test(a$h2.WholeBlood,a$IFBh2cis)
+cor.test(a$h2.WholeBlood,a$IFBh2)
+cor.test(a$h2.WholeBlood,a$IFBh2trans)
+##get GTEx rpkm (PC and PEER adjusted) check: my.dir %&% 26_GTEx_TW_CV_elasticNet.r paths
+
+```
