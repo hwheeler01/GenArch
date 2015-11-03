@@ -16,6 +16,8 @@ output: html_document
   source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
   my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
   fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
+  exp.dir <- my.dir %&% "gtex-rnaseq/ind-tissues-from-nick/"
+  h2.dir <- '/Volumes/im-lab/nas40t2/Data/Annotations/heritability/'
 ```
 
 ##FigSx DGN h2 v. exp level 
@@ -59,10 +61,10 @@ TO DO: plot a) array based h2 vs. RPKM in gtex, use alkes and or fred wright's h
 ```{r gtex}
 ##get GTEx TW local h2
 twh2 <- read.table(my.dir %&% "GTEx_Tissue-Wide_local_h2_se_geneinfo_no_description.txt",header=TRUE) 
-twh2 <- mutate(twh2,gene=AssociatedGeneName)
+twh2 <- dplyr::rename(twh2,gene=AssociatedGeneName)
 
 ##get price h2 (custom-made human array containing 23,720 unique oligonucleotide probes, http://www.nature.com/nature/journal/v452/n7186/full/nature06758.html)
-price <- read.table("~/GitHub/GenArch/GenArchPaper/compare2price_h2/journal.pgen.1001317.s005.TXT",header=TRUE,sep="\t")
+price <- read.table(h2.dir %&% "Alkes/h2all.txt",header=TRUE) %>% dplyr::rename(gene=gname)
 head(price)
 ##Which column to plot? cis? overall? try both
 ## IFA = Icelandic Family Adipose
@@ -70,10 +72,10 @@ head(price)
 
 a<-inner_join(twh2,price,"gene")
 dim(a)
-ggplot(a,aes(h2.WholeBlood,IFBh2cis)) + geom_point(alpha=1/4) + geom_smooth(method="lm") + theme_bw()
-cor.test(a$h2.WholeBlood,a$IFBh2cis)
-cor.test(a$h2.WholeBlood,a$IFBh2)
-cor.test(a$h2.WholeBlood,a$IFBh2trans)
+ggplot(a,aes(h2.WholeBlood,h2bloodcis)) + geom_point(alpha=1/4) + geom_smooth(method="lm") + theme_bw()
+cor.test(a$h2.WholeBlood,a$h2bloodcis)
+cor.test(a$h2.WholeBlood,a$h2blood)
+cor.test(a$h2.WholeBlood,a$h2bloodtra)
 ##get GTEx rpkm (PC and PEER adjusted) check: my.dir %&% 26_GTEx_TW_CV_elasticNet.r paths
 
 ```
