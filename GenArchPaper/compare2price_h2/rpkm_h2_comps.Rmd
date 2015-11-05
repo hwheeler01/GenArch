@@ -16,7 +16,7 @@ output: html_document
   source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
   my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
   fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
-  exp.dir <- my.dir %&% "gtex-rnaseq/ind-tissues-from-nick/"
+  exp.dir <- my.dir %&% "gtex-rnaseq/ind-tissues-RPKM/"
   h2.dir <- '/Volumes/im-lab/nas40t2/Data/Annotations/heritability/'
 ```
 
@@ -54,28 +54,96 @@ b
 summary(lm(h2~se.exp,filall))
 ```
 
-we do not see h2 dependence on expression level in contrast to what is reported for array based h2 estimates--ask Haky where this is reported, I couldn't find a fig in Price or Wright.
+we do not see h2 dependence on expression level in contrast to what is reported for array based h2 estimates--see Wright et al Table 2.
 
 TO DO: plot a) array based h2 vs. RPKM in gtex, use alkes and or fred wright's h2 estimates b) RNAseq h2 vs RPKM in gtex
 
-```{r gtex}
+###Price h2 v GTEx RPKM
+```{r price, message=FALSE, warning=FALSE}
 ##get GTEx TW local h2
 twh2 <- read.table(my.dir %&% "GTEx_Tissue-Wide_local_h2_se_geneinfo_no_description.txt",header=TRUE) 
-twh2 <- dplyr::rename(twh2,gene=AssociatedGeneName)
+twh2 <- dplyr::rename(twh2,gene=AssociatedGeneName,ensid=EnsemblGeneID)
 
 ##get price h2 (custom-made human array containing 23,720 unique oligonucleotide probes, http://www.nature.com/nature/journal/v452/n7186/full/nature06758.html)
 price <- read.table(h2.dir %&% "Alkes/h2all.txt",header=TRUE) %>% dplyr::rename(gene=gname)
 head(price)
-##Which column to plot? cis? overall? try both
-## IFA = Icelandic Family Adipose
-## IFB = Icelandic Family Blood
+summary(price)
 
 a<-inner_join(twh2,price,"gene")
 dim(a)
-ggplot(a,aes(h2.WholeBlood,h2bloodcis)) + geom_point(alpha=1/4) + geom_smooth(method="lm") + theme_bw()
-cor.test(a$h2.WholeBlood,a$h2bloodcis)
-cor.test(a$h2.WholeBlood,a$h2blood)
-cor.test(a$h2.WholeBlood,a$h2bloodtra)
-##get GTEx rpkm (PC and PEER adjusted) check: my.dir %&% 26_GTEx_TW_CV_elasticNet.r paths
+ggplot(a,aes(h2.WholeBlood,h2bloodcis)) + geom_point(alpha=1/4) + geom_smooth() + theme_bw()
+cor.test(a$h2.WholeBlood,a$h2bloodcis,method='s')
+cor.test(a$h2.WholeBlood,a$h2blood,method='s')
+cor.test(a$h2.WholeBlood,a$h2bloodtra,method='s')
 
+tislist <- scan(my.dir %&% "nine.spaces.tissue.list","c",sep="\n")
+rpkm <- data.frame()
+for(tis in tislist){
+  tisrpkm <- read.table(exp.dir %&% tis %&% ".meanRPKM.txt",header=TRUE)  
+  combo <- inner_join(a,tisrpkm,by='ensid') %>% dplyr::select(ensid,meanRPKM,h2adipcis,h2bloodcis) %>% mutate(tissue=tis)
+  res<-cor.test(combo$h2bloodcis,log10(combo$meanRPKM),method='p')
+  cat(tis," RPKM v Price h2bloodcis: R=",signif(res$estimate,2)," p=",signif(res$p.value,2),"\n",sep="")
+  res<-cor.test(combo$h2adipcis,log10(combo$meanRPKM),method='p')
+  cat(tis," RPKM v Price h2adipcis: R=",signif(res$estimate,2)," p=",signif(res$p.value,2),"\n",sep="")
+  rpkm <- rbind(rpkm,combo)
+}
+
+ggplot(rpkm,aes(x=log10(meanRPKM),y=h2bloodcis))+geom_point(alpha=1/4)+geom_smooth(method="lm")+facet_wrap(~tissue)+ggtitle("Price blood h2 vs. GTEx mean RPKM")+theme_bw()
+ggplot(rpkm,aes(x=log10(meanRPKM),y=h2adipcis))+geom_point(alpha=1/4)+geom_smooth(method="lm")+facet_wrap(~tissue)+ggtitle("Price adipose h2 vs. GTEx mean RPKM")+theme_bw()
+
+##price h2 vs. DGN raw counts
+dgnprice <- inner_join(all,price,by='gene')
+ggplot(dgnprice,aes(x=log10(mean.exp),y=h2bloodcis))+ geom_point(alpha=1/2) + geom_smooth() + theme_bw()+ggtitle("Price blood h2 vs. DGN mean counts")
+cor.test(log10(dgnprice$mean.exp),dgnprice$h2bloodcis,method='s')
+ggplot(dgnprice,aes(x=log10(mean.exp),y=h2adipcis))+ geom_point(alpha=1/2) + geom_smooth() + theme_bw()+ggtitle("Price adipose h2 vs. DGN mean counts")
+cor.test(log10(dgnprice$mean.exp),dgnprice$h2adipcis,method='s')
+```
+
+###Wright h2 v GTEx RPKM
+```{r wright, message=FALSE, warning=FALSE}
+##get GTEx TW local h2
+twh2 <- read.table(my.dir %&% "GTEx_Tissue-Wide_local_h2_se_geneinfo_no_description.txt",header=TRUE) 
+twh2 <- dplyr::rename(twh2,gene=AssociatedGeneName,ensid=EnsemblGeneID)
+
+wright <- read.table(h2.dir %&% "Fred/h2PB.txt",header=TRUE) %>% dplyr::rename(gene=gname)
+head(wright)
+summary(wright)
+
+a<-inner_join(twh2,wright,"gene")
+dim(a)
+ggplot(a,aes(h2.WholeBlood,h2PB)) + geom_point(alpha=1/4) + geom_smooth() + theme_bw()
+cor.test(a$h2.WholeBlood,a$h2PB,method='s')
+
+tislist <- scan(my.dir %&% "nine.spaces.tissue.list","c",sep="\n")
+rpkm <- data.frame()
+for(tis in tislist){
+  tisrpkm <- read.table(exp.dir %&% tis %&% ".meanRPKM.txt",header=TRUE)  
+  combo <- inner_join(a,tisrpkm,by='ensid') %>% dplyr::select(ensid,meanRPKM,h2PB) %>% mutate(tissue=tis)
+  res<-cor.test(combo$h2PB,log10(combo$meanRPKM),method='p')
+  cat(tis," RPKM v Wright h2PB: R=",signif(res$estimate,2)," p=",signif(res$p.value,2),"\n",sep="")
+  rpkm <- rbind(rpkm,combo)
+}
+
+ggplot(rpkm,aes(x=log10(meanRPKM),y=h2PB))+geom_point(alpha=1/4)+geom_smooth(method="lm")+facet_wrap(~tissue)+ggtitle("Wright blood h2 vs. GTEx mean RPKM")+theme_bw()
+
+##wright h2 vs. DGN raw counts
+dgnwright <- inner_join(all,wright,by='gene')
+ggplot(dgnwright,aes(x=log10(mean.exp),y=h2PB))+ geom_point(alpha=1/2) + geom_smooth() + theme_bw()+ggtitle("Wright blood h2 vs. DGN mean counts")
+cor.test(log10(dgnwright$mean.exp),dgnwright$h2PB,method='s')
+```
+
+###GTEx h2 v GTEx RPKM
+```{r gtex, message=FALSE, warning=FALSE}
+tislist <- scan(my.dir %&% 'nine.tissue.list',sep="\n",what="character")
+tislist2 <- scan(my.dir %&% "nine.spaces.tissue.list","c",sep="\n")
+tw <- data.frame()
+for(i in 1:length(tislist)){
+  tisrpkm <- read.table(exp.dir %&% tislist2[i] %&% ".meanRPKM.txt",header=TRUE)
+  h2 <- read.table(my.dir %&% "gtex-h2-estimates/GTEx.tissue-wide.h2_" %&% tislist[i] %&% "_marginal.local_2015-03-24.txt",header=T, sep="\t") %>% select(tissue,ensid,h2)
+  subdata <- inner_join(h2,tisrpkm,by="ensid")
+  res<-cor.test(log10(subdata$meanRPKM),subdata$h2)
+  cat(tislist[i],"\tPearson R=",round(res$estimate,3),"\tP-value=",res$p.value,"\n")
+  tw <- rbind(tw,subdata)
+}
+ggplot(tw,aes(x=log10(meanRPKM),y=h2))+geom_point(alpha=0.4)+ylab(expression("GCTA h"^2))+xlab(expression(paste("log"[10],"(meanRPKM)")))+geom_smooth(method="lm") + facet_wrap(~tissue,ncol=3)+theme_bw()+ggtitle("GTEx TW local h2 vs. GTEx mean RPKM")
 ```

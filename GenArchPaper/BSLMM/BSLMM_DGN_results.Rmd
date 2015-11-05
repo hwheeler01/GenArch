@@ -110,3 +110,10 @@ table(subdata[,3])/sum(table(subdata[,3]))
 summary(subdata$pge50)
 ```
 
+##pull pred #SNPs in BSLMM model for genes in PrediXcan Fig 5
+```{r num}
+filter(hun,gene=="ERAP2") %>% select(gene,n_gamma50,n_gamma025,n_gamma975)
+filter(hun,gene=="PEX6") %>% select(gene,n_gamma50,n_gamma025,n_gamma975)
+filter(hun,gene=="ERAP1") %>% select(gene,n_gamma50,n_gamma025,n_gamma975)
+filter(hun,gene=="NUDT2") %>% select(gene,n_gamma50,n_gamma025,n_gamma975)
+```

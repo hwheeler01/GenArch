@@ -105,7 +105,7 @@ Im\textsuperscript{3}}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-10-29 16:14:21 \textsuperscript{1}Department of Biology and
+  \date{2015-11-05 16:20:24 \textsuperscript{1}Department of Biology and
 \textsuperscript{2}Department of Computer Science, Loyola University
 Chicago, \textsuperscript{3}Section of Genetic Medicine, Department of
 Medicine, University of Chicago, \textsuperscript{4}Committee on
@@ -124,8 +124,8 @@ Genetics, Genomics, and Systems Biology, University of Chicago,
 For many complex traits, gene regulation is likely to play a crucial
 mechanistic role given the consistent enrichment of expression
 quantitative trait loci (eQTLs) among trait-associated variants. In
-order to fully harness gene regulation mechanisms in future studies of
-complex traits, we sought to better understand the underlying genetic
+order to fully harness gene regulation mechanisms in complex trait
+prediction, we sought to better understand the underlying genetic
 architecture of the gene expression traits across multiple tissues. We
 show that local heritability of gene expression (variance in gene
 expression due to genetic variation within 1Mb of a gene) can be
@@ -168,7 +168,7 @@ underlying genetic architecture of gene expression and to further
 optimize predictors for our complex trait prediciton method PrediXcan
 {[}13{]}. In our PrediXcan paper, we showed that a polygenic score model
 was suboptimal to more sparse models like the elastic net model with
-\(\alpha=0.5\). Howeer, a top eQTL only model did not do as well as the
+\(\alpha=0.5\). However, a top eQTL only model did not do as well as the
 elastic net either {[}13{]}, suggesting that for many genes, the genetic
 architecture is sparse, but not regulated by one SNP. Gene expression
 traits with sparse architecture should be better predicted with sparse
@@ -198,21 +198,20 @@ gene expression components and developed predictors for use in PrediXcan
 
 Specifically, in this paper we show that local heritability can be
 accurately estimated across tissues, but distal heritability cannot
-reliably estimated at current sample sizes (although strong functional
-priors reduce error). We also show that for local gene regulation, the
-genetic architecture is mostly sparse rather than polygenic. We found
-that estimates of the local heritability of cross-tissue gene expression
-generated with our OTD model have larger magnitude and improved standard
-errors compared to single tissue estimates due to the borrowing of
-information across all samples. Unlike previous array-based expression
-studies, we do not observe heritability estimate dependence on
-expression level. Comparing our OTD results to a previously performed
-joint multi-tissue eQTL analysis method {[}22{]}, we show that genes
-with high cross-tissue heritability are more likely to have cross-tissue
-eQTLs, confirming that OTD is capturing the cross-tissue component of
-gene expression. Cross-validated predictors of cross-tissue and
-tissue-specific expression built here have been added to the PrediXcan
-database for future investigations of complex traits.
+reliably estimated at current sample sizes. Yet, strong functional
+priors reduce distal heritability error. We also show that for local
+gene regulation, the genetic architecture is mostly sparse rather than
+polygenic. We found that estimates of the local heritability of
+cross-tissue gene expression generated with our OTD model have larger
+magnitude and improved standard errors compared to single tissue
+estimates due to the borrowing of information across all samples.
+Comparing our OTD results to a previously performed joint multi-tissue
+eQTL analysis method {[}22{]}, we show that genes with high cross-tissue
+heritability are more likely to have cross-tissue eQTLs, confirming that
+OTD is capturing the cross-tissue component of gene expression.
+Cross-validated predictors of cross-tissue and tissue-specific
+expression built here have been added to the PrediXcan database for
+future investigations of complex traits.
 
 \section{Results}\label{results}
 
@@ -255,10 +254,13 @@ reliably estimated in these smaller sample sizes as less than 1\% of
 genes in each tissue had a positive CI in the joint model (Fig
 3-\textbf{{[}SUP{]}})).
 
-We found no correlation between expression levels and local
+{[}{[}{[}We found no correlation between expression levels and local
 h\textsuperscript{2} estimates in DGN {[}{[}make SUP fig{]}{]}. {[}{[}TO
 DO: plot a) array based h2 vs.~RPKM in gtex, use alkes and or fred
-wright's h2 estimates b) RNAseq h2 vs RPKM in gtex{]}{]}
+wright's h2 estimates b) RNAseq h2 vs RPKM in
+gtex{]}{]}---\textgreater{} h2 (from Price, Wright,\& us) and GTEx RPKM
+do correlate, conflicting results b/t GTEx and DGN. Maybe b/c DGN is raw
+counts, not RPKM? remove from paper?{]}{]}{]}
 
 \subsection{The effect of local genetic variation on gene expression is
 sparse rather than
@@ -274,8 +276,8 @@ is highly polygenic, whereas if the optimal \(\alpha=1\) (equivalent to
 LASSO), the trait is highly sparse. We found that for most gene
 expression traits, the cross-validated R\textsuperscript{2} was
 suboptimal for \(\alpha=0\) and \(\alpha=0.05\), but nearly identically
-optimal for \(\alpha=0.5\) - \(\alpha=1\) in the DGN cohort (Fig 4). An
-\(\alpha=0.05\) was also clearly suboptimal for gene expression
+optimal for \(\alpha=0.5\) through \(\alpha=1\) in the DGN cohort (Fig
+4). An \(\alpha=0.05\) was also clearly suboptimal for gene expression
 prediction in the nine GTEx tissues, while models with
 \(\alpha=0.5,0.95,1\) had similar predictive power (Fig
 5-\textbf{{[}SUP{]}}). This suggests that for most genes, the effect of
@@ -309,8 +311,6 @@ we observed in DGN, genes with larger PVE estimates were more likely to
 have a PGE estimate approaching 1 with a lower credible set greater than
 0.01 in each of the nine GTEx tissues (Fig 8).
 
-{[}{[}add individual gene results: ERAP2, PEX6, etc.{]}{]}
-
 \subsection{Cross-tissue and tissue-specific gene expression by
 orthogonal tissue
 decomposition}\label{cross-tissue-and-tissue-specific-gene-expression-by-orthogonal-tissue-decomposition}
@@ -323,13 +323,13 @@ model with just the local GRM, we estimated the local
 h\textsuperscript{2} of cross-tissue gene expression and tissue-specific
 gene expression in the nine tissues with the most samples. The
 cross-tissue heritabilities were larger and the standard errors were
-smaller than the tissue-specific estimates (Fig 9). The percentage of
-GCTA h\textsuperscript{2} estimates with positive CIs was much larger
-for cross-tissue expression (17.3\%) than the tissue-specific
-expressions (all less than 3\%, Fig 10). Similarly, the percentage of
-BSLMM PVE estimates with a lower credible set greater than 0.01 was 49\%
-for cross-tissue expression, but ranged from 24-27\% for tissue-specific
-expression (Fig 11).
+smaller than the tissue-specific estimates (Fig 9-\textbf{{[}SUP{]}}).
+The percentage of GCTA h\textsuperscript{2} estimates with positive CIs
+was much larger for cross-tissue expression (17.3\%) than the
+tissue-specific expressions (all less than 3\%, Fig 10). Similarly, the
+percentage of BSLMM PVE estimates with a lower credible set greater than
+0.01 was 49\% for cross-tissue expression, but ranged from 24-27\% for
+tissue-specific expression (Fig 11).
 
 We also compared the cross-tissue h\textsuperscript{2} from the OTD to
 h\textsuperscript{2} estimates from the pre-OTD measures of gene
@@ -376,86 +376,70 @@ OTD also captures tissue-specific components of gene expression (Fig
 Because regulatory variation plays a key mechanistic role in the
 genetics of complex traits {[}1--3{]}, we sought to comprehensively
 characterize the genetic architecture of gene expression across tissues.
-We show that the local architecture of gene expression is sparse for
-95\% of heritable genes and that distal architecture cannot be
-accurately assessed at current sample sizes (n \textless{} 1000).
-{[}{[}compare mean h2's across studies{]}{]} Indeed, while the
-heritability of gene expression attributable to local genetic variation
-has been estimated accurately, large standard errors have prevented
-accurate estimation of the contribution of distal genetic variation to
-gene expression variation {[}11,12{]}.
+We accurately quantify the local heritability of gene expression in DGN
+whole blood and nine GTEx tissues. In DGN, the mean local
+h\textsuperscript{2} was 0.13, similar to that found in family studies
+of blood expression, where mean h\textsuperscript{2} ranged from
+0.07-0.11 {[}11,12{]}. While we found that functional priors (known
+trans-eQTLs) can reduce the error of the estimate by reducing the number
+of genetic markers included in the genetic relationship matrix, larger
+sample sizes (n \textgreater{} 1000) are needed to accurately estimate
+distal heritability.
+
+Using the hybrid polygenic-sparse approach of BSLMM (Bayesian Sparse
+Linear Mixed Model) {[}18{]}, we show that the local architecture of
+gene expression is sparse (high PGE) for most heritable genes in both
+DGN and GTEx. Using the elastic net {[}25{]}, we observed improved
+cross-validated expression prediction for \(\alpha>=0.5\) across
+tissues, confirming the sparsity result. Our BSLMM analysis quantified
+the optimal number of SNPs to include for each gene. For example, the
+median number of SNPs for \emph{ERAP2} was 1. When we previously plotted
+out-of-sample observed vs.~predicted expression using elastic net
+(\(\alpha=0.5\)) generated predictors for this gene, we saw three
+clusters, corresponding to each of the three genotypes for the causal
+variant {[}13{]}. Similarly, BSLMM estimated 2, 3, and 5 SNPs for
+\emph{PEX6}, \emph{NUDT2}, and \emph{ERAP1}, respectively, consistent
+with the out-of-sample observed vs.~predicted expression plots in our
+PrediXcan paper (see Figure 5 in {[}13{]}). Potentially due to
+variations in imputation quality of the input SNPs for expression
+prediction, it is useful to include more than the likely causal variants
+(i.e.~elastic net rathern than BSLMM) in the prediction for robustness.
+In addition, the elastic net is amenable cross-validation, while
+genome-wide cross-validation with BSLMM is impractical at current
+runtimes.
 
 We developed a mixed effects model called orthogonal tissue
 decomposition (OTD) to determine the cross-tissue and tissue-specific
-components of gene expression in the rich GTEx dataset. These components
-were used to develop predcitors of cross-tissue and tissue-specific gene
-expression for use in our gene-based association method PrediXcan
-{[}13{]}. The tissue availability is unbalanced because of the
+components of gene expression in the GTEx dataset. Previous studys have
+shown that many eQTLs are shared across tissues {[}21,22{]}. In
+addition, because expression data from multiple tissues were available
+from the same individuals in GTEx, we could effectively use the multiple
+tissue samples as subject replicates in our OTD model. However, the
+tissue availability is unbalanced across individuals because of the
 difficulties of sample collection and the uneven quality of the tissues.
-Furthermore, by using a mixed effects model to create cross-tissue
-expression, we borrow information across tissues, which should increase
-our power to detect associations and achieve better predictive models.
-
-We also assessed the ability of various models with different underlying
-assumptions to predict gene expression in order to understand the
-underlying genetic architecture of gene expression. Gene expression
-traits with sparse architecture should be better predicted with sparse
-models such as LASSO (Least Absolute Shrinkage and Selection Operator)
-{[}14{]} while highly polygenic traits should be better predicted with
-ridge regression or similarly polygenic models {[}15--17{]}. Using the
-hybrid approach of BSLMM (Bayesian Sparse Linear Mixed Model) {[}18{]},
-we quantified the proportion of the sparse component that makes up the
-total proportion of expression variance explained by sparse and
-polygenic effects.
-
-Specifically, in this paper we show that local heritability can be
-accurately estimated across tissues, but distal heritability cannot
-reliably estimated at current sample sizes. We also show that for local
-gene regulation, the genetic architecture is mostly sparse rather than
-polygenic. We found that estimates of the local heritability of
-cross-tissue gene expression generated with our OTD model have larger
-magnitude and improved standard errors compared to single tissue
-estimates due to the borrowing of information across all samples.
+By combining all available expression data in our OTD model, we found
+that estimates of the local heritability of cross-tissue gene expression
+have larger magnitude and improved standard errors compared to single
+tissue estimates due to the borrowing of information across all samples.
+Thus, OTD effectively increases power to estimate heritability.
 Comparing our OTD results to a previously performed joint multi-tissue
 eQTL analysis method {[}22{]}, we show that genes with high cross-tissue
 heritability are more likely to have cross-tissue eQTLs, confirming that
 OTD is capturing the cross-tissue component of gene expression.
 
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  local + trans heritability (others have done this)
-\item
-  trans heritability estimates not reliable, proportion not reliable
-\item
-  orthogonal tissue decomposition
-\item
-  cross tissue + tissue specific heritability -- estimates higher and se
-  lower for cross-tissue The tissue availability is unbalanced because
-  of the difficulties of sample collection and the uneven quality of the
-  tissues. Furthermore, by using a mixed effects model to create
-  cross-tissue expression, we borrow information across tissues, which
-  should increase our power to detect associations and achieve better
-  predictive models.
-\item
-  elastic net mixing parameter (alpha) as measure of
-  polygenicity/sparsity
-\end{enumerate}
-
-Future
-
-\begin{enumerate}
-\def\labelenumi{\arabic{enumi}.}
-\itemsep1pt\parskip0pt\parsep0pt
-\item
-  simulation to show sparsity well represented by alpha
-\item
-  use number of PC's (computed using only local snps) that maximize
-  prediction performance. This will count independent signals.
-\item
-  FHS heritability. could this improve trans heritability?
-\end{enumerate}
+In this paper, we quantitate the genetic architecture of gene expression
+and develop predictors across tissues. We show that local heritability
+can be accurately estimated across tissues, but distal heritability
+cannot be reliably estimated at current sample sizes. Using two
+different approaches, the elastic net and BSLMM, we show that for local
+gene regulation, the genetic architecture is mostly sparse rather than
+polygenic. Using new expression phenotypes generated in our OTD model,
+we show that cross-tissue predictive performance exceeded that of both
+tissue-specific and whole tissue expression as indicated by higher
+elastic net cross-validated R\textsuperscript{2}. Predictors generated
+in this study of gene expression architecture have been added to our
+PrediXcan database (\url{https://github.com/hakyimlab/PrediXcan})
+{[}13{]} for use in future studies of complex trait genetics.
 
 \section{Methods}\label{methods}
 
