@@ -93,8 +93,7 @@
 }
 
 \setlength{\droptitle}{-2em}
-  \title{Genetic architecture of gene expression regulation across tissues and
-implications for prediction}
+  \title{An atlas of the genetic architecture of gene expression traits across the entire human body}
   \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
   \author{Heather E. Wheeler\textsuperscript{1,2}, GTEx Consortium, Kaanan P.
@@ -116,6 +115,8 @@ Genetics, Genomics, and Systems Biology, University of Chicago,
 \usepackage{setspace}
 \setstretch{2}
 
+\usepackage{soul}
+
 
 \begin{document}
 
@@ -124,29 +125,50 @@ Genetics, Genomics, and Systems Biology, University of Chicago,
 
 \section{Abstract}\label{abstract}
 
-For many complex traits, gene regulation is likely to play a crucial
-mechanistic role given the consistent enrichment of expression
-quantitative trait loci (eQTLs) among trait-associated variants. In
-order to fully harness gene regulation mechanisms in complex trait
-prediction, we sought to better understand the underlying genetic
-architecture of the gene expression traits across multiple tissues. We
-show that local heritability of gene expression (variance in gene
-expression due to genetic variation within 1Mb of a gene) can be
-accurately estimated across tissues. However, distal heritability cannot
-be reliably estimated at sample sizes less than 1000, but strong
-functional priors can reduce the error of the distal estimates. Using
-both the elastic net and Bayesian sparse linear mixed modeling, we show
-that for local gene regulation, the genetic architecture is mostly
-sparse rather than polygenic. Using genome and transcriptome data from
-the diverse set of tissues available in The GTEx Project, we developed a
-model called Orthogonal Tissue Decomposition (OTD), which partitions
-gene expression into cross-tissue and tissue-specific components.
-Estimates of the local heritability of OTD-generated cross-tissue gene
-expression have larger magnitude and smaller standard errors compared to
-single tissue estimates due to the borrowing of information across all
-samples. We show that genes with high cross-tissue heritability are more
-likely to have cross-tissue eQTLs, confirming that OTD is capturing the
-cross-tissue component of gene expression.
+For most complex traits, gene regulation is known to play a crucial
+mechanistic role as demonstrated by the consistent enrichment of expression
+quantitative trait loci (eQTLs) among trait-associated variants. 
+For this reason, the GTEx project has generated RNAseq data on hundreds of
+individuals across more than 40 tissues providing a comprehensive atlas of gene expression traits.
+
+Here we systematically examined the local vs. distant heritability of protein coding gene expression traits
+as well as the sparsity vs polygenicity for tissues across the entire human body. To tease out the 
+tissue context specificity, we decomposed the expression levels into a ubiquitous or cross tissue 
+and tissue specific components via orthogonal tissue decomposition (OTD).
+
+Regardless of tissue type, we found that local heritability can be well characterized with current sample
+sizes while the heritability due to distant variants cannot, unless strong functional priors are used. 
+We also find that the distribution of effect sizes is more consistent with a sparse architecture across all tissues.
+We also show that the cross tissue and tissue specific phenotypes constructed with our OTD recapitulates 
+complex Bayesian multi tissue analysis results demonstrating that they reflect the expected biology.
+
+Finally, this knowledge was applied to develop prediction models of gene expression traits for all tissues. 
+The prediction models, heritability for each tissue, and prediction performance R2 are made publicly available. \hl{url here}
+
+
+%In
+%order to fully harness gene regulation mechanisms in complex trait
+%prediction, we sought to better understand the underlying genetic
+%architecture of the gene expression traits across multiple tissues. We
+%show that local heritability of gene expression (variance in gene
+%expression due to genetic variation within 1Mb of a gene) can be
+%accurately estimated across tissues. However, distal heritability cannot
+%be reliably estimated at sample sizes less than 1000, but strong
+%functional priors can reduce the error of the distal estimates. Using
+%both the elastic net and Bayesian sparse linear mixed modeling, we show
+%that for local gene regulation, the genetic architecture is mostly
+%sparse rather than polygenic. 
+
+%Using genome and transcriptome data from
+%the diverse set of tissues available in The GTEx Project, we developed a
+%model called Orthogonal Tissue Decomposition (OTD), which partitions
+%gene expression into cross-tissue and tissue-specific components.
+%Estimates of the local heritability of OTD-generated cross-tissue gene
+%expression have larger magnitude and smaller standard errors compared to
+%single tissue estimates due to the borrowing of information across all
+%samples. We show that genes with high cross-tissue heritability are more
+%likely to have cross-tissue eQTLs, confirming that OTD is capturing the
+%cross-tissue component of gene expression.
 
 \section{Introduction}\label{introduction}
 
@@ -199,6 +221,8 @@ underlying genetic architecture of the cross-tissue and tissue-specific
 gene expression components and developed predictors for use in PrediXcan
 {[}13{]}.
 
+\hl{Are we giving away results and punchline here in the intro?}
+
 Specifically, in this paper we show that local heritability can be
 accurately estimated across tissues, but distal heritability cannot
 reliably estimated at current sample sizes. Yet, strong functional
@@ -216,11 +240,10 @@ Cross-validated predictors of cross-tissue and tissue-specific
 expression built here have been added to the PrediXcan database for
 future investigations of complex traits.
 
+
 \section{Results}\label{results}
 
-\subsection{Local genetic variation explains a large proportion of gene
-expression
-variance}\label{local-genetic-variation-explains-a-large-proportion-of-gene-expression-variance}
+\subsection{Local genetic variation can be well characterized for all tissues}\label{local-genetic-variation-explains-a-large-proportion-of-gene-expression-variance}
 
 We estimated the heritability of gene expression in whole blood from the
 Depression Genes and Networks (DGN) cohort (n=922) {[}20{]} using a
@@ -264,6 +287,8 @@ wright's h2 estimates b) RNAseq h2 vs RPKM in
 gtex{]}{]}---\textgreater{} h2 (from Price, Wright,\& us) and GTEx RPKM
 do correlate, conflicting results b/t GTEx and DGN. Maybe b/c DGN is raw
 counts, not RPKM? remove from paper?{]}{]}{]}
+
+Thus we focus on the local architecture from now on.
 
 \subsection{The effect of local genetic variation on gene expression is
 sparse rather than
