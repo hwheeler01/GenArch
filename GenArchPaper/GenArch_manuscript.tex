@@ -65,8 +65,8 @@
 \fi
 \hypersetup{breaklinks=true,
             bookmarks=true,
-            pdfauthor={Heather E. Wheeler1,2, GTEx Consortium, Kaanan P. Shah3, Nicholas Knoblauch4, Nancy J. Cox5, Dan L. Nicolae3, Hae Kyung Im3},
-            pdftitle={Genetic architecture of gene expression regulation across tissues and implications for prediction},
+            pdfauthor={Heather E. Wheeler1,2, GTEx Consortium, Kaanan P. Shah3, . . ., Nancy J. Cox4, Dan L. Nicolae3, Hae Kyung Im3},
+            pdftitle={An atlas of the genetic architecture of gene expression traits across the entire human body},
             colorlinks=true,
             citecolor=blue,
             urlcolor=blue,
@@ -93,28 +93,25 @@
 }
 
 \setlength{\droptitle}{-2em}
-  \title{An atlas of the genetic architecture of gene expression traits across the entire human body}
+  \title{An atlas of the genetic architecture of gene expression traits across
+the entire human body}
   \pretitle{\vspace{\droptitle}\centering\huge}
   \posttitle{\par}
   \author{Heather E. Wheeler\textsuperscript{1,2}, GTEx Consortium, Kaanan P.
-Shah\textsuperscript{3}, Nicholas Knoblauch\textsuperscript{4}, Nancy J.
-Cox\textsuperscript{5}, Dan L. Nicolae\textsuperscript{3}, Hae Kyung
-Im\textsuperscript{3}}
+Shah\textsuperscript{3}, . . ., Nancy J. Cox\textsuperscript{4}, Dan L.
+Nicolae\textsuperscript{3}, Hae Kyung Im\textsuperscript{3}}
   \preauthor{\centering\large\emph}
   \postauthor{\par}
   \predate{\centering\large\emph}
   \postdate{\par}
-  \date{2015-11-05 16:20:24 \textsuperscript{1}Department of Biology and
+  \date{\textsuperscript{1}Department of Biology and
 \textsuperscript{2}Department of Computer Science, Loyola University
 Chicago, \textsuperscript{3}Section of Genetic Medicine, Department of
-Medicine, University of Chicago, \textsuperscript{4}Committee on
-Genetics, Genomics, and Systems Biology, University of Chicago,
-\textsuperscript{5}Division of Genetic Medicine, Vanderbilt University}
-
+Medicine, University of Chicago, \textsuperscript{4}Division of Genetic
+Medicine, Vanderbilt University 2015-11-17 15:52:42}
 
 \usepackage{setspace}
 \setstretch{2}
-
 \usepackage{soul}
 
 
@@ -126,49 +123,28 @@ Genetics, Genomics, and Systems Biology, University of Chicago,
 \section{Abstract}\label{abstract}
 
 For most complex traits, gene regulation is known to play a crucial
-mechanistic role as demonstrated by the consistent enrichment of expression
-quantitative trait loci (eQTLs) among trait-associated variants. 
-For this reason, the GTEx project has generated RNAseq data on hundreds of
-individuals across more than 40 tissues providing a comprehensive atlas of gene expression traits.
-
-Here we systematically examined the local vs. distant heritability of protein coding gene expression traits
-as well as the sparsity vs polygenicity for tissues across the entire human body. To tease out the 
-tissue context specificity, we decomposed the expression levels into a ubiquitous or cross tissue 
-and tissue specific components via orthogonal tissue decomposition (OTD).
-
-Regardless of tissue type, we found that local heritability can be well characterized with current sample
-sizes while the heritability due to distant variants cannot, unless strong functional priors are used. 
-We also find that the distribution of effect sizes is more consistent with a sparse architecture across all tissues.
-We also show that the cross tissue and tissue specific phenotypes constructed with our OTD recapitulates 
-complex Bayesian multi tissue analysis results demonstrating that they reflect the expected biology.
-
-Finally, this knowledge was applied to develop prediction models of gene expression traits for all tissues. 
-The prediction models, heritability for each tissue, and prediction performance R2 are made publicly available. \hl{url here}
-
-
-%In
-%order to fully harness gene regulation mechanisms in complex trait
-%prediction, we sought to better understand the underlying genetic
-%architecture of the gene expression traits across multiple tissues. We
-%show that local heritability of gene expression (variance in gene
-%expression due to genetic variation within 1Mb of a gene) can be
-%accurately estimated across tissues. However, distal heritability cannot
-%be reliably estimated at sample sizes less than 1000, but strong
-%functional priors can reduce the error of the distal estimates. Using
-%both the elastic net and Bayesian sparse linear mixed modeling, we show
-%that for local gene regulation, the genetic architecture is mostly
-%sparse rather than polygenic. 
-
-%Using genome and transcriptome data from
-%the diverse set of tissues available in The GTEx Project, we developed a
-%model called Orthogonal Tissue Decomposition (OTD), which partitions
-%gene expression into cross-tissue and tissue-specific components.
-%Estimates of the local heritability of OTD-generated cross-tissue gene
-%expression have larger magnitude and smaller standard errors compared to
-%single tissue estimates due to the borrowing of information across all
-%samples. We show that genes with high cross-tissue heritability are more
-%likely to have cross-tissue eQTLs, confirming that OTD is capturing the
-%cross-tissue component of gene expression.
+mechanistic role as demonstrated by the consistent enrichment of
+expression quantitative trait loci (eQTLs) among trait-associated
+variants. For this reason, the GTEx project has generated RNA-Seq data
+on hundreds of individuals across more than 40 tissues providing a
+comprehensive atlas of gene expression traits. Here, we systematically
+examined the local versus distant heritability as well as the sparsity
+versus polygenicity of protein coding gene expression traits in tissues
+across the entire human body. To determine tissue context specificity,
+we decomposed the expression levels into ubiquitous (cross-tissue) and
+tissue-specific components via orthogonal tissue decomposition (OTD).
+Regardless of tissue type, we found that local heritability can be well
+characterized with current sample sizes. Unless strong functional priors
+are used, the heritability due to distant variants cannot be estimated.
+We also find that the distribution of effect sizes is more consistent
+with a sparse architecture across all tissues. We also show that the
+cross-tissue and tissue-specific expression phenotypes constructed with
+our OTD model recapitulate complex Bayesian multi-tissue analysis
+results demonstrating that they reflect the expected biology. Finally,
+this knowledge was applied to develop prediction models of gene
+expression traits for all tissues. The prediction models, heritability
+for each tissue, and prediction performance R\textsuperscript{2} are
+made publicly available (\url{https://github.com/hakyimlab/PrediXcan}).
 
 \section{Introduction}\label{introduction}
 
@@ -198,7 +174,7 @@ elastic net either {[}13{]}, suggesting that for many genes, the genetic
 architecture is sparse, but not regulated by one SNP. Gene expression
 traits with sparse architecture should be better predicted with sparse
 models such as LASSO (Least Absolute Shrinkage and Selection Operator)
-{[}14{]} while highly polygenic traits should be better predicted with
+{[}14{]}, while highly polygenic traits should be better predicted with
 ridge regression or similarly polygenic models {[}15--17{]}. To obtain a
 more thorough understanding of gene expression achitecture, we used the
 elastic net and the hybrid approach of BSLMM (Bayesian Sparse Linear
@@ -221,41 +197,22 @@ underlying genetic architecture of the cross-tissue and tissue-specific
 gene expression components and developed predictors for use in PrediXcan
 {[}13{]}.
 
-\hl{Are we giving away results and punchline here in the intro?}
-
-Specifically, in this paper we show that local heritability can be
-accurately estimated across tissues, but distal heritability cannot
-reliably estimated at current sample sizes. Yet, strong functional
-priors reduce distal heritability error. We also show that for local
-gene regulation, the genetic architecture is mostly sparse rather than
-polygenic. We found that estimates of the local heritability of
-cross-tissue gene expression generated with our OTD model have larger
-magnitude and improved standard errors compared to single tissue
-estimates due to the borrowing of information across all samples.
-Comparing our OTD results to a previously performed joint multi-tissue
-eQTL analysis method {[}22{]}, we show that genes with high cross-tissue
-heritability are more likely to have cross-tissue eQTLs, confirming that
-OTD is capturing the cross-tissue component of gene expression.
-Cross-validated predictors of cross-tissue and tissue-specific
-expression built here have been added to the PrediXcan database for
-future investigations of complex traits.
-
-
 \section{Results}\label{results}
 
-\subsection{Local genetic variation can be well characterized for all tissues}\label{local-genetic-variation-explains-a-large-proportion-of-gene-expression-variance}
+\subsection{Local genetic variation can be well characterized for all
+tissues}\label{local-genetic-variation-can-be-well-characterized-for-all-tissues}
 
 We estimated the heritability of gene expression in whole blood from the
 Depression Genes and Networks (DGN) cohort (n=922) {[}20{]} using a
 mixed-effects model (see Methods) and calculated variances using
-restricted maximum likelihood as implemented in GCTA {[}23{]}. We fit
+restricted maximum likelihood as implemented in GCTA {[}22{]}. We fit
 two joint models, each with the same local genetic relationship matrix
 (GRM) and a two different distal GRMs. The local GRM was derived from
 SNPs within 1 Mb of each gene in both models. In model 1, the distal GRM
 was derived from all SNPs on non-gene chromosomes. In model 2, the
 distal GRM was derived from SNPs that are located on non-gene
 chromosomes and are eQTLs in the Framingham Heart Study (FHS) cohort
-(n=5257, FDR \textless{} 0.05) {[}24{]}. The mean local
+(n=5257, FDR \textless{} 0.05) {[}23{]}. The mean local
 h\textsuperscript{2} was similar in both models, 0.123 in model 1 and
 0.130 in model 2 (Fig 1). Of expressed genes, 52.6\% and 54.6\% had a
 positive 95\% confidence interval (CI) for the local estimate in models
@@ -278,23 +235,14 @@ similar to the maximum seen in DGN. As expected, distal
 h\textsuperscript{2} (eQTLs on non-gene chromosomes) could not be
 reliably estimated in these smaller sample sizes as less than 1\% of
 genes in each tissue had a positive CI in the joint model (Fig
-3-\textbf{{[}SUP{]}})).
-
-{[}{[}{[}We found no correlation between expression levels and local
-h\textsuperscript{2} estimates in DGN {[}{[}make SUP fig{]}{]}. {[}{[}TO
-DO: plot a) array based h2 vs.~RPKM in gtex, use alkes and or fred
-wright's h2 estimates b) RNAseq h2 vs RPKM in
-gtex{]}{]}---\textgreater{} h2 (from Price, Wright,\& us) and GTEx RPKM
-do correlate, conflicting results b/t GTEx and DGN. Maybe b/c DGN is raw
-counts, not RPKM? remove from paper?{]}{]}{]}
-
-Thus we focus on the local architecture from now on.
+3-\textbf{{[}SUP{]}})). Thus, we focus on the local architecture in
+subsequent sections.
 
 \subsection{The effect of local genetic variation on gene expression is
 sparse rather than
 polygenic}\label{the-effect-of-local-genetic-variation-on-gene-expression-is-sparse-rather-than-polygenic}
 
-We performed 10-fold cross-validation using the elastic net {[}25{]} to
+We performed 10-fold cross-validation using the elastic net {[}24{]} to
 test the predictive performance of local SNPs for gene expression across
 a range of mixing parameters, \(\alpha\). The \(\alpha\) that gives the
 largest cross-validation R\textsuperscript{2} informs the sparsity of
@@ -339,9 +287,9 @@ we observed in DGN, genes with larger PVE estimates were more likely to
 have a PGE estimate approaching 1 with a lower credible set greater than
 0.01 in each of the nine GTEx tissues (Fig 8).
 
-\subsection{Cross-tissue and tissue-specific gene expression by
-orthogonal tissue
-decomposition}\label{cross-tissue-and-tissue-specific-gene-expression-by-orthogonal-tissue-decomposition}
+\subsection{Cross-tissue expression phenotype has increased predictive
+power and recapitulates known multi-tissue eQTL target
+genes}\label{cross-tissue-expression-phenotype-has-increased-predictive-power-and-recapitulates-known-multi-tissue-eqtl-target-genes}
 
 In order to better understand the context specificity of gene expression
 regulation, we developed a method called orthogonal tissue decomposition
@@ -379,7 +327,7 @@ cross-validated R\textsuperscript{2} (Fig 5-\textbf{{[}SUP{]}}, Fig
 13-\textbf{{[}SUP{]}}).
 
 We compared our OTD results to those from a joint multi-tissue eQTL
-analysis method {[}22{]}, which was previously performed on a subset of
+analysis method {[}25{]}, which was previously performed on a subset of
 the GTEx data {[}21{]}. The results of this analysis include eQTL
 posterior probabilities for each of the nine tissues, which can be
 interpreted as the probability a SNP is an eQTL in tissue \emph{x} given
@@ -417,7 +365,7 @@ distal heritability.
 Using the hybrid polygenic-sparse approach of BSLMM (Bayesian Sparse
 Linear Mixed Model) {[}18{]}, we show that the local architecture of
 gene expression is sparse (high PGE) for most heritable genes in both
-DGN and GTEx. Using the elastic net {[}25{]}, we observed improved
+DGN and GTEx. Using the elastic net {[}24{]}, we observed improved
 cross-validated expression prediction for \(\alpha>=0.5\) across
 tissues, confirming the sparsity result. Our BSLMM analysis quantified
 the optimal number of SNPs to include for each gene. For example, the
@@ -439,7 +387,7 @@ runtimes.
 We developed a mixed effects model called orthogonal tissue
 decomposition (OTD) to determine the cross-tissue and tissue-specific
 components of gene expression in the GTEx dataset. Previous studys have
-shown that many eQTLs are shared across tissues {[}21,22{]}. In
+shown that many eQTLs are shared across tissues {[}21,25{]}. In
 addition, because expression data from multiple tissues were available
 from the same individuals in GTEx, we could effectively use the multiple
 tissue samples as subject replicates in our OTD model. However, the
@@ -451,7 +399,7 @@ have larger magnitude and improved standard errors compared to single
 tissue estimates due to the borrowing of information across all samples.
 Thus, OTD effectively increases power to estimate heritability.
 Comparing our OTD results to a previously performed joint multi-tissue
-eQTL analysis method {[}22{]}, we show that genes with high cross-tissue
+eQTL analysis method {[}25{]}, we show that genes with high cross-tissue
 heritability are more likely to have cross-tissue eQTLs, confirming that
 OTD is capturing the cross-tissue component of gene expression.
 
@@ -532,7 +480,7 @@ Assuming a random effects for \(w_{k,g} \approx N(0, \sigma^2_w)\) and
 \(\epsilon \approx N(0, \sigma^2_{\epsilon} I_n)\), where \(I_n\) is the
 identity matrix, we calculated the total variability explained by local
 and distal components by estimating \(\sigma^2_w\) with restricted
-maximum likelihood (REML) using GCTA software {[}23{]}. For heritability
+maximum likelihood (REML) using GCTA software {[}22{]}. For heritability
 analyses in the GTEx cohort, we removed the \(distal\) term from the
 model and only estimated marginal \(local\) h\textsuperscript{2} due to
 the smaller sample sizes of both cross-tissue and tissue-specific
@@ -541,7 +489,7 @@ expression levels compared to DGN.
 \subsection{Determining polygenicity versus sparsity using the elastic
 net}\label{determining-polygenicity-versus-sparsity-using-the-elastic-net}
 
-We applied the elastic net {[}25{]} to model the effect of local genetic
+We applied the elastic net {[}24{]} to model the effect of local genetic
 variation (SNPs within 1 Mb of gene) on the genetic architecture of gene
 expression. We used the \texttt{cv.glmnet} function in the R package
 \texttt{glmnet} {[}29,30{]} to perform 10-fold cross-validation of the
@@ -647,7 +595,7 @@ and tissue-specific expression as the residuals (\texttt{resid(fit})).
 \subsection{Comparison of OTD PVE to multi-tissue eQTL
 results}\label{comparison-of-otd-pve-to-multi-tissue-eqtl-results}
 
-Using results from a joint multi-tissue eQTL analysis method {[}22{]}
+Using results from a joint multi-tissue eQTL analysis method {[}25{]}
 performed with a subset of the GTEx data (maximum n=175 in the nine
 tissues of the pilot phase, see {[}21{]}), we defined an entropy
 statistic to compare these results to those from our OTD method. The
@@ -668,8 +616,6 @@ cross-tissue effects. We also calculated a Pearson correlation matrix
 between the posterior probabilities in each tissue from the multi-tissue
 eQTL method and the tissue-specific gene expression PVE from the OTD
 method.
-
-\subsection{Tables}\label{tables}
 
 \section{Figures}\label{figures}
 
@@ -970,26 +916,26 @@ gene regulation in humans. Science. American Association for the
 Advancement of Science (AAAS); 2015;348: 648--660.
 doi:\href{http://dx.doi.org/10.1126/science.1262110}{10.1126/science.1262110}
 
-22. Flutre T, Wen X, Pritchard J, Stephens M. A statistical framework
-for joint eQTL analysis in multiple tissues. Gibson G, editor. PLoS
-Genetics. Public Library of Science (PLoS); 2013;9: e1003486.
-doi:\href{http://dx.doi.org/10.1371/journal.pgen.1003486}{10.1371/journal.pgen.1003486}
-
-23. Yang J, Lee SH, Goddard ME, Visscher PM. GCTA: A tool for
+22. Yang J, Lee SH, Goddard ME, Visscher PM. GCTA: A tool for
 genome-wide complex trait analysis. The American Journal of Human
 Genetics. Elsevier BV; 2011;88: 76--82.
 doi:\href{http://dx.doi.org/10.1016/j.ajhg.2010.11.011}{10.1016/j.ajhg.2010.11.011}
 
-24. Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et al.
+23. Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et al.
 Identification of common genetic variants controlling transcript isoform
 variation in human whole blood. Nature Genetics. Nature Publishing
 Group; 2015;47: 345--352.
 doi:\href{http://dx.doi.org/10.1038/ng.3220}{10.1038/ng.3220}
 
-25. Zou H, Hastie T. Regularization and variable selection via the
+24. Zou H, Hastie T. Regularization and variable selection via the
 elastic net. Journal of the Royal Statistical Society: Series B
 (Statistical Methodology). Wiley-Blackwell; 2005;67: 301--320.
 doi:\href{http://dx.doi.org/10.1111/j.1467-9868.2005.00503.x}{10.1111/j.1467-9868.2005.00503.x}
+
+25. Flutre T, Wen X, Pritchard J, Stephens M. A statistical framework
+for joint eQTL analysis in multiple tissues. Gibson G, editor. PLoS
+Genetics. Public Library of Science (PLoS); 2013;9: e1003486.
+doi:\href{http://dx.doi.org/10.1371/journal.pgen.1003486}{10.1371/journal.pgen.1003486}
 
 26. Howie B, Fuchsberger C, Stephens M, Marchini J, Abecasis GR. Fast
 and accurate genotype imputation in genome-wide association studies
@@ -1032,11 +978,11 @@ doi:\href{http://dx.doi.org/10.1371/journal.pgen.1002525}{10.1371/journal.pgen.1
 2015. Available: \url{http://www.R-project.org/}
 
 34. Bates D, Maechler M, Bolker B, Walker S. lme4: Linear mixed-effects
-models using eigen and s4 {[}Internet{]}. 2014. Available:
+models using Eigen and S4 {[}Internet{]}. 2015. Available:
 \url{http://CRAN.R-project.org/package=lme4}
 
-35. Bates D, Maechler M, Bolker BM, Walker S. lme4: Linear mixed-effects
-models using eigen and s4 {[}Internet{]}. 2014. Available:
+35. Bates D, Maechler M, Bolker BM, Walker S. Fitting linear
+mixed-effects models using lme4 {[}Internet{]}. 2015. Available:
 \url{http://arxiv.org/abs/1406.5823}
 
 36. Stegle O, Parts L, Piipari M, Winn J, Durbin R. Using probabilistic
