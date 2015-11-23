@@ -1,0 +1,39 @@
+---
+title: An atlas of the genetic architecture of gene expression traits across the entire human body
+author: Heather E. Wheeler^1,2^, GTEx Consortium, Kaanan P. Shah^3^, . . ., Nancy J. Cox^4^, Dan L. Nicolae^3^, Hae Kyung Im^3^
+date: '^1^Department of Biology and ^2^Department of Computer Science, Loyola University Chicago, ^3^Section of Genetic Medicine, Department of Medicine, University of Chicago, ^4^Division of Genetic Medicine, Vanderbilt University `r Sys.time()`'
+output:
+  pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    number_sections: no
+csl: plos.csl
+bibliography: GenArch_references.bib
+header-includes:
+   - \usepackage{setspace}
+   - \setstretch{2}
+   - \usepackage{soul}
+---
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+  # devtools::install_github("cboettig/knitcitations@v1")
+  library(knitcitations); cleanbib()
+  cite_options(citation_format = "pandoc", check.entries=FALSE)
+  library(bibtex)
+  library(ggplot2)
+  library(reshape2)
+  library(png)
+  library(grid)
+  library(kfigr)
+  library(lme4)
+  library(dplyr)
+  library(knitr)
+  library(xtable)
+  "%&%" = function(a,b) paste(a,b,sep="")
+  source('~/GitHub/GenArch/GenArchPaper/multiplot.R')
+  fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
+  #BSLMM (~10 min/gene/fold with 8GB RAM and 2.2GHz AMD Opteron 6274 processor)
+```
+
+
+Using the hybrid polygenic-sparse approach of BSLMM (Bayesian Sparse Linear Mixed Model) `r citep("10.1371/journal.pgen.1003264")`, we show that the local architecture of gene expression is sparse (high PGE) for most heritable genes in both DGN and GTEx. Using the elastic net `r citep("10.1111/j.1467-9868.2005.00503.x")`, we observed improved cross-validated expression prediction for $\alpha \geq 0.5$ across tissues, confirming the sparsity result. This result demonstrates that sparse effects can be identified with sample sizes in the hundreds rather than the thousands and is supported by many prior studies with sample sizes near 100 that identified replicable eQTLs near the transcription start sites of genes`r citep("10.1371/journal.pgen.1003264, 10.1038/ng2142, 10.1371/journal.pgen.1002078, 10.1038/nature04244")`. Conversely, for traits that are highly polygenic, e.g. height, BMI, schizophrenia, and bipolar disorder, thousands to tens of thousands of samples are needed to identify significant genetic signals `r citep("10.1016/j.ajhg.2013.10.005, 10.1038/nature08185")`. Therefore, the distal contributions to expression h^2^ are likely to be more polygenic because they could not be accurately estimated here with sample sizes in the hundreds.
