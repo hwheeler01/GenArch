@@ -116,3 +116,9 @@ png(filename=fig.dir %&% "Fig-cor-StephensPr-OTDtsPVE.png",width=480,height=480)
 corrplot(mat2,method="circle",cl.lim = c(-0.2, 0.2),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
 dev.off()
 ```
+
+###PVE TS correlations
+```{r PVEcor}
+corMat <- round(cor(pve.ts[,3:11],use="p"),3)
+corrplot.mixed(corMat,tl.pos="lt")
+```

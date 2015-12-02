@@ -76,6 +76,8 @@ Our BSLMM analysis quantified the optimal number of SNPs to include for each gen
 
 We developed a mixed effects model called orthogonal tissue decomposition (OTD) to determine the cross-tissue and tissue-specific components of gene expression in the GTEx dataset. Previous studys have shown that many eQTLs are shared across tissues `r citep(c("10.1126/science.1262110","10.1371/journal.pgen.1003486"))`. In addition, because expression data from multiple tissues were available from the same individuals in GTEx, we could effectively use the multiple tissue samples as subject replicates in our OTD model. However, the tissue availability is unbalanced across individuals because of the difficulties of sample collection and the uneven quality of the tissues. By combining all available expression data in our OTD model, we found that estimates of the local heritability of cross-tissue gene expression have larger magnitude and improved standard errors compared to single tissue estimates due to the borrowing of information across all samples. Thus, OTD effectively increases power to estimate heritability. Comparing our OTD results to a previously performed joint multi-tissue eQTL analysis method `r citep("10.1371/journal.pgen.1003486")`, we show that genes with high cross-tissue heritability are more likely to have cross-tissue eQTLs, confirming that OTD is capturing the cross-tissue component of gene expression.
 
+We confirmed that OTD also captures tissue-specific components of gene expression by showing the correlation between tissue-specific OTD gene expression PVE and the posterior probability that the gene has an eQTL in that tissue is strongest in each respective tissue. Interestingly, whole blood and thyroid appear to be outliers in that they each have a negative correlation with all the other tissues (`r figr("corrplot", prefix=TRUE, link=TRUE, type="Fig")`).  In the GTEx pilot analysis, whole blood had the lowest levels of eQTL sharing with other tissues and thyroid had the largest number of cis-eQTL genes, which implies a higher number of tissue-specific eQTLs `r citep("10.1126/science.1262110")`.
+
 In this paper, we quantitate the genetic architecture of gene expression and develop predictors across tissues. We show that local heritability can be accurately estimated across tissues, but distal heritability cannot be reliably estimated at current sample sizes. Using two different approaches, the elastic net and BSLMM, we show that for local gene regulation, the genetic architecture is mostly sparse rather than polygenic. Using new expression phenotypes generated in our OTD model, we show that cross-tissue predictive performance exceeded that of both tissue-specific and whole tissue expression as indicated by higher elastic net cross-validated R^2^. Predictors generated in this study of gene expression architecture have been added to our PrediXcan database (<https://github.com/hakyimlab/PrediXcan>) `r citep("10.1038/ng.3367")` for use in future studies of complex trait genetics. 
 
 # Methods
@@ -214,10 +216,103 @@ fig <- readPNG(fig.dir %&% 'Fig-cor-StephensPr-OTDtsPVE.png')
 grid.raster(fig)
 ```
 
-#Supplemental Figures
+# Supplemental Figures
 
+# Acknowledegments
+We thank Nicholas Knoblauch and Jason Torres for initial pipeline development and planning. 
 
+# Grants
+We acknowledge the following US National Institutes of Health grants: K12 CA139160 (H.K.I.), T32 MH020065 (K.P.S.), R01 MH101820 and R01 MH090937 (GTEx), P30 DK20595 and P60 DK20595 (Diabetes Research and Training Center), P50 DA037844 (Rat Genomics), UO1 GM61393 (Pharmacogenomics of Anticancer Agents Research), P50 MH094267 (Conte), and U19 HL065962 (PGRN Statistical Analysis Resource). H.E.W. was supported in part by start-up funds from Loyola University Chicago.
 
+## GTEx data
+The Genotype-Tissue Expression (GTEx) Project was supported by the Common Fund
+of the Office of the Director of the National Institutes of Health
+(commonfund.nih.gov/GTEx). Additional funds were provided by the NCI, NHGRI,
+NHLBI, NIDA, NIMH, and NINDS. Donors were enrolled at Biospecimen Source Sites
+funded by NCI Leidos Biomedical Research, Inc. subcontracts to the National Disease
+Research Interchange (10XS170), Roswell Park Cancer Institute (10XS171), and
+Science Care, Inc. (X10S172). The Laboratory, Data Analysis, and Coordinating Center
+(LDACC) was funded through a contract (HHSN268201000029C) to the The Broad
+Institute, Inc. Biorepository operations were funded through a Leidos Biomedical
+Research, Inc. subcontract to Van Andel Research Institute (10ST1035). Additional data
+repository and project management were provided by Leidos Biomedical Research,
+Inc.(HHSN261200800001E). The Brain Bank was supported supplements to University
+of Miami grant DA006227. Statistical Methods development grants were made to the
+University of Geneva (MH090941 & MH101814), the University of Chicago
+(MH090951,MH090937, MH101825, & MH101820), the University of North Carolina -
+Chapel Hill (MH090936), North Carolina State University (MH101819),Harvard
+University (MH090948), Stanford University (MH101782), Washington University
+(MH101810), and to the University of Pennsylvania (MH101822). The datasets used for
+the analyses described in this manuscript were obtained from dbGaP at
+http://www.ncbi.nlm.nih.gov/gap through dbGaP accession number phs000424.v3.p1.
+
+##DGN data
+NIMH Study 7 (GenRED I) - Data and biomaterials were collected in six projects that
+participated in the National Institute of Mental Health (NIMH) Genetics of Recurrent
+Early-Onset Depression (GenRED) project. From 1999-2003, the Principal Investigators
+and Co-Investigators were: New York State Psychiatric Institute, New York, NY, R01
+MH060912, Myrna M. Weissman, Ph.D. and James K. Knowles, M.D., Ph.D.; University
+of Pittsburgh, Pittsburgh, PA, R01 MH060866, George S. Zubenko, M.D., Ph.D. and
+Wendy N. Zubenko, Ed.D., R.N., C.S.; Johns Hopkins University, Baltimore, MD, R01
+MH059552, J. Raymond DePaulo, M.D., Melvin G. McInnis, M.D. and Dean MacKinnon,
+M.D.; University of Pennsylvania, Philadelphia, PA, RO1 MH61686, Douglas F.
+Levinson, M.D. (GenRED coordinator), Madeleine M. Gladis, Ph.D., Kathleen MurphyEberenz,
+Ph.D. and Peter Holmans, Ph.D. (University of Wales College of Medicine);
+this preprint is the author/funder. It is made available under a CC-BY 4.0 International license.
+bioRxiv preprint first posted online June 17, 2015; doi: http://dx.doi.org/10.1101/020164; The copyright holder for
+University of Iowa, Iowa City, IW, R01 MH059542, Raymond R. Crowe, M.D. and
+William H. Coryell, M.D.; Rush University Medical Center, Chicago, IL, R01 MH059541-
+05, William A. Scheftner, M.D., Rush-Presbyterian.
+NIMH Study 18 - Data and biomaterials were obtained from the limited access datasets
+distributed from the NIH-supported “Sequenced Treatment Alternatives to Relieve
+Depression” (STAR\*D). STAR\*D focused on non-psychotic major depressive disorder in
+adults seen in outpatient settings. The primary purpose of this research study was to
+determine which treatments work best if the first treatment with medication does not
+produce an acceptable response. The study was supported by NIMH Contract #
+N01MH90003 to the University of Texas Southwestern Medical Center. The
+ClinicalTrials.gov identifier is NCT00021528.
+NIMH Study 52 (GenRED II) – Data and biomaterials in this release were collected in
+six projects that participated in the National Institute of Mental Health (NIMH) Genetics
+of Recurrent Early-Onset Depression (GenRED) project (1999-2009). The Principal
+Investigators and Co-Investigators were: New York State Psychiatric Institute, New
+York, NY, R01 MH 060912, Myrna M. Weissman, Ph.D.; Johns Hopkins University,
+Baltimore, MD, R01 MH059552, J. Raymond DePaulo, M.D., and James B. Potash,
+M.D., M.P.H.; University of Pennsylvania, Philadelphia, PA (1999-2005), and Stanford
+University (2006-2009), R01 MH61686, Douglas F. Levinson, M.D. (GenRED
+coordinator); University of Iowa, Iowa City, IW, R01 MH059542e, Raymond R. Crowe,
+M.D., and William H. Coryell, M.D.; Rush University Medical Center, Chicago, IL, R01
+MH059541-05, William A. Scheftner, M.D.; and University of Pittsburgh, Pittsburgh, PA
+(1999-2003), R01 MH060866, George S. Zubenko, M.D., Ph.D., and Wendy N.
+Zubenko, Ed.D., R.N., C.S.
+NIMH Study 88 -- Data was provided by Dr. Douglas F. Levinson. We gratefully
+acknowledge the resources were supported by National Institutes of Health/National
+Institute of Mental Health grants 5RC2MH089916 (PI: Douglas F. Levinson, M.D.; Coinvestigators:
+Myrna M. Weissman, Ph.D., James B. Potash, M.D., MPH, Daphne
+Koller, Ph.D., and Alexander E. Urban, Ph.D.) and 3R01MH090941 (Co-investigator:
+Daphne Koller, Ph.D.).
+
+##Computing resources
+This work made use of the Open Science Data Cloud (OSDC) which is an Open Cloud
+Consortium (OCC)-sponsored project. This work was supported in part by grants from
+Gordon and Betty Moore Foundation and the National Science Foundation and major
+contributions from OCC members like the University of Chicago.
+this preprint is the author/funder. It is made available under a CC-BY 4.0 International license.
+bioRxiv preprint first posted online June 17, 2015; doi: http://dx.doi.org/10.1101/020164; The copyright holder for
+https://www.opensciencedatacloud.org/
+Grossman RL, Greenway M, Heath AP, Powell R, Suarez R, Wells W, White KP,
+Atkinson M, Klampanos I, Alvarez H, Harvey C and Mambretti J, The Design of a
+Community Science Cloud: The Open Science Data Cloud Perspective. (2012)
+doi:10.1109/SC.Companion.2012.127
+This work made use of the Bionimbus Protected Data Cloud (PDC), which is a
+collaboration between the Open Science Data Cloud (OSDC) and the IGSB (IGSB), the
+Center for Research Informatics (CRI), the Institute for Translational Medicine (ITM),
+and the University of Chicago Comprehensive Cancer Center (UCCCC). The Bionimbus
+PDC is part of the OSDC ecosystem and is funded as a pilot project by the NIH.
+https://www.bionimbus-pdc.opensciencedatacloud.org/
+Heath AP, Greenway M, Powell R, Spring J, Suarez R, Hanley D, Bandlamudi C,
+McNerney ME, White KP and Grossman RL, Bionimbus: A Cloud for Managing,
+Analyzing and Sharing Large Genomics Datasets. J Am Med Inform Assoc (2014)
+doi:10.1136/amiajnl-2013-002155
 
 # References
 
