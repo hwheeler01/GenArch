@@ -258,9 +258,9 @@ The left column of Figure 1 shows the estimated local and distal h2 from DGN. Ev
 
 \hl{TODO: generate table 1}
 
-Table 1 summarizes the heritability estimate results across all tissues. It shows the mean h2 (\hl{this makes more sense if we use Alkes' method. If we use the GCTA we should clarify that it is biased because of the fact or not show it. We need to decide on this.}), mean se of h2 (local and distal), proportion of significant h2, number of significant genes, and number of expressed genes (definition? more than xx individuals with xx RPKM).
+Table 1 summarizes the heritability estimate results across all tissues. It shows the mean h2 (\hl{this should be computed allowing h2 estimates to be negative to avoid bias in the meanh2}), mean se of h2 (local and distal), proportion of local (mean(local)/(mean(local)+mean(distal))), proportion of significant h2, number of significant genes, and number of expressed genes (definition? more than xx individuals with xx RPKM).
 
-\hl{Relative contribution of local and distal variation to h2. Should we do this?}
+\hl{Relative contribution of local and distal variation to h2.}
 
 % We fit
 % two joint models, each with the same local genetic relationship matrix
@@ -304,9 +304,13 @@ functional priors (known eQTLs) to define distal h\textsuperscript{2} increased 
 to 4.2\% in whole blood (Fig 1). In GTEx tissues the increase ranged from xxx to xxx. \hl{TODO: do the same genes have signif h2? compare h2 and se from both estimates model1 vs model2}
 
 
+Given this limitation, we focus on local regulation for the remainder of the paper.
+
 \subsection{The effect of local genetic variation on gene expression is
 sparse rather than
-polygenic}\label{the-effect-of-local-genetic-variation-on-gene-expression-is-sparse-rather-than-polygenic}
+polygenic}\label{the-effect-of-local-genetic-variation-on-gene-expression-is-sparse-rather-than-polygenic}'
+
+Next, we sought to determine whether local genetic contribution to gene expression trait was polygenic or sparse. In other words, whether many variants of small effects or a small number of large effects were contributing to the trait variability. For this, we first looked at the prediction performance of a range of models with different degree of polygenicity, such as the elastic net model with different mixing parameter values that ranges from 0 (fully polygenic) to 1 (sparse, lasso).
 
 \subsection{Sparse local architecture revealed by performance of prediction models}
 
@@ -917,12 +921,11 @@ development and planning.
 \section{Grants}\label{grants}
 
 We acknowledge the following US National Institutes of Health grants:
-K12 CA139160 (H.K.I.), T32 MH020065 (K.P.S.), R01 MH101820 and R01
-MH090937 (GTEx), P30 DK20595 and P60 DK20595 (Diabetes Research and
-Training Center), P50 DA037844 (Rat Genomics), UO1 GM61393
-(Pharmacogenomics of Anticancer Agents Research), P50 MH094267 (Conte),
-and U19 HL065962 (PGRN Statistical Analysis Resource). H.E.W. was
+R01MH107666 (H.K.I.), K12 CA139160 (H.K.I.), T32 MH020065 (K.P.S.), R01 MH101820 (GTEx), 
+P30 DK20595 and P60 DK20595 (Diabetes Research and
+Training Center), P50 DA037844 (Rat Genomics), P50 MH094267 (Conte). H.E.W. was
 supported in part by start-up funds from Loyola University Chicago.
+
 
 \subsection{GTEx data}\label{gtex-data}
 
