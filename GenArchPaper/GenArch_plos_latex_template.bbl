@@ -1,0 +1,166 @@
+\begin{thebibliography}{10}
+
+\bibitem{Nicolae_2010}
+Nicolae DL, Gamazon E, Zhang W, Duan S, Dolan ME, Cox NJ.
+\newblock Trait-Associated {SNPs} Are More Likely to Be {eQTLs}: Annotation to
+  Enhance Discovery from {GWAS}.
+\newblock {PLoS} Genetics. 2010;6(4):e1000888.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1000888}.
+
+\bibitem{Nica_2010}
+Nica AC, Montgomery SB, Dimas AS, Stranger BE, Beazley C, Barroso I, et~al.
+\newblock Candidate Causal Regulatory Effects by Integration of Expression
+  {QTLs} with Complex Trait Genetic Associations.
+\newblock {PLoS} Genetics. 2010;6(4):e1000895.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1000895}.
+
+\bibitem{Gusev_2014}
+Gusev A, Lee SH, Trynka G, Finucane H, Vilhj{\a'a}lmsson BJ, Xu H, et~al.
+\newblock Partitioning Heritability of Regulatory and Cell-Type-Specific
+  Variants across 11 Common Diseases.
+\newblock The American Journal of Human Genetics. 2014;95(5):535--552.
+\newblock Available from: \url{http://dx.doi.org/10.1016/j.ajhg.2014.10.004}.
+
+\bibitem{Albert_2015}
+Albert FW, Kruglyak L.
+\newblock The role of regulatory variation in complex traits and disease.
+\newblock Nat Rev Genet. 2015;16(4):197--212.
+\newblock Available from: \url{http://dx.doi.org/10.1038/nrg3891}.
+
+\bibitem{Stranger_2012}
+Stranger BE, Montgomery SB, Dimas AS, Parts L, Stegle O, Ingle CE, et~al.
+\newblock Patterns of Cis Regulatory Variation in Diverse Human Populations.
+\newblock {PLoS} Genetics. 2012;8(4):e1002639.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1002639}.
+
+\bibitem{Stranger_2007}
+Stranger BE, Nica AC, Forrest MS, Dimas A, Bird CP, Beazley C, et~al.
+\newblock Population genomics of human gene expression.
+\newblock Nature Genetics. 2007;39(10):1217--1224.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng2142}.
+
+\bibitem{Innocenti_2011}
+Innocenti F, Cooper GM, Stanaway IB, Gamazon ER, Smith JD, Mirkov S, et~al.
+\newblock Identification, Replication, and Functional Fine-Mapping of
+  Expression Quantitative Trait Loci in Primary Human Liver Tissue.
+\newblock {PLoS} Genetics. 2011;7(5):e1002078.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1002078}.
+
+\bibitem{Wright_2014}
+Wright FA, Sullivan PF, Brooks AI, Zou F, Sun W, Xia K, et~al.
+\newblock Heritability and genomics of gene expression in peripheral blood.
+\newblock Nature Genetics. 2014 apr;46(5):430--437.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.2951}.
+
+\bibitem{Price_2011}
+Price AL, Helgason A, Thorleifsson G, McCarroll SA, Kong A, Stefansson K.
+\newblock Single-Tissue and Cross-Tissue Heritability of Gene Expression Via
+  Identity-by-Descent in Related or Unrelated Individuals.
+\newblock {PLoS} Genetics. 2011;7(2):e1001317.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1001317}.
+
+\bibitem{Purcell_2009}
+Purcell SM, Wray NR, Stone JL, Visscher PM, O'Donovan MC, Sullivan PF, et~al.
+\newblock Common polygenic variation contributes to risk of schizophrenia and
+  bipolar disorder.
+\newblock Nature. 2009;Available from:
+  \url{http://dx.doi.org/10.1038/nature08185}.
+
+\bibitem{Stahl_2012}
+Stahl EA, Wegmann D, Trynka G, Gutierrez-Achury J, Do R, Voight BF, et~al.
+\newblock Bayesian inference analyses of the polygenic architecture of
+  rheumatoid arthritis.
+\newblock Nature Genetics. 2012;44(5):483--489.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.2232}.
+
+\bibitem{Morris_2012}
+Morris AP, Voight BF, Teslovich TM, Ferreira T, Segr{\a`e} AV, Steinthorsdottir
+  V, et~al.
+\newblock Large-scale association analysis provides insights into the genetic
+  architecture and pathophysiology of type 2 diabetes.
+\newblock Nature Genetics. 2012;44(9):981--990.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.2383}.
+
+\bibitem{Gamazon_2015}
+Gamazon ER, Wheeler HE, Shah KP, Mozaffari SV, Aquino-Michaels K, Carroll RJ,
+  et~al.
+\newblock A gene-based association method for mapping traits using reference
+  transcriptome data.
+\newblock Nature Genetics. 2015;47(9):1091--1098.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.3367}.
+
+\bibitem{Tibshirani_1996}
+Tibshirani R.
+\newblock Regression Shrinkage and Selection via the Lasso.
+\newblock Journal of the Royal Statistical Society Series B (Methodological).
+  2015;58(1):267--288.
+\newblock Available from: \url{http://www.jstor.org/stable/2346178}.
+
+\bibitem{Hoerl_1970}
+Hoerl AE, Kennard RW.
+\newblock Ridge Regression: Applications to Nonorthogonal Problems.
+\newblock Technometrics. 1970;12(1):69--82.
+\newblock Available from:
+  \url{http://dx.doi.org/10.1080/00401706.1970.10488635}.
+
+\bibitem{de_los_Campos_2010}
+{de los Campos} G, Gianola D, Allison DB.
+\newblock Predicting genetic predisposition in humans: the promise of
+  whole-genome markers.
+\newblock Nat Rev Genet. 2010;11(12):880--886.
+\newblock Available from: \url{http://dx.doi.org/10.1038/nrg2898}.
+
+\bibitem{Wheeler_2014}
+Wheeler HE, Aquino-Michaels K, Gamazon ER, Trubetskoy VV, Dolan ME, Huang RS,
+  et~al.
+\newblock Poly-Omic Prediction of Complex Traits: {OmicKriging}.
+\newblock Genetic Epidemiology. 2014;38(5):402--415.
+\newblock Available from: \url{http://dx.doi.org/10.1002/gepi.21808}.
+
+\bibitem{Zhou_2013}
+Zhou X, Carbonetto P, Stephens M.
+\newblock Polygenic Modeling with Bayesian Sparse Linear Mixed Models.
+\newblock {PLoS} Genetics. 2013;9(2):e1003264.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1003264}.
+
+\bibitem{Cheung_2005}
+Cheung VG, Spielman RS, Ewens KG, Weber TM, Morley M, Burdick JT.
+\newblock Mapping determinants of human gene expression by regional and
+  genome-wide association.
+\newblock Nature. 2005;437(7063):1365--1369.
+\newblock Available from: \url{http://dx.doi.org/10.1038/nature04244}.
+
+\bibitem{Battle_2013}
+Battle A, Mostafavi S, Zhu X, Potash JB, Weissman MM, McCormick C, et~al.
+\newblock Characterizing the genetic basis of transcriptome diversity through
+  {RNA}-sequencing of 922 individuals.
+\newblock Genome Research. 2013;24(1):14--24.
+\newblock Available from: \url{http://dx.doi.org/10.1101/gr.155192.113}.
+
+\bibitem{Ardlie_2015}
+Ardlie KG, Deluca DS, Segre AV, Sullivan TJ, Young TR, Gelfand ET, et~al.
+\newblock The Genotype-Tissue Expression ({GTEx}) pilot analysis: Multitissue
+  gene regulation in humans.
+\newblock Science. 2015;348(6235):648--660.
+\newblock Available from: \url{http://dx.doi.org/10.1126/science.1262110}.
+
+\bibitem{Yang_2011}
+Yang J, Lee SH, Goddard ME, Visscher PM.
+\newblock {GCTA}: A Tool for Genome-wide Complex Trait Analysis.
+\newblock The American Journal of Human Genetics. 2011;88(1):76--82.
+\newblock Available from: \url{http://dx.doi.org/10.1016/j.ajhg.2010.11.011}.
+
+\bibitem{Stegle_2012}
+Stegle O, Parts L, Piipari M, Winn J, Durbin R.
+\newblock Using probabilistic estimation of expression residuals ({PEER}) to
+  obtain increased power and interpretability of gene expression analyses.
+\newblock Nat Protoc. 2012;7(3):500--507.
+\newblock Available from: \url{http://dx.doi.org/10.1038/nprot.2011.457}.
+
+\bibitem{Leek_2007}
+Leek JT, Storey JD.
+\newblock Capturing heterogeneity in gene expression studies by surrogate
+  variable analysis.
+\newblock PLoS Genet. 2007;3(9):1724--1735.
+
+\end{thebibliography}

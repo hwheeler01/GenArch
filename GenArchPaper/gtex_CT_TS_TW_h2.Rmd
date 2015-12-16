@@ -13,7 +13,7 @@ GTEx OTD joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of ea
   library(GGally)
   library(grid)
   "%&%" = function(a,b) paste(a,b,sep="")
-  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
+  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/GTEx_2014-06013_release/transfers/PrediXmod/Paper_plots/multiplot.R')
   my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
   fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
 ```
@@ -121,6 +121,7 @@ ts <- data.frame()
 for(tis in tislist){
   data <- read.table(my.dir %&% 'gtex-h2-estimates/GTEx.' %&% tis %&% '.h2.all.models_FHSfdr0.05.Chr1-22_globalOtherChr.2015-10-06.txt',header=T,sep="\t")  
   loc.jt <- select(data,tissue,loc.jt.h2,loc.jt.se) %>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),sample(loc.jt.se[is.na(loc.jt.se)==FALSE],replace=TRUE,size=length(loc.jt.se[is.na(loc.jt.se)==TRUE])),loc.jt.se)) %>% mutate(ymin = pmax(0, loc.jt.h2 - 2 * loc.jt.se), ymax = pmin(1, loc.jt.h2 + 2 * loc.jt.se)) %>% arrange(loc.jt.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(data$tissue)) 
+  print(dim(loc.jt))
   ts <- rbind(ts,loc.jt)
 }
 ##rm cross-tissue from plot
