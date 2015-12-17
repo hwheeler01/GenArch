@@ -1,0 +1,154 @@
+---
+title: "01_GenArch_Figs_2015-12-17"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+  library(ggplot2)
+  library(reshape2)
+  library(dplyr)
+  library(tidyr)
+  library(GGally)
+  library(grid)
+  "%&%" = function(a,b) paste(a,b,sep="")
+  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/GTEx_2014-06013_release/transfers/PrediXmod/Paper_plots/multiplot.R')
+  my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
+  fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
+```
+##Fig1
+DGN-WB joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. distal h^2^ is estimated with either all non-chr SNPs or SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).
+```{r jointH2,fig.width=6,fig.height=16, echo=TRUE, warning=FALSE, message=FALSE,eval=TRUE}
+otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt'
+
+fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
+d  <- fdrother %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se) )
+cigt0 <- d$ymin>0
+table(cigt0)
+ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
+ptrue
+fdrother <- mutate(d,`distal CI > 0`=cigt0)
+
+##Plot FDR based results
+a<-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2,color=`distal CI > 0`)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1) + xlab(expression("local h"^2)) + ylab(expression("distal h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_bw() +theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(1,1),legend.position=c(1,1))
+
+##plot joint h2 estimates
+local <- fdrother %>% select(loc.jt.h2,loc.jt.se)%>% arrange(loc.jt.h2) %>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),base::sample(loc.jt.se[is.na(loc.jt.se)==FALSE][1:100],size=length(loc.jt.se[is.na(loc.jt.se)==TRUE]),replace=TRUE),loc.jt.se))%>% arrange(loc.jt.h2) 
+names(local) = c('h2','se')
+data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+#data <- data[complete.cases(data),]
+cigt0 <- data$ymin>0
+table(cigt0)
+sum(table(cigt0))
+ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
+ptrue
+meanh2<-round(mean(data$h2),3)
+meanh2
+meanse <- round(mean(data$se),3)
+meanse
+data <- mutate(data,`CI > 0`=cigt0,position=1:nrow(data))
+my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.60, hjust=0,gp=gpar(fontsize=14)))
+my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
+my_grob3 = grobTree(textGrob(substitute(paste("mean SE", " = ", m),list(m=meanse)), x=0.05,  y=0.54, hjust=0,gp=gpar(fontsize=14)))
+
+b<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`CI > 0`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)+annotation_custom(my_grob3)
+
+global <- fdrother %>% select(gene,glo.jt.h2,glo.jt.se) %>% arrange(glo.jt.h2) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),base::sample(glo.jt.se[is.na(glo.jt.se)==FALSE][1:1000],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE]),replace=TRUE),glo.jt.se))%>% arrange(glo.jt.h2)  
+names(global) = c('gene','h2','se')
+data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+#data <- data[complete.cases(data),]
+cigt0 <- data$ymin>0
+table(cigt0)
+ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
+ptrue
+meanh2<-round(mean(data$h2),3)
+meanh2
+meanse <- round(mean(data$se),3)
+meanse
+data <- mutate(data,`CI > 0`=cigt0,position=1:nrow(data))
+
+glopriorlist <- dplyr::filter(data,`CI > 0`==TRUE) %>% dplyr::select(gene)
+
+my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.90, hjust=0,gp=gpar(fontsize=14)))
+my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.96, hjust=0,gp=gpar(fontsize=14)))
+my_grob3 = grobTree(textGrob(substitute(paste("mean SE", " = ", m),list(m=meanse)), x=0.05,  y=0.84, hjust=0,gp=gpar(fontsize=14)))
+
+c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`CI > 0`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.position="none")+annotation_custom(my_grob)+annotation_custom(my_grob2)+annotation_custom(my_grob3)
+
+multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=1)
+
+tiff(filename=fig.dir %&% "Fig1.tiff",width=360,height=960)
+multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=1)
+dev.off()
+
+png(filename=fig.dir %&% "Fig1.png",width=360,height=960)
+multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=1)
+dev.off()
+
+
+##make same plots using all SNPs on other chrs for global
+otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_all.Chr1-22_globalOtherChrallSNPs.2015-10-22.txt'
+
+other<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
+d  <- other %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se) )
+cigt0 <- d$ymin>0
+table(cigt0)
+ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
+ptrue
+other <- mutate(d,`distal CI > 0`=cigt0)
+aother<-ggplot(other,aes(x=loc.jt.h2,y=glo.jt.h2,color=`distal CI > 0`)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1) + xlab(expression("local h"^2)) + ylab(expression("distal h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_bw() + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(1,1),legend.position=c(1,1))
+
+local <- other %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) %>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),base::sample(loc.jt.se[is.na(loc.jt.se)==FALSE][1:100],size=length(loc.jt.se[is.na(loc.jt.se)==TRUE]),replace=TRUE),loc.jt.se))%>% arrange(loc.jt.h2)  
+names(local) = c('h2','se')
+data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+#data <- data[complete.cases(data),]
+cigt0 <- data$ymin>0
+table(cigt0)
+ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
+ptrue
+meanh2<-round(mean(data$h2),3)
+meanh2
+meanse <- round(mean(data$se),3)
+meanse
+data <- mutate(data,`CI > 0`=cigt0,position=1:nrow(data))
+
+my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.60, hjust=0,gp=gpar(fontsize=14)))
+my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
+my_grob3 = grobTree(textGrob(substitute(paste("mean SE", " = ", m),list(m=meanse)), x=0.05,  y=0.54, hjust=0,gp=gpar(fontsize=14)))
+
+bother<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`CI > 0`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)+annotation_custom(my_grob3)
+
+global <- other %>% select(gene,glo.jt.h2,glo.jt.se) %>% arrange(glo.jt.h2) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),base::sample(glo.jt.se[is.na(glo.jt.se)==FALSE][1:1000],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE]),replace=TRUE),glo.jt.se))%>% arrange(glo.jt.h2) 
+names(global) = c('gene','h2','se')
+data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
+#data <- data[complete.cases(data),]
+cigt0 <- data$ymin>0
+table(cigt0)
+ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
+ptrue
+meanh2<-round(mean(data$h2),3)
+meanh2
+meanse <- round(mean(data$se),3)
+meanse
+data <- mutate(data,`CI > 0`=cigt0,position=1:nrow(data))
+
+glolist <- dplyr::filter(data,`CI > 0`==TRUE) %>% dplyr::select(gene)
+table(glolist$gene %in% glopriorlist$gene)
+
+my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.90, hjust=0,gp=gpar(fontsize=14)))
+my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.96, hjust=0,gp=gpar(fontsize=14)))
+my_grob3 = grobTree(textGrob(substitute(paste("mean SE", " = ", m),list(m=meanse)), x=0.05,  y=0.84, hjust=0,gp=gpar(fontsize=14)))
+
+cother<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`CI > 0`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.position="none")+annotation_custom(my_grob)+annotation_custom(my_grob2)+annotation_custom(my_grob3)
+
+multiplot(aother+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),bother+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),cother+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=1)
+
+png(filename=fig.dir %&% "Fig-DGN-jt-h2.png",width=720,height=960)
+multiplot(aother+ggtitle('local = SNPs within 1Mb of gene\ndistal = SNPs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")), bother, cother, a+ggtitle('local = SNPs within 1Mb of gene\ndistal = known eQTLs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")),b, c,cols=2)
+dev.off()
+
+tiff(filename=fig.dir %&% "Fig-DGN-jt-h2.tiff",width=720,height=960)
+multiplot(aother+ggtitle('local = SNPs within 1Mb of gene\ndistal = SNPs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")), bother, cother, a+ggtitle('local = SNPs within 1Mb of gene\ndistal = known eQTLs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")),b, c,cols=2)
+dev.off()
+```

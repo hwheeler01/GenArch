@@ -163,4 +163,11 @@ Leek JT, Storey JD.
   variable analysis.
 \newblock PLoS Genet. 2007;3(9):1724--1735.
 
+\bibitem{Zhang_2015}
+Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et~al.
+\newblock Identification of common genetic variants controlling transcript
+  isoform variation in human whole blood.
+\newblock Nature Genetics. 2015;47(4):345--352.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.3220}.
+
 \end{thebibliography}

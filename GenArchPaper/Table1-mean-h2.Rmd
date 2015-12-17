@@ -22,17 +22,25 @@ output: html_document
 ```
 
 ```{r, loc.jt.tw,eval=TRUE,fig.width=8,fig.height=8}
-dgn <- read.table(my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-13.txt',header=T)
+dgn <- read.table(my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globalAll_reml-no-constrain.2015-12-15.txt',header=T)
 tislist <- scan(my.dir %&% 'gtex-rnaseq/ind-tissues-from-nick/GTEx_PrediXmod.tissue.list',sep="\n",what="character")
 table1 <- matrix(0,nrow=length(tislist)+1,ncol=7)
 n <- dgn$N[1]
 numexpgenes <- dim(dgn)[1] 
-meanh2 <- signif(mean(dgn$local.h2,na.rm=TRUE),3)
-meanse <- signif(mean(dgn$local.se,na.rm=TRUE),3)
-ciest <-  dgn %>% mutate(ymin = pmax(0, local.h2 - 2 * local.se), ymax = pmin(1, local.h2 + 2 * local.se)) %>% arrange(local.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(dgn$tissue)) 
+meanh2 <- signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)
+meanse <- signif(mean(dgn$loc.jt.se,na.rm=TRUE),3)
+ciest <-  dgn %>% mutate(ymin = pmax(0, loc.jt.h2 - 2 * loc.jt.se), ymax = pmin(1, loc.jt.h2 + 2 * loc.jt.se)) %>% arrange(loc.jt.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(dgn$tissue)) 
 propsig <- signif(table(ciest$nonzeroCI)[2]/sum(table(ciest$nonzeroCI,useNA="i")),3)
 numsig <- signif(table(ciest$nonzeroCI)[2],3)
 table1[1,] <- c("DGN-WholeBlood",n,meanh2,meanse,propsig,numsig,numexpgenes)
+
+##calc mean global for DGN
+signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)
+signif(mean(dgn$loc.jt.se,na.rm=TRUE),3)
+signif(mean(dgn$glo.jt.h2,na.rm=TRUE),3)
+signif(mean(dgn$glo.jt.se,na.rm=TRUE),3)
+##prop loc
+signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)/(signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)+signif(mean(dgn$glo.jt.h2,na.rm=TRUE),3))
 
 for(i in 1:length(tislist)){
   tis <- tislist[i]
@@ -49,7 +57,7 @@ for(i in 1:length(tislist)){
   tableinfo <- c(tis,n,meanh2,meanse,propsig,numsig,numexpgenes)
   table1[i+1,] <- tableinfo
 }
-colnames(table1)=c("tissue","n","mean h2","mean se","prop nonzeroCI","num nonzeroCI","num expressed")
+colnames(table1)=c("tissue","n","mean h2","mean se","prop CI > 0","num CI > 0","num expressed")
 #table1
 
 library(xtable)

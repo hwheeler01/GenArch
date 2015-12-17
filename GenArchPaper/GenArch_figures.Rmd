@@ -13,7 +13,7 @@ output: html_document
   library(GGally)
   library(grid)
   "%&%" = function(a,b) paste(a,b,sep="")
-  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
+  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/GTEx_2014-06013_release/transfers/PrediXmod/Paper_plots/multiplot.R')
   my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
   fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
 ```
@@ -23,35 +23,41 @@ DGN-WB joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of each
 otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt'
 
 fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
+d  <- fdrother %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se) )
+cigt0 <- d$ymin>0
+table(cigt0)
+ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
+ptrue
+fdrother <- mutate(d,`distal CI > 0`=cigt0)
 
 ##Plot FDR based results
-a<-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("local h"^2)) + ylab(expression("distal h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_bw() + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
+a<-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2,color=`distal CI > 0`)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1) + xlab(expression("local h"^2)) + ylab(expression("distal h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_bw() +theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(1,1),legend.position=c(1,1))
 
 ##plot joint h2 estimates
-local <- fdrother %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
+local <- fdrother %>% select(loc.jt.h2,loc.jt.se)%>% arrange(loc.jt.h2) %>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),base::sample(loc.jt.se[is.na(loc.jt.se)==FALSE][1:100],size=length(loc.jt.se[is.na(loc.jt.se)==TRUE]),replace=TRUE),loc.jt.se))%>% arrange(loc.jt.h2) 
 names(local) = c('h2','se')
 data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-data <- data[complete.cases(data),]
+#data <- data[complete.cases(data),]
 cigt0 <- data$ymin>0
 table(cigt0)
+sum(table(cigt0))
 ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
 ptrue
 meanh2<-round(mean(data$h2),3)
 meanh2
 meanse <- round(mean(data$se),3)
 meanse
-data <- mutate(data,nonzeroCI=cigt0,position=1:nrow(data))
-
+data <- mutate(data,`CI > 0`=cigt0,position=1:nrow(data))
 my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.60, hjust=0,gp=gpar(fontsize=14)))
 my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
 my_grob3 = grobTree(textGrob(substitute(paste("mean SE", " = ", m),list(m=meanse)), x=0.05,  y=0.54, hjust=0,gp=gpar(fontsize=14)))
 
-b<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)+annotation_custom(my_grob3)
+b<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`CI > 0`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)+annotation_custom(my_grob3)
 
-global <- fdrother %>% select(glo.jt.h2,glo.jt.se) %>% arrange(glo.jt.h2) 
+global <- fdrother %>% select(glo.jt.h2,glo.jt.se) %>% arrange(glo.jt.h2) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),base::sample(glo.jt.se[is.na(glo.jt.se)==FALSE][1:1000],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE]),replace=TRUE),glo.jt.se))%>% arrange(glo.jt.h2)  
 names(global) = c('h2','se')
 data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-data <- data[complete.cases(data),]
+#data <- data[complete.cases(data),]
 cigt0 <- data$ymin>0
 table(cigt0)
 ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
@@ -60,13 +66,13 @@ meanh2<-round(mean(data$h2),3)
 meanh2
 meanse <- round(mean(data$se),3)
 meanse
-data <- mutate(data,nonzeroCI=cigt0,position=1:nrow(data))
+data <- mutate(data,`CI > 0`=cigt0,position=1:nrow(data))
 
 my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.90, hjust=0,gp=gpar(fontsize=14)))
 my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.96, hjust=0,gp=gpar(fontsize=14)))
 my_grob3 = grobTree(textGrob(substitute(paste("mean SE", " = ", m),list(m=meanse)), x=0.05,  y=0.84, hjust=0,gp=gpar(fontsize=14)))
 
-c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.position="none")+annotation_custom(my_grob)+annotation_custom(my_grob2)+annotation_custom(my_grob3)
+c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`CI > 0`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.position="none")+annotation_custom(my_grob)+annotation_custom(my_grob2)+annotation_custom(my_grob3)
 
 multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=1)
 
@@ -83,13 +89,18 @@ dev.off()
 otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_all.Chr1-22_globalOtherChrallSNPs.2015-10-22.txt'
 
 other<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
+d  <- other %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se) )
+cigt0 <- d$ymin>0
+table(cigt0)
+ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
+ptrue
+other <- mutate(d,`distal CI > 0`=cigt0)
+aother<-ggplot(other,aes(x=loc.jt.h2,y=glo.jt.h2,color=`distal CI > 0`)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1) + xlab(expression("local h"^2)) + ylab(expression("distal h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_bw() + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(1,1),legend.position=c(1,1))
 
-aother<-ggplot(other,aes(x=loc.jt.h2,y=glo.jt.h2)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1,color='red') + xlab(expression("local h"^2)) + ylab(expression("distal h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_bw() + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"))
-
-local <- other %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) 
+local <- other %>% select(loc.jt.h2,loc.jt.se) %>% arrange(loc.jt.h2) %>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),base::sample(loc.jt.se[is.na(loc.jt.se)==FALSE][1:100],size=length(loc.jt.se[is.na(loc.jt.se)==TRUE]),replace=TRUE),loc.jt.se))%>% arrange(loc.jt.h2)  
 names(local) = c('h2','se')
 data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-data <- data[complete.cases(data),]
+#data <- data[complete.cases(data),]
 cigt0 <- data$ymin>0
 table(cigt0)
 ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
@@ -98,18 +109,18 @@ meanh2<-round(mean(data$h2),3)
 meanh2
 meanse <- round(mean(data$se),3)
 meanse
-data <- mutate(data,nonzeroCI=cigt0,position=1:nrow(data))
+data <- mutate(data,`CI > 0`=cigt0,position=1:nrow(data))
 
 my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.60, hjust=0,gp=gpar(fontsize=14)))
 my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
 my_grob3 = grobTree(textGrob(substitute(paste("mean SE", " = ", m),list(m=meanse)), x=0.05,  y=0.54, hjust=0,gp=gpar(fontsize=14)))
 
-bother<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)+annotation_custom(my_grob3)
+bother<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`CI > 0`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)+annotation_custom(my_grob3)
 
-global <- other %>% select(glo.jt.h2,glo.jt.se) %>% arrange(glo.jt.h2) 
+global <- other %>% select(glo.jt.h2,glo.jt.se) %>% arrange(glo.jt.h2) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),base::sample(glo.jt.se[is.na(glo.jt.se)==FALSE][1:1000],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE]),replace=TRUE),glo.jt.se))%>% arrange(glo.jt.h2) 
 names(global) = c('h2','se')
 data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-data <- data[complete.cases(data),]
+#data <- data[complete.cases(data),]
 cigt0 <- data$ymin>0
 table(cigt0)
 ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
@@ -118,13 +129,13 @@ meanh2<-round(mean(data$h2),3)
 meanh2
 meanse <- round(mean(data$se),3)
 meanse
-data <- mutate(data,nonzeroCI=cigt0,position=1:nrow(data))
+data <- mutate(data,`CI > 0`=cigt0,position=1:nrow(data))
 
 my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.90, hjust=0,gp=gpar(fontsize=14)))
 my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.96, hjust=0,gp=gpar(fontsize=14)))
 my_grob3 = grobTree(textGrob(substitute(paste("mean SE", " = ", m),list(m=meanse)), x=0.05,  y=0.84, hjust=0,gp=gpar(fontsize=14)))
 
-cother<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.position="none")+annotation_custom(my_grob)+annotation_custom(my_grob2)+annotation_custom(my_grob3)
+cother<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`CI > 0`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.position="none")+annotation_custom(my_grob)+annotation_custom(my_grob2)+annotation_custom(my_grob3)
 
 multiplot(aother+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),bother+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),cother+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=1)
 
@@ -163,12 +174,12 @@ ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
 ptrue
 meanh2<-round(mean(data$h2),3)
 meanh2
-data <- mutate(data,nonzeroCI=cigt0,position=1:nrow(data))
+data <- mutate(data,`CI > 0`=cigt0,position=1:nrow(data))
 
 my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.60, hjust=0,gp=gpar(fontsize=14)))
 my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
 
-b<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax,color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-30,1280))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
+b<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax,color=`CI > 0`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-30,1280))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
 
 global <- fdrtrans %>% select(trans.jt.h2,trans.jt.se) %>% arrange(trans.jt.h2) 
 names(global) = c('h2','se')
@@ -180,12 +191,12 @@ ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
 ptrue
 meanh2<-round(mean(data$h2),3)
 meanh2
-data <- mutate(data,nonzeroCI=cigt0,position=1:nrow(data))
+data <- mutate(data,`CI > 0`=cigt0,position=1:nrow(data))
 
 my_grob = grobTree(textGrob(substitute(paste("mean ", h^2, " = ", m),list(m=meanh2)), x=0.05,  y=0.60, hjust=0,gp=gpar(fontsize=14)))
 my_grob2 = grobTree(textGrob(substitute(paste("percent TRUE = ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
 
-c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax,color=nonzeroCI) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("known trans h"^2)) + xlab(expression("genes ordered by known trans h"^2))+coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-30,1280))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
+c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax,color=`CI > 0`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("known trans h"^2)) + xlab(expression("genes ordered by known trans h"^2))+coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-30,1280))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1), legend.position=c(0,1))+annotation_custom(my_grob)+annotation_custom(my_grob2)
 
 multiplot(a+ggtitle('A')+theme(plot.title=element_text(hjust=0,face="bold")),b+ggtitle('B')+theme(plot.title=element_text(hjust=0,face="bold")),c+ggtitle('C')+theme(plot.title=element_text(hjust=0,face="bold")),cols=1)
 
@@ -274,14 +285,14 @@ gTW_se <- gather(seTW,"Tissue.se","TissueWide.se",2:11)
 gTW_h2_se <- cbind(gTW_h2,gTW_se[,3])
 colnames(gTW_h2_se) <- c("ensid","Tissue","h2","se")
 ngenes<-nrow(gTW_h2_se)/length(unique(gTW_h2_se$Tissue))
-gTW_h2_se <- gTW_h2_se %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(Tissue,h2) %>% mutate(place=rep(1:ngenes,10),nonzeroCI=ymin>0) 
-fig4<-ggplot(gTW_h2_se,aes(x=place,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + facet_wrap(~Tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+theme(legend.justification=c(0,1),legend.position=c(0,1))+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),strip.text.x = element_text(size = 18),legend.text=element_text(size=14),legend.title=element_text(size=14))
+gTW_h2_se <- gTW_h2_se %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(Tissue,h2) %>% mutate(place=rep(1:ngenes,10),`CI > 0`=ymin>0) 
+fig4<-ggplot(gTW_h2_se,aes(x=place,y=h2,ymin=ymin, ymax=ymax, color=`CI > 0`) ) + facet_wrap(~Tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+theme(legend.justification=c(0,1),legend.position=c(0,1))+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),strip.text.x = element_text(size = 18),legend.text=element_text(size=14),legend.title=element_text(size=14))
 
 ###calc % nonzero for each tissue TISSUE-WIDE
 ### ADD to plot legend
 pvec<-vector()
 h2vec<-vector()
-a<-gTW_h2_se %>% select(ensid,Tissue,nonzeroCI) %>% spread(Tissue,nonzeroCI)
+a<-gTW_h2_se %>% select(ensid,Tissue,`CI > 0`) %>% spread(Tissue,`CI > 0`)
 for(i in 2:11){
   tis<-colnames(a)[i]
   cat("\n\n---",tis,"---\n")
@@ -299,9 +310,9 @@ for(i in 2:11){
   h2vec <- c(h2vec,meanh2)
 }
 
-ann_text <- data.frame( h2 = rep(0.78,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, Tissue = factor(colnames(a)[2:11]), ymin=rep(0.9,10), ymax=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
+ann_text <- data.frame( h2 = rep(0.78,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, Tissue = factor(colnames(a)[2:11]), ymin=rep(0.9,10), ymax=rep(0.9,10), `CI > 0`=rep(NA,10), se=rep(0.9,10))
 fig4.2<-fig4+geom_text(data=ann_text,aes(label=paste("mean_h^2 ==",mean_h2,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=5) 
-ann_text <- data.frame( h2 = rep(0.9,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, Tissue = factor(colnames(a)[2:11]), ymin=rep(0.9,10), ymax=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
+ann_text <- data.frame( h2 = rep(0.9,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, Tissue = factor(colnames(a)[2:11]), ymin=rep(0.9,10), ymax=rep(0.9,10), `CI > 0`=rep(NA,10), se=rep(0.9,10))
 fig4<-fig4.2+geom_text(data=ann_text,aes(label=paste("percent_TRUE ==",percent,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=5)
 
 fig4
@@ -394,14 +405,14 @@ gTS_se <- gather(seTS,"Tissue.se","TissueSpecific.se",2:11)
 gTS_h2_se <- cbind(gTS_h2,gTS_se[,3])
 colnames(gTS_h2_se) <- c("ensid","Tissue","h2","se")
 ngenes<-nrow(gTS_h2_se)/length(unique(gTS_h2_se$Tissue))
-gTS_h2_se <- gTS_h2_se %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(Tissue,h2) %>% mutate(place=rep(1:ngenes,10),nonzeroCI=ymin>0) 
-figS1<-ggplot(gTS_h2_se,aes(x=place,y=h2,ymin=ymin, ymax=ymax, color=nonzeroCI) ) + facet_wrap(~Tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+ theme(legend.justification=c(0,1), legend.position=c(0,1))+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),strip.text.x = element_text(size = 18),legend.text=element_text(size=14),legend.title=element_text(size=14))+ coord_cartesian(ylim=c(0,1))
+gTS_h2_se <- gTS_h2_se %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) ) %>% arrange(Tissue,h2) %>% mutate(place=rep(1:ngenes,10),`CI > 0`=ymin>0) 
+figS1<-ggplot(gTS_h2_se,aes(x=place,y=h2,ymin=ymin, ymax=ymax, color=`CI > 0`) ) + facet_wrap(~Tissue,ncol=2) + geom_pointrange(col='gray')+geom_point()+ theme(legend.justification=c(0,1), legend.position=c(0,1))+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),strip.text.x = element_text(size = 18),legend.text=element_text(size=14),legend.title=element_text(size=14))+ coord_cartesian(ylim=c(0,1))
 
 ###calc % nonzero for each tissue TISSUE-WIDE
 ### ADD to plot legend
 pvec<-vector()
 h2vec<-vector()
-a<-gTS_h2_se %>% select(ensid,Tissue,nonzeroCI) %>% spread(Tissue,nonzeroCI)
+a<-gTS_h2_se %>% select(ensid,Tissue,`CI > 0`) %>% spread(Tissue,`CI > 0`)
 for(i in 2:11){
   tis<-colnames(a)[i]
   cat("\n\n---",tis,"---\n")
@@ -419,9 +430,9 @@ for(i in 2:11){
   h2vec <- c(h2vec,meanh2)
 }
 
-ann_text <- data.frame( h2 = rep(0.78,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, Tissue = factor(colnames(a)[2:11]), ymin=rep(0.9,10), ymax=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
+ann_text <- data.frame( h2 = rep(0.78,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, Tissue = factor(colnames(a)[2:11]), ymin=rep(0.9,10), ymax=rep(0.9,10), `CI > 0`=rep(NA,10), se=rep(0.9,10))
 figS1.2<-figS1+geom_text(data=ann_text,aes(label=paste("mean_h^2 ==",mean_h2,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=5) 
-ann_text <- data.frame( h2 = rep(0.9,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, Tissue = factor(colnames(a)[2:11]), ymin=rep(0.9,10), ymax=rep(0.9,10), nonzeroCI=rep(NA,10), se=rep(0.9,10))
+ann_text <- data.frame( h2 = rep(0.9,10), place = rep(5000,10), percent= pvec, mean_h2 = h2vec, Tissue = factor(colnames(a)[2:11]), ymin=rep(0.9,10), ymax=rep(0.9,10), `CI > 0`=rep(NA,10), se=rep(0.9,10))
 figS1<-figS1.2+geom_text(data=ann_text,aes(label=paste("percent_TRUE ==",percent,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=5)
 
 figS1

@@ -63,7 +63,7 @@ img {
 <div id="header">
 <h1 class="title">Table1-mean-h2</h1>
 <h4 class="author"><em>Heather Wheeler</em></h4>
-<h4 class="date"><em>2015-12-16 16:24:39</em></h4>
+<h4 class="date"><em>2015-12-17 15:00:22</em></h4>
 </div>
 
 
@@ -80,19 +80,31 @@ img {
   rna.dir &lt;- my.dir %&amp;% &quot;gtex-rnaseq/&quot;
   annot.dir &lt;- my.dir %&amp;% &quot;gtex-annot/&quot;
   out.dir &lt;- rna.dir %&amp;% &quot;ind-tissues-RPKM/&quot;</code></pre>
-<pre class="r"><code>dgn &lt;- read.table(my.dir %&amp;% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-13.txt',header=T)
+<pre class="r"><code>dgn &lt;- read.table(my.dir %&amp;% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globalAll_reml-no-constrain.2015-12-15.txt',header=T)
 tislist &lt;- scan(my.dir %&amp;% 'gtex-rnaseq/ind-tissues-from-nick/GTEx_PrediXmod.tissue.list',sep=&quot;\n&quot;,what=&quot;character&quot;)
 table1 &lt;- matrix(0,nrow=length(tislist)+1,ncol=7)
 n &lt;- dgn$N[1]
 numexpgenes &lt;- dim(dgn)[1] 
-meanh2 &lt;- signif(mean(dgn$local.h2,na.rm=TRUE),3)
-meanse &lt;- signif(mean(dgn$local.se,na.rm=TRUE),3)
-ciest &lt;-  dgn %&gt;% mutate(ymin = pmax(0, local.h2 - 2 * local.se), ymax = pmin(1, local.h2 + 2 * local.se)) %&gt;% arrange(local.h2) %&gt;% mutate(nonzeroCI=ymin&gt;0,place=1:length(dgn$tissue)) 
+meanh2 &lt;- signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)
+meanse &lt;- signif(mean(dgn$loc.jt.se,na.rm=TRUE),3)
+ciest &lt;-  dgn %&gt;% mutate(ymin = pmax(0, loc.jt.h2 - 2 * loc.jt.se), ymax = pmin(1, loc.jt.h2 + 2 * loc.jt.se)) %&gt;% arrange(loc.jt.h2) %&gt;% mutate(nonzeroCI=ymin&gt;0,place=1:length(dgn$tissue)) 
 propsig &lt;- signif(table(ciest$nonzeroCI)[2]/sum(table(ciest$nonzeroCI,useNA=&quot;i&quot;)),3)
 numsig &lt;- signif(table(ciest$nonzeroCI)[2],3)
 table1[1,] &lt;- c(&quot;DGN-WholeBlood&quot;,n,meanh2,meanse,propsig,numsig,numexpgenes)
 
-for(i in 1:length(tislist)){
+##calc mean global for DGN
+signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)</code></pre>
+<pre><code>## [1] 0.143</code></pre>
+<pre class="r"><code>signif(mean(dgn$loc.jt.se,na.rm=TRUE),3)</code></pre>
+<pre><code>## [1] 0.0292</code></pre>
+<pre class="r"><code>signif(mean(dgn$glo.jt.h2,na.rm=TRUE),3)</code></pre>
+<pre><code>## [1] 0.034</code></pre>
+<pre class="r"><code>signif(mean(dgn$glo.jt.se,na.rm=TRUE),3)</code></pre>
+<pre><code>## [1] 0.258</code></pre>
+<pre class="r"><code>##prop loc
+signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)/(signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)+signif(mean(dgn$glo.jt.h2,na.rm=TRUE),3))</code></pre>
+<pre><code>## [1] 0.8079096</code></pre>
+<pre class="r"><code>for(i in 1:length(tislist)){
   tis &lt;- tislist[i]
   data &lt;- read.table(my.dir %&amp;% 'GTEx.TW.' %&amp;% tis  %&amp;% '.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-14.txt',header=T,sep=&quot;\t&quot;)  
   explist &lt;- scan(out.dir %&amp;% tis %&amp;% &quot;.meanRPKMgt0.1_3samplesRPKMgt0_genelist&quot;,&quot;c&quot;)
@@ -107,21 +119,21 @@ for(i in 1:length(tislist)){
   tableinfo &lt;- c(tis,n,meanh2,meanse,propsig,numsig,numexpgenes)
   table1[i+1,] &lt;- tableinfo
 }
-colnames(table1)=c(&quot;tissue&quot;,&quot;n&quot;,&quot;mean h2&quot;,&quot;mean se&quot;,&quot;prop nonzeroCI&quot;,&quot;num nonzeroCI&quot;,&quot;num expressed&quot;)
+colnames(table1)=c(&quot;tissue&quot;,&quot;n&quot;,&quot;mean h2&quot;,&quot;mean se&quot;,&quot;prop CI &gt; 0&quot;,&quot;num CI &gt; 0&quot;,&quot;num expressed&quot;)
 #table1
 
 library(xtable)
 tab &lt;- xtable(table1)
 print(tab, type=&quot;latex&quot;,include.rownames=FALSE)</code></pre>
-<pre><code>## % latex table generated in R 3.2.1 by xtable 1.7-4 package
-## % Wed Dec 16 16:25:26 2015
+<pre><code>## % latex table generated in R 3.2.0 by xtable 1.8-0 package
+## % Thu Dec 17 15:01:57 2015
 ## \begin{table}[ht]
 ## \centering
 ## \begin{tabular}{lllllll}
 ##   \hline
-## tissue &amp; n &amp; mean h2 &amp; mean se &amp; prop nonzeroCI &amp; num nonzeroCI &amp; num expressed \\ 
+## tissue &amp; n &amp; mean h2 &amp; mean se &amp; prop CI $&gt;$ 0 &amp; num CI $&gt;$ 0 &amp; num expressed \\ 
 ##   \hline
-## DGN-WholeBlood &amp; 922 &amp; 0.149 &amp; 0.0307 &amp; 0.542 &amp; 6900 &amp; 12719 \\ 
+## DGN-WholeBlood &amp; 922 &amp; 0.143 &amp; 0.0292 &amp; 0.486 &amp; 6180 &amp; 12719 \\ 
 ##   Adipose-Subcutaneous &amp; 298 &amp; 0.0385 &amp; 0.0381 &amp; 0.0735 &amp; 1040 &amp; 14205 \\ 
 ##   AdrenalGland &amp; 126 &amp; 0.0432 &amp; 0.075 &amp; 0.0425 &amp; 601 &amp; 14150 \\ 
 ##   Artery-Aorta &amp; 198 &amp; 0.0421 &amp; 0.0561 &amp; 0.0649 &amp; 898 &amp; 13844 \\ 
