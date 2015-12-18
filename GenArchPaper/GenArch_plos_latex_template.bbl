@@ -170,4 +170,12 @@ Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et~al.
 \newblock Nature Genetics. 2015;47(4):345--352.
 \newblock Available from: \url{http://dx.doi.org/10.1038/ng.3220}.
 
+\bibitem{Zou_2005}
+Zou H, Hastie T.
+\newblock Regularization and variable selection via the elastic net.
+\newblock Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology). 2005;67(2):301--320.
+\newblock Available from:
+  \url{http://dx.doi.org/10.1111/j.1467-9868.2005.00503.x}.
+
 \end{thebibliography}
