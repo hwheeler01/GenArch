@@ -1,0 +1,204 @@
+% Template for PLoS
+% Version 3.1 February 2015
+%
+% To compile to pdf, run:
+% latex plos.template
+% bibtex plos.template
+% latex plos.template
+% latex plos.template
+% dvipdf plos.template
+%
+% % % % % % % % % % % % % % % % % % % % % %
+%
+% -- IMPORTANT NOTE
+%
+% This template contains comments intended 
+% to minimize problems and delays during our production 
+% process. Please follow the template instructions
+% whenever possible.
+%
+% % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Once your paper is accepted for publication, 
+% PLEASE REMOVE ALL TRACKED CHANGES in this file and leave only
+% the final text of your manuscript.
+%
+% There are no restrictions on package use within the LaTeX files except that 
+% no packages listed in the template may be deleted.
+%
+% Please do not include colors or graphics in the text.
+%
+% Please do not create a heading level below \subsection. For 3rd level headings, use \paragraph{}.
+%
+% % % % % % % % % % % % % % % % % % % % % % %
+%
+% -- FIGURES AND TABLES
+%
+% Please include tables/figure captions directly after the paragraph where they are first cited in the text.
+%
+% DO NOT INCLUDE GRAPHICS IN YOUR MANUSCRIPT
+% - Figures should be uploaded separately from your manuscript file. 
+% - Figures generated using LaTeX should be extracted and removed from the PDF before submission. 
+% - Figures containing multiple panels/subfigures must be combined into one image file before submission.
+% For figure citations, please use "Fig." instead of "Figure".
+% See http://www.plosone.org/static/figureGuidelines for PLOS figure guidelines.
+%
+% Tables should be cell-based and may not contain:
+% - tabs/spacing/line breaks within cells to alter layout or alignment
+% - vertically-merged cells (no tabular environments within tabular environments, do not use \multirow)
+% - colors, shading, or graphic objects
+% See http://www.plosone.org/static/figureGuidelines#tables for table guidelines.
+%
+% For tables that exceed the width of the text column, use the adjustwidth environment as illustrated in the example table in text below.
+%
+% % % % % % % % % % % % % % % % % % % % % % % %
+%
+% -- EQUATIONS, MATH SYMBOLS, SUBSCRIPTS, AND SUPERSCRIPTS
+%
+% IMPORTANT
+% Below are a few tips to help format your equations and other special characters according to our specifications. For more tips to help reduce the possibility of formatting errors during conversion, please see our LaTeX guidelines at http://www.plosone.org/static/latexGuidelines
+%
+% Please be sure to include all portions of an equation in the math environment.
+%
+% Do not include text that is not math in the math environment. For example, CO2 will be CO\textsubscript{2}.
+%
+% Please add line breaks to long display equations when possible in order to fit size of the column. 
+%
+% For inline equations, please do not include punctuation (commas, etc) within the math environment unless this is part of the equation.
+%
+% % % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Please contact latex@plos.org with any questions.
+%
+% % % % % % % % % % % % % % % % % % % % % % % %
+
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+
+% Use adjustwidth environment to exceed column width (see example table in text)
+\usepackage{changepage}
+
+% Use Unicode characters when possible
+\usepackage[utf8]{inputenc}
+
+% textcomp package and marvosym package for additional characters
+\usepackage{textcomp,marvosym}
+
+% fixltx2e package for \textsubscript
+\usepackage{fixltx2e}
+
+% amsmath and amssymb packages, useful for mathematical formulas and symbols
+\usepackage{amsmath,amssymb}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+% Use nameref to cite supporting information files (see Supporting Information section for more info)
+\usepackage{nameref,hyperref}
+
+% line numbers
+\usepackage[right]{lineno}
+
+% ligatures disabled
+\usepackage{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+
+% rotating package for sideways tables
+\usepackage{rotating}
+
+% Remove comment for double spacing
+%\usepackage{setspace} 
+%\doublespacing
+
+% Text layout
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in 
+\textheight 8.75in
+
+% Bold the 'Figure #' in the caption and separate it from the title/caption with a period
+% Captions will be left justified
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
+
+% Use the PLoS provided BiBTeX style
+\bibliographystyle{plos-latex-template/plos2015}
+
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+% Leave date blank
+\date{}
+
+
+
+%% Include all macros below
+
+\newcommand{\lorem}{{\bf LOREM}}
+\newcommand{\ipsum}{{\bf IPSUM}}
+
+%% END MACROS SECTION
+
+\begin{document}
+\vspace*{0.35in}
+
+
+% latex table generated in R 3.2.0 by xtable 1.8-0 package
+% Wed Dec 23 10:12:39 2015
+\begin{table}[!ht]
+\begin{adjustwidth}{-2.25in}{0in} % Comment out/remove adjustwidth environment if table fits in text column.
+\caption*{{\bf S1 Table. Estimates of cross-tissue and tissue-specific local h$^2$.} Expression levels derived by Orthogonal Tissue Decomposition and h$^2$ estimated using the \texttt{--reml-no-constrain} method.}
+\centering
+\begin{tabular}{lllllll}
+  \hline
+tissue & n & mean h$^2$ & mean se & prop CI $>$ 0 & num CI $>$ 0 & num expressed \\ 
+  \hline
+Cross-tissue & 450 & 0.0624 & 0.0328 & 0.198 & 2940 & 16951 \\ 
+  Adipose - Subcutaneous & 298 & 0.0169 & 0.0351 & 0.0122 & 207 & 16951 \\ 
+  Adrenal Gland & 126 & 0.0369 & 0.0761 & 0.0179 & 304 & 16951 \\ 
+  Artery - Aorta & 198 & 0.0216 & 0.0533 & 0.0146 & 247 & 16951 \\ 
+  Artery - Coronary & 119 & 0.0483 & 0.0844 & 0.0205 & 347 & 16951 \\ 
+  Artery - Tibial & 285 & 0.022 & 0.0378 & 0.018 & 305 & 16951 \\ 
+  Brain - Anterior cingulate cortex (BA24) & 72 & 0.0369 & 0.139 & 0.0217 & 368 & 16951 \\ 
+  Brain - Caudate (basal ganglia) & 100 & 0.0424 & 0.0965 & 0.0176 & 299 & 16951 \\ 
+  Brain - Cerebellar Hemisphere & 89 & 0.0458 & 0.113 & 0.0294 & 498 & 16951 \\ 
+  Brain - Cerebellum & 103 & 0.0406 & 0.0956 & 0.0248 & 421 & 16951 \\ 
+  Brain - Cortex & 96 & 0.0532 & 0.101 & 0.0259 & 439 & 16951 \\ 
+  Brain - Frontal Cortex (BA9) & 92 & 0.0373 & 0.105 & 0.0179 & 304 & 16951 \\ 
+  Brain - Hippocampus & 81 & 0.0327 & 0.115 & 0.0149 & 252 & 16951 \\ 
+  Brain - Hypothalamus & 81 & 0.0205 & 0.119 & 0.0145 & 245 & 16951 \\ 
+  Brain - Nucleus accumbens (basal ganglia) & 93 & 0.0404 & 0.104 & 0.0232 & 393 & 16951 \\ 
+  Brain - Putamen (basal ganglia) & 82 & 0.0327 & 0.112 & 0.0142 & 241 & 16951 \\ 
+  Breast - Mammary Tissue & 183 & 0.0198 & 0.0533 & 0.00791 & 134 & 16951 \\ 
+  Cells - EBV-transformed lymphocytes & 115 & 0.0454 & 0.0808 & 0.0206 & 349 & 16951 \\ 
+  Cells - Transformed fibroblasts & 272 & 0.0193 & 0.0373 & 0.0159 & 269 & 16951 \\ 
+  Colon - Sigmoid & 124 & 0.0243 & 0.0814 & 0.0129 & 219 & 16951 \\ 
+  Colon - Transverse & 170 & 0.0215 & 0.0577 & 0.0106 & 179 & 16951 \\ 
+  Esophagus - Gastroesophageal Junction & 127 & 0.0286 & 0.0784 & 0.0131 & 222 & 16951 \\ 
+  Esophagus - Mucosa & 242 & 0.0263 & 0.0465 & 0.0238 & 404 & 16951 \\ 
+  Esophagus - Muscularis & 219 & 0.0235 & 0.0498 & 0.0176 & 299 & 16951 \\ 
+  Heart - Atrial Appendage & 159 & 0.0314 & 0.0639 & 0.0169 & 287 & 16951 \\ 
+  Heart - Left Ventricle & 190 & 0.0246 & 0.0556 & 0.0176 & 298 & 16951 \\ 
+  Liver & 98 & 0.0355 & 0.0977 & 0.0188 & 319 & 16951 \\ 
+  Lung & 279 & 0.0177 & 0.0384 & 0.0132 & 223 & 16951 \\ 
+  Muscle - Skeletal & 361 & 0.0195 & 0.0308 & 0.0255 & 432 & 16951 \\ 
+  Nerve - Tibial & 256 & 0.0259 & 0.0415 & 0.0224 & 379 & 16951 \\ 
+  Ovary & 85 & 0.043 & 0.105 & 0.0162 & 275 & 16951 \\ 
+  Pancreas & 150 & 0.0362 & 0.068 & 0.02 & 339 & 16951 \\ 
+  Pituitary & 87 & 0.0437 & 0.113 & 0.0206 & 349 & 16951 \\ 
+  Skin - Not Sun Exposed (Suprapubic) & 196 & 0.0413 & 0.0562 & 0.0254 & 430 & 16951 \\ 
+  Skin - Sun Exposed (Lower leg) & 303 & 0.0271 & 0.0381 & 0.0264 & 448 & 16951 \\ 
+  Small Intestine - Terminal Ileum & 77 & 0.0462 & 0.118 & 0.0205 & 347 & 16951 \\ 
+  Spleen & 89 & 0.0621 & 0.106 & 0.0286 & 484 & 16951 \\ 
+  Stomach & 171 & 0.02 & 0.0564 & 0.00808 & 137 & 16951 \\ 
+  Testis & 157 & 0.0416 & 0.0679 & 0.037 & 627 & 16951 \\ 
+  Thyroid & 279 & 0.0237 & 0.039 & 0.026 & 441 & 16951 \\ 
+  Whole Blood & 339 & 0.0251 & 0.0333 & 0.0288 & 488 & 16951 \\ 
+   \hline
+\end{tabular}
+\end{adjustwidth}
+\end{table}
+
+\end{document}

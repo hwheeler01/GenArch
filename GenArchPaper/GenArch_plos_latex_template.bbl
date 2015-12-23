@@ -150,19 +150,6 @@ Yang J, Lee SH, Goddard ME, Visscher PM.
 \newblock The American Journal of Human Genetics. 2011;88(1):76--82.
 \newblock Available from: \url{http://dx.doi.org/10.1016/j.ajhg.2010.11.011}.
 
-\bibitem{Stegle_2012}
-Stegle O, Parts L, Piipari M, Winn J, Durbin R.
-\newblock Using probabilistic estimation of expression residuals ({PEER}) to
-  obtain increased power and interpretability of gene expression analyses.
-\newblock Nat Protoc. 2012;7(3):500--507.
-\newblock Available from: \url{http://dx.doi.org/10.1038/nprot.2011.457}.
-
-\bibitem{Leek_2007}
-Leek JT, Storey JD.
-\newblock Capturing heterogeneity in gene expression studies by surrogate
-  variable analysis.
-\newblock PLoS Genet. 2007;3(9):1724--1735.
-
 \bibitem{Zhang_2015}
 Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et~al.
 \newblock Identification of common genetic variants controlling transcript
@@ -177,5 +164,84 @@ Zou H, Hastie T.
   Methodology). 2005;67(2):301--320.
 \newblock Available from:
   \url{http://dx.doi.org/10.1111/j.1467-9868.2005.00503.x}.
+
+\bibitem{Flutre_2013}
+Flutre T, Wen X, Pritchard J, Stephens M.
+\newblock A Statistical Framework for Joint {eQTL} Analysis in Multiple
+  Tissues.
+\newblock {PLoS} Genetics. 2013;9(5):e1003486.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1003486}.
+
+\bibitem{Stegle_2012}
+Stegle O, Parts L, Piipari M, Winn J, Durbin R.
+\newblock Using probabilistic estimation of expression residuals ({PEER}) to
+  obtain increased power and interpretability of gene expression analyses.
+\newblock Nat Protoc. 2012;7(3):500--507.
+\newblock Available from: \url{http://dx.doi.org/10.1038/nprot.2011.457}.
+
+\bibitem{Leek_2007}
+Leek JT, Storey JD.
+\newblock Capturing heterogeneity in gene expression studies by surrogate
+  variable analysis.
+\newblock PLoS Genet. 2007;3(9):1724--1735.
+
+\bibitem{Howie_2012}
+Howie B, Fuchsberger C, Stephens M, Marchini J, Abecasis GR.
+\newblock Fast and accurate genotype imputation in genome-wide association
+  studies through pre-phasing.
+\newblock Nature Genetics. 2012;44(8):955--959.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.2354}.
+
+\bibitem{Fuchsberger_2014}
+Fuchsberger C, Abecasis GR, Hinds DA.
+\newblock minimac2: faster genotype imputation.
+\newblock Bioinformatics. 2014;31(5):782--784.
+\newblock Available from:
+  \url{http://dx.doi.org/10.1093/bioinformatics/btu704}.
+
+\bibitem{Harrow_2012}
+Harrow J, Frankish A, Gonzalez JM, Tapanari E, Diekhans M, Kokocinski F, et~al.
+\newblock {GENCODE}: The reference human genome annotation for The {ENCODE}
+  Project.
+\newblock Genome Research. 2012;22(9):1760--1774.
+\newblock Available from: \url{http://dx.doi.org/10.1101/gr.135350.111}.
+
+\bibitem{Friedman_2010}
+Friedman J, Hastie T, Tibshirani R.
+\newblock Regularization Paths for Generalized Linear Models via Coordinate
+  Descent.
+\newblock Journal of Statistical Software. 2010;33(1):1--22.
+\newblock Available from: \url{http://www.jstatsoft.org/v33/i01/}.
+
+\bibitem{Simon_2011}
+Simon N, Friedman J, Hastie T, Tibshirani R.
+\newblock Regularization Paths for Cox's Proportional Hazards Model via
+  Coordinate Descent.
+\newblock Journal of Statistical Software. 2011;39(5):1--13.
+\newblock Available from: \url{http://www.jstatsoft.org/v39/i05/}.
+
+\bibitem{Zhou_2012}
+Zhou X, Stephens M.
+\newblock Genome-wide efficient mixed-model analysis for association studies.
+\newblock Nature Genetics. 2012;44(7):821--824.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.2310}.
+
+\bibitem{Im_2012}
+Im HK, Gamazon ER, Stark AL, Huang RS, Cox NJ, Dolan ME.
+\newblock Mixed Effects Modeling of Proliferation Rates in Cell-Based Models:
+  Consequence for Pharmacogenomics and Cancer.
+\newblock {PLoS} Genetics. 2012;8(2):e1002525.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1002525}.
+
+\bibitem{R_Core_Team_2015}
+{R Core Team}. R: A Language and Environment for Statistical Computing.
+\newblock Vienna, Austria; 2015.
+\newblock Available from: \url{http://www.R-project.org/}.
+
+\bibitem{Bates_2015a}
+Bates D, M{\"a}chler M, Bolker BM, Walker S.
+\newblock Fitting Linear Mixed-Effects Models using {lme4}.
+\newblock Journal of Statistical Software. 2015;67(1):1--48.
+\newblock Available from: \url{http://dx.doi.org/10.18637/jss.v067.i01}.
 
 \end{thebibliography}
