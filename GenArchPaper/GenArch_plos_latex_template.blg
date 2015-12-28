@@ -7,47 +7,50 @@ Reallocated global_strs (elt_size=20001) to 20 items from 10.
 Reallocated glb_str_end (elt_size=4) to 20 items from 10.
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Database file #1: GenArch_references.bib
+`journal' is a missing field, not a string, for entry davis2013partitioning
+while executing---line 1874 of file plos-latex-template/plos2015.bst
+Warning--empty journal in davis2013partitioning
 Warning--empty author and editor in R_Core_Team_2015
 Warning--missing publisher in R_Core_Team_2015
-You've used 36 entries,
+You've used 38 entries,
             3170 wiz_defined-function locations,
-            945 strings with 23221 characters,
-and the built_in function-call counts, 157604 in all, are:
-= -- 18699
-> -- 716
+            953 strings with 23861 characters,
+and the built_in function-call counts, 164148 in all, are:
+= -- 19499
+> -- 772
 < -- 0
-+ -- 699
-- -- 179
-* -- 15424
-:= -- 17154
-add.period$ -- 176
-call.type$ -- 36
++ -- 727
+- -- 193
+* -- 16023
+:= -- 17849
+add.period$ -- 183
+call.type$ -- 38
 change.case$ -- 0
 chr.to.int$ -- 0
-cite$ -- 38
-duplicate$ -- 6558
-empty$ -- 16256
-format.name$ -- 213
-if$ -- 36014
+cite$ -- 41
+duplicate$ -- 6995
+empty$ -- 16895
+format.name$ -- 229
+if$ -- 37527
 int.to.chr$ -- 0
-int.to.str$ -- 36
-missing$ -- 463
-newline$ -- 216
-num.names$ -- 36
-pop$ -- 709
+int.to.str$ -- 38
+missing$ -- 491
+newline$ -- 225
+num.names$ -- 38
+pop$ -- 752
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 790
+skip$ -- 842
 stack$ -- 0
-substring$ -- 41243
-swap$ -- 1028
+substring$ -- 42738
+swap$ -- 1084
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 2
-while$ -- 416
-width$ -- 38
-write$ -- 464
-(There were 2 warnings)
+warning$ -- 3
+while$ -- 442
+width$ -- 40
+write$ -- 483
+(There was 1 error message)
