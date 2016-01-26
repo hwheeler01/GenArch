@@ -356,6 +356,15 @@ dev.off()
 ##Fig 6
 ###Table of Pr vs PVE correlations
 ```{r PrPVE}
+mtPVE <- inner_join(mt,pve.tw,by='gene')
+corMat <- round(cor(mtPVE[,3:dim(mtPVE)[2]],use="p"),3)
+###Pr rows, PVE cols
+mat2.tw <- corMat[1:9,11:dim(corMat)[2]]
+colnames(mat2.tw)<-c('Whole: Adipose','Artery','Heart','Lung','Muscle','Nerve','Skin','Thyroid','WholeBlood')
+rownames(mat2.tw)<-c('Adipose','Artery','WholeBlood','Heart','Lung','Muscle','Nerve','Skin','Thyroid')
+mat2.tw <- mat2.tw[ order(row.names(mat2.tw)), ]
+rownames(mat2.tw)[1] <- 'PPA: Adipose'
+
 mtPVE <- inner_join(mt,pve.ts,by='gene')
 corMat <- round(cor(mtPVE[,3:dim(mtPVE)[2]],use="p"),3)
 ###Pr rows, PVE cols
@@ -363,13 +372,17 @@ mat2 <- corMat[1:9,11:dim(corMat)[2]]
 colnames(mat2)<-c('OTD: Adipose','Artery','Heart','Lung','Muscle','Nerve','Skin','Thyroid','WholeBlood')
 rownames(mat2)<-c('Adipose','Artery','WholeBlood','Heart','Lung','Muscle','Nerve','Skin','Thyroid')
 mat2 <- mat2[ order(row.names(mat2)), ]
-rownames(mat2)[1] <- 'eQTL: Adipose'
+rownames(mat2)[1] <- 'PPA: Adipose'
 
-tiff(filename=fig.dir %&% "Fig-cor-StephensPr-OTDtsPVE.tiff",width=480,height=480)
-corrplot(mat2,method="circle",cl.lim = c(-0.2, 0.2),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
+tiff(filename=fig.dir %&% "Fig-cor-StephensPr-v-PVE.tiff",width=960,height=480)
+par(mfrow=c(1,2))
+corrplot(mat2.tw,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
+corrplot(mat2,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
 dev.off()
 
-png(filename=fig.dir %&% "Fig-cor-StephensPr-OTDtsPVE.png",width=480,height=480)
-corrplot(mat2,method="circle",cl.lim = c(-0.2, 0.2),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
+png(filename=fig.dir %&% "Fig-cor-StephensPr-v-PVE.png",width=960,height=480)
+par(mfrow=c(1,2))
+corrplot(mat2.tw,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
+corrplot(mat2,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
 dev.off()
 ```

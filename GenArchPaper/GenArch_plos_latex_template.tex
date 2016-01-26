@@ -154,7 +154,7 @@
 %% END MACROS SECTION
 
 %added packages
-\usepackage{soul}
+\usepackage{soul} 
 \usepackage{color}
 %% END ADDED PACKAGES
 
@@ -172,6 +172,7 @@
 \\
 Heather E. Wheeler\textsuperscript{1,2,*},
 Kaanan P. Shah\textsuperscript{3},
+Jonathon Brenner\textsuperscript{2},
 Tzintzuni Garcia\textsuperscript{4},
 Keston Aquino-Michaels\textsuperscript{3},
 . . .,
@@ -323,8 +324,6 @@ DGN-WholeBlood & 922 & 0.143 & 0.0292 & 0.486 & 6180 & 12719 \\
 \end{adjustwidth}
 \end{table}
 
-In DGN (whole blood), the mean local h$^2$ was 14.3\% and the mean distal h$^2$ was 3.4\% such that the local variation contribution is estimated as 14.3/(3.4+14.3) = 81\%. This is much higher than the 37\% reported by Price et al \cite{Price_2011} based on blood expression data for a cohort of Icelandic individuals. This potentially underestimation of the distal component could be due to over-correction of confounders used in the preprocessing of the expression trait data we used. Indeed, PEER \cite{Stegle_2012}, SVA \cite{Leek_2007}, and other types of hidden confounder corrections have been shown to increase local eQTL replicability but there are concerns about the detrimental effects on the distal eQTL identification. As larger sample sizes become available we will test this hypothesis in GTEx data by computing the distal h$^2$ without PEER factor correction.
-
 The left column of Fig. \ref{fig-dgn-jt-h2} shows the estimated local and distal h$^2$ from DGN, this time using REML constrained between 0 and 1 (GCTA default) \cite{Yang_2011}. Even though many genes show relatively large point estimates of distal h$^2$, only the ones colored in blue are significantly different from zero. The local component of h$^2$ is relatively well estimated in DGN with 
 %\hl{44.3\% of genes  (5633 out of 12719) }
 48.6\% of genes  (6180 out of 12719) showing h$^2$ values significantly different from zero. In contrast, the distal heritability is significantly different from zero for only 2.7\% (343 out of 12719) of the genes. 
@@ -441,11 +440,11 @@ We call this approach orthogonal tissue decomposition (OTD) because the cross-ti
 
 %If our OTD was able to capture the common cross tissue component, we expected to observe higher h2 for the cross tissue traits compared to the original expression in each tissue. This is because our approach uses the data from multiple tissues to capture the substantial common component while averaging out the noise. Also because of this leveraging of multiple measurements we have a larger effective sample size for the cross tissue expression traits (450 for cross tissue vs less than 362 for each tissue). This is expected to translate in smaller standard errors of the cross tissue h2 compare to tissue level h2. 
 
-Our estimates of h2 for cross tissue expression traits are larger than the corresponding estimates for each whole tissue expression traits (\nameref{S5_Fig}). %For the remainder of this paper we will refer to the original tissue expression levels as whole tissue expression to distinguish from the tissue specific component, which does not have the cross tissue component.
-This means that our OTD approach increases the ratio of genetically regulated component to noise by averaging across multiple tissues. In addition to the increased h2 we observe reduction in standard errors of the estimated h2. This is partly due to the increased h2 -- higher h2 are better estimated-- but also due to the larger effective sample size for cross tissue phenotypes. There were 450 samples for which cross tissue traits were avialable whereas the maximum sample size for whole tissue phenotypes was 362. As consequence of this increase h2 and decreased standard errors, the percentage of cross h\textsuperscript{2} estimates with positive CIs was 19.8\% whereas for whole tissue expression traits they ranged from 2.4-9.5\%. Similarly, cross-tissue BSLMM PVE estimates had lower error than whole tissue PVE (\nameref{S4_Fig}, \nameref{S6_Fig}). 
+Our estimates of h\textsuperscript{2} for cross tissue expression traits are larger than the corresponding estimates for each whole tissue expression traits (\nameref{S3_Fig}). %For the remainder of this paper we will refer to the original tissue expression levels as whole tissue expression to distinguish from the tissue specific component, which does not have the cross tissue component.
+This means that our OTD approach increases the ratio of genetically regulated component to noise by averaging across multiple tissues. In addition to the increased h\textsuperscript{2} we observe reduction in standard errors of the estimated h\textsuperscript{2}. This is partly due to the increased h\textsuperscript{2} -- higher h\textsuperscript{2} are better estimated-- but also due to the larger effective sample size for cross tissue phenotypes. There were 450 samples for which cross tissue traits were avialable whereas the maximum sample size for whole tissue phenotypes was 362. As consequence of this increase h\textsuperscript{2} and decreased standard errors, the percentage of cross h\textsuperscript{2} estimates with positive CIs was 19.8\% whereas for whole tissue expression traits they ranged from 2.4-9.5\%. Similarly, cross-tissue BSLMM PVE estimates had lower error than whole tissue PVE (\nameref{S4_Fig}, \nameref{S5_Fig}). 
 
 As for the tissue specific components, 
-the cross-tissue heritability estimates were also larger and the standard errors were smaller reflecting the fact that a substantial portion of regulation is common across tissues (\nameref{S3_Fig}). The percentage of GCTA h\textsuperscript{2} estimates with positive CIs was much larger for cross-tissue expression (19.8\%) than the tissue-specific expressions (all less than 4\%, \nameref{S1_Table}). Similarly, the percentage of BSLMM PVE estimates with a lower credible set greater than 0.01 was 49\% for cross-tissue expression, but ranged from 24-27\% for tissue-specific expression (\nameref{S4_Fig}).
+the cross-tissue heritability estimates were also larger and the standard errors were smaller reflecting the fact that a substantial portion of regulation is common across tissues (\nameref{S6_Fig}). The percentage of GCTA h\textsuperscript{2} estimates with positive CIs was much larger for cross-tissue expression (19.8\%) than the tissue-specific expressions (all less than 4\%, \nameref{S1_Table}). Similarly, the percentage of BSLMM PVE estimates with a lower credible set greater than 0.01 was 49\% for cross-tissue expression, but ranged from 24-27\% for tissue-specific expression (\nameref{S5_Fig}).
 
 %We also compared the cross-tissue h\textsuperscript{2} from the OTD to h\textsuperscript{2} estimates from the pre-OTD measures of gene expression, which we term whole tissue expression. Again, the cross-tissue heritability estimates were larger and the standard errors were smaller than the whole tissue estimates (\nameref{S5_Fig}) due to the larger effective sample size of the cross tissue phenotypes compared to whole tissue expression phenotypes as well as the common regulation across tissues. The percentage of whole tissue h\textsuperscript{2} estimates with positive CIs ranged from 2.4-9.5\% and were all larger than their respective tissue-specific positive CI percentages, but smaller than the cross-tissue percentage (Table \ref{table-h2}, \nameref{S1_Table}). 
 
@@ -465,11 +464,11 @@ Cross-tissue predictive performance exceeded that of both tissue-specific and wh
 
 We compared our OTD results to those from a joint multi-tissue eQTL analysis method \cite{Flutre_2013}, which was previously performed on a subset of the GTEx data \cite{Ardlie_2015} covering 9 tissues. In particular, we used the posterior probability of a gene being actively regulated  (PPA) in a tissue. These analysis results are available on the GTEx portal.
 
-First, we reasoned that genes with high cross tissue h2 would be actively regulated in most tissues so that the PPA of a gene would be roughly uniform across tissues. By contrast, a gene with tissue specific regulation would have concentrated posterior probability in one or a few tissues. Thus we decided to define a measure of uniformity of the posterior probability vector across the 9 tissues using the concept of entropy. More specifically, for each gene we normalized the vector of posterior probabilities so that the sum equaled 1. Then we applied the usual entropy definition (negative of the sum of the log of the posterior probabilities weighted by the same probabilities, see Methods). In other words, we defined an entropy statistic that combines the nine posterior probabilities into one value such that higher entropy values mean the gene regulation is more uniform across all nine tissues, rather than in just a small subset of the nine.
+First, we reasoned that genes with high cross tissue h\textsuperscript{2} would be actively regulated in most tissues so that the PPA of a gene would be roughly uniform across tissues. By contrast, a gene with tissue specific regulation would have concentrated posterior probability in one or a few tissues. Thus we decided to define a measure of uniformity of the posterior probability vector across the 9 tissues using the concept of entropy. More specifically, for each gene we normalized the vector of posterior probabilities so that the sum equaled 1. Then we applied the usual entropy definition (negative of the sum of the log of the posterior probabilities weighted by the same probabilities, see Methods). In other words, we defined an entropy statistic that combines the nine posterior probabilities into one value such that higher entropy values mean the gene regulation is more uniform across all nine tissues, rather than in just a small subset of the nine.
 
-Reassuringly, we found that the cross tissue phenotype heritability estimates were well correlated with the entropy statistics indicating that our derived cross tissue phenotype is capturing the common regulatory component. Fig. \ref{fig-ct-entropy}A and B show the comparison between this entropy statistics and cross-tissue expression heritability (R=0.082) and PVE (R = 0.12).
+Reassuringly, we found that the cross tissue phenotype heritability estimates were well correlated with the entropy statistics indicating that our derived cross tissue phenotype is capturing the common regulatory component. Figure \ref{fig-ct-entropy} shows the comparison between this entropy statistics and cross-tissue expression heritability (R=0.082) and PVE (R = 0.12).
 
-For the original whole tissue, we expected the whole tissue expression heritability to correlate with the posterior probability of a gene being actively regulated in a tissue as shown in Figure 6 A \hl{(add plot...)}. Similarly, the tissue specific phenotype heritability showed highest correlation with the PPA of the matching tissue, confirming that OTD also captures tissue-specific components of gene expression (Fig. \ref{fig-corrplot}). However, for whole blood and thyroid to a lesser degree there is a consistently negative correlation with other tissues. This issue needs to be further investigated.
+For the original whole tissue, we expected the whole tissue expression heritability to correlate with the posterior probability of a gene being actively regulated in a tissue as shown in Figure \ref{fig-corrplot}A. Strikingly, the tissue specific phenotype heritability showed highest correlation with the PPA of the matching tissue and lower correlations with other tissues, confirming that OTD also captures tissue-specific components of gene expression (Fig. \ref{fig-corrplot}B). However, for whole blood there is a consistently negative correlation with other tissues. This issue needs to be further investigated.
 
 \begin{figure}[h]
 \includegraphics[width=12cm]{Figures/Fig-CT-entropy.png}
@@ -484,12 +483,12 @@ line is in red.}
 \end{figure}
 
 \begin{figure}[h]
-\includegraphics[width=10cm]{Figures/Fig-cor-StephensPr-OTDtsPVE.png}
-\caption{{\bf Tissue-specific expression from the 
-orthogonal tissue decomposition (OTD) compared to multi-tissue eQTL results.} 
-Pearson correlation (R) between the 
-posterior probability the top multi-tissue eQTL regulates its gene in a given tissue (eQTL, 
-Flutre et al. method) and the PVE of tissue-specific gene expression from the orthogonal
+\includegraphics[width=12cm]{Figures/Fig-cor-StephensPr-v-PVE.png}
+\caption{{\bf Comparison of whole tissue or tissue-specific expression PVE to the posterior 
+probability of a gene being actively regulated in a tissue.} 
+Pearson correlation (R) between the posterior probability the top multi-tissue eQTL 
+regulates its gene in a given tissue (PPA, Flutre et al. method) and the PVE of (A) whole 
+tissue gene expression or (B) tissue-specific gene expression from the orthogonal
 tissue decomposition (OTD). Area of each circle is proportional to the absolute value of R.}
 \label{fig-corrplot}
 \end{figure}
@@ -562,6 +561,7 @@ subsequent analyses.
 \hl{QC and imputation description by Tzuni here + matrixeQTL runs by Keston}
 
 \hl{*cite Shabalin AA: Matrix eQTL: ultra fast eQTL analysis via large matrix operations. Bioinformatics 2012, 28:1353?1358.}
+\cite{shabalin2012matrix}
 
 \subsection*{Partitioning local and distal heritability of gene
 expression}\label{partitioning-local-and-distal-heritability-of-gene-expression}
@@ -866,24 +866,24 @@ Analyzing and Sharing Large Genomics Datasets. J Am Med Inform Assoc
 {\bf GTEx whole tissue cross-validated predictive performance across the elastic net.} Predictive R$^2$ difference between LASSO ($\alpha = 1$) and several other values of $\alpha$ compared to LASSO predictive R$^2$ for all autosomal genes per tissue.
 
 \subsection*{S3 Fig}
-%Fig-GTEx-CT-v-TS.tiff
-\label{S3_Fig}
-{\bf Cross-tissue and tissue-specific comparison of heritability (h$^2$, A) and standard error (SE, B) estimation.} Cross-tissue local h$^2$ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-specifc local h$^2$ is estimated using the tissue-specific component (residuals) of the mixed effects model for gene expression for each respective tissue and SNPs within 1 Mb of each gene.
-
-\subsection*{S4 Fig}
-%Fig-GTEx_CT-TS_BSLMM.tiff
-\label{S4_Fig}
-{\bf GTEx orthogonal tissue decomposition cross-tissue and tissue-specific expression Bayesian Sparse Linear Mixed Model.} Comparison of median PGE (proportion of PVE explained by sparse effects) to median PVE (total proportion of variance explained) for expression of each gene. The 95\% credible set of each PGE estimate is in gray and genes with a lower credible set (LCS) greater than 0.01 are in blue.
-
-\subsection*{S5 Fig}
 %Fig-GTEx-CT-v-TW.tiff
-\label{S5_Fig}
+\label{S3_Fig}
 {\bf Cross-tissue and whole tissue comparison of heritability (h$^2$, A) and standard error (SE, B).} Cross-tissue local h$^2$ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Whole tissue local h$^2$ is estimated using the measured gene expression for each respective tissue and SNPs within 1 Mb of each gene.
 
-\subsection*{S6 Fig}
+\subsection*{S4 Fig}
 %Fig-GTEx_TW_BSLMM.tiff
-\label{S6_Fig}
+\label{S4_Fig}
 {\bf GTEx whole tissue expression Bayesian Sparse Linear Mixed Model.} Comparison of median PGE (proportion of PVE explained by sparse effects) to median PVE (total proportion of variance explained) for expression of each gene. The 95\% credible set of each PGE estimate is in gray and genes with a lower credible set (LCS) greater than 0.01 are in blue.
+
+\subsection*{S5 Fig}
+%Fig-GTEx_CT-TS_BSLMM.tiff
+\label{S5_Fig}
+{\bf GTEx orthogonal tissue decomposition cross-tissue and tissue-specific expression Bayesian Sparse Linear Mixed Model.} Comparison of median PGE (proportion of PVE explained by sparse effects) to median PVE (total proportion of variance explained) for expression of each gene. The 95\% credible set of each PGE estimate is in gray and genes with a lower credible set (LCS) greater than 0.01 are in blue.
+
+\subsection*{S6 Fig}
+%Fig-GTEx-CT-v-TS.tiff
+\label{S6_Fig}
+{\bf Cross-tissue and tissue-specific comparison of heritability (h$^2$, A) and standard error (SE, B) estimation.} Cross-tissue local h$^2$ is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-specifc local h$^2$ is estimated using the tissue-specific component (residuals) of the mixed effects model for gene expression for each respective tissue and SNPs within 1 Mb of each gene.
 
 \subsection*{S7 Fig}
 %Fig-GTEx_CT-TS_EN_CV.tiff

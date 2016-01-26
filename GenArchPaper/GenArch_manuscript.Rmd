@@ -1,18 +1,23 @@
 ---
-title: An atlas of the genetic architecture of gene expression traits across the entire human body
-author: Heather E. Wheeler^1,2^, GTEx Consortium, Kaanan P. Shah^3^, . . ., Nancy J. Cox^4^, Dan L. Nicolae^3^, Hae Kyung Im^3^
-date: '^1^Department of Biology and ^2^Department of Computer Science, Loyola University Chicago, ^3^Section of Genetic Medicine, Department of Medicine, University of Chicago, ^4^Division of Genetic Medicine, Vanderbilt University `r Sys.time()`'
+title: An atlas of the genetic architecture of gene expression traits across the entire
+  human body
+author: Heather E. Wheeler^1,2^, GTEx Consortium, Kaanan P. Shah^3^, . . ., Nancy
+  J. Cox^4^, Dan L. Nicolae^3^, Hae Kyung Im^3^
+date: ^1^Department of Biology and ^2^Department of Computer Science, Loyola University
+  Chicago, ^3^Section of Genetic Medicine, Department of Medicine, University of Chicago,
+  ^4^Division of Genetic Medicine, Vanderbilt University `r Sys.time()`
 output:
   pdf_document:
     fig_caption: yes
     keep_tex: yes
     number_sections: no
+  word_document: default
+header-includes:
+- \usepackage{setspace}
+- \setstretch{2}
+- \usepackage{soul}
 csl: plos.csl
 bibliography: GenArch_references.bib
-header-includes:
-   - \usepackage{setspace}
-   - \setstretch{2}
-   - \usepackage{soul}
 ---
 
 ```{r, echo=FALSE, message=FALSE, warning=FALSE}
