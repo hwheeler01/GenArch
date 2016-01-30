@@ -31,7 +31,8 @@ Torres JM, Gamazon ER, Parra EJ, Below JE, Valladares-Salgado A, Wacher N,
 \bibitem{davis2013partitioning}
 Davis LK, Yu D, Keenan CL, Gamazon ER, Konkashbaev AI, Derks EM, et~al.
 \newblock Partitioning the heritability of Tourette syndrome and obsessive
-  compulsive disorder reveals differences in genetic architecture. 2013;.
+  compulsive disorder reveals differences in genetic architecture.
+\newblock PLoS Genet. 2013;.
 
 \bibitem{Albert_2015}
 Albert FW, Kruglyak L.
@@ -162,24 +163,11 @@ Yang J, Lee SH, Goddard ME, Visscher PM.
 \newblock The American Journal of Human Genetics. 2011;88(1):76--82.
 \newblock Available from: \url{http://dx.doi.org/10.1016/j.ajhg.2010.11.011}.
 
-\bibitem{Stegle_2012}
-Stegle O, Parts L, Piipari M, Winn J, Durbin R.
-\newblock Using probabilistic estimation of expression residuals ({PEER}) to
-  obtain increased power and interpretability of gene expression analyses.
-\newblock Nat Protoc. 2012;7(3):500--507.
-\newblock Available from: \url{http://dx.doi.org/10.1038/nprot.2011.457}.
-
-\bibitem{Leek_2007}
-Leek JT, Storey JD.
-\newblock Capturing heterogeneity in gene expression studies by surrogate
-  variable analysis.
-\newblock PLoS Genet. 2007;3(9):1724--1735.
-
-\bibitem{Pierce_2014}
+\bibitem{pierce2014mediation}
 Pierce BL, Tong L, Chen LS, Rahaman R, Argos M, Jasmine F, et~al.
 \newblock Mediation Analysis Demonstrates That Trans-eQTLs Are Often Explained
   by Cis-Mediation: A Genome-Wide Analysis among 1,800 South Asians.
-\newblock PLoS Genetics. 2014;10(12):e1004818.
+\newblock PLoS genetics. 2014;10(12):e1004818.
 
 \bibitem{Zhang_2015}
 Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et~al.
@@ -203,6 +191,19 @@ Flutre T, Wen X, Pritchard J, Stephens M.
 \newblock {PLoS} Genetics. 2013;9(5):e1003486.
 \newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1003486}.
 
+\bibitem{Stegle_2012}
+Stegle O, Parts L, Piipari M, Winn J, Durbin R.
+\newblock Using probabilistic estimation of expression residuals ({PEER}) to
+  obtain increased power and interpretability of gene expression analyses.
+\newblock Nat Protoc. 2012;7(3):500--507.
+\newblock Available from: \url{http://dx.doi.org/10.1038/nprot.2011.457}.
+
+\bibitem{Leek_2007}
+Leek JT, Storey JD.
+\newblock Capturing heterogeneity in gene expression studies by surrogate
+  variable analysis.
+\newblock PLoS Genet. 2007;3(9):1724--1735.
+
 \bibitem{Howie_2012}
 Howie B, Fuchsberger C, Stephens M, Marchini J, Abecasis GR.
 \newblock Fast and accurate genotype imputation in genome-wide association
@@ -216,6 +217,11 @@ Fuchsberger C, Abecasis GR, Hinds DA.
 \newblock Bioinformatics. 2014;31(5):782--784.
 \newblock Available from:
   \url{http://dx.doi.org/10.1093/bioinformatics/btu704}.
+
+\bibitem{irizarry2003summaries}
+Irizarry RA, Bolstad BM, Collin F, Cope LM, Hobbs B, Speed TP.
+\newblock Summaries of Affymetrix GeneChip probe level data.
+\newblock Nucleic acids research. 2003;31(4):e15--e15.
 
 \bibitem{shabalin2012matrix}
 Shabalin AA.
