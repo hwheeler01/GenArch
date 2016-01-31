@@ -7,47 +7,49 @@ Reallocated global_strs (elt_size=20001) to 20 items from 10.
 Reallocated glb_str_end (elt_size=4) to 20 items from 10.
 Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
 Database file #1: GenArch_references.bib
+Warning--empty year in MacDonald_1
+Warning--empty year in MacDonald_2
 Warning--empty author and editor in R_Core_Team_2015
 Warning--missing publisher in R_Core_Team_2015
-You've used 41 entries,
+You've used 46 entries,
             3170 wiz_defined-function locations,
-            971 strings with 24614 characters,
-and the built_in function-call counts, 171026 in all, are:
-= -- 20345
-> -- 828
-< -- 0
-+ -- 755
-- -- 207
-* -- 16620
-:= -- 18591
-add.period$ -- 196
-call.type$ -- 41
+            995 strings with 25523 characters,
+and the built_in function-call counts, 178982 in all, are:
+= -- 21323
+> -- 896
+< -- 1
++ -- 793
+- -- 224
+* -- 17265
+:= -- 19449
+add.period$ -- 214
+call.type$ -- 46
 change.case$ -- 0
 chr.to.int$ -- 0
-cite$ -- 43
-duplicate$ -- 7488
-empty$ -- 17563
-format.name$ -- 245
-if$ -- 39126
+cite$ -- 50
+duplicate$ -- 8124
+empty$ -- 18318
+format.name$ -- 265
+if$ -- 40991
 int.to.chr$ -- 0
-int.to.str$ -- 41
-missing$ -- 529
-newline$ -- 241
-num.names$ -- 41
-pop$ -- 808
+int.to.str$ -- 46
+missing$ -- 581
+newline$ -- 266
+num.names$ -- 46
+pop$ -- 912
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 904
+skip$ -- 1010
 stack$ -- 0
-substring$ -- 44205
-swap$ -- 1169
-text.length$ -- 0
+substring$ -- 45742
+swap$ -- 1277
+text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
-warning$ -- 2
-while$ -- 476
-width$ -- 43
-write$ -- 518
-(There were 2 warnings)
+warning$ -- 4
+while$ -- 519
+width$ -- 48
+write$ -- 570
+(There were 4 warnings)

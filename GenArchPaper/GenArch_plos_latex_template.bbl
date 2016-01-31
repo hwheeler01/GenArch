@@ -223,6 +223,34 @@ Irizarry RA, Bolstad BM, Collin F, Cope LM, Hobbs B, Speed TP.
 \newblock Summaries of Affymetrix GeneChip probe level data.
 \newblock Nucleic acids research. 2003;31(4):e15--e15.
 
+\bibitem{MacDonald_1}
+MacDonald JW.
+\newblock huex10stprobeset.db: Affymetrix huex10 annotation data (chip
+  huex10stprobeset).
+\newblock R package;version 8.3.1.
+
+\bibitem{MacDonald_2}
+MacDonald JW.
+\newblock huex10sttranscriptcluster.db: Affymetrix huex10 annotation data (chip
+  huex10sttranscriptcluster).
+\newblock R package;version 8.3.1.
+
+\bibitem{chang2014second}
+Chang CC, Chow CC, Tellier LC, Vattikuti S, Purcell SM, Lee JJ.
+\newblock Second-generation PLINK: rising to the challenge of larger and richer
+  datasets.
+\newblock ArXiv e-prints. 2014;.
+
+\bibitem{delaneau2012linear}
+Delaneau O, Marchini J, Zagury JF.
+\newblock A linear complexity phasing method for thousands of genomes.
+\newblock Nature methods. 2012;9(2):179--181.
+
+\bibitem{mccarthy2015reference}
+McCarthy S, Das S, Kretzschmar W, Durbin R, Abecasis G, Marchini J.
+\newblock A reference panel of 64,976 haplotypes for genotype imputation.
+\newblock bioRxiv. 2015;p. 035170.
+
 \bibitem{shabalin2012matrix}
 Shabalin AA.
 \newblock Matrix eQTL: ultra fast eQTL analysis via large matrix operations.
