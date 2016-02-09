@@ -441,7 +441,7 @@ We call this approach orthogonal tissue decomposition (OTD) because the cross-ti
 %If our OTD was able to capture the common cross tissue component, we expected to observe higher h2 for the cross tissue traits compared to the original expression in each tissue. This is because our approach uses the data from multiple tissues to capture the substantial common component while averaging out the noise. Also because of this leveraging of multiple measurements we have a larger effective sample size for the cross tissue expression traits (450 for cross tissue vs less than 362 for each tissue). This is expected to translate in smaller standard errors of the cross tissue h2 compare to tissue level h2. 
 
 Our estimates of h\textsuperscript{2} for cross tissue expression traits are larger than the corresponding estimates for each whole tissue expression traits (\nameref{S3_Fig}). %For the remainder of this paper we will refer to the original tissue expression levels as whole tissue expression to distinguish from the tissue specific component, which does not have the cross tissue component.
-This means that our OTD approach increases the ratio of genetically regulated component to noise by averaging across multiple tissues. In addition to the increased h\textsuperscript{2} we observe reduction in standard errors of the estimated h\textsuperscript{2}. This is partly due to the increased h\textsuperscript{2} -- higher h\textsuperscript{2} are better estimated-- but also due to the larger effective sample size for cross tissue phenotypes. There were 450 samples for which cross tissue traits were avialable whereas the maximum sample size for whole tissue phenotypes was 362. As consequence of this increase h\textsuperscript{2} and decreased standard errors, the percentage of cross h\textsuperscript{2} estimates with positive CIs was 19.8\% whereas for whole tissue expression traits they ranged from 2.4-9.5\%. Similarly, cross-tissue BSLMM PVE estimates had lower error than whole tissue PVE (\nameref{S4_Fig}, \nameref{S5_Fig}). 
+This means that our OTD approach increases the ratio of genetically regulated component to noise by averaging across multiple tissues. In addition to the increased h\textsuperscript{2} we observe reduction in standard errors of the estimated h\textsuperscript{2}. This is partly due to the increased h\textsuperscript{2} -- higher h\textsuperscript{2} are better estimated-- but also due to the larger effective sample size for cross tissue phenotypes. There were 450 samples for which cross tissue traits were available whereas the maximum sample size for whole tissue phenotypes was 362. As consequence of this increased h\textsuperscript{2} and decreased standard errors, the percentage of cross h\textsuperscript{2} estimates with positive CIs was 19.8\% whereas for whole tissue expression traits they ranged from 2.4-9.5\%. Similarly, cross-tissue BSLMM PVE estimates had lower error than whole tissue PVE (\nameref{S4_Fig}, \nameref{S5_Fig}). 
 
 As for the tissue specific components, 
 the cross-tissue heritability estimates were also larger and the standard errors were smaller reflecting the fact that a substantial portion of regulation is common across tissues (\nameref{S6_Fig}). The percentage of GCTA h\textsuperscript{2} estimates with positive CIs was much larger for cross-tissue expression (19.8\%) than the tissue-specific expressions (all less than 4\%, \nameref{S1_Table}). Similarly, the percentage of BSLMM PVE estimates with a lower credible set greater than 0.01 was 49\% for cross-tissue expression, but ranged from 24-27\% for tissue-specific expression (\nameref{S5_Fig}).
@@ -450,7 +450,6 @@ the cross-tissue heritability estimates were also larger and the standard errors
 
 Cross-tissue predictive performance exceeded that of both tissue-specific and whole tissue expression as indicated by higher cross-validated R\textsuperscript{2} (\nameref{S2_Fig}, \nameref{S7_Fig}). Like whole tissue expression, cross-tissue and tissue-specific expression showed better predictive performance when using more sparse models. In other words elastic-net models with \(\alpha \geq 0.5\) predicted better than the ones with \(\alpha=0.05\) (\nameref{S7_Fig}). 
 
-------
 
 %% from README: correspond to the marginal posterior of the SNP being active in Adipose, etc. These columns are the same as in the file "res_final_uc_com_genes_com_snps.txt.gz" (described above), which only contains the best SNP per gene
 %To Haky, the SNP seems to be the same for each gene. From the README file: "These values may be interpreted as Pr(SNP is eQTL in tissue s | data). 9875 eGenes are presented, with the?top" (most significant) SNP in each gene used."
@@ -462,11 +461,14 @@ Cross-tissue predictive performance exceeded that of both tissue-specific and wh
 
 \subsection*{Cross Tissue expresion phenotype recapitulates published multi-tissue eQTL results}
 
-We compared our OTD results to those from a joint multi-tissue eQTL analysis method \cite{Flutre_2013}, which was previously performed on a subset of the GTEx data \cite{Ardlie_2015} covering 9 tissues. In particular, we used the posterior probability of a gene being actively regulated  (PPA) in a tissue. These analysis results are available on the GTEx portal.
+To verify that the cross tissue phenotype has the properties we expect, we compared our OTD results to those from a joint multi-tissue eQTL analysis method \cite{Flutre_2013}, which was previously performed on a subset of the GTEx data \cite{Ardlie_2015} covering 9 tissues. In particular, we used the posterior probability of a gene being actively regulated  (PPA) in a tissue. These analysis results are available on the GTEx portal.
 
 First, we reasoned that genes with high cross tissue h\textsuperscript{2} would be actively regulated in most tissues so that the PPA of a gene would be roughly uniform across tissues. By contrast, a gene with tissue specific regulation would have concentrated posterior probability in one or a few tissues. Thus we decided to define a measure of uniformity of the posterior probability vector across the 9 tissues using the concept of entropy. More specifically, for each gene we normalized the vector of posterior probabilities so that the sum equaled 1. Then we applied the usual entropy definition (negative of the sum of the log of the posterior probabilities weighted by the same probabilities, see Methods). In other words, we defined an entropy statistic that combines the nine posterior probabilities into one value such that higher entropy values mean the gene regulation is more uniform across all nine tissues, rather than in just a small subset of the nine.
 
-Reassuringly, we found that the cross tissue phenotype heritability estimates were well correlated with the entropy statistics indicating that our derived cross tissue phenotype is capturing the common regulatory component. Figure \ref{fig-ct-entropy} shows the comparison between this entropy statistics and cross-tissue expression heritability (R=0.082) and PVE (R = 0.12).
+Thus we expected that genes with high cross tissue heritability, i.e. large cross tissue regulation would show high probability of being active in multiple tissues, thus high uniformity measure. Reassuringly, this is exactly what we find.
+Figure \ref{fig-ct-entropy} shows that genes with high cross tissue heritability concentrate on the higher end of the uniformity measure. 
+%%the comparison between this entropy statistics and cross-tissue expression heritability (R=0.082) and PVE (R = 0.12).
+\hl{TODO: 1) use uniformity instead of entropy. 2). normalize so that max entropy is 1 3) change to boxplots CT-h2 vs genes within 0-0.33, 0.33-0.66, 0.66-1, show p value of differences between box plot medians, rather the R2, 4) drop the B panel}
 
 For the original whole tissue, we expected the whole tissue expression heritability to correlate with the posterior probability of a gene being actively regulated in a tissue as shown in Figure \ref{fig-corrplot}A. Strikingly, the tissue specific phenotype heritability showed highest correlation with the PPA of the matching tissue and lower correlations with other tissues, confirming that OTD also captures tissue-specific components of gene expression (Fig. \ref{fig-corrplot}B). However, for whole blood there is a consistently negative correlation with other tissues. This issue needs to be further investigated.
 
@@ -572,26 +574,26 @@ the gene) and distal (eQTLs on non-gene chromosomes) as defined by the
 GENCODE \cite{Harrow_2012} version 12 gene annotation. We calculated the
 proportion of the variance (narrow-sense heritability) explained by each
 component using the following mixed-effects model:
-
-\[ Y_g = \sum_{k  \in local}w_{k,g} X_k + \sum_{k  \in distal}w_{k,g} X_k + \epsilon \]
-
-Assuming a random effects for \(w_{k,g} \sim N(0, \sigma^2_w)\) and
+%
+\[ Y_g = \sum_{k  \in local}w^\text{local}_{k,g} X_k + \sum_{k  \in distal}w^\text{distal}_{k,g} X_k + \epsilon \]
+%
+where $Y_g$ represents the expression of gene $g$, $X_k$ is the allelic dosage for SNP $k$, local refers to the set of SNPs located within 1Mb of the gene's transcription start and end, distal refers to SNPs in other chromosomes, and $\epsilon$ is the error term representing environmental and other unknown factors. We assume that the local and distal components are independent of each other as well as independent of the error term.
+We assume random effects for \(w^\text{local}_{k,g} \sim N(0, \sigma^2_{w,\text{local}})\), \(w^\text{distal}_{k,g} \sim N(0, \sigma^2_{w,\text{distal}})\), and
 \(\epsilon \sim N(0, \sigma^2_{\epsilon} I_n)\), where \(I_n\) is the
-identity matrix, we calculated the total variability explained by local
-and distal components by estimating \(\sigma^2_w\) with restricted
-maximum likelihood (REML) using GCTA software \cite{Yang_2011}. For heritability
-analyses in the GTEx cohort, we removed the \(distal\) term from the
-model and only estimated marginal \(local\) h\textsuperscript{2} due to
-the smaller sample sizes of both cross-tissue and tissue-specific
-expression levels compared to DGN. 
+identity matrix. We calculated the total variability explained by local
+and distal components using restricted
+maximum likelihood (REML) as implemented in the GCTA software \cite{Yang_2011}. 
+%For heritability
+%analyses in the GTEx cohort, we removed the `distal' term from the
+%model and only estimated marginal `local' h\textsuperscript{2} due to
+%the smaller sample sizes of both cross-tissue and tissue-specific
+%expression levels compared to DGN. 
+Heritabilities are plotted as point estimates with bars that extend 2 times the estimated standard error up and down. The intervals were also forced to be $\ge 0 $ or $\le 1$. 
+Genes were considered to have heritability significantly different from 0 if the p values from the GCTA was less than 0.05.
 
-Approximate confidence intervals were computed as the point estimate $\pm$ 
-2 times the estimated standard error. The intervals were also forced to be $\ge 0 $ or $\le 1$. 
-Genes were considered to have heritability significantly different from 0 if the confidence interval did not include 0.
-
-By default we restricted the heritability estimates to be in the 0 to 1 interval. However, 
+By default we restricted the heritability estimates to be within the [0,1] interval. However, 
 for the purpose of estimating the mean heritability (see Table \ref{table-h2} and \nameref{S1_Table}), we performed separate runs allowing the heritability estimates to 
-take negative values with the \texttt{--reml-no-constrain} option in GCTA. Despite the lack of obvious biological interpretation of a negative heritability, 
+take negative values. Despite the lack of obvious biological interpretation of a negative heritability, 
 it is an accepted procedure used in order to avoid bias in the estimated mean \cite{Price_2011,Wright_2014}.
 
 \subsection*{Determining polygenicity versus sparsity using the elastic
@@ -635,80 +637,85 @@ We used BSLMM \cite{Zhou_2013} to model the effect of local genetic variation
 expression. The BSLMM is a linear model with a polygenic component (small effects) and a sparse component (large effects)
 enforced by sparsity inducing priors on the
 regression coefficients \cite{Zhou_2013}. We used the software GEMMA \cite{Zhou_2012} to
-implement BSLMM for each gene using the following parameters:
+implement BSLMM for each gene %{\small (\( \texttt{gemma -g [genoFile] -p [expFile] -a [snpFile] -bslmm 1 -s 100000 -o [out]} \))}
+with 100K sampling steps per gene.
+%The \texttt{-bslmm 1} option specifies a linear BSLMM and the \texttt{-s 100000} option specifies the number of sampling steps per gene.
+ The BSLMM estimates the PVE (the proportion of variance in
+phenotype explained by the additive genetic model, analogous to the chip heritability in GCTA) and PGE (the proportion of genetic variance explained by the sparse effects terms where 0 means that genetic effect is purely polygenic and 1 means that the effect is purely sparse). From the second half of the sampling iterations for each gene, we report the median and the 95\% credible sets of the
+PVE, PGE, and the \textbar{}\(\gamma\)\textbar{} parameter (the number of SNPs with non-zero coefficients).
 
-\[ \texttt{gemma -g [genoFile] -p [expFile] -a [snpFile] -bslmm 1 -s 100000 -o [out]} \]
+\subsection*{Orthogonal Tissue Decomposition}\label{orthogonal-tissue-decomposition}
 
-The \texttt{-bslmm 1} option specifies a linear BSLMM and the
-\texttt{-s 100000} option specifies the number of sampling steps per
-gene. The BSLMM estimates the PVE (the total proportion of variance in
-phenotype explained by the sparse effects and random effects terms
-together) and PGE (the proportion of genetic variance explained by the
-sparse effects terms). From the second half of the sampling iterations
-for each gene, we report the median and the 95\% credible sets of the
-PVE, PGE, and the \textbar{}\(\gamma\)\textbar{} parameter (the number
-of SNPs with non-zero coefficients).
+We use a mixed effects model to decompose the expression level of a gene into a subject specific and subject by tissue specific components. The expression of a gene for individual $i$ in tissue $t$, $Y_{i,t}$, is modeled as
+%
+\[Y_{i,t} =  Y_{i}^{\text{CT}}   + Y_{i,t}^{\text{TS}} + \mathbf{Z}_i \boldsymbol{\beta} + \epsilon_{i,t}  \] 
+%
+where $Y_{i}^{\text{CT}}$ is the random subject level intercept,  $Y_{i,t}^{\text{TS}} $ is the random subject by tissue intercept, $\mathbf{Z}_i $ represents covariates (for overall intercept, tissue intercept, gender, and PEER factors), and $\epsilon_{i,t}$ is the error term. We assume $Y_{i}^{\text{CT}} \sim N(0,\sigma_{\text{CT}}^2)$, $Y_{i,t}^{\text{TS}} \sim N(0,\sigma_{\text{TS}}^2)$, $\epsilon \sim N(0,\sigma^2_{epsilon})$, and all three independent of each other.
 
-\subsection*{Orthogonal tissue
-decomposition}\label{orthogonal-tissue-decomposition}
+For the cross tissue component to be identifiable, multiple replicates of expression is needed for each subject. In the same vein, for the tissue specific component to be identifiable multiple replicates of expression is needed for a given tissue/subject pair. GTEx\cite{Ardlie_2015}  data consisted of measurement of expression for multiple tissues for each subject, thus multiple replications per subject. However, there were very few replicated measurement for a given tissue/subject pair. Thus, we fit the reduced model and use the estimates of the residual as the tissue specific component.
+%
+\[Y_{i,t} =  Y_{i}^{\text{CT}}   + \mathbf{Z}_i \boldsymbol{\beta} + \epsilon_{i,t}  \] 
+%
 
-To better understand the context specificity of gene expression
-regulation, we developed a method called orthogonal tissue decomposition
-(OTD). This approach is an extension of our method to develop an
-intrinsic growth phenotype \cite{Im_2012}. We applied OTD to GTEx Project
-\cite{Ardlie_2015} data and decomposed the expression of each gene into
-cross-tissue and tissue-specific components. The tissue availability is
-unbalanced across individuals because of the difficulties of sample
-collection and the uneven quality of the tissues. OTD decomposes the
-expression traits into orthogonal components as represented by the
-following model:
+%We applied OTD to GTEx Project
+%\cite{Ardlie_2015} data and decomposed the expression of each gene into
+%cross-tissue and tissue-specific components. The tissue availability is
+%unbalanced across individuals because of the difficulties of sample
+%collection and the uneven quality of the tissues. OTD decomposes the
+%expression traits into orthogonal components as represented by the
+%following model:
 
-\[ Y_i = T_{i,cross} + T_{i,tissue} \]
-
-Specifically, to generate cross-tissue and tissue-specific expression
-levels, we used the \texttt{lmer} function in the R \cite{R_Core_Team_2015} package
-\texttt{lme4} \cite{Bates_2015a} to fit the following mixed-effects model:
-
-\[ \texttt{fit <- lme4::lmer(expression $\sim$ (1|SUBJID) + TISSUE + GENDER + PEERs)} \]
+The mixed effects model parameters were estimated using the \texttt{lme4} package \cite{Bates_2015a} in R \cite{R_Core_Team_2015}. Batch effects and unmeasured confounders were accounted for using 15 \texttt{PEER} factors computed with the \texttt{PEER} \cite{Stegle_2012} package in R. Posterior modes of the subject level random intercepts were used as estimates of the cross tissue components whereas the residuals of the models were used as tissue specific components.
+%to fit the following mixed-effects model:
+% \texttt{lmer(expression $\sim$ (1|SUBJID) + TISSUE + GENDER + PEERs)}. 
 
 The model included whole tissue gene expression levels in 8555 GTEx
 tissue samples from 544 unique subjects. A total of 17,647
 Protein-coding genes (defined by GENCODE \cite{Harrow_2012} version 18) with a
 mean gene expression level across tissues greater than 0.1 RPKM (reads
 per kilobase of transcript per million reads mapped) and RPKM $>$ 0 in at least 3 individuals were included in
-the model. \texttt{SUBJID} was a random effect and the covariates
-\texttt{TISSUE}, \texttt{GENDER}, and \texttt{PEERs} were fixed effects
-used to predict whole tissue expression levels (\texttt{expression} in
-the model). \texttt{PEERs} included the top 15 PEER factors estimated
-across all tissues using the R package \texttt{PEER} \cite{Stegle_2012} to control
-for batch effects and experimental confounders. Cross-tissue expression
-was defined as the random effects from the model (\texttt{ranef(fit)})
-and tissue-specific expression as the residuals (\texttt{resid(fit})).
+the model. 
 
-\subsection*{Comparison of OTD PVE to multi-tissue eQTL
+%\texttt{SUBJID} was a random effect and the covariates
+%\texttt{TISSUE}, \texttt{GENDER}, and \texttt{PEERs} were fixed effects
+%used to predict whole tissue expression levels (\texttt{expression} in
+%the model). \texttt{PEERs} included the top 15 PEER factors estimated
+%across all tissues using the R package \texttt{PEER} \cite{Stegle_2012} to control
+%for batch effects and experimental confounders. Cross-tissue expression
+%was defined as the random effects from the model (\texttt{ranef(fit)})
+%and tissue-specific expression as the residuals (\texttt{resid(fit})).
+
+\subsection*{Comparison of OTD trait heritability with multi-tissue eQTL
 results}\label{comparison-of-otd-pve-to-multi-tissue-eqtl-results}
 
-Using results from a joint multi-tissue eQTL analysis method \cite{Flutre_2013}
-performed with a subset of the GTEx data (maximum n=175 in the nine
-tissues of the pilot phase, see \cite{Ardlie_2015}), we defined an entropy
-statistic to compare these results to those from our OTD method. The
-results of the multi-tissue analysis include eQTL posterior
-probabilities for each of the nine tissues, which can be interpreted as
-the probability a SNP is an eQTL in tissue \(t\) given the data. Using
-the top eQTL for each gene \(g\), we defined the entropy \(S_g\) as:
+To verify that the newly derived cross tissue and tissue specific traits were capturing the expected properties we used the results of the multi-tissue eQTL analysis performed by Flutre et al \cite{Flutre_2013}
+%Using results from a joint multi-tissue eQTL analysis method \cite{Flutre_2013} performed with 
+on nine tissues from the pilot phase of the GTEx project \cite{Ardlie_2015}. %%($n<175$) . 
+In particular, we used the posterior probability of a gene being actively regulated (PPA) in a tissue downloaded from the GTEx portal.
 
-\[ S_g = -\sum_{t}p_{t,g} \log p_{t,g} \]
+We reasoned that genes with large cross tissue component (i.e. high cross tissue h2) would have more uniform PPA across tissues. Thus we defined for each gene a measure of uniformity, $U_g$, across tissues based on the nine dimensional vector of PPAs using the entropy formula. More specifically, we divided each vector of PPA by their sum across tissues and computed the measure of uniformity as follows:
+%%and compared it with  heritability estimates of the cross tissue component.
+%We combined the vector of the nine posterior probabilities 
+%we defined an entropy
+%statistic to compare these results to those from our OTD method. 
+%The
+%results of the multi-tissue analysis include eQTL posterior
+%probabilities for each of the nine tissues, which can be interpreted as
+%the probability a SNP is an eQTL in tissue \(t\) given the data. Using
+%the top eQTL for each gene \(g\), we defined the entropy \(S_g\) as:
+\[ U_g = -\sum_{t}p_{t,g} \log p_{t,g} \]
+%
+where \(p_{t,g}\) is the normalized PPA for gene $g$ and tissue $t$.
 
-where \(p_{t,g}\) is the eQTL probability in tissue \(t\) normalized to
-1 for each gene \(g\). Thus, eQTLs with higher entropy statistics are
-more likely to be cross-tissue eQTLs, rather than only regulating gene
-expression in one or a few tissues. We calculated the Pearson
-correlation between \(S_g\) and the cross-tissue expression heritability
-and PVE for each gene to verify that our OTD method captures
-cross-tissue effects. We also calculated a Pearson correlation matrix
-between the posterior probabilities in each tissue from the multi-tissue
-eQTL method and the tissue-specific gene expression PVE from the OTD
-method.
+%Thus, eQTLs with higher entropy statistics are
+%more likely to be cross-tissue eQTLs, rather than only regulating gene
+%expression in one or a few tissues. We calculated the Pearson
+%correlation between \(S_g\) and the cross-tissue expression heritability
+%and PVE for each gene to verify that our OTD method captures
+%cross-tissue effects. We also calculated a Pearson correlation matrix
+%between the posterior probabilities in each tissue from the multi-tissue
+%eQTL method and the tissue-specific gene expression PVE from the OTD
+%method.
 
 
 
@@ -755,49 +762,7 @@ phs000424.v3.p1.
 
 \paragraph{DGN data.}\label{dgn-data}
 
-NIMH Study 7 (GenRED I) - Data and biomaterials were collected in six
-projects that participated in the National Institute of Mental Health
-(NIMH) Genetics of Recurrent Early-Onset Depression (GenRED) project.
-From 1999-2003, the Principal Investigators and Co-Investigators were:
-New York State Psychiatric Institute, New York, NY, R01 MH060912, Myrna
-M. Weissman, Ph.D.~and James K. Knowles, M.D., Ph.D.; University of
-Pittsburgh, Pittsburgh, PA, R01 MH060866, George S. Zubenko, M.D.,
-Ph.D.~and Wendy N. Zubenko, Ed.D., R.N., C.S.; Johns Hopkins University,
-Baltimore, MD, R01 MH059552, J. Raymond DePaulo, M.D., Melvin G.
-McInnis, M.D.~and Dean MacKinnon, M.D.; University of Pennsylvania,
-Philadelphia, PA, RO1 MH61686, Douglas F. Levinson, M.D. (GenRED
-coordinator), Madeleine M. Gladis, Ph.D., Kathleen MurphyEberenz,
-Ph.D.~and Peter Holmans, Ph.D. (University of Wales College of
-Medicine); this preprint is the author/funder. It is made available
-under a CC-BY 4.0 International license. bioRxiv preprint first posted
-online June 17, 2015; doi: \url{http://dx.doi.org/10.1101/020164}; The
-copyright holder for University of Iowa, Iowa City, IW, R01 MH059542,
-Raymond R. Crowe, M.D.~and William H. Coryell, M.D.; Rush University
-Medical Center, Chicago, IL, R01 MH059541- 05, William A. Scheftner,
-M.D., Rush-Presbyterian. NIMH Study 18 - Data and biomaterials were
-obtained from the limited access datasets distributed from the
-NIH-supported ``Sequenced Treatment Alternatives to Relieve Depression''
-(STAR*D). STAR*D focused on non-psychotic major depressive disorder in
-adults seen in outpatient settings. The primary purpose of this research
-study was to determine which treatments work best if the first treatment
-with medication does not produce an acceptable response. The study was
-supported by NIMH Contract \# N01MH90003 to the University of Texas
-Southwestern Medical Center. The ClinicalTrials.gov identifier is
-NCT00021528. NIMH Study 52 (GenRED II) -- Data and biomaterials in this
-release were collected in six projects that participated in the National
-Institute of Mental Health (NIMH) Genetics of Recurrent Early-Onset
-Depression (GenRED) project (1999-2009). The Principal Investigators and
-Co-Investigators were: New York State Psychiatric Institute, New York,
-NY, R01 MH 060912, Myrna M. Weissman, Ph.D.; Johns Hopkins University,
-Baltimore, MD, R01 MH059552, J. Raymond DePaulo, M.D., and James B.
-Potash, M.D., M.P.H.; University of Pennsylvania, Philadelphia, PA
-(1999-2005), and Stanford University (2006-2009), R01 MH61686, Douglas
-F. Levinson, M.D. (GenRED coordinator); University of Iowa, Iowa City,
-IW, R01 MH059542e, Raymond R. Crowe, M.D., and William H. Coryell, M.D.;
-Rush University Medical Center, Chicago, IL, R01 MH059541-05, William A.
-Scheftner, M.D.; and University of Pittsburgh, Pittsburgh, PA
-(1999-2003), R01 MH060866, George S. Zubenko, M.D., Ph.D., and Wendy N.
-Zubenko, Ed.D., R.N., C.S. NIMH Study 88 -- Data was provided by
+NIMH Study 88 -- Data was provided by
 Dr.~Douglas F. Levinson. We gratefully acknowledge the resources were
 supported by National Institutes of Health/National Institute of Mental
 Health grants 5RC2MH089916 (PI: Douglas F. Levinson, M.D.;
