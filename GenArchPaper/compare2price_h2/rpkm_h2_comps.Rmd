@@ -1,0 +1,149 @@
+---
+title: "rpkm_h2_comps"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+  library(ggplot2)
+  library(reshape2)
+  library(dplyr)
+  library(tidyr)
+  library(GGally)
+  library(grid)
+  "%&%" = function(a,b) paste(a,b,sep="")
+  source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan-Paper/scripts/Heather/make-figures/multiplot.R')
+  my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
+  fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
+  exp.dir <- my.dir %&% "gtex-rnaseq/ind-tissues-RPKM/"
+  h2.dir <- '/Volumes/im-lab/nas40t2/Data/Annotations/heritability/'
+```
+
+##FigSx DGN h2 v. exp level 
+```{r h2vlevel, echo=TRUE, warning=FALSE, message=FALSE,eval=TRUE}
+se <- function(x) sqrt(var(x)/length(x))
+h2 <- read.table('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/DGN-WB.localGRM.h2.exp.2014-08-30.txt',header=T)
+rawcounts <- read.table('/Volumes/im-lab/nas40t2/Data/Transcriptome/WB1K/data_used_for_eqtl_study/raw_counts.txt',header=T)
+expmean<-data.frame(mean.exp=colMeans(rawcounts),se.exp=apply(rawcounts,2,se)) %>%mutate(gene=as.factor(colnames(rawcounts)))
+all <- inner_join(expmean,h2,by='gene',copy=TRUE)
+ngenes<-dim(all)[[1]]
+a<-ggplot(all,aes(x=log10(mean.exp),y=h2)) + geom_point() + xlab(expression(paste("log"[10],"(mean expression raw counts)"))) + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " genes)") + theme_bw(20)+ geom_smooth(method = "lm")
+a
+summary(lm(h2~mean.exp,all))
+b<-ggplot(all,aes(x=log10(se.exp),y=h2)) + geom_point() + xlab(expression(paste("log"[10],"(SE expression raw counts)"))) + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " genes)") + theme_bw(20)+ geom_smooth(method = "lm")
+b
+summary(lm(h2~se.exp,all))
+
+tiff(filename=fig.dir %&% "FigSx-h2_v_exp_rawcounts.tiff",width=960,height=480)
+multiplot(a,b,cols=2)
+dev.off()
+
+png(filename=fig.dir %&% "FigSx-h2_v_exp_rawcounts.png",width=960,height=480)
+multiplot(a,b,cols=2)
+dev.off()
+
+###only include genes with h2>0.1
+filall<-filter(all,h2>0.1)
+ngenes<-dim(filall)[[1]]
+a<-ggplot(filall,aes(x=log10(mean.exp),y=h2)) + geom_point() + xlab(expression(paste("log"[10],"(mean expression raw counts)"))) + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " h2 > 0.1 genes)") + theme_bw(20)+ geom_smooth(method = "lm")
+a
+summary(lm(h2~mean.exp,filall))
+b<-ggplot(filall,aes(x=log10(se.exp),y=h2)) + geom_point() + xlab(expression(paste("log"[10],"(SE expression raw counts)"))) + ylab(expression("Local h"^2)) + ggtitle("DGN-WB (" %&% ngenes %&% " h2 > 0.1 genes)") + theme_bw(20)+ geom_smooth(method = "lm")
+b
+summary(lm(h2~se.exp,filall))
+```
+
+we do not see h2 dependence on expression level in contrast to what is reported for array based h2 estimates--see Wright et al Table 2.
+
+TO DO: plot a) array based h2 vs. RPKM in gtex, use alkes and or fred wright's h2 estimates b) RNAseq h2 vs RPKM in gtex
+
+###Price h2 v GTEx RPKM
+```{r price, message=FALSE, warning=FALSE}
+##get GTEx TW local h2
+twh2 <- read.table(my.dir %&% "GTEx_Tissue-Wide_local_h2_se_geneinfo_no_description.txt",header=TRUE) 
+twh2 <- dplyr::rename(twh2,gene=AssociatedGeneName,ensid=EnsemblGeneID)
+
+##get price h2 (custom-made human array containing 23,720 unique oligonucleotide probes, http://www.nature.com/nature/journal/v452/n7186/full/nature06758.html)
+price <- read.table(h2.dir %&% "Alkes/h2all.txt",header=TRUE) %>% dplyr::rename(gene=gname)
+head(price)
+summary(price)
+
+a<-inner_join(twh2,price,"gene")
+dim(a)
+ggplot(a,aes(h2.WholeBlood,h2bloodcis)) + geom_point(alpha=1/4) + geom_smooth() + theme_bw()
+cor.test(a$h2.WholeBlood,a$h2bloodcis,method='s')
+cor.test(a$h2.WholeBlood,a$h2blood,method='s')
+cor.test(a$h2.WholeBlood,a$h2bloodtra,method='s')
+
+tislist <- scan(my.dir %&% "nine.spaces.tissue.list","c",sep="\n")
+rpkm <- data.frame()
+for(tis in tislist){
+  tisrpkm <- read.table(exp.dir %&% tis %&% ".meanRPKM.txt",header=TRUE)  
+  combo <- inner_join(a,tisrpkm,by='ensid') %>% dplyr::select(ensid,meanRPKM,h2adipcis,h2bloodcis) %>% mutate(tissue=tis)
+  res<-cor.test(combo$h2bloodcis,log10(combo$meanRPKM),method='p')
+  cat(tis," RPKM v Price h2bloodcis: R=",signif(res$estimate,2)," p=",signif(res$p.value,2),"\n",sep="")
+  res<-cor.test(combo$h2adipcis,log10(combo$meanRPKM),method='p')
+  cat(tis," RPKM v Price h2adipcis: R=",signif(res$estimate,2)," p=",signif(res$p.value,2),"\n",sep="")
+  rpkm <- rbind(rpkm,combo)
+}
+
+ggplot(rpkm,aes(x=log10(meanRPKM),y=h2bloodcis))+geom_point(alpha=1/4)+geom_smooth(method="lm")+facet_wrap(~tissue)+ggtitle("Price blood h2 vs. GTEx mean RPKM")+theme_bw()
+ggplot(rpkm,aes(x=log10(meanRPKM),y=h2adipcis))+geom_point(alpha=1/4)+geom_smooth(method="lm")+facet_wrap(~tissue)+ggtitle("Price adipose h2 vs. GTEx mean RPKM")+theme_bw()
+
+##price h2 vs. DGN raw counts
+dgnprice <- inner_join(all,price,by='gene')
+ggplot(dgnprice,aes(x=log10(mean.exp),y=h2bloodcis))+ geom_point(alpha=1/2) + geom_smooth() + theme_bw()+ggtitle("Price blood h2 vs. DGN mean counts")
+cor.test(log10(dgnprice$mean.exp),dgnprice$h2bloodcis,method='s')
+ggplot(dgnprice,aes(x=log10(mean.exp),y=h2adipcis))+ geom_point(alpha=1/2) + geom_smooth() + theme_bw()+ggtitle("Price adipose h2 vs. DGN mean counts")
+cor.test(log10(dgnprice$mean.exp),dgnprice$h2adipcis,method='s')
+```
+
+###Wright h2 v GTEx RPKM
+```{r wright, message=FALSE, warning=FALSE}
+##get GTEx TW local h2
+twh2 <- read.table(my.dir %&% "GTEx_Tissue-Wide_local_h2_se_geneinfo_no_description.txt",header=TRUE) 
+twh2 <- dplyr::rename(twh2,gene=AssociatedGeneName,ensid=EnsemblGeneID)
+
+wright <- read.table(h2.dir %&% "Fred/h2PB.txt",header=TRUE) %>% dplyr::rename(gene=gname)
+head(wright)
+summary(wright)
+
+a<-inner_join(twh2,wright,"gene")
+dim(a)
+ggplot(a,aes(h2.WholeBlood,h2PB)) + geom_point(alpha=1/4) + geom_smooth() + theme_bw()
+cor.test(a$h2.WholeBlood,a$h2PB,method='s')
+
+tislist <- scan(my.dir %&% "nine.spaces.tissue.list","c",sep="\n")
+rpkm <- data.frame()
+for(tis in tislist){
+  tisrpkm <- read.table(exp.dir %&% tis %&% ".meanRPKM.txt",header=TRUE)  
+  combo <- inner_join(a,tisrpkm,by='ensid') %>% dplyr::select(ensid,meanRPKM,h2PB) %>% mutate(tissue=tis)
+  res<-cor.test(combo$h2PB,log10(combo$meanRPKM),method='p')
+  cat(tis," RPKM v Wright h2PB: R=",signif(res$estimate,2)," p=",signif(res$p.value,2),"\n",sep="")
+  rpkm <- rbind(rpkm,combo)
+}
+
+ggplot(rpkm,aes(x=log10(meanRPKM),y=h2PB))+geom_point(alpha=1/4)+geom_smooth(method="lm")+facet_wrap(~tissue)+ggtitle("Wright blood h2 vs. GTEx mean RPKM")+theme_bw()
+
+##wright h2 vs. DGN raw counts
+dgnwright <- inner_join(all,wright,by='gene')
+ggplot(dgnwright,aes(x=log10(mean.exp),y=h2PB))+ geom_point(alpha=1/2) + geom_smooth() + theme_bw()+ggtitle("Wright blood h2 vs. DGN mean counts")
+cor.test(log10(dgnwright$mean.exp),dgnwright$h2PB,method='s')
+```
+
+###GTEx h2 v GTEx RPKM
+```{r gtex, message=FALSE, warning=FALSE}
+tislist <- scan(my.dir %&% 'nine.tissue.list',sep="\n",what="character")
+tislist2 <- scan(my.dir %&% "nine.spaces.tissue.list","c",sep="\n")
+tw <- data.frame()
+for(i in 1:length(tislist)){
+  tisrpkm <- read.table(exp.dir %&% tislist2[i] %&% ".meanRPKM.txt",header=TRUE)
+  h2 <- read.table(my.dir %&% "gtex-h2-estimates/GTEx.tissue-wide.h2_" %&% tislist[i] %&% "_marginal.local_2015-03-24.txt",header=T, sep="\t") %>% select(tissue,ensid,h2)
+  subdata <- inner_join(h2,tisrpkm,by="ensid")
+  res<-cor.test(log10(subdata$meanRPKM),subdata$h2)
+  cat(tislist[i],"\tPearson R=",round(res$estimate,3),"\tP-value=",res$p.value,"\n")
+  tw <- rbind(tw,subdata)
+}
+ggplot(tw,aes(x=log10(meanRPKM),y=h2))+geom_point(alpha=0.4)+ylab(expression("GCTA h"^2))+xlab(expression(paste("log"[10],"(meanRPKM)")))+geom_smooth(method="lm") + facet_wrap(~tissue,ncol=3)+theme_bw()+ggtitle("GTEx TW local h2 vs. GTEx mean RPKM")
+```

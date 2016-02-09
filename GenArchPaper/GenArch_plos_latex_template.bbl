@@ -1,0 +1,304 @@
+\begin{thebibliography}{10}
+
+\bibitem{Nicolae_2010}
+Nicolae DL, Gamazon E, Zhang W, Duan S, Dolan ME, Cox NJ.
+\newblock Trait-Associated {SNPs} Are More Likely to Be {eQTLs}: Annotation to
+  Enhance Discovery from {GWAS}.
+\newblock {PLoS} Genetics. 2010;6(4):e1000888.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1000888}.
+
+\bibitem{Nica_2010}
+Nica AC, Montgomery SB, Dimas AS, Stranger BE, Beazley C, Barroso I, et~al.
+\newblock Candidate Causal Regulatory Effects by Integration of Expression
+  {QTLs} with Complex Trait Genetic Associations.
+\newblock {PLoS} Genetics. 2010;6(4):e1000895.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1000895}.
+
+\bibitem{Gusev_2014}
+Gusev A, Lee SH, Trynka G, Finucane H, Vilhj{\a'a}lmsson BJ, Xu H, et~al.
+\newblock Partitioning Heritability of Regulatory and Cell-Type-Specific
+  Variants across 11 Common Diseases.
+\newblock The American Journal of Human Genetics. 2014;95(5):535--552.
+\newblock Available from: \url{http://dx.doi.org/10.1016/j.ajhg.2014.10.004}.
+
+\bibitem{torres2014cross}
+Torres JM, Gamazon ER, Parra EJ, Below JE, Valladares-Salgado A, Wacher N,
+  et~al.
+\newblock Cross-tissue and tissue-specific eQTLs: partitioning the heritability
+  of a complex trait.
+\newblock The American Journal of Human Genetics. 2014;95(5):521--534.
+
+\bibitem{davis2013partitioning}
+Davis LK, Yu D, Keenan CL, Gamazon ER, Konkashbaev AI, Derks EM, et~al.
+\newblock Partitioning the heritability of Tourette syndrome and obsessive
+  compulsive disorder reveals differences in genetic architecture.
+\newblock PLoS Genet. 2013;.
+
+\bibitem{Albert_2015}
+Albert FW, Kruglyak L.
+\newblock The role of regulatory variation in complex traits and disease.
+\newblock Nat Rev Genet. 2015;16(4):197--212.
+\newblock Available from: \url{http://dx.doi.org/10.1038/nrg3891}.
+
+\bibitem{Stranger_2012}
+Stranger BE, Montgomery SB, Dimas AS, Parts L, Stegle O, Ingle CE, et~al.
+\newblock Patterns of Cis Regulatory Variation in Diverse Human Populations.
+\newblock {PLoS} Genetics. 2012;8(4):e1002639.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1002639}.
+
+\bibitem{Stranger_2007}
+Stranger BE, Nica AC, Forrest MS, Dimas A, Bird CP, Beazley C, et~al.
+\newblock Population genomics of human gene expression.
+\newblock Nature Genetics. 2007;39(10):1217--1224.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng2142}.
+
+\bibitem{Innocenti_2011}
+Innocenti F, Cooper GM, Stanaway IB, Gamazon ER, Smith JD, Mirkov S, et~al.
+\newblock Identification, Replication, and Functional Fine-Mapping of
+  Expression Quantitative Trait Loci in Primary Human Liver Tissue.
+\newblock {PLoS} Genetics. 2011;7(5):e1002078.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1002078}.
+
+\bibitem{Wright_2014}
+Wright FA, Sullivan PF, Brooks AI, Zou F, Sun W, Xia K, et~al.
+\newblock Heritability and genomics of gene expression in peripheral blood.
+\newblock Nature Genetics. 2014 apr;46(5):430--437.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.2951}.
+
+\bibitem{Price_2011}
+Price AL, Helgason A, Thorleifsson G, McCarroll SA, Kong A, Stefansson K.
+\newblock Single-Tissue and Cross-Tissue Heritability of Gene Expression Via
+  Identity-by-Descent in Related or Unrelated Individuals.
+\newblock {PLoS} Genetics. 2011;7(2):e1001317.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1001317}.
+
+\bibitem{Purcell_2009}
+Purcell SM, Wray NR, Stone JL, Visscher PM, O'Donovan MC, Sullivan PF, et~al.
+\newblock Common polygenic variation contributes to risk of schizophrenia and
+  bipolar disorder.
+\newblock Nature. 2009;Available from:
+  \url{http://dx.doi.org/10.1038/nature08185}.
+
+\bibitem{Stahl_2012}
+Stahl EA, Wegmann D, Trynka G, Gutierrez-Achury J, Do R, Voight BF, et~al.
+\newblock Bayesian inference analyses of the polygenic architecture of
+  rheumatoid arthritis.
+\newblock Nature Genetics. 2012;44(5):483--489.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.2232}.
+
+\bibitem{Morris_2012}
+Morris AP, Voight BF, Teslovich TM, Ferreira T, Segr{\a`e} AV, Steinthorsdottir
+  V, et~al.
+\newblock Large-scale association analysis provides insights into the genetic
+  architecture and pathophysiology of type 2 diabetes.
+\newblock Nature Genetics. 2012;44(9):981--990.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.2383}.
+
+\bibitem{Gamazon_2015}
+Gamazon ER, Wheeler HE, Shah KP, Mozaffari SV, Aquino-Michaels K, Carroll RJ,
+  et~al.
+\newblock A gene-based association method for mapping traits using reference
+  transcriptome data.
+\newblock Nature Genetics. 2015;47(9):1091--1098.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.3367}.
+
+\bibitem{Tibshirani_1996}
+Tibshirani R.
+\newblock Regression Shrinkage and Selection via the Lasso.
+\newblock Journal of the Royal Statistical Society Series B (Methodological).
+  2015;58(1):267--288.
+\newblock Available from: \url{http://www.jstor.org/stable/2346178}.
+
+\bibitem{Hoerl_1970}
+Hoerl AE, Kennard RW.
+\newblock Ridge Regression: Applications to Nonorthogonal Problems.
+\newblock Technometrics. 1970;12(1):69--82.
+\newblock Available from:
+  \url{http://dx.doi.org/10.1080/00401706.1970.10488635}.
+
+\bibitem{de_los_Campos_2010}
+{de los Campos} G, Gianola D, Allison DB.
+\newblock Predicting genetic predisposition in humans: the promise of
+  whole-genome markers.
+\newblock Nat Rev Genet. 2010;11(12):880--886.
+\newblock Available from: \url{http://dx.doi.org/10.1038/nrg2898}.
+
+\bibitem{Wheeler_2014}
+Wheeler HE, Aquino-Michaels K, Gamazon ER, Trubetskoy VV, Dolan ME, Huang RS,
+  et~al.
+\newblock Poly-Omic Prediction of Complex Traits: {OmicKriging}.
+\newblock Genetic Epidemiology. 2014;38(5):402--415.
+\newblock Available from: \url{http://dx.doi.org/10.1002/gepi.21808}.
+
+\bibitem{Zhou_2013}
+Zhou X, Carbonetto P, Stephens M.
+\newblock Polygenic Modeling with Bayesian Sparse Linear Mixed Models.
+\newblock {PLoS} Genetics. 2013;9(2):e1003264.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1003264}.
+
+\bibitem{Cheung_2005}
+Cheung VG, Spielman RS, Ewens KG, Weber TM, Morley M, Burdick JT.
+\newblock Mapping determinants of human gene expression by regional and
+  genome-wide association.
+\newblock Nature. 2005;437(7063):1365--1369.
+\newblock Available from: \url{http://dx.doi.org/10.1038/nature04244}.
+
+\bibitem{Battle_2013}
+Battle A, Mostafavi S, Zhu X, Potash JB, Weissman MM, McCormick C, et~al.
+\newblock Characterizing the genetic basis of transcriptome diversity through
+  {RNA}-sequencing of 922 individuals.
+\newblock Genome Research. 2013;24(1):14--24.
+\newblock Available from: \url{http://dx.doi.org/10.1101/gr.155192.113}.
+
+\bibitem{Ardlie_2015}
+Ardlie KG, Deluca DS, Segre AV, Sullivan TJ, Young TR, Gelfand ET, et~al.
+\newblock The Genotype-Tissue Expression ({GTEx}) pilot analysis: Multitissue
+  gene regulation in humans.
+\newblock Science. 2015;348(6235):648--660.
+\newblock Available from: \url{http://dx.doi.org/10.1126/science.1262110}.
+
+\bibitem{Yang_2011}
+Yang J, Lee SH, Goddard ME, Visscher PM.
+\newblock {GCTA}: A Tool for Genome-wide Complex Trait Analysis.
+\newblock The American Journal of Human Genetics. 2011;88(1):76--82.
+\newblock Available from: \url{http://dx.doi.org/10.1016/j.ajhg.2010.11.011}.
+
+\bibitem{pierce2014mediation}
+Pierce BL, Tong L, Chen LS, Rahaman R, Argos M, Jasmine F, et~al.
+\newblock Mediation Analysis Demonstrates That Trans-eQTLs Are Often Explained
+  by Cis-Mediation: A Genome-Wide Analysis among 1,800 South Asians.
+\newblock PLoS genetics. 2014;10(12):e1004818.
+
+\bibitem{Zhang_2015}
+Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et~al.
+\newblock Identification of common genetic variants controlling transcript
+  isoform variation in human whole blood.
+\newblock Nature Genetics. 2015;47(4):345--352.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.3220}.
+
+\bibitem{Zou_2005}
+Zou H, Hastie T.
+\newblock Regularization and variable selection via the elastic net.
+\newblock Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology). 2005;67(2):301--320.
+\newblock Available from:
+  \url{http://dx.doi.org/10.1111/j.1467-9868.2005.00503.x}.
+
+\bibitem{Flutre_2013}
+Flutre T, Wen X, Pritchard J, Stephens M.
+\newblock A Statistical Framework for Joint {eQTL} Analysis in Multiple
+  Tissues.
+\newblock {PLoS} Genetics. 2013;9(5):e1003486.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1003486}.
+
+\bibitem{Stegle_2012}
+Stegle O, Parts L, Piipari M, Winn J, Durbin R.
+\newblock Using probabilistic estimation of expression residuals ({PEER}) to
+  obtain increased power and interpretability of gene expression analyses.
+\newblock Nat Protoc. 2012;7(3):500--507.
+\newblock Available from: \url{http://dx.doi.org/10.1038/nprot.2011.457}.
+
+\bibitem{Leek_2007}
+Leek JT, Storey JD.
+\newblock Capturing heterogeneity in gene expression studies by surrogate
+  variable analysis.
+\newblock PLoS Genet. 2007;3(9):1724--1735.
+
+\bibitem{Howie_2012}
+Howie B, Fuchsberger C, Stephens M, Marchini J, Abecasis GR.
+\newblock Fast and accurate genotype imputation in genome-wide association
+  studies through pre-phasing.
+\newblock Nature Genetics. 2012;44(8):955--959.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.2354}.
+
+\bibitem{Fuchsberger_2014}
+Fuchsberger C, Abecasis GR, Hinds DA.
+\newblock minimac2: faster genotype imputation.
+\newblock Bioinformatics. 2014;31(5):782--784.
+\newblock Available from:
+  \url{http://dx.doi.org/10.1093/bioinformatics/btu704}.
+
+\bibitem{irizarry2003summaries}
+Irizarry RA, Bolstad BM, Collin F, Cope LM, Hobbs B, Speed TP.
+\newblock Summaries of Affymetrix GeneChip probe level data.
+\newblock Nucleic acids research. 2003;31(4):e15--e15.
+
+\bibitem{MacDonald_1}
+MacDonald JW.
+\newblock huex10stprobeset.db: Affymetrix huex10 annotation data (chip
+  huex10stprobeset).
+\newblock R package;version 8.3.1.
+
+\bibitem{MacDonald_2}
+MacDonald JW.
+\newblock huex10sttranscriptcluster.db: Affymetrix huex10 annotation data (chip
+  huex10sttranscriptcluster).
+\newblock R package;version 8.3.1.
+
+\bibitem{chang2014second}
+Chang CC, Chow CC, Tellier LC, Vattikuti S, Purcell SM, Lee JJ.
+\newblock Second-generation PLINK: rising to the challenge of larger and richer
+  datasets.
+\newblock ArXiv e-prints. 2014;.
+
+\bibitem{delaneau2012linear}
+Delaneau O, Marchini J, Zagury JF.
+\newblock A linear complexity phasing method for thousands of genomes.
+\newblock Nature methods. 2012;9(2):179--181.
+
+\bibitem{mccarthy2015reference}
+McCarthy S, Das S, Kretzschmar W, Durbin R, Abecasis G, Marchini J.
+\newblock A reference panel of 64,976 haplotypes for genotype imputation.
+\newblock bioRxiv. 2015;p. 035170.
+
+\bibitem{shabalin2012matrix}
+Shabalin AA.
+\newblock Matrix eQTL: ultra fast eQTL analysis via large matrix operations.
+\newblock Bioinformatics. 2012;28(10):1353--1358.
+
+\bibitem{Harrow_2012}
+Harrow J, Frankish A, Gonzalez JM, Tapanari E, Diekhans M, Kokocinski F, et~al.
+\newblock {GENCODE}: The reference human genome annotation for The {ENCODE}
+  Project.
+\newblock Genome Research. 2012;22(9):1760--1774.
+\newblock Available from: \url{http://dx.doi.org/10.1101/gr.135350.111}.
+
+\bibitem{Friedman_2010}
+Friedman J, Hastie T, Tibshirani R.
+\newblock Regularization Paths for Generalized Linear Models via Coordinate
+  Descent.
+\newblock Journal of Statistical Software. 2010;33(1):1--22.
+\newblock Available from: \url{http://www.jstatsoft.org/v33/i01/}.
+
+\bibitem{Simon_2011}
+Simon N, Friedman J, Hastie T, Tibshirani R.
+\newblock Regularization Paths for Cox's Proportional Hazards Model via
+  Coordinate Descent.
+\newblock Journal of Statistical Software. 2011;39(5):1--13.
+\newblock Available from: \url{http://www.jstatsoft.org/v39/i05/}.
+
+\bibitem{Zhou_2012}
+Zhou X, Stephens M.
+\newblock Genome-wide efficient mixed-model analysis for association studies.
+\newblock Nature Genetics. 2012;44(7):821--824.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.2310}.
+
+\bibitem{Im_2012}
+Im HK, Gamazon ER, Stark AL, Huang RS, Cox NJ, Dolan ME.
+\newblock Mixed Effects Modeling of Proliferation Rates in Cell-Based Models:
+  Consequence for Pharmacogenomics and Cancer.
+\newblock {PLoS} Genetics. 2012;8(2):e1002525.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1002525}.
+
+\bibitem{R_Core_Team_2015}
+{R Core Team}. R: A Language and Environment for Statistical Computing.
+\newblock Vienna, Austria; 2015.
+\newblock Available from: \url{http://www.R-project.org/}.
+
+\bibitem{Bates_2015a}
+Bates D, M{\"a}chler M, Bolker BM, Walker S.
+\newblock Fitting Linear Mixed-Effects Models using {lme4}.
+\newblock Journal of Statistical Software. 2015;67(1):1--48.
+\newblock Available from: \url{http://dx.doi.org/10.18637/jss.v067.i01}.
+
+\end{thebibliography}

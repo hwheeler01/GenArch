@@ -1,0 +1,118 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+    \usepackage{xltxtra,xunicode}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+  \newcommand{\euro}{€}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\ifxetex
+  \usepackage[setpagesize=false, % page size defined by xetex
+              unicode=false, % unicode breaks when used with xetex
+              xetex]{hyperref}
+\else
+  \usepackage[unicode=true]{hyperref}
+\fi
+\hypersetup{breaklinks=true,
+            bookmarks=true,
+            pdfauthor={Heather E. Wheeler1,2, GTEx Consortium, Kaanan P. Shah3, . . ., Nancy J. Cox4, Dan L. Nicolae3, Hae Kyung Im3},
+            pdftitle={An atlas of the genetic architecture of gene expression traits across the entire human body},
+            colorlinks=true,
+            citecolor=blue,
+            urlcolor=blue,
+            linkcolor=magenta,
+            pdfborder={0 0 0}}
+\urlstyle{same}  % don't use monospace font for urls
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\setcounter{secnumdepth}{0}
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{An atlas of the genetic architecture of gene expression traits across
+the entire human body}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{Heather E. Wheeler\textsuperscript{1,2}, GTEx Consortium, Kaanan P.
+Shah\textsuperscript{3}, . . ., Nancy J. Cox\textsuperscript{4}, Dan L.
+Nicolae\textsuperscript{3}, Hae Kyung Im\textsuperscript{3}}
+  \preauthor{\centering\large\emph}
+  \postauthor{\par}
+  \predate{\centering\large\emph}
+  \postdate{\par}
+  \date{\textsuperscript{1}Department of Biology and
+\textsuperscript{2}Department of Computer Science, Loyola University
+Chicago, \textsuperscript{3}Section of Genetic Medicine, Department of
+Medicine, University of Chicago, \textsuperscript{4}Division of Genetic
+Medicine, Vanderbilt University 2015-11-23 15:36:22}
+
+\usepackage{setspace}
+\setstretch{2}
+\usepackage{soul}
+
+
+\begin{document}
+
+\maketitle
+
+
+Using the hybrid polygenic-sparse approach of BSLMM (Bayesian Sparse
+Linear Mixed Model) {[}1{]}, we show that the local architecture of gene
+expression is sparse (high PGE) for most heritable genes in both DGN and
+GTEx. Using the elastic net {[}2{]}, we observed improved
+cross-validated expression prediction for \(\alpha \geq 0.5\) across
+tissues, confirming the sparsity result. This result demonstrates that
+sparse effects can be identified with sample sizes in the hundreds
+rather than the thousands and is supported by many prior studies with
+sample sizes near 100 that identified replicable eQTLs near the
+transcription start sites of genes{[}1{]}. Conversely, for traits that
+are highly polygenic, e.g.~height, BMI, schizophrenia, and bipolar
+disorder, thousands to tens of thousands of samples are needed to
+identify significant genetic signals {[}\textbf{???}{]}. Therefore, the
+distal contributions to expression h\textsuperscript{2} are likely to be
+more polygenic because they could not be accurately estimated here with
+sample sizes in the hundreds.
+
+1. Zhou X, Carbonetto P, Stephens M. Polygenic modeling with bayesian
+sparse linear mixed models. Visscher PM, editor. PLoS Genetics. Public
+Library of Science (PLoS); 2013;9: e1003264.
+doi:\href{http://dx.doi.org/10.1371/journal.pgen.1003264}{10.1371/journal.pgen.1003264}
+
+2. Zou H, Hastie T. Regularization and variable selection via the
+elastic net. Journal of the Royal Statistical Society: Series B
+(Statistical Methodology). Wiley-Blackwell; 2005;67: 301--320.
+doi:\href{http://dx.doi.org/10.1111/j.1467-9868.2005.00503.x}{10.1111/j.1467-9868.2005.00503.x}
+
+\end{document}
