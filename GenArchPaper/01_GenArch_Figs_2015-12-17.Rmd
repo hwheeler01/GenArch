@@ -319,30 +319,31 @@ mtS <- apply(mtPr,1,entropy) ##calc entropy for each row
 summary(mtS)
 geneS <- select(mt,gene) %>% mutate(entropy=mtS) ##put gene and entropy together
 
-tislist <- c('CrossTissue')
-for(tis in tislist){
-  h2.tis <- h2.ts %>% select(gene,one_of(tis)) ##one_of allows character vector
-  newdata <- inner_join(geneS,h2.tis,by='gene')
-  colnames(newdata)[3] <- "h2"
-  p <- ggplot(newdata,aes(y=h2,x=entropy))+geom_point(alpha=0.3)+stat_smooth(fill='pink',color='red')+ylab(expression(paste("Cross-Tissue ", "h"^{2}))) + xlab("Entropy")
-  cors <- data.frame(cor=signif(cor(newdata$h2, newdata$entropy), 2))
-  p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=-Inf, y=Inf, hjust=-0.5, vjust=2, size=5)
-  print(cor.test(newdata$h2, newdata$entropy))
-  a <- p1 + theme_bw(16) #+ coord_cartesian(ylim=c(1.75,2.25))
-  #print(a)
-}
+tis <- 'CrossTissue'
 
-for(tis in tislist){
-  pve.tis <- pve.ts %>% select(gene,one_of(tis)) ##one_of allows character vector
-  newdata <- inner_join(geneS,pve.tis,by='gene')
-  colnames(newdata)[3] <- "pve"
-  p <- ggplot(newdata,aes(y=pve,x=entropy))+geom_point(alpha=0.3)+stat_smooth(fill='pink',color='red')+ylab("Cross-Tissue PVE") + xlab("Entropy")
-  cors <- data.frame(cor=signif(cor(newdata$pve, newdata$entropy, use="p"), 2))
-  p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=-Inf, y=Inf, hjust=-0.5, vjust=2, size=5)
-  print(cor.test(newdata$pve, newdata$entropy))
-  b <- p1 + theme_bw(16) #+ coord_cartesian(ylim=c(1.75,2.25))
-  #print(b)
-}
+h2.tis <- h2.ts %>% select(gene,one_of(tis)) ##one_of allows character vector
+newdata <- inner_join(geneS,h2.tis,by='gene')
+groupdata <- dplyr::mutate(newdata, group=ifelse(entropy<1,0,1))
+groupdata <- dplyr::mutate(newdata, group=ifelse(entropy>2,2,groupdata$group))
+colnames(groupdata)[3] <- "h2"
+p <- ggplot(groupdata,aes(y=h2,x=factor(group,labels=c("0-1","1-2","2-3"))))+geom_boxplot()+ylab(expression(paste("Cross-Tissue ", "h"^{2}))) + xlab("Uniformity")
+cors <- data.frame(cor=signif(cor(groupdata$h2, groupdata$group), 2))
+p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=-Inf, y=Inf, hjust=-0.5, vjust=2, size=5)
+print(cor.test(groupdata$h2, groupdata$group)$p.value)
+a <- p1 + theme_bw(16) #+ coord_cartesian(ylim=c(1.75,2.25))
+print(a)
+
+pve.tis <- pve.ts %>% select(gene,one_of(tis)) ##one_of allows character vector
+newdata <- inner_join(geneS,pve.tis,by='gene')
+groupdata <- dplyr::mutate(newdata, group=ifelse(entropy<1,0,1))
+groupdata <- dplyr::mutate(newdata, group=ifelse(entropy>2,2,groupdata$group))
+colnames(groupdata)[3] <- "pve"
+p <- ggplot(groupdata,aes(y=pve,x=factor(group,labels=c("0-1","1-2","2-3"))))+geom_boxplot()+ylab(expression(paste("Cross-Tissue ", "PVE"))) + xlab("Uniformity")
+cors <- data.frame(cor=signif(cor(groupdata$pve, groupdata$group, use="p"), 2))
+p1 <- p + geom_text(data=cors, aes(label=paste("R = ", cor, sep="")), x=-Inf, y=Inf, hjust=-0.5, vjust=2, size=5)
+print(cor.test(groupdata$pve, groupdata$entropy)$p.value)
+b <- p1 + theme_bw(16) #+ coord_cartesian(ylim=c(1.75,2.25))
+print(b)
 
 tiff(filename=fig.dir %&% "Fig-CT-entropy.tiff",width=720,height=360)
 multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=18)),b + ggtitle('B\n')+ theme(plot.title=element_text(hjust=0),text=element_text(size=18)),cols=2)
