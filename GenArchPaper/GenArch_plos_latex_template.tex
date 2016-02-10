@@ -330,21 +330,28 @@ The left column of Fig. \ref{fig-dgn-jt-h2} shows the estimated local and distal
 
 \begin{figure}[h]
 \includegraphics[width=12cm]{Figures/Fig-DGN-jt-h2.png}
-\caption{{\bf DGN whole blood expression joint heritability
-(h\textsuperscript{2}).} Local (SNPs within 1 Mb of each gene) and distal
-(Left: SNPs on non-gene chromsomes. Right: SNPs that are eQTLs in the
-Framingham Heart Study on other chromosomes {[}FDR \textless{} 0.05{]})
-h\textsuperscript{2} for gene expression were jointly estimated.
+\caption{{\bf DGN whole blood expression local and distal heritability
+(h\textsuperscript{2}).} 
+%
+This figure shows the local and distal heritability of gene expression levels in whole blood from the DGN RNAseq dataset. Both local and distal heritability were estimated jointly. Notice that only a few genes have distal heritability that is significantly different from 0. 
+Local was defined as 1Mb from each gene. For the left side panel, distal heritability was computed using all SNPs outside of the gene's chromosome. On the the right side, distal heritability was computing using SNPs that had been found to be cis-eQTL in the Framingham study.
+%
+%Local (SNPs within 1 Mb of each gene) and distal
+%(Left: SNPs on non-gene chromsomes. Right: SNPs that are eQTLs in the
+%Framingham Heart Study on other chromosomes {[}FDR \textless{} 0.05{]})
+%h\textsuperscript{2} for gene expression were jointly estimated.
 (\textbf{Top}) Distal h\textsuperscript{2} compared to local
 h\textsuperscript{2} per gene in each model. (\textbf{Middle}) Local and
 (\textbf{Bottom}) distal gene expression h\textsuperscript{2} estimates
-ordered by increasing h\textsuperscript{2}. The 95\% confidence interval
-(CI) of each h\textsuperscript{2} estimate is in gray and genes with a
-lower bound greater than zero are in blue.}
+ordered by increasing h\textsuperscript{2}. 
+As a measure of uncertainty, we have added two times the standard errors of each h\textsuperscript{2} estimate in gray segments. Genes with significant h2 are shown in blue.
+\hl{TODO: drop reference to CI, color based on p value, delete mean h2 and mean SE from plots, percent TRUE should say percent $p<0.05$}
+}
 \label{fig-dgn-jt-h2}
 \end{figure}
 
-It has been shown that local-eQTLs are more likely to be distal-eQTLs of target genes \cite{pierce2014mediation}. Thus, we tested whether restricting the distal genetic similarity computation to QTLs (as determined in the Framingham mRNA dataset of over 5000 individuals \cite{Zhang_2015}  independent of the DGN and GTEx cohorts) for other genes could improve distal heritability precision by prioritizing functional variants. We exclude eQTLs on the same chromosome as the tested gene to avoid contaminating distal h$^2$ with cis associations. 
+
+It has been shown that local-eQTLs are more likely to be distal-eQTLs of target genes \cite{pierce2014mediation}. Thus, we tested whether restricting the distal genetic similarity computation to QTLs (as determined in the Framingham mRNA dataset of over 5000 individuals \cite{Zhang_2015}  independent of the DGN and GTEx cohorts) for other genes could improve distal heritability precision by prioritizing functional variants. We exclude eQTLs on the same chromosome as the tested gene to avoid contaminating distal h$^2$ with cis associations.
 
 Using functional priors (known eQTLs) to define distal h\textsuperscript{2} increased the percentage of genes with a positive CI from 2.7\% (343 genes) to 3.6\% (458) in whole blood (Fig. \ref{fig-dgn-jt-h2}). A total of 125 genes have significant distal h$^2$ by both approaches, i.e. all variants on other chromosomes or only  known eQTL variants on other chromosomes.
 
@@ -361,13 +368,17 @@ More specifically, we performed 10-fold cross-validation using the elastic net \
 \begin{figure}[h]
 \includegraphics[width=12cm]{Figures/Fig-DGN-EN.png}
 \caption{{\bf DGN cross-validated predictive performance across the elastic net.} 
-(\textbf{A}) 10-fold cross-validated R\textsuperscript{2} of
-predicted vs. observed expression in DGN whole blood compared to a range
-of elastic net mixing parameters (\(\alpha\)) for genes on chromosome 22
-with R\textsuperscript{2} \textgreater{} 0.3. (\textbf{B}) Predictive
-R\textsuperscript{2} difference between LASSO (\(\alpha = 1\)) and
-several other values of \(\alpha\) compared to LASSO predictive
-R\textsuperscript{2} for all autosomal genes.}
+This figure shows the cross validated R2 between observed and predicted expression levels using elastic net prediction models in DGN. (\textbf{A}) This panel shows the 10-fold cross validated R2 for 132 \hl{check number} genes with relatively large R2 ($>0.3$) from chromosome 22 as a function of the elastic net mixing parameters (\(\alpha\)). Smaller mixing parameters correspond to more polygenic models while larger ones correspond to more sparse models. Each line represents a gene. The performance is in general flat for most values of the mixing parameter except very close to zero where it shows a pronounced dip. Thus polygenic models perform more poorly than sparse models. (\textbf{B}) This panel shows the difference between the cross validated R2 of the LASSO model and the elastic net model mixing parameters 0.05 and 0.5 for autosomal protein coding genes. Elastic net with $\alpha=0.5$ values hover around zero, meaning that it has similar predictive performance to LASSO. The more polygenic model elastic net with $\alpha=0.05$ is mostly above the 0 line, indicating that they perform worse than the LASSO model.
+%
+%(\textbf{A}) 10-fold cross-validated R\textsuperscript{2} of
+%predicted vs. observed expression in DGN whole blood compared to a range
+%of elastic net mixing parameters (\(\alpha\)) for genes on chromosome 22
+%with R\textsuperscript{2} \textgreater{} 0.3. 
+%(\textbf{B}) Predictive
+%R\textsuperscript{2} difference between LASSO (\(\alpha = 1\)) and
+%several other values of \(\alpha\) compared to LASSO predictive
+%R\textsuperscript{2} for all autosomal genes. 
+\hl{TODO: exclude 0.95 results from panel B}}
 \label{fig-dgn-en}
 \end{figure}
 
@@ -379,17 +390,26 @@ As anticipated, we find that for highly heritable genes, the sparse component is
 
 \begin{figure}[h]
 \includegraphics[width=6cm]{Figures/Fig-DGN-BSLMM.png}
-\caption{{\bf Bayesian Sparse Linear Mixed Models reveal the sparsity of gene expression architecture.} 
-(\textbf{A}) Comparison of median PGE
-(proportion of PVE explained by sparse effects) to median PVE (total
-proportion of variance explained) for expression of each gene. The 95\%
-credible set of each PGE estimate is in gray and genes with a lower
-credible set (LCS) greater than 0.01 are in blue. (\textbf{B})
-Comparison of the median number of SNPs included in the model of each
-gene to median PVE. The 95\% credible set of each SNP-number estimate is
-in gray and genes with a median of 10 or fewer SNPs are in blue.(\textbf{C}) 
-BSLMM-estimated PVE compared to GCTA-estimated
-heritability per gene (R=0.96).}
+\caption{{\bf Sparsity Estimates Using Bayesian Sparse Linear Mixed Models.} 
+I(\textbf{A}) 
+This panel shows a measure of sparsity of the gene expression traits represented by the PGE parameter from the BSLMM approach. PGE is the proportion of sparse component of the total variance explained by genetic variants, PVE (the BSLMM equivalent of h2). The median of the posterior samples of BSLMM output is used as estimates of these parameters.
+Genes with lower credible set (LCS) $>0.01$ are shown in green and the rest in red. The 95\% credible set of each estimate is shown in gray. 
+ For highly heritable genes the sparse component is close to 1, thus for high heritability genes the local architecture is sparse. For lower heritability genes, there is not enough evidence to determine sparsity or polygenicity. \hl{TODO: relabel TRUE/FALSE as lower credible set $>$/$\le$0.01}
+Panel B shows \hl{TODO: drop this panel} %%the estimated number of SNPs in the sparse component of the model.
+Panel C \hl{to become B} shows the heritability estimate from BSLMM (PVE) vs the estimates from GCTA, which are found to be similar.
+%
+%Comparison of median PGE
+(%proportion of PVE explained by sparse effects) to median PVE (total
+%proportion of variance explained) for expression of each gene. 
+%The 95\%
+%credible set of each PGE estimate is in gray and genes with a lower
+%credible set (LCS) greater than 0.01 are in blue. (\textbf{B})
+%Comparison of the median number of SNPs included in the model of each
+%gene to median PVE. The 95\% credible set of each SNP-number estimate is
+%in gray and genes with a median of 10 or fewer SNPs are in blue.(\textbf{C}) 
+%BSLMM-estimated PVE compared to GCTA-estimated
+%heritability per gene (R=0.96).
+}
 \label{fig-dgn-bslmm}
 \end{figure}
 
@@ -399,9 +419,11 @@ Also as expected, we find that when the sample size is large enough, such as in 
 
 \begin{figure}[h]
 \includegraphics[width=12cm]{Figures/Fig-GTEx_TW_PVE_v_h2.png}
-\caption{{\bf GTEx PVE vs. h$^2$.} 
-GTEx whole tissue expression BSLMM-estimated PVE (total proportion of variance 
-explained) compared to GCTA-estimated heritability per gene. R = Pearson correlation.}
+\caption{{\bf BSLMM vs LMM estimates of heritability in GTEx.} 
+This figure shows the comparison between estimates of heritability using BSLMM vs LMM for GTEx data. \hl{TODO: use gray or black for 1-1 line}. For most genes BSLMM estimates are larger than LMM estimates reflecting the fact that BSLMM yields better estimates of heritability because of its ability to account for the sparse component.
+%GTEx whole tissue expression BSLMM-estimated PVE (total proportion of variance 
+%explained) compared to GCTA-estimated heritability per gene.
+ R = Pearson correlation.}
 \label{fig-gtex-pve-h2}
 \end{figure}
 
@@ -470,28 +492,36 @@ Figure \ref{fig-ct-entropy} shows that genes with high cross tissue heritability
 %%the comparison between this entropy statistics and cross-tissue expression heritability (R=0.082) and PVE (R = 0.12).
 \hl{TODO: 1) use uniformity instead of entropy. 2). normalize so that max entropy is 1 3) change to boxplots CT-h2 vs genes within 0-0.33, 0.33-0.66, 0.66-1, show p value of differences between box plot medians, rather the R2, 4) drop the B panel}
 
-For the original whole tissue, we expected the whole tissue expression heritability to correlate with the posterior probability of a gene being actively regulated in a tissue as shown in Figure \ref{fig-corrplot}A. Strikingly, the tissue specific phenotype heritability showed highest correlation with the PPA of the matching tissue and lower correlations with other tissues, confirming that OTD also captures tissue-specific components of gene expression (Fig. \ref{fig-corrplot}B). However, for whole blood there is a consistently negative correlation with other tissues. This issue needs to be further investigated.
+For the original whole tissue, we expected the whole tissue expression heritability to correlate with the posterior probability of a gene being actively regulated in a tissue. This is confirmed in Figure \ref{fig-corrplot}A where PPA in each tissue is correlated with the heritability of the expression in that tissue. In the off diagonal elements we observe high correlation between tissues, which was expected given that large portion of the regulation has been shown to be common across tissues. Whole blood has the lowest correlation  consistent with whole blood clustering aways from other tissues \cite{Ardile_2015}. In contrast, panel B of Figure \ref{fig-corrplot} shows that the tissue specific expression heritability correlates well with matching tissue PPA but the off diagonal correlations are substantially reduced consistent with these phenotypes representing tissue specific components. Again whole blood shows a negative correlation which could be indicative of some over correction of the cross tissue component. Overall these results indicate that the cross tissue and tissue specific phenotypes have properties that are consistent with the intended decomposition.
+
+%Strikingly, the tissue specific phenotype heritability showed highest correlation with the PPA of the matching tissue and lower correlations with other tissues, confirming that OTD also captures tissue-specific components of gene expression (Fig. \ref{fig-corrplot}B). However, for whole blood there is a consistently negative correlation with other tissues. This issue needs to be further investigated.
+
+\hl{TODO: add cross tissue results to table 1}
+
+\hl{Genes with higher heritability for the cross tissue component have more uniform distribution of PPA across tissues}
 
 \begin{figure}[h]
 \includegraphics[width=12cm]{Figures/Fig-CT-entropy.png}
-\caption{{\bf Cross-tissue expression from the 
-orthogonal tissue decomposition (OTD) compared to multi-tissue eQTL results.} 
-Pearson correlation (R) between the entropy of the posterior probabilities
-from the Flutre et al. multi-tissue eQTL method 
-and the estimates of (A) heritability and (B) PVE of cross-tissue
-gene expression derived from the OTD. The generalized additive model smoothing 
-line is in red.}
+\caption{{\bf Measure of uniformity of posterior probability of active regulation vs cross-tissue heritability.}
+% expression from the 
+%orthogonal tissue decomposition (OTD) compared to multi-tissue eQTL results.} 
+%Pearson correlation (R) between the entropy of the posterior probabilities
+This figure shows the distribution of heritability of the cross tissue component vs a measure of uniformity of genetic regulation across tissues. 
+The measure of uniformity was computed using the posterior probability of a gene being actively regulated in a tissue, PPA, from Flutre et al. multi-tissue eQTL analysis. Genes with PPA concentrated in one tissue were assigned small values of the uniformity measure whereas genes with PPA uniformly distributed across tissues were assigned high value of uniformity measure. See Methods for the entropy-based definition of uniformity.}
 \label{fig-ct-entropy}
 \end{figure}
 
 \begin{figure}[h]
 \includegraphics[width=12cm]{Figures/Fig-cor-StephensPr-v-PVE.png}
-\caption{{\bf Comparison of whole tissue or tissue-specific expression PVE to the posterior 
-probability of a gene being actively regulated in a tissue.} 
-Pearson correlation (R) between the posterior probability the top multi-tissue eQTL 
-regulates its gene in a given tissue (PPA, Flutre et al. method) and the PVE of (A) whole 
-tissue gene expression or (B) tissue-specific gene expression from the orthogonal
-tissue decomposition (OTD). Area of each circle is proportional to the absolute value of R.}
+\caption{{\bf Comparison of heritability of whole tissue or tissue specific components vs. PPA.} 
+Panel A of this figure shows the correlation between the heritability of the original (we are calling whole here) tissue expression levels vs. the probability of the tissue being actively regulated in a given tissue (PPA). Matching tissues show in general largest correlation values but most of the off diagonal correlations are also relatively high consistent with the shared regulation across tissues. 
+Panel B shows the correlation between the heritability of the tissue specific component of expression vs. PPA. Correlations are in general lower but matching tissues show the largest correlation. Off diagonal correlations are reduced substantially consistent with properties that are specific to each tissue. 
+%Pearson correlation (R) between the posterior probability the top multi-tissue eQTL 
+%regulates its gene in a given tissue (PPA, Flutre et al. method) and the PVE of (A) whole 
+%tissue gene expression or (B) tissue-specific gene expression from the orthogonal
+%tissue decomposition (OTD). 
+Area of each circle is proportional to the absolute value of R.
+}
 \label{fig-corrplot}
 \end{figure}
 
@@ -650,7 +680,7 @@ We use a mixed effects model to decompose the expression level of a gene into a 
 %
 \[Y_{i,t} =  Y_{i}^{\text{CT}}   + Y_{i,t}^{\text{TS}} + \mathbf{Z}_i \boldsymbol{\beta} + \epsilon_{i,t}  \] 
 %
-where $Y_{i}^{\text{CT}}$ is the random subject level intercept,  $Y_{i,t}^{\text{TS}} $ is the random subject by tissue intercept, $\mathbf{Z}_i $ represents covariates (for overall intercept, tissue intercept, gender, and PEER factors), and $\epsilon_{i,t}$ is the error term. We assume $Y_{i}^{\text{CT}} \sim N(0,\sigma_{\text{CT}}^2)$, $Y_{i,t}^{\text{TS}} \sim N(0,\sigma_{\text{TS}}^2)$, $\epsilon \sim N(0,\sigma^2_{epsilon})$, and all three independent of each other.
+where $Y_{i}^{\text{CT}}$ is the random subject level intercept,  $Y_{i,t}^{\text{TS}} $ is the random subject by tissue intercept, $\mathbf{Z}_i $ represents covariates (for overall intercept, tissue intercept, gender, and PEER factors), and $\epsilon_{i,t}$ is the error term. We assume $Y_{i}^{\text{CT}} \sim N(0,\sigma_{\text{CT}}^2)$, $Y_{i,t}^{\text{TS}} \sim N(0,\sigma_{\text{TS}}^2)$, $\epsilon \sim N(0,\sigma^2_{\epsilon})$, and all three independent of each other.
 
 For the cross tissue component to be identifiable, multiple replicates of expression is needed for each subject. In the same vein, for the tissue specific component to be identifiable multiple replicates of expression is needed for a given tissue/subject pair. GTEx\cite{Ardlie_2015}  data consisted of measurement of expression for multiple tissues for each subject, thus multiple replications per subject. However, there were very few replicated measurement for a given tissue/subject pair. Thus, we fit the reduced model and use the estimates of the residual as the tissue specific component.
 %
