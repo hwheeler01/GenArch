@@ -270,55 +270,56 @@ Table \ref{table-h2} summarizes the unconstrained heritability estimate results 
 \begin{table}[!ht]
 \begin{adjustwidth}{-2.25in}{0in} % Comment out/remove adjustwidth environment if table fits in text column.
 \caption{
-{\bf Estimates of local h$^2$ across whole tissues.}}
-\begin{tabular}{lllllll}
+{\bf Estimates of local h$^2$ across tissues.}}
+\begin{tabular}{lrrrrrr}
   \hline
-tissue & n & mean h$^2$ & mean se & prop CI $>$ 0 & num CI $>$ 0 & num expressed \\ 
+tissue & n & avg h$^2$ & avg SE & \% P$<$0.05 & num P$<$0.05 & num expressed \\ 
   \hline
-DGN-WholeBlood & 922 & 0.143 & 0.0292 & 0.486 & 6180 & 12719 \\ 
-  Adipose-Subcutaneous & 298 & 0.0385 & 0.0381 & 0.0735 & 1040 & 14205 \\ 
-  AdrenalGland & 126 & 0.0432 & 0.075 & 0.0425 & 601 & 14150 \\ 
-  Artery-Aorta & 198 & 0.0421 & 0.0561 & 0.0649 & 898 & 13844 \\ 
-  Artery-Coronary & 119 & 0.0371 & 0.0773 & 0.0337 & 476 & 14127 \\ 
-  Artery-Tibial & 285 & 0.0417 & 0.0402 & 0.0798 & 1080 & 13504 \\ 
-  Brain-Anteriorcingulatecortex(BA24) & 72 & 0.0275 & 0.133 & 0.031 & 450 & 14515 \\ 
-  Brain-Caudate(basalganglia) & 100 & 0.0367 & 0.091 & 0.0343 & 502 & 14632 \\ 
-  Brain-CerebellarHemisphere & 89 & 0.0492 & 0.11 & 0.0509 & 728 & 14295 \\ 
-  Brain-Cerebellum & 103 & 0.0504 & 0.094 & 0.0544 & 788 & 14491 \\ 
-  Brain-Cortex & 96 & 0.0451 & 0.0937 & 0.0393 & 578 & 14689 \\ 
-  Brain-FrontalCortex(BA9) & 92 & 0.0379 & 0.101 & 0.0341 & 496 & 14554 \\ 
-  Brain-Hippocampus & 81 & 0.0368 & 0.114 & 0.0285 & 414 & 14513 \\ 
-  Brain-Hypothalamus & 81 & 0.017 & 0.115 & 0.0235 & 347 & 14759 \\ 
-  Brain-Nucleusaccumbens(basalganglia) & 93 & 0.0293 & 0.0965 & 0.0292 & 426 & 14601 \\ 
-  Brain-Putamen(basalganglia) & 82 & 0.0324 & 0.108 & 0.0291 & 419 & 14404 \\ 
-  Breast-MammaryTissue & 183 & 0.0289 & 0.053 & 0.0365 & 537 & 14700 \\ 
-  Cells-EBV-transformedlymphocytes & 115 & 0.0578 & 0.0814 & 0.0497 & 619 & 12454 \\ 
-  Cells-Transformedfibroblasts & 272 & 0.0508 & 0.0424 & 0.0925 & 1180 & 12756 \\ 
-  Colon-Sigmoid & 124 & 0.0327 & 0.0807 & 0.0389 & 557 & 14321 \\ 
-  Colon-Transverse & 170 & 0.0358 & 0.059 & 0.0436 & 640 & 14676 \\ 
-  Esophagus-GastroesophagealJunction & 127 & 0.0318 & 0.0761 & 0.0332 & 469 & 14125 \\ 
-  Esophagus-Mucosa & 242 & 0.0416 & 0.0479 & 0.0764 & 1090 & 14239 \\ 
-  Esophagus-Muscularis & 219 & 0.0393 & 0.0505 & 0.069 & 969 & 14047 \\ 
-  Heart-AtrialAppendage & 159 & 0.0418 & 0.0638 & 0.0475 & 660 & 13892 \\ 
-  Heart-LeftVentricle & 190 & 0.0342 & 0.0558 & 0.0503 & 670 & 13321 \\ 
-  Liver & 98 & 0.033 & 0.0935 & 0.0299 & 405 & 13553 \\ 
-  Lung & 279 & 0.0315 & 0.0401 & 0.0577 & 853 & 14775 \\ 
-  Muscle-Skeletal & 361 & 0.0327 & 0.0324 & 0.0732 & 939 & 12833 \\ 
-  Nerve-Tibial & 256 & 0.0523 & 0.0445 & 0.095 & 1380 & 14510 \\ 
-  Ovary & 85 & 0.0369 & 0.0988 & 0.0258 & 364 & 14094 \\ 
-  Pancreas & 150 & 0.0469 & 0.0674 & 0.0557 & 777 & 13941 \\ 
-  Pituitary & 87 & 0.0379 & 0.107 & 0.0358 & 544 & 15183 \\ 
-  Skin-NotSunExposed(Suprapubic) & 196 & 0.0407 & 0.0532 & 0.0502 & 735 & 14642 \\ 
-  Skin-SunExposed(Lowerleg) & 303 & 0.0385 & 0.0385 & 0.0765 & 1120 & 14625 \\ 
-  SmallIntestine-TerminalIleum & 77 & 0.0365 & 0.112 & 0.0281 & 418 & 14860 \\ 
-  Spleen & 89 & 0.059 & 0.0998 & 0.0417 & 603 & 14449 \\ 
-  Stomach & 171 & 0.0315 & 0.0579 & 0.0367 & 533 & 14531 \\ 
-  Testis & 157 & 0.0539 & 0.0679 & 0.0727 & 1230 & 16936 \\ 
-  Thyroid & 279 & 0.0436 & 0.0413 & 0.0861 & 1260 & 14642 \\ 
-  WholeBlood & 339 & 0.0326 & 0.0328 & 0.0677 & 823 & 12160 \\ 
+DGN Whole Blood & 922 & 0.143 & 0.029 & 50.3 & 6399 & 12719 \\ 
+  Cross-tissue & 450 & 0.059 & 0.034 & 35.4 & 6003 & 16951 \\ 
+  Adipose - Subcutaneous & 298 & 0.038 & 0.038 & 16.9 & 2402 & 14205 \\ 
+  Adrenal Gland & 126 & 0.043 & 0.075 & 11.4 & 1610 & 14150 \\ 
+  Artery - Aorta & 198 & 0.042 & 0.056 & 16.6 & 2294 & 13844 \\ 
+  Artery - Coronary & 119 & 0.037 & 0.077 & 10.5 & 1477 & 14127 \\ 
+  Artery - Tibial & 285 & 0.042 & 0.040 & 17.3 & 2333 & 13504 \\ 
+  Brain - Anterior cingulate cortex (BA24) & 72 & 0.028 & 0.133 & 10.6 & 1532 & 14515 \\ 
+  Brain - Caudate (basal ganglia) & 100 & 0.037 & 0.091 & 10.5 & 1540 & 14632 \\ 
+  Brain - Cerebellar Hemisphere & 89 & 0.049 & 0.110 & 13.3 & 1901 & 14295 \\ 
+  Brain - Cerebellum & 103 & 0.050 & 0.094 & 13.5 & 1955 & 14491 \\ 
+  Brain - Cortex & 96 & 0.045 & 0.094 & 10.7 & 1575 & 14689 \\ 
+  Brain - Frontal Cortex (BA9) & 92 & 0.038 & 0.101 & 10.9 & 1581 & 14554 \\ 
+  Brain - Hippocampus & 81 & 0.037 & 0.114 & 9.8 & 1422 & 14513 \\ 
+  Brain - Hypothalamus & 81 & 0.017 & 0.115 & 9.9 & 1460 & 14759 \\ 
+  Brain - Nucleus accumbens (basal ganglia) & 93 & 0.029 & 0.096 & 10.2 & 1486 & 14601 \\ 
+  Brain - Putamen (basal ganglia) & 82 & 0.032 & 0.108 & 10.1 & 1456 & 14404 \\ 
+  Breast - Mammary Tissue & 183 & 0.029 & 0.053 & 11.7 & 1714 & 14700 \\ 
+  Cells - EBV-transformed lymphocytes & 115 & 0.058 & 0.081 & 11.6 & 1448 & 12454 \\ 
+  Cells - Transformed fibroblasts & 272 & 0.051 & 0.042 & 19.0 & 2420 & 12756 \\ 
+  Colon - Sigmoid & 124 & 0.033 & 0.081 & 12.3 & 1760 & 14321 \\ 
+  Colon - Transverse & 170 & 0.036 & 0.059 & 12.5 & 1832 & 14676 \\ 
+  Esophagus - Gastroesophageal Junction & 127 & 0.032 & 0.076 & 11.6 & 1638 & 14125 \\ 
+  Esophagus - Mucosa & 242 & 0.042 & 0.048 & 17.4 & 2476 & 14239 \\ 
+  Esophagus - Muscularis & 219 & 0.039 & 0.050 & 16.8 & 2355 & 14047 \\ 
+  Heart - Atrial Appendage & 159 & 0.042 & 0.064 & 12.9 & 1787 & 13892 \\ 
+  Heart - Left Ventricle & 190 & 0.034 & 0.056 & 14.7 & 1960 & 13321 \\ 
+  Liver & 98 & 0.033 & 0.094 & 10.0 & 1350 & 13553 \\ 
+  Lung & 279 & 0.032 & 0.040 & 15.7 & 2315 & 14775 \\ 
+  Muscle - Skeletal & 361 & 0.033 & 0.032 & 17.0 & 2180 & 12833 \\ 
+  Nerve - Tibial & 256 & 0.052 & 0.045 & 18.8 & 2724 & 14510 \\ 
+  Ovary & 85 & 0.037 & 0.099 & 8.5 & 1194 & 14094 \\ 
+  Pancreas & 150 & 0.047 & 0.067 & 14.0 & 1954 & 13941 \\ 
+  Pituitary & 87 & 0.038 & 0.107 & 10.7 & 1621 & 15183 \\ 
+  Skin - Not Sun Exposed (Suprapubic) & 196 & 0.041 & 0.053 & 13.4 & 1966 & 14642 \\ 
+  Skin - Sun Exposed (Lower leg) & 303 & 0.039 & 0.038 & 17.7 & 2589 & 14625 \\ 
+  Small Intestine - Terminal Ileum & 77 & 0.036 & 0.112 & 9.0 & 1341 & 14860 \\ 
+  Spleen & 89 & 0.059 & 0.100 & 10.4 & 1508 & 14449 \\ 
+  Stomach & 171 & 0.032 & 0.058 & 12.0 & 1747 & 14531 \\ 
+  Testis & 157 & 0.054 & 0.068 & 16.5 & 2792 & 16936 \\ 
+  Thyroid & 279 & 0.044 & 0.041 & 18.2 & 2670 & 14642 \\ 
+  Whole Blood & 339 & 0.033 & 0.033 & 16.1 & 1956 & 12160 \\ 
    \hline
 \end{tabular}
-\begin{flushleft} Except for DGN-WholeBlood, all tissues are from the GTEx Project.
+\begin{flushleft} Except for DGN Whole Blood, all tissues are from the GTEx Project. Cross-tissue uses derived expression levels from our orthogonal tissue decomposition (OTD) of GTEx data. Average heritability (avg h$^2$) and standard error (avg SE) are calculated across genes for each tissue. The proportion (prop) and number (num) of genes with significant h$^2$ estimates (P$<$0.05) and the number of genes expressed in each tissue are also reported. 
 \end{flushleft}
 \label{table-h2}
 \end{adjustwidth}
@@ -389,7 +390,7 @@ To further confirm the local sparsity of gene expression traits, we turned to th
 As anticipated, we find that for highly heritable genes, the sparse component is large. For example, all genes with PVE \textgreater{} 0.50 had PGE \textgreater{} 0.82 and their median PGE was 0.989 (Fig. \ref{fig-dgn-bslmm}A). The median PGE for genes with PVE \textgreater{} 0.1 was 0.949. Fittingly, for most (96.3\%) of the genes with PVE estimates \textgreater{} 0.10, the median number of SNPs included in the model was no more than 10 (Fig. \ref{fig-dgn-bslmm}B).
 
 \begin{figure}[h]
-\includegraphics[width=6cm]{Figures/Fig-DGN-BSLMM.png}
+\includegraphics[width=12cm]{Figures/Fig-DGN-BSLMM.png}
 \caption{{\bf Sparsity Estimates Using Bayesian Sparse Linear Mixed Models.} 
 I(\textbf{A}) 
 This panel shows a measure of sparsity of the gene expression traits represented by the PGE parameter from the BSLMM approach. PGE is the proportion of sparse component of the total variance explained by genetic variants, PVE (the BSLMM equivalent of h2). The median of the posterior samples of BSLMM output is used as estimates of these parameters.
@@ -492,7 +493,7 @@ Figure \ref{fig-ct-entropy} shows that genes with high cross tissue heritability
 %%the comparison between this entropy statistics and cross-tissue expression heritability (R=0.082) and PVE (R = 0.12).
 \hl{TODO: 1) use uniformity instead of entropy. 2). normalize so that max entropy is 1 3) change to boxplots CT-h2 vs genes within 0-0.33, 0.33-0.66, 0.66-1, show p value of differences between box plot medians, rather the R2, 4) drop the B panel}
 
-For the original whole tissue, we expected the whole tissue expression heritability to correlate with the posterior probability of a gene being actively regulated in a tissue. This is confirmed in Figure \ref{fig-corrplot}A where PPA in each tissue is correlated with the heritability of the expression in that tissue. In the off diagonal elements we observe high correlation between tissues, which was expected given that large portion of the regulation has been shown to be common across tissues. Whole blood has the lowest correlation  consistent with whole blood clustering aways from other tissues \cite{Ardile_2015}. In contrast, panel B of Figure \ref{fig-corrplot} shows that the tissue specific expression heritability correlates well with matching tissue PPA but the off diagonal correlations are substantially reduced consistent with these phenotypes representing tissue specific components. Again whole blood shows a negative correlation which could be indicative of some over correction of the cross tissue component. Overall these results indicate that the cross tissue and tissue specific phenotypes have properties that are consistent with the intended decomposition.
+For the original whole tissue, we expected the whole tissue expression heritability to correlate with the posterior probability of a gene being actively regulated in a tissue. This is confirmed in Figure \ref{fig-corrplot}A where PPA in each tissue is correlated with the heritability of the expression in that tissue. In the off diagonal elements we observe high correlation between tissues, which was expected given that large portion of the regulation has been shown to be common across tissues. Whole blood has the lowest correlation  consistent with whole blood clustering aways from other tissues \cite{Ardlie_2015}. In contrast, panel B of Figure \ref{fig-corrplot} shows that the tissue specific expression heritability correlates well with matching tissue PPA but the off diagonal correlations are substantially reduced consistent with these phenotypes representing tissue specific components. Again whole blood shows a negative correlation which could be indicative of some over correction of the cross tissue component. Overall these results indicate that the cross tissue and tissue specific phenotypes have properties that are consistent with the intended decomposition.
 
 %Strikingly, the tissue specific phenotype heritability showed highest correlation with the PPA of the matching tissue and lower correlations with other tissues, confirming that OTD also captures tissue-specific components of gene expression (Fig. \ref{fig-corrplot}B). However, for whole blood there is a consistently negative correlation with other tissues. This issue needs to be further investigated.
 
@@ -501,7 +502,7 @@ For the original whole tissue, we expected the whole tissue expression heritabil
 \hl{Genes with higher heritability for the cross tissue component have more uniform distribution of PPA across tissues}
 
 \begin{figure}[h]
-\includegraphics[width=12cm]{Figures/Fig-CT-entropy.png}
+\includegraphics[width=6cm]{Figures/Fig-CT-entropy.png}
 \caption{{\bf Measure of uniformity of posterior probability of active regulation vs cross-tissue heritability.}
 % expression from the 
 %orthogonal tissue decomposition (OTD) compared to multi-tissue eQTL results.} 

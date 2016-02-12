@@ -283,22 +283,15 @@ Zhou X, Stephens M.
 \newblock Nature Genetics. 2012;44(7):821--824.
 \newblock Available from: \url{http://dx.doi.org/10.1038/ng.2310}.
 
-\bibitem{Im_2012}
-Im HK, Gamazon ER, Stark AL, Huang RS, Cox NJ, Dolan ME.
-\newblock Mixed Effects Modeling of Proliferation Rates in Cell-Based Models:
-  Consequence for Pharmacogenomics and Cancer.
-\newblock {PLoS} Genetics. 2012;8(2):e1002525.
-\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1002525}.
-
-\bibitem{R_Core_Team_2015}
-{R Core Team}. R: A Language and Environment for Statistical Computing.
-\newblock Vienna, Austria; 2015.
-\newblock Available from: \url{http://www.R-project.org/}.
-
 \bibitem{Bates_2015a}
 Bates D, M{\"a}chler M, Bolker BM, Walker S.
 \newblock Fitting Linear Mixed-Effects Models using {lme4}.
 \newblock Journal of Statistical Software. 2015;67(1):1--48.
 \newblock Available from: \url{http://dx.doi.org/10.18637/jss.v067.i01}.
+
+\bibitem{R_Core_Team_2015}
+{R Core Team}. R: A Language and Environment for Statistical Computing.
+\newblock Vienna, Austria; 2015.
+\newblock Available from: \url{http://www.R-project.org/}.
 
 \end{thebibliography}

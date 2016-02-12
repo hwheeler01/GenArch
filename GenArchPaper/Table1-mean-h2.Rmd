@@ -24,15 +24,27 @@ output: html_document
 ```{r, loc.jt.tw,eval=TRUE,fig.width=8,fig.height=8}
 dgn <- read.table(my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globalAll_reml-no-constrain.2015-12-15.txt',header=T)
 tislist <- scan(my.dir %&% 'gtex-rnaseq/ind-tissues-from-nick/GTEx_PrediXmod.tissue.list',sep="\n",what="character")
-table1 <- matrix(0,nrow=length(tislist)+1,ncol=7)
+tisspacelist <- scan(my.dir %&% '40.tissue.list',sep="\n",what="character")
+table1 <- matrix(0,nrow=length(tislist)+2,ncol=7)
 n <- dgn$N[1]
 numexpgenes <- dim(dgn)[1] 
-meanh2 <- signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)
-meanse <- signif(mean(dgn$loc.jt.se,na.rm=TRUE),3)
-ciest <-  dgn %>% mutate(ymin = pmax(0, loc.jt.h2 - 2 * loc.jt.se), ymax = pmin(1, loc.jt.h2 + 2 * loc.jt.se)) %>% arrange(loc.jt.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(dgn$tissue)) 
-propsig <- signif(table(ciest$nonzeroCI)[2]/sum(table(ciest$nonzeroCI,useNA="i")),3)
-numsig <- signif(table(ciest$nonzeroCI)[2],3)
-table1[1,] <- c("DGN-WholeBlood",n,meanh2,meanse,propsig,numsig,numexpgenes)
+meanh2 <- sprintf("%.3f",mean(dgn$loc.jt.h2,na.rm=TRUE))
+meanse <- sprintf("%.3f",mean(dgn$loc.jt.se,na.rm=TRUE))
+pest <-  dgn %>% mutate(loc.jt.P = 2*pnorm(-abs(loc.jt.h2/loc.jt.se))) %>% mutate(loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P)) %>% arrange(loc.jt.h2) %>% mutate(Plt05=loc.jt.P<0.05) 
+propsig <- sprintf("%.1f",table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100)
+numsig <- table(pest$Plt05)[2]
+table1[1,] <- c("DGN Whole Blood",n,meanh2,meanse,propsig,numsig,numexpgenes)
+
+#add cross-tissue to table 1
+ct <- read.table(my.dir %&% 'cross-tissue.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-14.txt',header=T)
+n <- ct$N[1]
+numexpgenes <- dim(ct)[1] 
+meanh2 <- sprintf("%.3f",mean(ct$loc.jt.h2,na.rm=TRUE))
+meanse <- sprintf("%.3f",mean(ct$loc.jt.se,na.rm=TRUE))
+pest <-  ct %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% arrange(local.h2) %>% mutate(Plt05=local.p<0.05)
+propsig <- sprintf("%.1f",table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100)
+numsig <- table(pest$Plt05)[2]
+table1[2,] <- c("Cross-tissue",n,meanh2,meanse,propsig,numsig,numexpgenes)
 
 ##calc mean global for DGN
 signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)
@@ -49,15 +61,16 @@ for(i in 1:length(tislist)){
   data <- dplyr::filter(data,ensid %in% explist)
   n <- data$N[1]
   numexpgenes <- dim(data)[1] ##num expressed genes mean(RPKM)>0.1
-  meanh2 <- signif(mean(data$local.h2,na.rm=TRUE),3)
-  meanse <- signif(mean(data$local.se,na.rm=TRUE),3)
-  ciest <-  data %>% mutate(ymin = pmax(0, local.h2 - 2 * local.se), ymax = pmin(1, local.h2 + 2 * local.se)) %>% arrange(local.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(data$tissue)) 
-  propsig <- signif(table(ciest$nonzeroCI)[2]/sum(table(ciest$nonzeroCI,useNA="i")),3)
-  numsig <- signif(table(ciest$nonzeroCI)[2],3)
-  tableinfo <- c(tis,n,meanh2,meanse,propsig,numsig,numexpgenes)
-  table1[i+1,] <- tableinfo
+  meanh2 <- sprintf("%.3f",mean(data$local.h2,na.rm=TRUE))
+  meanse <- sprintf("%.3f",mean(data$local.se,na.rm=TRUE))
+  pest <-  data %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% arrange(local.h2) %>% mutate(Plt05=local.p<0.05) 
+  propsig <- sprintf("%.1f",table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100)
+  numsig <- table(pest$Plt05)[2]
+  tisspace <- tisspacelist[i]
+  tableinfo <- c(tisspace,n,meanh2,meanse,propsig,numsig,numexpgenes)
+  table1[i+2,] <- tableinfo
 }
-colnames(table1)=c("tissue","n","mean h2","mean se","prop CI > 0","num CI > 0","num expressed")
+colnames(table1)=c("tissue","n","avg h2","avg SE","% P<0.05","num P<0.05","num expressed")
 #table1
 
 library(xtable)
