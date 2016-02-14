@@ -63,7 +63,7 @@ img {
 <div id="header">
 <h1 class="title">TableS1-CT-TS-mean-h2</h1>
 <h4 class="author"><em>Heather Wheeler</em></h4>
-<h4 class="date"><em>2015-12-23 10:34:42</em></h4>
+<h4 class="date"><em>2016-02-14 07:45:35</em></h4>
 </div>
 
 
@@ -86,11 +86,11 @@ tislist &lt;- scan(my.dir %&amp;% '40.tissue.list',sep=&quot;\n&quot;,what=&quot
 table1 &lt;- matrix(0,nrow=length(tislist)+1,ncol=7)
 n &lt;- ct$N[1]
 numexpgenes &lt;- dim(ct)[1] 
-meanh2 &lt;- signif(mean(ct$local.h2,na.rm=TRUE),3)
-meanse &lt;- signif(mean(ct$local.se,na.rm=TRUE),3)
-ciest &lt;-  ct %&gt;% mutate(ymin = pmax(0, local.h2 - 2 * local.se), ymax = pmin(1, local.h2 + 2 * local.se)) %&gt;% arrange(local.h2) %&gt;% mutate(nonzeroCI=ymin&gt;0,place=1:length(ct$tissue)) 
-propsig &lt;- signif(table(ciest$nonzeroCI)[2]/sum(table(ciest$nonzeroCI)),3)
-numsig &lt;- signif(table(ciest$nonzeroCI)[2],3)
+meanh2 &lt;- sprintf(&quot;%.3f&quot;,mean(ct$loc.jt.h2,na.rm=TRUE))
+meanse &lt;- sprintf(&quot;%.3f&quot;,mean(ct$loc.jt.se,na.rm=TRUE))
+pest &lt;-  ct %&gt;% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %&gt;% arrange(local.h2) %&gt;% mutate(Plt05=local.p&lt;0.05)
+propsig &lt;- sprintf(&quot;%.1f&quot;,table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA=&quot;i&quot;))*100)
+numsig &lt;- table(pest$Plt05)[2]
 table1[1,] &lt;- c(&quot;Cross-tissue&quot;,n,meanh2,meanse,propsig,numsig,numexpgenes)
 
 
@@ -99,69 +99,69 @@ for(i in 1:length(tislist)){
   data &lt;- read.table(my.dir %&amp;% 'GTEx.TS.' %&amp;% tis  %&amp;% '.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-14.txt',header=T,sep=&quot;\t&quot;)  
   n &lt;- data$N[1]
   numexpgenes &lt;- dim(data)[1] ##num expressed genes mean(RPKM)&gt;0.1
-  meanh2 &lt;- signif(mean(data$local.h2,na.rm=TRUE),3)
-  meanse &lt;- signif(mean(data$local.se,na.rm=TRUE),3)
-  ciest &lt;-  data %&gt;% mutate(ymin = pmax(0, local.h2 - 2 * local.se), ymax = pmin(1, local.h2 + 2 * local.se)) %&gt;% arrange(local.h2) %&gt;% mutate(nonzeroCI=ymin&gt;0,place=1:length(data$tissue)) 
-  propsig &lt;- signif(table(ciest$nonzeroCI)[2]/sum(table(ciest$nonzeroCI,useNA=&quot;i&quot;)),3)
-  numsig &lt;- signif(table(ciest$nonzeroCI)[2],3)
+  meanh2 &lt;- sprintf(&quot;%.3f&quot;,mean(data$local.h2,na.rm=TRUE))
+  meanse &lt;- sprintf(&quot;%.3f&quot;,mean(data$local.se,na.rm=TRUE))
+  pest &lt;-  data %&gt;% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %&gt;% arrange(local.h2) %&gt;% mutate(Plt05=local.p&lt;0.05) 
+  propsig &lt;- sprintf(&quot;%.1f&quot;,table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA=&quot;i&quot;))*100)
+  numsig &lt;- table(pest$Plt05)[2]
   tableinfo &lt;- c(tis,n,meanh2,meanse,propsig,numsig,numexpgenes)
   table1[i+1,] &lt;- tableinfo
 }
-colnames(table1)=c(&quot;tissue&quot;,&quot;n&quot;,&quot;mean h2&quot;,&quot;mean se&quot;,&quot;prop CI &gt; 0&quot;,&quot;num CI &gt; 0&quot;,&quot;num expressed&quot;)
+colnames(table1)=c(&quot;tissue&quot;,&quot;n&quot;,&quot;avg h2&quot;,&quot;avg SE&quot;,&quot;% P&lt;0.05&quot;,&quot;num P&lt;0.05&quot;,&quot;num expressed&quot;)
 #table1
 
 library(xtable)
 tab &lt;- xtable(table1)
 print(tab, type=&quot;latex&quot;,include.rownames=FALSE)</code></pre>
 <pre><code>## % latex table generated in R 3.2.0 by xtable 1.8-0 package
-## % Wed Dec 23 10:35:52 2015
+## % Sun Feb 14 07:46:42 2016
 ## \begin{table}[ht]
 ## \centering
 ## \begin{tabular}{lllllll}
 ##   \hline
-## tissue &amp; n &amp; mean h2 &amp; mean se &amp; prop CI $&gt;$ 0 &amp; num CI $&gt;$ 0 &amp; num expressed \\ 
+## tissue &amp; n &amp; avg h2 &amp; avg SE &amp; \% P$&lt;$0.05 &amp; num P$&lt;$0.05 &amp; num expressed \\ 
 ##   \hline
-## Cross-tissue &amp; 450 &amp; 0.0624 &amp; 0.0328 &amp; 0.198 &amp; 2940 &amp; 16951 \\ 
-##   Adipose - Subcutaneous &amp; 298 &amp; 0.0169 &amp; 0.0351 &amp; 0.0122 &amp; 207 &amp; 16951 \\ 
-##   Adrenal Gland &amp; 126 &amp; 0.0369 &amp; 0.0761 &amp; 0.0179 &amp; 304 &amp; 16951 \\ 
-##   Artery - Aorta &amp; 198 &amp; 0.0216 &amp; 0.0533 &amp; 0.0146 &amp; 247 &amp; 16951 \\ 
-##   Artery - Coronary &amp; 119 &amp; 0.0483 &amp; 0.0844 &amp; 0.0205 &amp; 347 &amp; 16951 \\ 
-##   Artery - Tibial &amp; 285 &amp; 0.022 &amp; 0.0378 &amp; 0.018 &amp; 305 &amp; 16951 \\ 
-##   Brain - Anterior cingulate cortex (BA24) &amp; 72 &amp; 0.0369 &amp; 0.139 &amp; 0.0217 &amp; 368 &amp; 16951 \\ 
-##   Brain - Caudate (basal ganglia) &amp; 100 &amp; 0.0424 &amp; 0.0965 &amp; 0.0176 &amp; 299 &amp; 16951 \\ 
-##   Brain - Cerebellar Hemisphere &amp; 89 &amp; 0.0458 &amp; 0.113 &amp; 0.0294 &amp; 498 &amp; 16951 \\ 
-##   Brain - Cerebellum &amp; 103 &amp; 0.0406 &amp; 0.0956 &amp; 0.0248 &amp; 421 &amp; 16951 \\ 
-##   Brain - Cortex &amp; 96 &amp; 0.0532 &amp; 0.101 &amp; 0.0259 &amp; 439 &amp; 16951 \\ 
-##   Brain - Frontal Cortex (BA9) &amp; 92 &amp; 0.0373 &amp; 0.105 &amp; 0.0179 &amp; 304 &amp; 16951 \\ 
-##   Brain - Hippocampus &amp; 81 &amp; 0.0327 &amp; 0.115 &amp; 0.0149 &amp; 252 &amp; 16951 \\ 
-##   Brain - Hypothalamus &amp; 81 &amp; 0.0205 &amp; 0.119 &amp; 0.0145 &amp; 245 &amp; 16951 \\ 
-##   Brain - Nucleus accumbens (basal ganglia) &amp; 93 &amp; 0.0404 &amp; 0.104 &amp; 0.0232 &amp; 393 &amp; 16951 \\ 
-##   Brain - Putamen (basal ganglia) &amp; 82 &amp; 0.0327 &amp; 0.112 &amp; 0.0142 &amp; 241 &amp; 16951 \\ 
-##   Breast - Mammary Tissue &amp; 183 &amp; 0.0198 &amp; 0.0533 &amp; 0.00791 &amp; 134 &amp; 16951 \\ 
-##   Cells - EBV-transformed lymphocytes &amp; 115 &amp; 0.0454 &amp; 0.0808 &amp; 0.0206 &amp; 349 &amp; 16951 \\ 
-##   Cells - Transformed fibroblasts &amp; 272 &amp; 0.0193 &amp; 0.0373 &amp; 0.0159 &amp; 269 &amp; 16951 \\ 
-##   Colon - Sigmoid &amp; 124 &amp; 0.0243 &amp; 0.0814 &amp; 0.0129 &amp; 219 &amp; 16951 \\ 
-##   Colon - Transverse &amp; 170 &amp; 0.0215 &amp; 0.0577 &amp; 0.0106 &amp; 179 &amp; 16951 \\ 
-##   Esophagus - Gastroesophageal Junction &amp; 127 &amp; 0.0286 &amp; 0.0784 &amp; 0.0131 &amp; 222 &amp; 16951 \\ 
-##   Esophagus - Mucosa &amp; 242 &amp; 0.0263 &amp; 0.0465 &amp; 0.0238 &amp; 404 &amp; 16951 \\ 
-##   Esophagus - Muscularis &amp; 219 &amp; 0.0235 &amp; 0.0498 &amp; 0.0176 &amp; 299 &amp; 16951 \\ 
-##   Heart - Atrial Appendage &amp; 159 &amp; 0.0314 &amp; 0.0639 &amp; 0.0169 &amp; 287 &amp; 16951 \\ 
-##   Heart - Left Ventricle &amp; 190 &amp; 0.0246 &amp; 0.0556 &amp; 0.0176 &amp; 298 &amp; 16951 \\ 
-##   Liver &amp; 98 &amp; 0.0355 &amp; 0.0977 &amp; 0.0188 &amp; 319 &amp; 16951 \\ 
-##   Lung &amp; 279 &amp; 0.0177 &amp; 0.0384 &amp; 0.0132 &amp; 223 &amp; 16951 \\ 
-##   Muscle - Skeletal &amp; 361 &amp; 0.0195 &amp; 0.0308 &amp; 0.0255 &amp; 432 &amp; 16951 \\ 
-##   Nerve - Tibial &amp; 256 &amp; 0.0259 &amp; 0.0415 &amp; 0.0224 &amp; 379 &amp; 16951 \\ 
-##   Ovary &amp; 85 &amp; 0.043 &amp; 0.105 &amp; 0.0162 &amp; 275 &amp; 16951 \\ 
-##   Pancreas &amp; 150 &amp; 0.0362 &amp; 0.068 &amp; 0.02 &amp; 339 &amp; 16951 \\ 
-##   Pituitary &amp; 87 &amp; 0.0437 &amp; 0.113 &amp; 0.0206 &amp; 349 &amp; 16951 \\ 
-##   Skin - Not Sun Exposed (Suprapubic) &amp; 196 &amp; 0.0413 &amp; 0.0562 &amp; 0.0254 &amp; 430 &amp; 16951 \\ 
-##   Skin - Sun Exposed (Lower leg) &amp; 303 &amp; 0.0271 &amp; 0.0381 &amp; 0.0264 &amp; 448 &amp; 16951 \\ 
-##   Small Intestine - Terminal Ileum &amp; 77 &amp; 0.0462 &amp; 0.118 &amp; 0.0205 &amp; 347 &amp; 16951 \\ 
-##   Spleen &amp; 89 &amp; 0.0621 &amp; 0.106 &amp; 0.0286 &amp; 484 &amp; 16951 \\ 
-##   Stomach &amp; 171 &amp; 0.02 &amp; 0.0564 &amp; 0.00808 &amp; 137 &amp; 16951 \\ 
-##   Testis &amp; 157 &amp; 0.0416 &amp; 0.0679 &amp; 0.037 &amp; 627 &amp; 16951 \\ 
-##   Thyroid &amp; 279 &amp; 0.0237 &amp; 0.039 &amp; 0.026 &amp; 441 &amp; 16951 \\ 
-##   Whole Blood &amp; 339 &amp; 0.0251 &amp; 0.0333 &amp; 0.0288 &amp; 488 &amp; 16951 \\ 
+## Cross-tissue &amp; 450 &amp; 0.059 &amp; 0.034 &amp; 35.4 &amp; 6003 &amp; 16951 \\ 
+##   Adipose - Subcutaneous &amp; 298 &amp; 0.017 &amp; 0.035 &amp; 10.3 &amp; 1747 &amp; 16951 \\ 
+##   Adrenal Gland &amp; 126 &amp; 0.037 &amp; 0.076 &amp; 10.2 &amp; 1731 &amp; 16951 \\ 
+##   Artery - Aorta &amp; 198 &amp; 0.022 &amp; 0.053 &amp; 10.2 &amp; 1733 &amp; 16951 \\ 
+##   Artery - Coronary &amp; 119 &amp; 0.048 &amp; 0.084 &amp; 12.2 &amp; 2066 &amp; 16951 \\ 
+##   Artery - Tibial &amp; 285 &amp; 0.022 &amp; 0.038 &amp; 13.3 &amp; 2262 &amp; 16951 \\ 
+##   Brain - Anterior cingulate cortex (BA24) &amp; 72 &amp; 0.037 &amp; 0.139 &amp; 8.6 &amp; 1451 &amp; 16951 \\ 
+##   Brain - Caudate (basal ganglia) &amp; 100 &amp; 0.042 &amp; 0.096 &amp; 9.8 &amp; 1659 &amp; 16951 \\ 
+##   Brain - Cerebellar Hemisphere &amp; 89 &amp; 0.046 &amp; 0.113 &amp; 10.2 &amp; 1730 &amp; 16951 \\ 
+##   Brain - Cerebellum &amp; 103 &amp; 0.041 &amp; 0.096 &amp; 10.8 &amp; 1825 &amp; 16951 \\ 
+##   Brain - Cortex &amp; 96 &amp; 0.053 &amp; 0.101 &amp; 10.6 &amp; 1803 &amp; 16951 \\ 
+##   Brain - Frontal Cortex (BA9) &amp; 92 &amp; 0.037 &amp; 0.105 &amp; 8.4 &amp; 1418 &amp; 16951 \\ 
+##   Brain - Hippocampus &amp; 81 &amp; 0.033 &amp; 0.115 &amp; 7.6 &amp; 1292 &amp; 16951 \\ 
+##   Brain - Hypothalamus &amp; 81 &amp; 0.020 &amp; 0.119 &amp; 7.8 &amp; 1321 &amp; 16951 \\ 
+##   Brain - Nucleus accumbens (basal ganglia) &amp; 93 &amp; 0.040 &amp; 0.104 &amp; 8.9 &amp; 1511 &amp; 16951 \\ 
+##   Brain - Putamen (basal ganglia) &amp; 82 &amp; 0.033 &amp; 0.112 &amp; 7.8 &amp; 1323 &amp; 16951 \\ 
+##   Breast - Mammary Tissue &amp; 183 &amp; 0.020 &amp; 0.053 &amp; 7.7 &amp; 1307 &amp; 16951 \\ 
+##   Cells - EBV-transformed lymphocytes &amp; 115 &amp; 0.045 &amp; 0.081 &amp; 10.8 &amp; 1833 &amp; 16951 \\ 
+##   Cells - Transformed fibroblasts &amp; 272 &amp; 0.019 &amp; 0.037 &amp; 10.6 &amp; 1805 &amp; 16951 \\ 
+##   Colon - Sigmoid &amp; 124 &amp; 0.024 &amp; 0.081 &amp; 9.0 &amp; 1530 &amp; 16951 \\ 
+##   Colon - Transverse &amp; 170 &amp; 0.022 &amp; 0.058 &amp; 8.6 &amp; 1462 &amp; 16951 \\ 
+##   Esophagus - Gastroesophageal Junction &amp; 127 &amp; 0.029 &amp; 0.078 &amp; 8.9 &amp; 1512 &amp; 16951 \\ 
+##   Esophagus - Mucosa &amp; 242 &amp; 0.026 &amp; 0.047 &amp; 13.7 &amp; 2319 &amp; 16951 \\ 
+##   Esophagus - Muscularis &amp; 219 &amp; 0.024 &amp; 0.050 &amp; 11.0 &amp; 1871 &amp; 16951 \\ 
+##   Heart - Atrial Appendage &amp; 159 &amp; 0.031 &amp; 0.064 &amp; 9.4 &amp; 1601 &amp; 16951 \\ 
+##   Heart - Left Ventricle &amp; 190 &amp; 0.025 &amp; 0.056 &amp; 11.2 &amp; 1894 &amp; 16951 \\ 
+##   Liver &amp; 98 &amp; 0.036 &amp; 0.098 &amp; 8.9 &amp; 1506 &amp; 16951 \\ 
+##   Lung &amp; 279 &amp; 0.018 &amp; 0.038 &amp; 10.7 &amp; 1819 &amp; 16951 \\ 
+##   Muscle - Skeletal &amp; 361 &amp; 0.020 &amp; 0.031 &amp; 13.1 &amp; 2223 &amp; 16951 \\ 
+##   Nerve - Tibial &amp; 256 &amp; 0.026 &amp; 0.042 &amp; 13.3 &amp; 2250 &amp; 16951 \\ 
+##   Ovary &amp; 85 &amp; 0.043 &amp; 0.105 &amp; 7.8 &amp; 1323 &amp; 16951 \\ 
+##   Pancreas &amp; 150 &amp; 0.036 &amp; 0.068 &amp; 11.6 &amp; 1969 &amp; 16951 \\ 
+##   Pituitary &amp; 87 &amp; 0.044 &amp; 0.113 &amp; 9.4 &amp; 1590 &amp; 16951 \\ 
+##   Skin - Not Sun Exposed (Suprapubic) &amp; 196 &amp; 0.041 &amp; 0.056 &amp; 19.2 &amp; 3249 &amp; 16951 \\ 
+##   Skin - Sun Exposed (Lower leg) &amp; 303 &amp; 0.027 &amp; 0.038 &amp; 17.3 &amp; 2939 &amp; 16951 \\ 
+##   Small Intestine - Terminal Ileum &amp; 77 &amp; 0.046 &amp; 0.118 &amp; 7.9 &amp; 1340 &amp; 16951 \\ 
+##   Spleen &amp; 89 &amp; 0.062 &amp; 0.106 &amp; 10.7 &amp; 1820 &amp; 16951 \\ 
+##   Stomach &amp; 171 &amp; 0.020 &amp; 0.056 &amp; 8.3 &amp; 1406 &amp; 16951 \\ 
+##   Testis &amp; 157 &amp; 0.042 &amp; 0.068 &amp; 14.0 &amp; 2378 &amp; 16951 \\ 
+##   Thyroid &amp; 279 &amp; 0.024 &amp; 0.039 &amp; 13.3 &amp; 2250 &amp; 16951 \\ 
+##   Whole Blood &amp; 339 &amp; 0.025 &amp; 0.033 &amp; 17.7 &amp; 3004 &amp; 16951 \\ 
 ##    \hline
 ## \end{tabular}
 ## \end{table}</code></pre>

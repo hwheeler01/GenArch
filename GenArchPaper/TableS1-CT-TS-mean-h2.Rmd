@@ -28,11 +28,11 @@ tislist <- scan(my.dir %&% '40.tissue.list',sep="\n",what="character")
 table1 <- matrix(0,nrow=length(tislist)+1,ncol=7)
 n <- ct$N[1]
 numexpgenes <- dim(ct)[1] 
-meanh2 <- signif(mean(ct$local.h2,na.rm=TRUE),3)
-meanse <- signif(mean(ct$local.se,na.rm=TRUE),3)
-ciest <-  ct %>% mutate(ymin = pmax(0, local.h2 - 2 * local.se), ymax = pmin(1, local.h2 + 2 * local.se)) %>% arrange(local.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(ct$tissue)) 
-propsig <- signif(table(ciest$nonzeroCI)[2]/sum(table(ciest$nonzeroCI)),3)
-numsig <- signif(table(ciest$nonzeroCI)[2],3)
+meanh2 <- sprintf("%.3f",mean(ct$loc.jt.h2,na.rm=TRUE))
+meanse <- sprintf("%.3f",mean(ct$loc.jt.se,na.rm=TRUE))
+pest <-  ct %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% arrange(local.h2) %>% mutate(Plt05=local.p<0.05)
+propsig <- sprintf("%.1f",table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100)
+numsig <- table(pest$Plt05)[2]
 table1[1,] <- c("Cross-tissue",n,meanh2,meanse,propsig,numsig,numexpgenes)
 
 
@@ -41,15 +41,15 @@ for(i in 1:length(tislist)){
   data <- read.table(my.dir %&% 'GTEx.TS.' %&% tis  %&% '.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-14.txt',header=T,sep="\t")  
   n <- data$N[1]
   numexpgenes <- dim(data)[1] ##num expressed genes mean(RPKM)>0.1
-  meanh2 <- signif(mean(data$local.h2,na.rm=TRUE),3)
-  meanse <- signif(mean(data$local.se,na.rm=TRUE),3)
-  ciest <-  data %>% mutate(ymin = pmax(0, local.h2 - 2 * local.se), ymax = pmin(1, local.h2 + 2 * local.se)) %>% arrange(local.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(data$tissue)) 
-  propsig <- signif(table(ciest$nonzeroCI)[2]/sum(table(ciest$nonzeroCI,useNA="i")),3)
-  numsig <- signif(table(ciest$nonzeroCI)[2],3)
+  meanh2 <- sprintf("%.3f",mean(data$local.h2,na.rm=TRUE))
+  meanse <- sprintf("%.3f",mean(data$local.se,na.rm=TRUE))
+  pest <-  data %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% arrange(local.h2) %>% mutate(Plt05=local.p<0.05) 
+  propsig <- sprintf("%.1f",table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100)
+  numsig <- table(pest$Plt05)[2]
   tableinfo <- c(tis,n,meanh2,meanse,propsig,numsig,numexpgenes)
   table1[i+1,] <- tableinfo
 }
-colnames(table1)=c("tissue","n","mean h2","mean se","prop CI > 0","num CI > 0","num expressed")
+colnames(table1)=c("tissue","n","avg h2","avg SE","% P<0.05","num P<0.05","num expressed")
 #table1
 
 library(xtable)

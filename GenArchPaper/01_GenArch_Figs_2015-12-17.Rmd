@@ -29,7 +29,6 @@ otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05
 fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
 d  <- fdrother %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se) )
 cigt0 <- d$ymin>0
-table(cigt0)
 ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
 ptrue
 fdrother <- mutate(d, loc.jt.P = 2*pnorm(-abs(loc.jt.h2/loc.jt.se)), glo.jt.P = 2*pnorm(-abs(glo.jt.h2/glo.jt.se))) %>% mutate(loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P),glo.jt.P=ifelse(is.na(glo.jt.P),1,glo.jt.P)) %>% mutate(locPlt05=loc.jt.P < 0.05,gloPlt05=glo.jt.P < 0.05) %>% mutate(`distal P`=factor(gloPlt05,labels=c('\u2265 0.05','< 0.05')))
@@ -43,11 +42,9 @@ local <- fdrother %>% select(loc.jt.h2,loc.jt.se,loc.jt.P,locPlt05)%>% arrange(l
 names(local) = c('h2','se','jt.P','Plt05')
 data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
 cigt0 <- data$ymin>0
-table(cigt0)
-sum(table(cigt0))
+cat("local jt.P < 0.05 (distal: known eQTLs)")
 table(data$jt.P < 0.05,useNA='i')
-ptrueCI<-round(table(cigt0)/sum(table(cigt0)),3)*100
-ptrueCI
+sum(table(data$jt.P < 0.05,useNA='i'))
 ptrue <-round(table(data$jt.P < 0.05,useNA='i')/sum(table(data$jt.P < 0.05,useNA='i')),3)*100
 ptrue
 meanh2<-round(mean(data$h2),3)
@@ -64,9 +61,10 @@ names(global) = c('gene','h2','se','jt.P','Plt05')
 data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
 #data <- data[complete.cases(data),]
 cigt0 <- data$ymin>0
-table(cigt0)
 ptrueCI<-round(table(cigt0)/sum(table(cigt0)),3)*100
-ptrueCI
+cat("global jt.P < 0.05 (distal: known eQTLs)")
+table(data$jt.P < 0.05,useNA='i')
+sum(table(data$jt.P < 0.05,useNA='i'))
 ptrue <-signif(table(data$jt.P < 0.05,useNA='i')/sum(table(data$jt.P < 0.05,useNA='i')),3)*100
 ptrue
 meanh2<-round(mean(data$h2),3)
@@ -87,7 +85,6 @@ otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_all.Chr1-2
 other<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
 d  <- other %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se) )
 cigt0 <- d$ymin>0
-table(cigt0)
 ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
 ptrue
 
@@ -100,9 +97,10 @@ local <- other %>% select(loc.jt.h2,loc.jt.se,loc.jt.P,locPlt05) %>% arrange(loc
 names(local) = c('h2','se','jt.P','Plt05')
 data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
 cigt0 <- data$ymin>0
-table(cigt0)
 ptrueCI<-round(table(cigt0)/sum(table(cigt0)),3)*100
-ptrueCI
+cat("local jt.P < 0.05 (distal: all eQTLs)")
+table(data$jt.P < 0.05,useNA='i')
+sum(table(data$jt.P < 0.05,useNA='i'))
 ptrue <-round(table(data$jt.P < 0.05,useNA='i')/sum(table(data$jt.P < 0.05,useNA='i')),3)*100
 ptrue
 meanh2<-round(mean(data$h2),3)
@@ -118,12 +116,13 @@ global <- other %>% select(gene,glo.jt.h2,glo.jt.se,glo.jt.P,gloPlt05) %>% arran
 names(global) = c('gene','h2','se','jt.P','Plt05')
 data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
 cigt0 <- data$ymin>0
-table(cigt0)
 ptrueCI<-round(table(cigt0)/sum(table(cigt0)),3)*100
-ptrueCI
+cat("global jt.P < 0.05 (distal: known eQTLs)")
+table(data$jt.P < 0.05,useNA='i')
+sum(table(data$jt.P < 0.05,useNA='i'))
 ptrue <-signif(table(data$jt.P < 0.05,useNA='i')/sum(table(data$jt.P < 0.05,useNA='i')),3)*100
 ptrue
-meanh2<-round(mean(data$h2),3)
+meanh2<-round(mean(data$h2,useNA="T"),3)
 meanh2
 meanse <- round(mean(data$se),3)
 meanse
