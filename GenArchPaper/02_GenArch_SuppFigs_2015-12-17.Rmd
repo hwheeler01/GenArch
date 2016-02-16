@@ -60,16 +60,16 @@ for(i in 1:9){
   h2vec <- c(h2vec,meanh2)
 }
 pvec<-ifelse(is.na(pvec),0,pvec)
-ann_text <- data.frame( glo.jt.h2 = rep(0.78,9), place = rep(5000,9), percent= pvec, mean_h2 = h2vec, tissue = factor(colnames(a)), ymin=rep(0.9,9), ymax=rep(0.9,9), `CI > 0`=rep(NA,9), se=rep(0.9,9))
+ann_text <- data.frame( glo.jt.h2 = rep(0.25,9), place = rep(0,9), percent= pvec, mean_h2 = h2vec, tissue = factor(colnames(a)), ymin=rep(0.9,9), ymax=rep(0.9,9), `CI > 0`=rep(NA,9), se=rep(0.9,9))
 
-#p3<-p+geom_text(data=ann_text,aes(label=paste("percent_P_lt_0.05 ==",percent,sep=" ")),color="black",show.legend=F,parse=T,hjust=0,size=3)+ theme(legend.justification=c(0,1), legend.position=c(0,1))
+p3<-p+geom_text(data=ann_text,aes(label=paste("percent_P_lt_0.05 ==",percent,sep=" ")),color="black",show.legend=F,parse=T,hjust=0,size=3)+ theme(legend.justification=c(0,1), legend.position=c(0,1))
 print(ann_text)
 
 png(filename=fig.dir %&% "Fig-GTEx_TW_glo.jt.h2.png",width=720,height=480)
-p
+p3
 dev.off()
 tiff(filename=fig.dir %&% "Fig-GTEx_TW_glo.jt.h2.tiff",width=720,height=480)
-p
+p3
 dev.off()
 ```
 
