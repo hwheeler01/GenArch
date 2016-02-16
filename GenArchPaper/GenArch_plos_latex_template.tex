@@ -138,12 +138,12 @@
 \pagestyle{myheadings}
 \pagestyle{fancy}
 \fancyhf{}
-\lhead{\includegraphics[width=2.0in]{plos-latex-template/PLOS-submission.eps}}
+%\lhead{\includegraphics[width=2.0in]{plos-latex-template/PLOS-submission.eps}}
 \rfoot{\thepage/\pageref{LastPage}}
 \renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
 \fancyheadoffset[L]{2.25in}
 \fancyfootoffset[L]{2.25in}
-\lfoot{\sf PLOS}
+%\lfoot{\sf PLOS}
 
 %% Include all macros below
 
@@ -175,9 +175,8 @@ Kaanan P. Shah\textsuperscript{3},
 Jonathon Brenner\textsuperscript{2},
 Tzintzuni Garcia\textsuperscript{4},
 Keston Aquino-Michaels\textsuperscript{3},
-. . .,
 GTEx Consortium,
-. . ., Nancy J. Cox\textsuperscript{5}, Dan L.
+Nancy J. Cox\textsuperscript{5}, Dan L.
 Nicolae\textsuperscript{3}, Hae Kyung Im\textsuperscript{3,*}
 \\
 \bigskip
@@ -263,7 +262,7 @@ We estimated the local and distal heritability of gene expression levels in 40 t
 
 For the local heritability component, we used variants within 1Mb of the transcription start and end of each protein coding gene, whereas for the distal component, we used variants outside of the chromosome where the gene was located. Different approaches to pick the set of distal variants were explored, but results were robust to different selections. See more details in Methods.
 
-Table \ref{table-h2} summarizes the unconstrained heritability estimate results across all tissues. In order to obtain an unbiased estimates of mean h$^2$, we allow the values to be negative when fitting the REML, as done previously \cite{Price_2011,Wright_2014}. This approach reduces the standard error of the estimated mean of heritability, especially important for the distal component. Even though each individual gene's distal heritability is noisy, averaging across all genes reduces the error substantially. For the DGN dataset, we were able to estimate the mean distal h$^2$. However for the GTEx samples, the sample size was too small and the REML algorithm became unstable when allowing for negative values. This numeric instability would cause a small number of genes with large positive (and noisy) heritability values to converge biasing the mean value. For this reason we do not show mean distal heritability estimates for GTEx tissues. 
+Table \ref{table-h2} summarizes the heritability estimate results across all tissues. In order to obtain an unbiased estimates of mean h$^2$, we allow the values to be negative when fitting the REML (unconstrained), as done previously \cite{Price_2011,Wright_2014}. This approach reduces the standard error of the estimated mean of heritability, especially important for the distal component. Even though each individual gene's distal heritability is noisy, averaging across all genes reduces the error substantially. For the DGN dataset, we were able to estimate the mean distal h$^2$. However for the GTEx samples, the sample size was too small and the REML algorithm became unstable when allowing for negative values. This numeric instability would cause only a small number of genes with large positive (and noisy) heritability values to converge biasing the mean value. For this reason we do not show mean distal heritability estimates for GTEx tissues. 
 
 % latex table generated in R 3.2.1 by xtable 1.7-4 package
 % Wed Dec 16 14:40:32 2015
@@ -352,9 +351,9 @@ As a measure of uncertainty, we have added two times the standard errors of each
 
 It has been shown that local-eQTLs are more likely to be distal-eQTLs of target genes \cite{pierce2014mediation}. Thus, we tested whether restricting the distal genetic similarity computation to QTLs (as determined in the Framingham mRNA dataset of over 5000 individuals \cite{Zhang_2015}  independent of the DGN and GTEx cohorts) for other genes could improve distal heritability precision by prioritizing functional variants. We exclude eQTLs on the same chromosome as the tested gene to avoid contaminating distal h$^2$ with cis associations.
 
-Using functional priors (known eQTLs) to define distal h\textsuperscript{2} increased the percentage of genes with a positive CI from 3.0\% (378 genes) to 3.9\% (492) in whole blood (Fig. \ref{fig-dgn-jt-h2}). A total of 143 genes have significant distal h$^2$ by both approaches, i.e. all variants on other chromosomes or only  known eQTL variants on other chromosomes.
+Using functional priors (known eQTLs) to define distal h\textsuperscript{2} increased the percentage of genes with significant heritability from 3.0\% (378 genes) to 3.9\% (492) in whole blood (Fig. \ref{fig-dgn-jt-h2}). A total of 143 genes have significant distal h$^2$ by both approaches, i.e. all variants on other chromosomes or only  known eQTL variants on other chromosomes.
 
-However, using the subset of known eQTLs (from an independent source) in other chromosomes for computing distal heritability reduced the mean value from 0.102 to 0.065. Therefore, while we gain some power to detect significant distal heritability by using cis eQTL priors, a good portion of the distal regulation is lost when using only the smaller subset of known cis-eQTL variants. We used functional priors to estimate distal h$^2$ in the GTEx cohort, but less than 1\% of genes had a $P < 0.05$ (\nameref{S1_Fig}).
+However, using the subset of known eQTLs (from an independent source) in other chromosomes for computing distal heritability reduced the mean value from 0.102 to 0.065 \hl{these number are not right. it was 3/4\% for distal}. Therefore, while we gain some power to detect significant distal heritability by using cis eQTL priors, a good portion of the distal regulation is lost when using only the smaller subset of known cis-eQTL variants. We used functional priors to estimate distal h$^2$ in the GTEx cohort, but less than 1\% of genes had a $P < 0.05$ (\nameref{S1_Fig}).
 
 Given the limited sample size we will focus on local regulation for the remainder of the paper.
 
@@ -423,31 +422,6 @@ This figure shows the comparison between estimates of heritability using BSLMM v
 \label{fig-gtex-pve-h2}
 \end{figure}
 
-%To further validate this result, we used BSLMM {[}18{]} to
-%define the total proportion of variance in expression explained by
-%sparse and polygenic effects together (PVE) and the proportion of this
-% genetic variance explained by sparse effects (PGE) for local SNPs in
-% each gene in the DGN cohort. The PVE can be thought of as a Bayesian
-% estimate of chip heritability and, indeed, there is a strong correlation
-% between BSLMM-estimated PVE and GCTA-estimated h\textsuperscript{2} (Fig
-% 6A, R=0.96). For genes with large PVE, the PGE also was large,
-% indicative of a sparse genetic architecture. For example, all genes with
-% PVE \textgreater{} 0.50 had PGE \textgreater{} 0.82 and their median PGE
-% was 0.989 (Fig 6B). The median PGE for genes with PVE \textgreater{} 0.1
-% was 0.949. Fittingly, for most (96.3\%) of the genes with PVE estimates
-% \textgreater{} 0.10, the median number of SNPs included in the model was
-% no more than 10 (Fig 6C).
-
-% This likely reflects the increased power
-% of the BSLMM method at the lower sample sizes  present
-% in GTEx to estimate variance explained when the trait is more sparse
-% than polygenic. GCTA assumes an underlying polygenic model, but as we
-% saw in DGN, BSLMM-estimated PVE and GCTA-estimated h\textsuperscript{2}
-% are more correlated when the sample size is larger (n=922, Fig 6A). As
-% we observed in DGN, genes with larger PVE estimates were more likely to
-% have a PGE estimate approaching 1 with a lower credible set greater than
-% 0.01 in each of the nine GTEx tissues (Fig 8).
-
 \subsection*{Orthogonal decomposition of cross-tissue and tissue-specific expression traits}
 
 Since a substantial portion of local regulation was shown to be common across multiple tissues \cite{Ardlie_2015}, we sought to decompose the expression levels into a component that is common across all tissues and tissue-specific components. For this we use a linear mixed effects model with a person-level random effect. See details in Methods. We use the posterior mean of this random effect as an estimate of the cross tissue component. We consider the residual component of this model as the tissue specific component. Below we describe the properties of these derived phenotypes.
@@ -456,10 +430,8 @@ We call this approach orthogonal tissue decomposition (OTD) because the cross-ti
 
 \subsection*{Cross-tissue expression phenotype is less noisy and more predictable}%\label{cross-tissue-expression-phenotype-has-increased-predictive-power-and-recapitulates-known-multi-tissue-eqtl-target-genes}
 
-%If our OTD was able to capture the common cross tissue component, we expected to observe higher h2 for the cross tissue traits compared to the original expression in each tissue. This is because our approach uses the data from multiple tissues to capture the substantial common component while averaging out the noise. Also because of this leveraging of multiple measurements we have a larger effective sample size for the cross tissue expression traits (450 for cross tissue vs less than 362 for each tissue). This is expected to translate in smaller standard errors of the cross tissue h2 compare to tissue level h2. 
-
-Our estimates of h\textsuperscript{2} for cross tissue expression traits are larger than the corresponding estimates for each whole tissue expression traits (\nameref{S3_Fig}). %For the remainder of this paper we will refer to the original tissue expression levels as whole tissue expression to distinguish from the tissue specific component, which does not have the cross tissue component.
-This means that our OTD approach increases the ratio of genetically regulated component to noise by averaging across multiple tissues. In addition to the increased h\textsuperscript{2} we observe reduction in standard errors of the estimated h\textsuperscript{2}. This is partly due to the increased h\textsuperscript{2} -- higher h\textsuperscript{2} are better estimated-- but also due to the larger effective sample size for cross tissue phenotypes. There were 450 samples for which cross tissue traits were available whereas the maximum sample size for whole tissue phenotypes was 362. As consequence of this increased h\textsuperscript{2} and decreased standard errors, the percentage of cross h\textsuperscript{2} estimates with $P < 0.05$ was 35.4\% whereas for whole tissue expression traits they ranged from 8.5-19.0\% (Table \ref{table-h2}). Similarly, cross-tissue BSLMM PVE estimates had lower error than whole tissue PVE (\nameref{S4_Fig}, \nameref{S5_Fig}). 
+Our estimates of h\textsuperscript{2} for cross tissue expression traits are larger than the corresponding estimates for each whole tissue expression traits (\nameref{S3_Fig}).
+This is due to the fact that our OTD approach increases the ratio of genetically regulated component to noise by averaging across multiple tissues. In addition to the increased h\textsuperscript{2} we observe reduction in standard errors of the estimated h\textsuperscript{2}. This is partly due to the increased h\textsuperscript{2} -- higher h\textsuperscript{2} are better estimated-- but also due to the larger effective sample size for cross tissue phenotypes. There were 450 samples for which cross tissue traits were available whereas the maximum sample size for whole tissue phenotypes was 362. As consequence of this increased h\textsuperscript{2} and decreased standard errors, the percentage of cross h\textsuperscript{2} estimates with $P < 0.05$ was 35.4\% whereas for whole tissue expression traits they ranged from 8.5-19.0\% (Table \ref{table-h2}). Similarly, cross-tissue BSLMM PVE estimates had lower error than whole tissue PVE (\nameref{S4_Fig}, \nameref{S5_Fig}). 
 
 As for the tissue-specific components, 
 the cross-tissue heritability estimates were also larger and the standard errors were smaller reflecting the fact that a substantial portion of regulation is common across tissues (\nameref{S6_Fig}). The percentage of GCTA h\textsuperscript{2} estimates with $P < 0.05$ was much larger for cross-tissue expression (35.4\%) than the tissue-specific expressions (7.6-17.7\%, \nameref{S1_Table}). Similarly, the percentage of BSLMM PVE estimates with a lower credible set greater than 0.01 was 49\% for cross-tissue expression, but ranged from 24-27\% for tissue-specific expression (\nameref{S5_Fig}).
@@ -479,9 +451,9 @@ Cross-tissue predictive performance exceeded that of both tissue-specific and wh
 
 \subsection*{Cross Tissue expression phenotype recapitulates published multi-tissue eQTL results}
 
-To verify that the cross tissue phenotype has the properties we expect, we compared our OTD results to those from a joint multi-tissue eQTL analysis method \cite{Flutre_2013}, which was previously performed on a subset of the GTEx data \cite{Ardlie_2015} covering 9 tissues. In particular, we used the posterior probability of a gene being actively regulated  (PPA) in a tissue. These analysis results are available on the GTEx portal.
+To verify that the cross tissue phenotype has the properties we expect, we compared our OTD results to those from a joint multi-tissue eQTL analysis  \cite{Flutre_2013}, which was previously performed on a subset of the GTEx data \cite{Ardlie_2015} covering 9 tissues. In particular, we used the posterior probability of a gene being actively regulated  (PPA) in a tissue. These analysis results are available on the GTEx portal.
 
-First, we reasoned that genes with high cross tissue h\textsuperscript{2} would be actively regulated in most tissues so that the PPA of a gene would be roughly uniform across tissues. By contrast, a gene with tissue specific regulation would have concentrated posterior probability in one or a few tissues. Thus we decided to define a measure of uniformity of the posterior probability vector across the 9 tissues using the concept of entropy. More specifically, for each gene we normalized the vector of posterior probabilities so that the sum equaled 1. Then we applied the usual entropy definition (negative of the sum of the log of the posterior probabilities weighted by the same probabilities, see Methods). In other words, we defined an entropy statistic that combines the nine posterior probabilities into one value such that higher entropy values mean the gene regulation is more uniform across all nine tissues, rather than in just a small subset of the nine.
+First, we reasoned that genes with high cross tissue h\textsuperscript{2} would be actively regulated in most tissues so that the PPA of a gene would be roughly uniform across tissues. By contrast, a gene with tissue specific regulation would have concentrated posterior probability in one or a few tissues. Thus we decided to define a measure of uniformity of the posterior probability vector across the 9 tissues using the concept of entropy. More specifically, for each gene we normalized the vector of posterior probabilities so that the sum equaled 1. Then we applied the usual entropy definition (negative of the sum of the log of the posterior probabilities weighted by the same probabilities, see Methods). In other words, we defined a uniformity statistic that combines the nine posterior probabilities into one value such that higher values mean the gene regulation is more uniform across all nine tissues, rather than in just a small subset of the nine.
 
 Thus we expected that genes with high cross tissue heritability, i.e. large cross tissue regulation would show high probability of being active in multiple tissues, thus high uniformity measure. Reassuringly, this is exactly what we find.
 Figure \ref{fig-ct-entropy} shows that genes with high cross tissue heritability concentrate on the higher end of the uniformity measure. 
@@ -530,11 +502,13 @@ In DGN (whole blood), the mean local h$^2$ was 14.3\% and the mean distal h$^2$ 
 %To Haky, I did not see mention of distal proportion, I did see:
 % "...with cis-eQTLs explaining a median of 3.3% of expression variance (median 7.7% among genes with an eQTL),..."
 
-We showed that restricting distal variants to known functional variants such as eQTL data from independent studies improves the precision of distal heritability estimates, but also reduces mean distal heritability estimates by half. For GTEx tissues, we computed the distal heritability using only the subset of functional (known eQTLs) variants to reduce the errors in the estimates at the expense of missing variants that contribute to the traits.
+We showed that restricting distal variants to known functional variants such as eQTL data from independent studies improves the precision of distal heritability estimates, but also reduces mean distal heritability estimates by half \hl{we need to re-check these numbers}. %For GTEx tissues, we computed the distal heritability using only the subset of functional (known eQTLs) variants to reduce the errors in the estimates at the expense of missing variants that contribute to the traits.
 
 Using results implied by the improved predictive performance of sparse models and by directly estimating sparsity using BSLMM (Bayesian Sparse Linear Mixed Model), we show evidence that for highly heritable genes, local regulation is sparse across all the tissues analyzed here. For genes with moderate and low heritability the evidence is not as strong, but results are consistent with a sparse local architecture. Better methods to correct for hidden confounders that do not dilute distal signals and larger sample sizes will be needed to determine the properties of distal regulation. 
 
-Given that a substantial portion of local regulation is shared across tissues, we propose here to decompose the expression traits into cross-tissue and tissue-specific components. This approach, called orthogonal tissue decomposition, aims to decouple the shared regulation from the tissue-specific regulation. We examined the genetic architecture of these derived traits and find that they follow similar patterns to the original whole tissue expression traits. The cross-tissue component benefits from an effectively larger sample size than any individual tissue trait, which is reflected in more accurate heritability estimates and consistently better prediction performance. Encouragingly, heritability estimates of cross-tissue traits correlate well with a measure of uniformity of regulation across tissues defined as the entropy of the vector of probability for a gene to be regulated in a given tissue. Higher entropy genes will show more uniform regulation across tissues. As for the tissue-specific expression traits, we found that they recapitulate correlation with the vector of probability of tissue-specific regulation. The main application for which these traits were devised is to be used as prediction models in PrediXcan \cite{Gamazon_2015}. We expect results from the cross-tissue models to relate to mechanisms that are shared across multiple tissues whereas results from the tissue-specific models will inform us about the context specific mechanisms. 
+Given that a substantial portion of local regulation is shared across tissues, we propose here to decompose the expression traits into cross-tissue and tissue-specific components. This approach, called orthogonal tissue decomposition, aims to decouple the shared regulation from the tissue-specific regulation. We examined the genetic architecture of these derived traits and find that they follow similar patterns to the original whole tissue expression traits. The cross-tissue component benefits from an effectively larger sample size than any individual tissue trait, which is reflected in more accurate heritability estimates and consistently better prediction performance. Encouragingly, we find that genes with high cross tissue heritability tend to be regulated more uniformly across tissues. As for the tissue-specific expression traits, we found that they recapitulate correlation with the vector of probability of tissue-specific regulation. 
+
+Prediction models of these decoupled expression traits will be useful to interpret the association results from PrediXcan \cite{Gamazon_2015}. We expect results from the cross-tissue models to relate to mechanisms that are shared across multiple tissues whereas results from the tissue-specific models will inform us about the context specific mechanisms. 
 
 In this paper, we quantitate the genetic architecture of gene expression and develop predictors across tissues. We show that local heritability can be accurately estimated across tissues, but distal heritability cannot be reliably estimated at current sample sizes. Using two different approaches, the elastic net and BSLMM, we show that for local gene regulation, the genetic architecture is mostly sparse rather than polygenic. Using new expression phenotypes generated in our OTD model, we show that cross-tissue predictive performance exceeded that of both tissue-specific and whole tissue expression as indicated by higher elastic net cross-validated R\textsuperscript{2}. Predictors generated in this study of gene expression architecture have been added to our PredictDB database (\url{https://github.com/hakyimlab/PrediXcan}) for use in future studies of complex trait genetics.
 
@@ -583,7 +557,7 @@ subsequent analyses.
 
 \paragraph*{Framingham Expression Dataset.}\label{framingham-dataset}
 
-We obtained exon array expression and genotype array data from 5257 \hl{[Tzuni, what is your n?]} individuals from the Framingham Heart Study \cite{Zhang_2015}. We used the Affymetrix power tools (APT) suite to perform the preprocessing and normalization steps. First the robust multi-array analysis (RMA) protocol was applied which consists of three steps: background correction, quantile normalization, and summarization \cite{irizarry2003summaries}. The background correction step uses antigenomic probes that do not match known genome sequences to adjust the baseline for detection, and is applied separately to each array. Next, the normalization step utilizes a 'sketch' quantile normalization technique instead of a memory-intensive full quantile normalization. The benefit is a much lower memory requirement with little accuracy trade-off for large sample sets such as this one. Finally, the adjusted probe values were summarized (by the median polish method) into log-transformed expression values such that one value is derived per exon or gene. Additionally an analysis of the detection of probes above the background noise (DABG) was carried out. It provides further diagnostic information which can be used to filter out poorly performing probes and weakly expressed genes.  The summarized expression values were then annotated more fully using the annotation databases contained in the huex10stprobeset.db (exon-level annotations) and huex10sttranscriptcluster.db (gene-level annotations) R packages available from Bioconductor \cite{MacDonald_1,MacDonald_2}. In both cases gene annotations were provided for each feature. 
+We obtained exon array expression and genotype array data from 5257 individuals from the Framingham Heart Study \cite{Zhang_2015}. The final sample size after QC was 4286. We used the Affymetrix power tools (APT) suite to perform the preprocessing and normalization steps. First the robust multi-array analysis (RMA) protocol was applied which consists of three steps: background correction, quantile normalization, and summarization \cite{irizarry2003summaries}. The background correction step uses antigenomic probes that do not match known genome sequences to adjust the baseline for detection, and is applied separately to each array. Next, the normalization step utilizes a 'sketch' quantile normalization technique instead of a memory-intensive full quantile normalization. The benefit is a much lower memory requirement with little accuracy trade-off for large sample sets such as this one. Finally, the adjusted probe values were summarized (by the median polish method) into log-transformed expression values such that one value is derived per exon or gene. Additionally an analysis of the detection of probes above the background noise (DABG) was carried out. It provides further diagnostic information which can be used to filter out poorly performing probes and weakly expressed genes.  The summarized expression values were then annotated more fully using the annotation databases contained in the huex10stprobeset.db (exon-level annotations) and huex10sttranscriptcluster.db (gene-level annotations) R packages available from Bioconductor \cite{MacDonald_1,MacDonald_2}. In both cases gene annotations were provided for each feature. 
 
 Plink \cite{chang2014second} was used for data wrangling and cleaning steps. The data wrangling steps included updating probe IDs, unifying data to the positive strand, and updating locations to GRCh37. The data cleaning steps included a step to filter for variant and subject missingness and minor alleles, one to filter variants with Hardy-Weinberg exact test, and a step to remove unusual heterozygosity. Additionally, we used the HRC-check-bin tool in order to carry out data wrangling steps required to make our data compatible with the Haplotype Reference Consortium (HRC) panel (\url{http://www.well.ox.ac.uk/~wrayner/tools/}). Having been prepared thusly, the data were split by chromosome and pre-phased with SHAPEIT \cite{delaneau2012linear} using the 1000 Genomes phase 3 panel and converted to vcf format. These files were then submitted to the Michigan Imputation Server (\url{https://imputationserver.sph.umich.edu/start.html}) \cite{Howie_2012,Fuchsberger_2014} for imputation with the HRC version 1 panel \cite{mccarthy2015reference}.  We applied Matrix eQTL \cite{shabalin2012matrix} to the normalized expression and imputed genotype data to generate prior eQTLs for our heritability analysis.
 
@@ -622,7 +596,7 @@ it is an accepted procedure used in order to avoid bias in the estimated mean \c
 \subsection*{Determining polygenicity versus sparsity using the elastic
 net}\label{determining-polygenicity-versus-sparsity-using-the-elastic-net}
 
-We used the glmnet package to fit an elastic net model where the tuning parameter is chosen via 10 fold cross validation to maximize prediction performance measure by Pearson's R$^2$ \cite{Friedman_2010, Simon_2011}.
+We used the glmnet package to fit an elastic net model where the tuning parameter is chosen via 10 fold cross validation to maximize prediction performance measured by Pearson's R$^2$ \cite{Friedman_2010, Simon_2011}.
 
 %  applied the elastic net {[}24{]} to model the effect of local genetic
 % variation (SNPs within 1 Mb of gene) on the genetic architecture of gene
@@ -792,6 +766,16 @@ Health grants 5RC2MH089916 (PI: Douglas F. Levinson, M.D.;
 Coinvestigators: Myrna M. Weissman, Ph.D., James B. Potash, M.D., MPH,
 Daphne Koller, Ph.D., and Alexander E. Urban, Ph.D.) and 3R01MH090941
 (Co-investigator: Daphne Koller, Ph.D.).
+
+\paragraph{Framingham data.}
+
+The Framingham Heart Study is conducted and supported by the National Heart, Lung, and Blood Institute (NHLBI) in collaboration with Boston University (Contract No. N01-HC-25195 and HHSN268201500001I). This manuscript was not prepared in collaboration with investigators of the Framingham Heart Study and does not necessarily reflect the opinions or views of the Framingham Heart Study, Boston University, or NHLBI.
+
+Funding for SHARe Affymetrix genotyping was provided by NHLBI Contract N02-HL- 64278. SHARe Illumina genotyping was provided under an agreement between Illumina and Boston University. Funding for Affymetrix genotyping of the FHS Omni cohorts was provided by Intramural NHLBI funds from Andrew D. Johnson and Christopher J. O?Donnell.
+
+Additional funding for SABRe was provided by Division of Intramural Research, NHLBI, and Center for Population Studies, NHLBI.
+
+The following datasets were downloaded from dbGaP: phs000363.v12.p9 and phs000342.v13.p9.
 
 \paragraph{Computing resources.}\label{computing-resources}
 
