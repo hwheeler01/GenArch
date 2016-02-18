@@ -32,7 +32,8 @@ numexpgenes <- dim(dgn)[1]
 meanh2 <- sprintf("%.3f",mean(dgn$loc.jt.h2,na.rm=TRUE))
 semean <- sprintf("%.4f",se(dgn$loc.jt.h2))
 meanandse <- meanh2 %&% " (" %&% semean %&% ")"
-pest <-  dgn %>% mutate(loc.jt.P=ifelse(loc.jt.h2 > 0, 2*pnorm(-abs(loc.jt.h2/loc.jt.se)),1))  %>% arrange(loc.jt.h2) %>% mutate(Plt05=loc.jt.P<0.05) 
+#pest <-  dgn %>% mutate(loc.jt.P=ifelse(loc.jt.h2 > 0, 2*pnorm(-abs(loc.jt.h2/loc.jt.se)),1))  %>% arrange(loc.jt.h2) %>% mutate(Plt05=loc.jt.P<0.05) 
+pest <-  dgn %>% mutate(loc.jt.P=2*pnorm(-abs(loc.jt.h2/loc.jt.se)))  %>% arrange(loc.jt.h2) %>% mutate(Plt05=loc.jt.P<0.05)
 propsig <- sprintf("%.1f",table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100)
 numsig <- table(pest$Plt05)[2]
 table1[1,] <- c("DGN Whole Blood",n,meanandse,propsig,numsig,numexpgenes)
@@ -41,8 +42,8 @@ table1[1,] <- c("DGN Whole Blood",n,meanandse,propsig,numsig,numexpgenes)
 ct <- read.table(my.dir %&% 'cross-tissue.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-14.txt',header=T)
 n <- ct$N[1]
 numexpgenes <- dim(ct)[1] 
-meanh2 <- sprintf("%.3f",mean(ct$loc.jt.h2,na.rm=TRUE))
-semean <- sprintf("%.4f",se(ct$loc.jt.h2))
+meanh2 <- sprintf("%.3f",mean(ct$local.h2,na.rm=TRUE))
+semean <- sprintf("%.4f",se(ct$local.h2))
 meanandse <- meanh2 %&% " (" %&% semean %&% ")"
 pest <-  ct %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% arrange(local.h2) %>% mutate(Plt05=local.p<0.05)
 propsig <- sprintf("%.1f",table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100)
@@ -54,7 +55,8 @@ signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)
 signif(se(dgn$loc.jt.h2),3)
 signif(mean(dgn$glo.jt.h2,na.rm=TRUE),3)
 signif(se(dgn$glo.jt.h2),3)
-pest <-  dgn %>% mutate(glo.jt.P=ifelse(glo.jt.h2 > 0, 2*pnorm(-abs(glo.jt.h2/glo.jt.se)),1))  %>% arrange(glo.jt.h2) %>% mutate(Plt05=glo.jt.P<0.05) 
+#pest <-  dgn %>% mutate(glo.jt.P=ifelse(glo.jt.h2 > 0, 2*pnorm(-abs(glo.jt.h2/glo.jt.se)),1))  %>% arrange(glo.jt.h2) %>% mutate(Plt05=glo.jt.P<0.05) 
+pest <-  dgn %>% mutate(glo.jt.P=2*pnorm(-abs(glo.jt.h2/glo.jt.se)))  %>% arrange(glo.jt.h2) %>% mutate(Plt05=glo.jt.P<0.05) 
 propsig <- sprintf("%.1f",table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100)
 propsig
 table(pest$Plt05)

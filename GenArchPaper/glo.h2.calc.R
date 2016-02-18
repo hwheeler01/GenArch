@@ -38,7 +38,8 @@ otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05
 
 fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
 d  <- fdrother %>% mutate(ymin = glo.jt.h2 - 2 * glo.jt.se, ymax = glo.jt.h2 + 2 * glo.jt.se)
-fdrother <- mutate(d, loc.jt.P = ifelse(loc.jt.h2 > 0, 2*pnorm(-abs(loc.jt.h2/loc.jt.se)),1) , glo.jt.P = ifelse(glo.jt.h2 > 0, 2*pnorm(-abs(glo.jt.h2/glo.jt.se)),1)) 
+#fdrother <- mutate(d, loc.jt.P = ifelse(loc.jt.h2 > 0, 2*pnorm(-abs(loc.jt.h2/loc.jt.se)),1) , glo.jt.P = ifelse(glo.jt.h2 > 0, 2*pnorm(-abs(glo.jt.h2/glo.jt.se)),1)) 
+fdrother <- mutate(d, loc.jt.P = 2*pnorm(-abs(loc.jt.h2/loc.jt.se)) , glo.jt.P = 2*pnorm(-abs(glo.jt.h2/glo.jt.se))) 
 fdrother <- mutate(fdrother, loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P),glo.jt.P=ifelse(is.na(glo.jt.P),1,glo.jt.P)) %>% 
   mutate(locPlt05=loc.jt.P < 0.05,gloPlt05=glo.jt.P < 0.05) %>% mutate(`distal P`=factor(gloPlt05,labels=c('\u2265 0.05','< 0.05')))
 table(fdrother$gloPlt05)
@@ -98,7 +99,8 @@ otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05
 other<-read.table(otherfile,header=T) ##all SNPs on non-gene chromosomes used to define global GRM
 d  <- other %>% mutate(ymin =  glo.jt.h2 - 2 * glo.jt.se, ymax =  glo.jt.h2 + 2 * glo.jt.se )
 
-other <- mutate(d, loc.jt.P = ifelse(loc.jt.h2 > 0, 2*pnorm(-abs(loc.jt.h2/loc.jt.se)),1), glo.jt.P = ifelse(glo.jt.h2 > 0, 2*pnorm(-abs(glo.jt.h2/glo.jt.se)),1)) %>% mutate(loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P),glo.jt.P=ifelse(is.na(glo.jt.P),1,glo.jt.P)) %>%   mutate(locPlt05=loc.jt.P < 0.05,gloPlt05=glo.jt.P < 0.05) %>% mutate(`distal P`=factor(gloPlt05,labels=c('\u2265 0.05','< 0.05')))
+#other <- mutate(d, loc.jt.P = ifelse(loc.jt.h2 > 0, 2*pnorm(-abs(loc.jt.h2/loc.jt.se)),1), glo.jt.P = ifelse(glo.jt.h2 > 0, 2*pnorm(-abs(glo.jt.h2/glo.jt.se)),1)) %>% mutate(loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P),glo.jt.P=ifelse(is.na(glo.jt.P),1,glo.jt.P)) %>%   mutate(locPlt05=loc.jt.P < 0.05,gloPlt05=glo.jt.P < 0.05) %>% mutate(`distal P`=factor(gloPlt05,labels=c('\u2265 0.05','< 0.05')))
+other <- mutate(d, loc.jt.P = 2*pnorm(-abs(loc.jt.h2/loc.jt.se)) , glo.jt.P = 2*pnorm(-abs(glo.jt.h2/glo.jt.se))) %>% mutate(loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P),glo.jt.P=ifelse(is.na(glo.jt.P),1,glo.jt.P)) %>%   mutate(locPlt05=loc.jt.P < 0.05,gloPlt05=glo.jt.P < 0.05) %>% mutate(`distal P`=factor(gloPlt05,labels=c('\u2265 0.05','< 0.05')))
 table(other$gloPlt05)
 
 aother<-ggplot(other,aes(x=loc.jt.h2,y=glo.jt.h2,color=`distal P`)) + geom_point(cex=1,alpha=2/3) + 
