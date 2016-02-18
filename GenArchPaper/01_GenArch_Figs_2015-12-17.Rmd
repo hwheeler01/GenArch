@@ -82,7 +82,7 @@ c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=P) ) + geom_point
 ##make same plots using all SNPs on other chrs for global
 otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_all.Chr1-22_globalOtherChrallSNPs.2015-10-22.txt'
 
-other<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
+other<-read.table(otherfile,header=T) ##all SNPs on non-gene chromosomes used to define global GRM
 d  <- other %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se) )
 cigt0 <- d$ymin>0
 ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
