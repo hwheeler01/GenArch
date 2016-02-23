@@ -57,9 +57,9 @@ signif(mean(dgn$glo.jt.h2,na.rm=TRUE),3)
 signif(se(dgn$glo.jt.h2),3)
 #pest <-  dgn %>% mutate(glo.jt.P=ifelse(glo.jt.h2 > 0, 2*pnorm(-abs(glo.jt.h2/glo.jt.se)),1))  %>% arrange(glo.jt.h2) %>% mutate(Plt05=glo.jt.P<0.05) 
 pest <-  dgn %>% mutate(glo.jt.P=2*pnorm(-abs(glo.jt.h2/glo.jt.se)))  %>% arrange(glo.jt.h2) %>% mutate(Plt05=glo.jt.P<0.05) 
-propsig <- sprintf("%.1f",table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100)
+propsig <- table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100
 propsig
-table(pest$Plt05)
+table(pest$Plt05,useNA="i")
 ##prop loc
 signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)/(signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)+signif(mean(dgn$glo.jt.h2,na.rm=TRUE),3))
 
