@@ -235,11 +235,11 @@ MacDonald JW.
   huex10sttranscriptcluster).
 \newblock R package;version 8.3.1.
 
-\bibitem{chang2014second}
-Chang CC, Chow CC, Tellier LC, Vattikuti S, Purcell SM, Lee JJ.
+\bibitem{chang2015second}
+Chang CC, Chow CC, Tellier L, Vattikuti S, Purcell SM, Lee JJ.
 \newblock Second-generation PLINK: rising to the challenge of larger and richer
   datasets.
-\newblock ArXiv e-prints. 2014;.
+\newblock Gigascience. 2015;4(7).
 
 \bibitem{delaneau2012linear}
 Delaneau O, Marchini J, Zagury JF.
@@ -293,5 +293,19 @@ Bates D, M{\"a}chler M, Bolker BM, Walker S.
 {R Core Team}. R: A Language and Environment for Statistical Computing.
 \newblock Vienna, Austria; 2015.
 \newblock Available from: \url{http://www.R-project.org/}.
+
+\bibitem{grossman2012design}
+Grossman RL, Greenway M, Heath AP, Powell R, Suarez RD, Wells W, et~al.
+\newblock The design of a community science cloud: The open science data cloud
+  perspective.
+\newblock In: High Performance Computing, Networking, Storage and Analysis
+  (SCC), 2012 SC Companion:. IEEE; 2012. p. 1051--1057.
+
+\bibitem{heath2014bionimbus}
+Heath AP, Greenway M, Powell R, Spring J, Suarez R, Hanley D, et~al.
+\newblock Bionimbus: a cloud for managing, analyzing and sharing large genomics
+  datasets.
+\newblock Journal of the American Medical Informatics Association.
+  2014;21(6):969--975.
 
 \end{thebibliography}
