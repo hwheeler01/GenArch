@@ -8,14 +8,14 @@ args <- commandArgs(trailingOnly=T)
 ### Directories & Variables
 
 my.dir <- "/group/im-lab/nas40t2/hwheeler/cross-tissue/"
-exp.dir <- my.dir %&% "gtex-rnaseq/ind-tissues-from-nick/"
-annot.dir <- my.dir %&% "gtex-annot/"
-gt.dir <- my.dir %&% "gtex-genotypes/"
-en.dir <- my.dir %&% "gtex-OTD-weights/"
+ct.dir <- "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/"
+annot.dir <- "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/"
+gt.dir <- "/group/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/DGN-WB_genotypes/by.chr/"
+en.dir <- my.dir %&% "DGN-weights/"
 
 k <- 10 ### k-fold CV
 n <- 1 #number of k-fold CV replicates, remove nrep loop for this implementation
-tis <- args[3] 
+tis <- "DGN-WB"  
 
 ##alpha = The elasticnet mixing parameter, with 0≤α≤ 1. The penalty is defined as
 #(1-α)/2||β||_2^2+α||β||_1.
@@ -23,8 +23,9 @@ tis <- args[3]
 
 alpha <- as.numeric(args[2]) #alpha to test in CV
 
-gencodefile <- annot.dir %&% "gencode.v18.genes.patched_contigs.summary.protein.chr" %&% args[1] ##genes split into 22 files
+gencodefile <- annot.dir %&% 'gencode.v12.V1.summary.protein.nodup.genenames'
 chrom <- args[1]
+chrname <- "chr" %&% chrom
 
 snpset <- "hapmapSnpsCEU"
 
@@ -37,42 +38,42 @@ library(glmnet)
 #getDoParWorkers()
 
 ################################################
-rpkmid <- exp.dir %&% "GTEx_PrediXmod." %&% tis %&% ".exp.adj.15PEERfactors.3PCs.gender.ID.list"
-rpkmgene <- exp.dir %&% "GTEx_PrediXmod." %&% tis %&% ".exp.adj.15PEERfactors.3PCs.gender.GENE.list"
-rpkmfile <- exp.dir %&% "GTEx_PrediXmod." %&% tis %&% ".exp.adj.15PEERfactors.3PCs.gender.IDxGENE.RDS"
-
+rpkmid <- ct.dir %&% tis %&% ".exp.ID.list"
 expid <- scan(rpkmid,"character")
+rpkmgene <- ct.dir %&% tis %&% ".exp.GENE.list"
 geneid <- scan(rpkmgene,"character")
-expdata <- readRDS(rpkmfile)
-###THIS messed up the results (transposes matrix and then mislabels it-D'OH!), don't need this step when using .RDS file input: expdata <- matrix(expdata, ncol = length(geneid), byrow=TRUE)
+rpkmfile <- ct.dir %&% tis %&% ".exp.IDxGENE"
+expdata <- scan(rpkmfile)
+expdata <- matrix(expdata, ncol = length(geneid), byrow=TRUE)
 rownames(expdata) <- expid
 colnames(expdata) <- geneid
 
 t.expdata <- expdata #don't need to transpose DGN
 
 gencode <- read.table(gencodefile)
-rownames(gencode) <- gencode[,5]
+rownames(gencode) <- gencode[,6]
+gencode <- gencode[gencode[,1]==chrname,] ##pull genes on chr of interest
 t.expdata <- t.expdata[,intersect(colnames(t.expdata),rownames(gencode))] ###pull gene expression data w/gene info
-
+                
 expsamplelist <- rownames(t.expdata) ###samples with exp data###
               	
-bimfile <- gt.dir %&% "GTEx_Analysis_2014-06-13.hapmapSnpsCEU.chr" %&% chrom %&% ".bim" ###get SNP position information###
+
+bimfile <- gt.dir %&% "DGN.hapmap2.QC.chr" %&% chrom %&% ".bim" ###get SNP position information###
 bim <- read.table(bimfile)
 rownames(bim) <- bim$V2
-                
-famfile <- gt.dir %&% "GTEx_Analysis_2014-06-13.hapmapSnpsCEU.ID.list"
-fam <- scan(famfile,"character")
-samplelist <- intersect(fam,expsamplelist)
-                        
+
+famfile <- gt.dir %&% "DGN.hapmap2.QC.chr" %&% chrom %&% ".fam" ###samples with gt data###
+fam <- read.table(famfile)
+samplelist <- intersect(fam$V1,expsamplelist)
+
 exp.w.geno <- t.expdata[samplelist,] ###get expression of samples with genotypes###
 explist <- colnames(exp.w.geno)
 
-gtfile <- gt.dir %&% 'GTEx_Analysis_2014-06-13.hapmapSnpsCEU.chr' %&% chrom %&% '.mldose.gz'
-gtX <- read.table(gtfile)
-a<-gtX[,3:dim(gtX)[2]]
-gtX <- as.matrix(a)
+gtfile <- gt.dir %&% tis %&% '.gt.chr' %&% chrom %&% '.IDxSNP'
+gtX <- scan(gtfile)
+gtX <- matrix(gtX, ncol = length(bim$V2), byrow=TRUE)
 colnames(gtX) <- bim$V2
-rownames(gtX) <- fam
+rownames(gtX) <- fam$V1
 X <- gtX[samplelist,]
 
 set.seed(42)
@@ -82,11 +83,11 @@ resultsarray <- array(0,c(length(explist),8))
 dimnames(resultsarray)[[1]] <- explist
 resultscol <- c("gene","alpha","cvm","lambda.iteration","lambda.min","n.snps","R2","pval")
 dimnames(resultsarray)[[2]] <- resultscol
-workingbest <- "working_TW_" %&% tis %&% "_exp_" %&% k %&% "-foldCV_elasticNet_alpha" %&% alpha %&% "_" %&% snpset %&% "_chr" %&% chrom %&% "_" %&% date %&% ".txt"
+workingbest <- "working_" %&% tis %&% "_exp_" %&% k %&% "-foldCV_elasticNet_alpha" %&% alpha %&% "_" %&% snpset %&% "_chr" %&% chrom %&% "_" %&% date %&% ".txt"
 write(resultscol,file=workingbest,ncolumns=8,sep="\t")
 
 weightcol = c("gene","SNP","refAllele","effectAllele","beta")
-workingweight <- en.dir %&% "TW_" %&% tis %&% "_elasticNet_alpha" %&% alpha %&% "_" %&% snpset %&% "_weights_chr" %&% chrom %&% "_" %&% date %&% ".txt"
+workingweight <- en.dir %&% tis %&% "_elasticNet_alpha" %&% alpha %&% "_" %&% snpset %&% "_weights_chr" %&% chrom %&% "_" %&% date %&% ".txt"
 write(weightcol,file=workingweight,ncol=5,sep="\t")
 
 
@@ -160,4 +161,4 @@ for(i in 1:length(explist)){
 }
 
 
-write.table(resultsarray,file="TW_" %&% tis %&% "_exp_" %&% k %&% "-foldCV_elasticNet_alpha" %&% alpha %&% "_" %&% snpset %&% "_chr" %&% chrom %&% "_" %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
+write.table(resultsarray,file=tis %&% "_exp_" %&% k %&% "-foldCV_elasticNet_alpha" %&% alpha %&% "_" %&% snpset %&% "_chr" %&% chrom %&% "_" %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
