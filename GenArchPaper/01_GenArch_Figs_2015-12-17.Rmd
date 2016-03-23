@@ -146,7 +146,7 @@ dev.off()
 
 ##Fig 2
 ###DGN Polygenic v. sparse  by elastic net.
-```{r EN, echo=TRUE, warning=FALSE, message=FALSE,eval=FALSE}
+```{r EN, echo=TRUE, warning=FALSE, message=FALSE,eval=TRUE}
 data<-read.table(my.dir %&% 'DGN-WB_exp_10-foldCV_1-reps_elasticNet_eachAlphaR2_hapmap2snps_chr22_2015-01-21.txt',header=T)
 colnames(data)<-c("gene",0:20/20)
 a <- data$gene %in% fdrother$gene
@@ -187,7 +187,7 @@ dev.off()
 
 ##Fig 3
 ###DGN BSLMM
-```{r dgn-bslmm}
+```{r dgn-bslmm, eval=TRUE}
 gcta <- read.table('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt',header=TRUE)
 bslmm <- read.table(my.dir %&% 'DGN-WB_exp_BSLMM-s100K_iterations_all_genes_2015-06-14.txt',header=T)
 all <- inner_join(gcta,bslmm,by='gene')
@@ -220,7 +220,7 @@ summary(subdata$pge50)
 
 ##Fig 4
 ####plot tissue-wide PVE vs GCTA marginal h2
-```{r twBSh2,warning=FALSE,message=FALSE,eval=FALSE}
+```{r twBSh2,warning=FALSE,message=FALSE,eval=TRUE}
 tislist <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.tissue.list',sep="\n",what="character")
 tw <- data.frame()
 rvec<-vector()
@@ -253,7 +253,7 @@ dev.off()
 ##Fig 5
 ###Calculate entropy of Pr and correlate with **cross-tissue and tissue-specific** h2 
 - higher entropy means more likely to be multi-tissue eQTL (expect positive cor. for entropy vs. cross-tissue h2)
-```{r,entropTSh2}
+```{r,entropTSh2,eval=TRUE}
 mt.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/Multi_tissue_eQTL_GTEx_Pilot_Phase_datasets/"
 h2.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/"
 bslmm.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/BSLMM_exp/"
@@ -307,7 +307,10 @@ dev.off()
 
 ##Fig 6
 ###Table of Pr vs PVE correlations
-```{r PrPVE}
+```{r PrPVE, eval=TRUE}
+pve.tw <- read.table(bslmm.dir %&% "GTEx_Tissue-Wide_local_PVE_by_BSLMM.txt",header=TRUE)
+#remove version number in order to compare ensembl IDs
+pve.tw <- mutate(pve.tw,gene=substr(pve.tw$gene,1,15))
 mtPVE <- inner_join(mt,pve.tw,by='gene')
 corMat <- round(cor(mtPVE[,3:dim(mtPVE)[2]],use="p"),3)
 ###Pr rows, PVE cols
@@ -317,6 +320,9 @@ rownames(mat2.tw)<-c('Adipose','Artery','WholeBlood','Heart','Lung','Muscle','Ne
 mat2.tw <- mat2.tw[ order(row.names(mat2.tw)), ]
 rownames(mat2.tw)[1] <- 'PPA: Adipose'
 
+pve.ts <- read.table(bslmm.dir %&% "GTEx_Tissue-Specific_local_PVE_by_BSLMM.txt",header=TRUE)
+#remove version number in order to compare ensembl IDs
+pve.ts <- mutate(pve.ts,gene=substr(pve.ts$gene,1,15))
 mtPVE <- inner_join(mt,pve.ts,by='gene')
 corMat <- round(cor(mtPVE[,3:dim(mtPVE)[2]],use="p"),3)
 ###Pr rows, PVE cols
