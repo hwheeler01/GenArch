@@ -13,6 +13,7 @@ output: html_document
   library(GGally)
   library(grid)
   "%&%" = function(a,b) paste(a,b,sep="")
+  se <- function(x) sqrt(var(x,na.rm=TRUE)/length(is.na(x)==FALSE))
   source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/GTEx_2014-06013_release/transfers/PrediXmod/Paper_plots/multiplot.R')
   my.dir <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/'
   fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
@@ -24,21 +25,41 @@ output: html_document
 ```{r, loc.jt.tw,eval=TRUE,fig.width=8,fig.height=8}
 dgn <- read.table(my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globalAll_reml-no-constrain.2015-12-15.txt',header=T)
 tislist <- scan(my.dir %&% 'gtex-rnaseq/ind-tissues-from-nick/GTEx_PrediXmod.tissue.list',sep="\n",what="character")
-table1 <- matrix(0,nrow=length(tislist)+1,ncol=7)
+tisspacelist <- scan(my.dir %&% '40.tissue.list',sep="\n",what="character")
+table1 <- matrix(0,nrow=length(tislist)+2,ncol=6)
 n <- dgn$N[1]
 numexpgenes <- dim(dgn)[1] 
-meanh2 <- signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)
-meanse <- signif(mean(dgn$loc.jt.se,na.rm=TRUE),3)
-ciest <-  dgn %>% mutate(ymin = pmax(0, loc.jt.h2 - 2 * loc.jt.se), ymax = pmin(1, loc.jt.h2 + 2 * loc.jt.se)) %>% arrange(loc.jt.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(dgn$tissue)) 
-propsig <- signif(table(ciest$nonzeroCI)[2]/sum(table(ciest$nonzeroCI,useNA="i")),3)
-numsig <- signif(table(ciest$nonzeroCI)[2],3)
-table1[1,] <- c("DGN-WholeBlood",n,meanh2,meanse,propsig,numsig,numexpgenes)
+meanh2 <- sprintf("%.3f",mean(dgn$loc.jt.h2,na.rm=TRUE))
+semean <- sprintf("%.4f",se(dgn$loc.jt.h2))
+meanandse <- meanh2 %&% " (" %&% semean %&% ")"
+#pest <-  dgn %>% mutate(loc.jt.P=ifelse(loc.jt.h2 > 0, 2*pnorm(-abs(loc.jt.h2/loc.jt.se)),1))  %>% arrange(loc.jt.h2) %>% mutate(Plt05=loc.jt.P<0.05) 
+pest <-  dgn %>% mutate(loc.jt.P=2*pnorm(-abs(loc.jt.h2/loc.jt.se)))  %>% arrange(loc.jt.h2) %>% mutate(Plt05=loc.jt.P<0.05)
+propsig <- sprintf("%.1f",table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100)
+numsig <- table(pest$Plt05)[2]
+table1[1,] <- c("DGN Whole Blood",n,meanandse,propsig,numsig,numexpgenes)
+
+#add cross-tissue to table 1
+ct <- read.table(my.dir %&% 'cross-tissue.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-14.txt',header=T)
+n <- ct$N[1]
+numexpgenes <- dim(ct)[1] 
+meanh2 <- sprintf("%.3f",mean(ct$local.h2,na.rm=TRUE))
+semean <- sprintf("%.4f",se(ct$local.h2))
+meanandse <- meanh2 %&% " (" %&% semean %&% ")"
+pest <-  ct %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% arrange(local.h2) %>% mutate(Plt05=local.p<0.05)
+propsig <- sprintf("%.1f",table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100)
+numsig <- table(pest$Plt05)[2]
+table1[2,] <- c("Cross-tissue",n,meanandse,propsig,numsig,numexpgenes)
 
 ##calc mean global for DGN
 signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)
-signif(mean(dgn$loc.jt.se,na.rm=TRUE),3)
+signif(se(dgn$loc.jt.h2),3)
 signif(mean(dgn$glo.jt.h2,na.rm=TRUE),3)
-signif(mean(dgn$glo.jt.se,na.rm=TRUE),3)
+signif(se(dgn$glo.jt.h2),3)
+#pest <-  dgn %>% mutate(glo.jt.P=ifelse(glo.jt.h2 > 0, 2*pnorm(-abs(glo.jt.h2/glo.jt.se)),1))  %>% arrange(glo.jt.h2) %>% mutate(Plt05=glo.jt.P<0.05) 
+pest <-  dgn %>% mutate(glo.jt.P=2*pnorm(-abs(glo.jt.h2/glo.jt.se)))  %>% arrange(glo.jt.h2) %>% mutate(Plt05=glo.jt.P<0.05) 
+propsig <- table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100
+propsig
+table(pest$Plt05,useNA="i")
 ##prop loc
 signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)/(signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)+signif(mean(dgn$glo.jt.h2,na.rm=TRUE),3))
 
@@ -49,15 +70,17 @@ for(i in 1:length(tislist)){
   data <- dplyr::filter(data,ensid %in% explist)
   n <- data$N[1]
   numexpgenes <- dim(data)[1] ##num expressed genes mean(RPKM)>0.1
-  meanh2 <- signif(mean(data$local.h2,na.rm=TRUE),3)
-  meanse <- signif(mean(data$local.se,na.rm=TRUE),3)
-  ciest <-  data %>% mutate(ymin = pmax(0, local.h2 - 2 * local.se), ymax = pmin(1, local.h2 + 2 * local.se)) %>% arrange(local.h2) %>% mutate(nonzeroCI=ymin>0,place=1:length(data$tissue)) 
-  propsig <- signif(table(ciest$nonzeroCI)[2]/sum(table(ciest$nonzeroCI,useNA="i")),3)
-  numsig <- signif(table(ciest$nonzeroCI)[2],3)
-  tableinfo <- c(tis,n,meanh2,meanse,propsig,numsig,numexpgenes)
-  table1[i+1,] <- tableinfo
+  meanh2 <- sprintf("%.3f",mean(data$local.h2,na.rm=TRUE))
+  semean <- sprintf("%.4f",se(data$local.h2))
+  pest <-  data %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% arrange(local.h2) %>% mutate(Plt05=local.p<0.05) 
+  propsig <- sprintf("%.1f",table(pest$Plt05)[2]/sum(table(pest$Plt05,useNA="i"))*100)
+  numsig <- table(pest$Plt05)[2]
+  tisspace <- tisspacelist[i]
+  meanandse <- meanh2 %&% " (" %&% semean %&% ")"
+  tableinfo <- c(tisspace,n,meanandse,propsig,numsig,numexpgenes)
+  table1[i+2,] <- tableinfo
 }
-colnames(table1)=c("tissue","n","mean h2","mean se","prop CI > 0","num CI > 0","num expressed")
+colnames(table1)=c("tissue","n","mean h2 (SE)","% P<0.05","num P<0.05","num expressed")
 #table1
 
 library(xtable)

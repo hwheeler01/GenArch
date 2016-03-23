@@ -1,4 +1,4 @@
-This is BibTeX, Version 0.99d (TeX Live 2015)
+This is BibTeX, Version 0.99d (TeX Live 2014)
 Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
 The top-level auxiliary file: GenArch_plos_latex_template.aux
 The style file: plos-latex-template/plos2015.bst
@@ -11,45 +11,45 @@ Warning--empty year in MacDonald_1
 Warning--empty year in MacDonald_2
 Warning--empty author and editor in R_Core_Team_2015
 Warning--missing publisher in R_Core_Team_2015
-You've used 46 entries,
+You've used 47 entries,
             3170 wiz_defined-function locations,
-            995 strings with 25523 characters,
-and the built_in function-call counts, 178982 in all, are:
-= -- 21323
-> -- 896
-< -- 1
-+ -- 793
-- -- 224
-* -- 17265
-:= -- 19449
-add.period$ -- 214
-call.type$ -- 46
-change.case$ -- 0
+            1000 strings with 25976 characters,
+and the built_in function-call counts, 183766 in all, are:
+= -- 21915
+> -- 928
+< -- 2
++ -- 804
+- -- 232
+* -- 17707
+:= -- 19956
+add.period$ -- 217
+call.type$ -- 47
+change.case$ -- 2
 chr.to.int$ -- 0
-cite$ -- 50
-duplicate$ -- 8124
-empty$ -- 18318
-format.name$ -- 265
-if$ -- 40991
+cite$ -- 51
+duplicate$ -- 8411
+empty$ -- 18787
+format.name$ -- 274
+if$ -- 42104
 int.to.chr$ -- 0
-int.to.str$ -- 46
-missing$ -- 581
-newline$ -- 266
-num.names$ -- 46
-pop$ -- 912
+int.to.str$ -- 47
+missing$ -- 596
+newline$ -- 270
+num.names$ -- 47
+pop$ -- 930
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 1010
+skip$ -- 1054
 stack$ -- 0
-substring$ -- 45742
-swap$ -- 1277
-text.length$ -- 1
+substring$ -- 46888
+swap$ -- 1326
+text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 4
-while$ -- 519
-width$ -- 48
-write$ -- 570
+while$ -- 534
+width$ -- 49
+write$ -- 581
 (There were 4 warnings)

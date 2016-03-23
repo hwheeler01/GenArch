@@ -235,11 +235,11 @@ MacDonald JW.
   huex10sttranscriptcluster).
 \newblock R package;version 8.3.1.
 
-\bibitem{chang2014second}
-Chang CC, Chow CC, Tellier LC, Vattikuti S, Purcell SM, Lee JJ.
+\bibitem{chang2015second}
+Chang CC, Chow CC, Tellier L, Vattikuti S, Purcell SM, Lee JJ.
 \newblock Second-generation PLINK: rising to the challenge of larger and richer
   datasets.
-\newblock ArXiv e-prints. 2014;.
+\newblock Gigascience. 2015;4(7).
 
 \bibitem{delaneau2012linear}
 Delaneau O, Marchini J, Zagury JF.
@@ -283,22 +283,29 @@ Zhou X, Stephens M.
 \newblock Nature Genetics. 2012;44(7):821--824.
 \newblock Available from: \url{http://dx.doi.org/10.1038/ng.2310}.
 
-\bibitem{Im_2012}
-Im HK, Gamazon ER, Stark AL, Huang RS, Cox NJ, Dolan ME.
-\newblock Mixed Effects Modeling of Proliferation Rates in Cell-Based Models:
-  Consequence for Pharmacogenomics and Cancer.
-\newblock {PLoS} Genetics. 2012;8(2):e1002525.
-\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1002525}.
+\bibitem{Bates_2015a}
+Bates D, M{\"a}chler M, Bolker BM, Walker S.
+\newblock Fitting Linear Mixed-Effects Models using {lme4}.
+\newblock Journal of Statistical Software. 2015;67(1):1--48.
+\newblock Available from: \url{http://dx.doi.org/10.18637/jss.v067.i01}.
 
 \bibitem{R_Core_Team_2015}
 {R Core Team}. R: A Language and Environment for Statistical Computing.
 \newblock Vienna, Austria; 2015.
 \newblock Available from: \url{http://www.R-project.org/}.
 
-\bibitem{Bates_2015a}
-Bates D, M{\"a}chler M, Bolker BM, Walker S.
-\newblock Fitting Linear Mixed-Effects Models using {lme4}.
-\newblock Journal of Statistical Software. 2015;67(1):1--48.
-\newblock Available from: \url{http://dx.doi.org/10.18637/jss.v067.i01}.
+\bibitem{grossman2012design}
+Grossman RL, Greenway M, Heath AP, Powell R, Suarez RD, Wells W, et~al.
+\newblock The design of a community science cloud: The open science data cloud
+  perspective.
+\newblock In: High Performance Computing, Networking, Storage and Analysis
+  (SCC), 2012 SC Companion:. IEEE; 2012. p. 1051--1057.
+
+\bibitem{heath2014bionimbus}
+Heath AP, Greenway M, Powell R, Spring J, Suarez R, Hanley D, et~al.
+\newblock Bionimbus: a cloud for managing, analyzing and sharing large genomics
+  datasets.
+\newblock Journal of the American Medical Informatics Association.
+  2014;21(6):969--975.
 
 \end{thebibliography}
