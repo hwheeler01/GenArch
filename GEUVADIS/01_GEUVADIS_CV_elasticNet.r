@@ -33,6 +33,10 @@ library(glmnet)
 library(dplyr)
 ################################################
 
+##get genenames for db script
+gencode <- read.table(annot.dir %&% "gencode.v18.genes.patched_contigs.summary.protein")
+gencode <- mutate(gencode,shortens=substr(V5,1,15),genename=as.character(V6)) %>% dplyr::select(shortens,genename)
+
 ##make list of needed population samples
 samples <- read.table(gt.dir %&% "samples.txt")
 gtsamplelist <- as.character(samples$V1)
@@ -71,9 +75,10 @@ dimnames(resultsarray)[[2]] <- resultscol
 workingbest <- exp.dir %&% "GEUVADIS_" %&% pop %&% "_exp_" %&% k %&% "-foldCV_elasticNet_alpha" %&% alpha %&% "_" %&% snpset %&% "_chr" %&% chrom %&% "_" %&% date %&% ".txt"
 write(resultscol,file=workingbest,ncolumns=8,sep="\t")
 
-weightcol = c("gene","SNP","refAllele","effectAllele","beta")
+#weightcol = c("gene","SNP","refAllele","effectAllele","beta")
+weightcol = c("gene", "rsid", "ref", "alt", "beta", "alpha") #col headers for use with generate_sqlite_dbs.py
 workingweight <- en.dir %&% "GEUVADIS_" %&% pop %&% "_elasticNet_alpha" %&% alpha %&% "_" %&% snpset %&% "_weights_chr" %&% chrom %&% "_" %&% date %&% ".txt"
-write(weightcol,file=workingweight,ncol=5,sep="\t")
+write(weightcol,file=workingweight,ncolumns=6,sep="\t")
 
 for(i in 1:length(explist)){
   cat(i,"/",length(explist),"\n")
@@ -87,7 +92,6 @@ for(i in 1:length(explist)){
   expmat <- as.matrix(popexp[,4:dim(popexp)[2]]) #make exp only in matrix format for glmnet
   expmat <- t(expmat) #transpose to match previous code
   colnames(expmat) <- popexp$TargetID #carry gene IDs along
-###START HERE
   if(is.null(dim(cismat))){
     bestbetas <- data.frame() ###effectively skips genes with <2 cis-SNPs
   }else{
@@ -131,8 +135,8 @@ for(i in 1:length(explist)){
     bestbetalist <- names(bestbetas)
     bestbetainfo <- cisgenos[bestbetalist,1:5]
     betatable<-as.matrix(cbind(bestbetainfo,bestbetas))
-    betafile<-cbind(gene,betatable[,2],betatable[,4],betatable[,5],betatable[,6]) ##output "gene","SNP","refAllele","effectAllele","beta"
-    write(t(betafile),file=workingweight,ncolumns=5,append=T,sep="\t") # t() necessary for correct output from write() function
+    betafile<-cbind(gene,betatable[,2],betatable[,4],betatable[,5],betatable[,6],alpha) ##output "gene","SNP","refAllele","effectAllele","beta","alpha"
+    write(t(betafile),file=workingweight,ncolumns=6,append=T,sep="\t") # t() necessary for correct output from write() function
 
   }else{
     resultsarray[gene,1] <- gene
@@ -142,4 +146,10 @@ for(i in 1:length(explist)){
   write(resultsarray[gene,],file=workingbest,ncolumns=8,append=T,sep="\t")
 }
 
-write.table(resultsarray,file=exp.dir %&% "GEUVADIS_" %&% pop %&% "_exp_" %&% k %&% "-foldCV_elasticNet_alpha" %&% alpha %&% "_" %&% snpset %&% "_chr" %&% chrom %&% "_" %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
+#add hugo genenames
+newres <- data.frame(resultsarray)
+newres <- mutate(newres,shortens=substr(gene,1,15))
+newres <- left_join(newres,gencode,by="shortens") %>% mutate(genename=ifelse(is.na(genename),shortens,genename))
+results <- dplyr::select(newres,gene,alpha,cvm,lambda.iteration,lambda.min,n.snps,R2,pval, genename)
+
+write.table(results,file=exp.dir %&% "GEUVADIS_" %&% pop %&% "_exp_" %&% k %&% "-foldCV_elasticNet_alpha" %&% alpha %&% "_" %&% snpset %&% "_chr" %&% chrom %&% "_" %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
