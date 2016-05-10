@@ -1,0 +1,143 @@
+---
+title: "07_plot_en_h2"
+author: "Heather Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+```{r}
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(GGally)
+library(tidyr)
+"%&%" = function(a,b) paste(a,b,sep="")
+my.dir = "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/GEUVADIS/"
+```
+
+### Pairwise comparison of E-N R2
+```{r,fig.width=10,fig.height=10}
+pops = scan(my.dir %&% 'poplist','c')
+ for(alpha in c(0, 0.5,1)){ #rerun with 0 when CEU chr1 finishes
+  for(pop in pops){
+    data <- fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_exp_10-foldCV_elasticNet_alpha" %&% alpha %&% "_1KGP_geuMAF0.01_all_chr1-22_2016-04-16.txt")
+    R2 = data.frame(dplyr::select(data,R2)) %>% mutate(R2=ifelse(is.na(R2),0,R2)) #set NAs to zero
+    colnames(R2) = pop
+    if(exists("allR2") == FALSE){
+      allR2 = R2
+    }else{
+      allR2 <- cbind(allR2, R2)
+    }
+  }
+  print(ggpairs(allR2,lower=list(continuous="points",params=c(cex=0.7,ylim=c(0,1),xlim=c(0,1))),diag=list(continuous='blank'),title="E-N (alpha=" %&% alpha %&% ") 10-fold CV R2"))
+  rm("allR2")
+}
+```
+
+### Pairwise comparison of GCTA h2
+```{r, fig.width=10,fig.height=10}
+pops = scan(my.dir %&% 'poplist','c')
+for(pop in pops){
+    data <- fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_exp_gcta_reml_local_h2_1KGP_geuMAF0.01_all_chr1-22_2016-05-02.txt")
+    h2 = data.frame(dplyr::select(data,local.h2)) %>% mutate(local.h2=ifelse(is.na(local.h2),0,local.h2)) #set NAs to zero
+    colnames(h2) = pop
+    if(exists("allh2") == FALSE){
+      allh2 = h2
+    }else{
+      allh2 <- cbind(allh2, h2)
+    }
+  }
+print(ggpairs(allh2,lower=list(continuous="points",params=c(cex=0.7,ylim=c(0,1),xlim=c(0,1))),diag=list(continuous='blank'),title="h2 estimates"))
+rm("allh2")
+```
+
+### Compare E-N in YRI to other pops
+```{r,fig.width=10,fig.height=10}
+pops = scan(my.dir %&% 'poplist','c')
+for(alpha in c(0,0.5,1)){ #rerun with 0 when CEU chr1 finishes
+  for(pop in pops){
+    data <- fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_exp_10-foldCV_elasticNet_alpha" %&% alpha %&% "_1KGP_geuMAF0.01_all_chr1-22_2016-04-16.txt")
+    R2 = data.frame(dplyr::select(data,R2)) %>% mutate(R2=ifelse(is.na(R2),0,R2)) #set NAs to zero
+    colnames(R2) = pop
+    if(exists("allR2") == FALSE){
+      allR2 = R2
+    }else{
+      allR2 <- cbind(allR2, R2)
+    }
+  }
+  comp <- gather(allR2,pop,R2,-YRI) %>% mutate(diff=YRI-R2)
+  print(ggplot(comp, aes(pop,diff,fill=pop,color=pop)) +  ylab("YRI R2 - pop R2") + coord_cartesian(ylim=c(-1,1)) + 
+      geom_point(position=position_jitterdodge(),size=1) +
+      geom_boxplot(fill="white",outlier.colour = NA, position = position_dodge()) + ggtitle("E-N alpha=" %&% alpha))
+  topcomp <- filter(comp,diff>0.25)
+  print(ggplot(topcomp,aes(pop,fill=pop)) + geom_bar() + ggtitle("Number of genes R2 diff > 0.25"))
+  botcomp <- filter(comp,diff<(-0.25))
+  print(ggplot(botcomp,aes(pop,fill=pop)) + geom_bar() + ggtitle("Number of genes R2 diff < -0.25"))
+  rm("allR2")
+}
+```
+
+### Compare E-N in GBR to other pops
+```{r,fig.width=10,fig.height=10}
+pops = scan(my.dir %&% 'poplist','c')
+for(alpha in c(0,0.5,1)){ #rerun with 0 when CEU chr1 finishes
+  for(pop in pops){
+    data <- fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_exp_10-foldCV_elasticNet_alpha" %&% alpha %&% "_1KGP_geuMAF0.01_all_chr1-22_2016-04-16.txt")
+    R2 = data.frame(dplyr::select(data,R2)) %>% mutate(R2=ifelse(is.na(R2),0,R2)) #set NAs to zero
+    colnames(R2) = pop
+    if(exists("allR2") == FALSE){
+      allR2 = R2
+    }else{
+      allR2 <- cbind(allR2, R2)
+    }
+  }
+  comp <- gather(allR2,pop,R2,-GBR) %>% mutate(diff=GBR-R2)
+  print(ggplot(comp, aes(pop,diff,fill=pop,color=pop)) +  ylab("GBR R2 - pop R2") + coord_cartesian(ylim=c(-1,1)) + 
+      geom_point(position=position_jitterdodge(),size=1) +
+      geom_boxplot(fill="white",outlier.colour = NA, position = position_dodge()) + ggtitle("E-N alpha=" %&% alpha))
+  topcomp <- filter(comp,diff>0.25)
+  print(ggplot(topcomp,aes(pop,fill=pop)) + geom_bar() + ggtitle("Number of genes R2 diff > 0.25"))
+  botcomp <- filter(comp,diff<(-0.25))
+  print(ggplot(botcomp,aes(pop,fill=pop)) + geom_bar() + ggtitle("Number of genes R2 diff < -0.25"))
+  rm("allR2")
+}
+```
+
+### Compare E-N in ALL to other pops
+```{r,fig.width=10,fig.height=10}
+pops = scan(my.dir %&% 'poplist','c')
+for(alpha in c(0,0.5,1)){ #rerun with 0 when CEU chr1 finishes
+  for(pop in pops){
+    data <- fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_exp_10-foldCV_elasticNet_alpha" %&% alpha %&% "_1KGP_geuMAF0.01_all_chr1-22_2016-04-16.txt")
+    R2 = data.frame(dplyr::select(data,R2)) %>% mutate(R2=ifelse(is.na(R2),0,R2)) #set NAs to zero
+    colnames(R2) = pop
+    if(exists("allR2") == FALSE){
+      allR2 = R2
+    }else{
+      allR2 <- cbind(allR2, R2)
+    }
+  }
+  comp <- gather(allR2,pop,R2,-ALL) %>% mutate(diff=ALL-R2)
+  print(ggplot(comp, aes(pop,diff,fill=pop,color=pop)) +  ylab("ALL R2 - pop R2") + coord_cartesian(ylim=c(-1,1)) + 
+      geom_point(position=position_jitterdodge(),size=1) +
+      geom_boxplot(fill="white",outlier.colour = NA, position = position_dodge()) + ggtitle("E-N alpha=" %&% alpha))
+  topcomp <- filter(comp,diff>0.25)
+  print(ggplot(topcomp,aes(pop,fill=pop)) + geom_bar() + ggtitle("Number of genes R2 diff > 0.25"))
+  botcomp <- filter(comp,diff<(-0.25))
+  print(ggplot(botcomp,aes(pop,fill=pop)) + geom_bar() + ggtitle("Number of genes R2 diff < -0.25"))
+  rm("allR2")
+}
+```
+
+### h2 vs R2
+```{r}
+pops = scan(my.dir %&% 'poplist','c')
+ for(alpha in c(0,0.5,1)){ #rerun with 0 when CEU chr1 finishes
+  for(pop in pops){
+    h2 = fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_exp_gcta_reml_local_h2_1KGP_geuMAF0.01_all_chr1-22_2016-05-02.txt") %>% mutate(ymin = pmax(0, local.h2 - 2 * local.se), ymax = pmin(1, local.h2 + 2 * local.se), local.h2=ifelse(is.na(local.h2),0,local.h2)) #set NAs to zero
+    r2 =fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_exp_10-foldCV_elasticNet_alpha" %&% alpha %&% "_1KGP_geuMAF0.01_all_chr1-22_2016-04-16.txt") %>% mutate(ensid=gene,R2=ifelse(is.na(R2),0,R2)) 
+    all = inner_join(h2,r2,by='ensid') %>% arrange(local.h2)
+    p1<-ggplot(all,aes(x=1:nrow(all),y=local.h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()
+    print(p1 + geom_point(data=all,aes(x=1:nrow(all),y=R2),color='red',cex=0.8) + xlab(expression("Genes sorted by h"^2)) + ylab(expression(h^{2} ~"(black) or " ~ R^{2} ~ "(red)")) +theme_bw(20) + ggtitle(pop %&% " E-N (alpha=" %&% alpha %&% ")"))
+  }
+}
+```
