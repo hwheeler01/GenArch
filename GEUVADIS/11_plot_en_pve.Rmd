@@ -1,0 +1,67 @@
+---
+title: "11_plot_en_pve"
+author: "Heather Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+```{r}
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(GGally)
+library(tidyr)
+"%&%" = function(a,b) paste(a,b,sep="")
+my.dir = "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/GEUVADIS/"
+```
+
+### Pairwise comparison of BSLMM PVE
+```{r, fig.width=10,fig.height=10}
+pops = scan(my.dir %&% 'poplist','c')
+for(pop in pops){
+    data <- fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_BSLMM-s100K_iterations_all_chr1-22_2016-05-11.txt")
+    h2 = data.frame(dplyr::select(data,pve50)) #%>% mutate(local.h2=ifelse(is.na(local.h2),0,local.h2)) #set NAs to zero
+    colnames(h2) = pop
+    if(exists("allh2") == FALSE){
+      allh2 = h2
+    }else{
+      allh2 <- cbind(allh2, h2)
+    }
+  }
+print(ggpairs(allh2,lower=list(continuous="points",params=c(cex=0.7,ylim=c(0,1),xlim=c(0,1))),diag=list(continuous='blank'),title="BSLMM PVE estimates"))
+rm("allh2")
+```
+
+### PVE vs R2
+```{r}
+pops = scan(my.dir %&% 'poplist','c')
+ for(alpha in c(0,0.5,1)){ 
+  for(pop in pops){
+    h2 = fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_BSLMM-s100K_iterations_all_chr1-22_2016-05-11.txt") %>% mutate(ymin = pve025, ymax = pve975, ensid=gene) #set NAs to zero
+    r2 =fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_exp_10-foldCV_elasticNet_alpha" %&% alpha %&% "_1KGP_geuMAF0.01_all_chr1-22_2016-05-10.txt") %>% mutate(ensid=gene,R2=ifelse(is.na(R2),0,R2)) 
+    all = inner_join(h2,r2,by='ensid') %>% arrange(pve50)
+    p1<-ggplot(all,aes(x=1:nrow(all),y=pve50,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()
+    print(p1 + geom_point(data=all,aes(x=1:nrow(all),y=R2),color='red',cex=0.8) + xlab(expression("Genes sorted by h"^2)) + ylab(expression(h^{2} ~"(black) or " ~ R^{2} ~ "(red)")) +theme_bw(20) + ggtitle(pop %&% " E-N (alpha=" %&% alpha %&% ")"))
+    print(cor.test(all$pve50,all$R2))
+  }
+}
+```
+
+### PVE vs gcta h2
+```{r,fig.width=8,fig.height=6}
+pops = scan(my.dir %&% 'poplist','c')
+for(pop in pops){
+  pve = fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_BSLMM-s100K_iterations_all_chr1-22_2016-05-11.txt") %>% mutate(ymin = pve025, ymax = pve975, ensid=gene) #set NAs to zero
+  h2 = fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_exp_gcta_reml_local_h2_1KGP_geuMAF0.01_all_chr1-22_2016-05-02.txt") %>% mutate(ymin = pmax(0, local.h2 - 2 * local.se), ymax = pmin(1, local.h2 + 2 * local.se), local.h2=ifelse(is.na(local.h2),0,local.h2)) #set NAs to zero
+  all = inner_join(h2,pve,by='ensid') %>% arrange(pve50) %>% mutate(population=pop)
+  p1<-ggplot(all,aes(x=local.h2,y=pve50)) + geom_point()
+  print(pop)
+  print(cor.test(all$pve50,all$local.h2))
+  if(exists("allh2pve") == FALSE){
+    allh2pve <- all
+  }else{
+    allh2pve <- rbind(allh2pve, all)
+  }
+}
+ggplot(allh2pve,aes(x=local.h2,y=pve50)) + geom_point(alpha=0.2) + facet_wrap(~population) + theme_bw(14) + xlab("GCTA h2") + ylab("BSLMM h2")
+ggplot(allh2pve,aes(x=pve50,y=pge50)) + geom_point(alpha=0.2) + facet_wrap(~population) + theme_bw(14) + xlab("BSLMM PVE") + ylab("BSLMM PGE")
+```
