@@ -112,3 +112,29 @@ pops = scan(my.dir %&% 'poplist','c')
   }
 }
 ```
+
+### R2 diff (lasso - alpha) v. R2 lasso
+```{r}
+pops = scan(my.dir %&% 'poplist','c')
+
+for(pop in pops){
+  r2_0 =fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_exp_10-foldCV_elasticNet_alpha0_1KGP_geuMAF0.01_all_chr1-22_2016-05-10.txt") %>% mutate(R2=ifelse(is.na(R2),0,R2)) %>% select(gene,alpha,R2)
+  r2_05 = fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_exp_10-foldCV_elasticNet_alpha0.5_1KGP_geuMAF0.01_all_chr1-22_2016-05-10.txt") %>% mutate(R2=ifelse(is.na(R2),0,R2)) %>% select(gene,alpha,R2)
+  r2_1 = fread(my.dir %&% "GEUVADIS_" %&% pop %&% "_exp_10-foldCV_elasticNet_alpha1_1KGP_geuMAF0.01_all_chr1-22_2016-05-10.txt") %>% mutate(R2=ifelse(is.na(R2),0,R2)) %>% select(gene,alpha,R2) 
+    
+  r2_01 = inner_join(r2_0,r2_1,by='gene')
+  r2_51 = inner_join(r2_05,r2_1,by='gene') 
+  all = rbind(r2_01,r2_51) 
+  all = all[complete.cases(all),]
+  colnames(all) = c('gene','alpha','R2','alpha1','lasso')
+  all=mutate(all,alpha=factor(alpha),pop=pop)
+  if(exists("allR2") == FALSE){
+    allR2 = all
+  }else{
+    allR2 <- rbind(allR2, all)
+  }
+}
+
+p<-ggplot(allR2, aes(y = lasso - R2, x = lasso, group=alpha, color=alpha)) + geom_point(show_guide = TRUE) + ylab(expression(paste("R"^2, " difference (LASSO - alpha)"))) + xlab(expression(paste("R"^2, " (LASSO)"))) +theme_bw() + facet_wrap(~pop,ncol=3)
+print(p)
+```
