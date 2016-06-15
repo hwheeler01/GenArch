@@ -83,3 +83,4 @@ for(i in 1:length(ensidlist)){
 
 
 ./ldak.4.9 --cut-genes testgene --sp dgn-sp-format/DGN.imputed_maf0.05_R20.8.hapmapSnpsCEU.chr22 --genefile genefile --weights chr22/weightsALL 
+./ldak.4.9 --calc-genes-reml testgene --pheno phenofile --sp dgn-sp-format/DGN.imputed_maf0.05_R20.8.hapmapSnpsCEU.chr22 --partition 1 --weights chr22/weightsALL

@@ -70,7 +70,7 @@ for(alpha in c(0,0.5,1)){
       geom_boxplot(fill="white",outlier.colour = NA, position = position_dodge()) + ggtitle("E-N alpha=" %&% alpha))
   topcomp <- filter(comp,abs(diff)>0.25)
   print(ggplot(topcomp,aes(pop,fill=pop)) + geom_bar() + ggtitle("Number of genes abs(R2 diff) > 0.25 E-N alpha=" %&% alpha))
-  rm("allR2")
+  #rm("allR2")
 }
 ```
 

@@ -88,7 +88,9 @@ working100K <- out.dir %&% "working_" %&% tis %&% "_TW_exp_BSLMM-s100K_iteration
 	"_" %&% date %&% ".txt"
 write(resultscol,file=working100K,ncolumns=19,sep="\t")
 
-for(i in 47:length(explist)){
+tisnoparenth <- gsub("\\(|\\)","",tis) #replace parentheses in string
+
+for(i in 1:length(explist)){
   cat(i,"/",length(explist),"\n")
   gene <- explist[i]
   geneinfo <- gencode[gene,]
@@ -106,19 +108,19 @@ for(i in 47:length(explist)){
     genofile <- cbind(cisbim[,1],cisbim[,5:dim(cisbim)[2]])
     phenofile <- data.frame(exp.w.geno[,gene])
 
-    write.table(annotfile, file=out.dir %&% "tmppTW.annot." %&% chrom %&% ".s." %&% whichlist, quote=F, row.names=F, 
+    write.table(annotfile, file=out.dir %&% "tmppTW.annot." %&% chrom %&% tisnoparenth %&% whichlist, quote=F, row.names=F, 
 	col.names=F, sep=",")
-    write.table(genofile, file=out.dir %&% "tmppTW.geno." %&% chrom %&% ".s." %&% whichlist, quote=F, row.names=F, 
+    write.table(genofile, file=out.dir %&% "tmppTW.geno." %&% chrom %&% tisnoparenth %&% whichlist, quote=F, row.names=F, 
 	col.names=F, sep=",")
-    write.table(phenofile, file=out.dir %&% "tmppTW.pheno." %&% chrom %&% ".s." %&% whichlist, quote=F, row.names=F,
+    write.table(phenofile, file=out.dir %&% "tmppTW.pheno." %&% chrom %&% tisnoparenth %&% whichlist, quote=F, row.names=F,
 	col.names=F, sep=",")
 
-    runBSLMM <- "gemma -g " %&% out.dir %&% "tmppTW.geno." %&% chrom %&% ".s." %&% whichlist %&% " -p " %&% out.dir %&% 
-	"tmppTW.pheno." %&% chrom %&% ".s." %&% whichlist %&% " -a " %&% out.dir %&% "tmppTW.annot." %&% chrom %&% ".s." %&% 
-	whichlist %&% " -bslmm 1 -seed 12345 -s 100000 -o tmppTW." %&% chrom %&% ".s." %&% whichlist
+    runBSLMM <- "gemma -g " %&% out.dir %&% "tmppTW.geno." %&% chrom %&% tisnoparenth %&% whichlist %&% " -p " %&% out.dir %&% 
+	"tmppTW.pheno." %&% chrom %&% tisnoparenth %&% whichlist %&% " -a " %&% out.dir %&% "tmppTW.annot." %&% chrom %&% tisnoparenth %&% 
+	whichlist %&% " -bslmm 1 -seed 12345 -s 100000 -o tmppTW." %&% chrom %&% tisnoparenth %&% whichlist
     system(runBSLMM)
 
-    hyp <- read.table(bslmm.out.dir %&% "output/tmppTW." %&% chrom %&% ".s." %&% whichlist %&% ".hyp.txt",header=T)
+    hyp <- read.table(bslmm.out.dir %&% "output/tmppTW." %&% chrom %&% tisnoparenth %&% whichlist %&% ".hyp.txt",header=T)
     hyp50 <- hyp[(dim(hyp)[1]/2+1):dim(hyp)[1],] #take second half of sampling iterations
     quantres <- apply(hyp50,2,getquant)
     res <- c(gene,quantres[1,],quantres[2,],quantres[3,])
