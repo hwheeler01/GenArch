@@ -1,10 +1,9 @@
 ####by Heather E. Wheeler 20141114####
 args <- commandArgs(trailingOnly=T)
-args <- "22"
+#args <- "22"
 "%&%" = function(a,b) paste(a,b,sep="")
 date = Sys.Date()
 library(dplyr)
-library(data.table)
 
 pre.dir <- "/group/im-lab/nas40t2/hwheeler/cross-tissue/"
 my.dir <- pre.dir %&% "expArch_DGN-WB_imputedGTs/"
@@ -24,16 +23,15 @@ bim <- read.table(bimfile)
 rownames(bim) <- bim$V2
 
 ###get dosage data
-#gt <- readRDS(gt.dir %&% "DGN.imputed_maf0.05_R20.8_1000G.chr" %&% args[1] %&% ".SNPxID.rds")
 gt <- read.table(gt.dir %&% "DGN.imputed_maf0.05_R20.8.hapmapSnpsCEU.chr" %&% args[1] %&% ".SNPxID")
 
 ### Scan expression data
 idfile <- rna.dir %&% "DGN-WBexp.ID.list"
-genefile <- rna.dir %&% "DGN-WBexp.GENE.list"
+genef <- rna.dir %&% "DGN-WBexp.GENE.list"
 expfile <- rna.dir %&% "DGN-WB.rntransform.exp.IDxGENE"
 
 subjid <- scan(idfile,"character")
-geneid <- scan(genefile, "character")
+geneid <- scan(genef, "character")
 expdata <- scan(expfile)
 expdata <- matrix(expdata, ncol = length(geneid), byrow=TRUE)
 rownames(expdata) <- subjid
@@ -46,41 +44,42 @@ colnames(gencode) <- c('chr','str','start','end','ensid','gene','func','known')
 genebool <- colnames(expdata) %in% gencode$gene
 chrexp <- expdata[,genebool==TRUE]
 expgencode <- gencode[gencode$gene %in% colnames(expdata),]
+rownames(expgencode) = expgencode$ensid
 ensidlist <- expgencode[,5]
 
+#for(i in 1:10){
 for(i in 1:length(ensidlist)){
     cat(i,"/",length(ensidlist),"\n")
     ensid <- ensidlist[i]
-    geneinfo <- gencode[as.character(ensid),]
+    geneinfo <- expgencode[as.character(ensid),]
     gene <- geneinfo[1,6]
     chr <- geneinfo[1,1]
     c <- substr(chr,4,5)
     start <- geneinfo$start - 1e6 ### 1Mb lower bound for cis-eQTLS
     end <- geneinfo$end + 1e6 ### 1Mb upper bound for cis-eQTLs
     genefile <- data.frame(as.character(ensid),c,start,end)
-    write.table(genefile,file="genefile",quote=F,row.names=F,col.names=F)
+    write.table(genefile,file="genefile" %&% c,quote=F,row.names=F,col.names=F)
 
     exppheno <- data.frame(chrexp[,as.character(gene)])
     colnames(exppheno) <- c('exp')
     phenofile <- mutate(exppheno, FID=rownames(exppheno), IID=1) %>% dplyr::select(FID, IID, exp)
-    write.table(phenofile,file="phenofile",quote=F,row.names=F)
+    write.table(phenofile,file="phenofile" %&% c,quote=F,row.names=F)
 
-    chrsnps <- subset(bim,bim[,1]==c) ### pull snps on same chr
-    cissnps <- subset(chrsnps,chrsnps[,4]>=start & chrsnps[,4]<=end) ### pull cis-SNP info
-    snplist <- cissnps[,2]    
-    write.table(snplist, file= my.dir %&% "tmp." %&% thresh %&% ".SNPlist." %&% gencodeset,quote=F,col.names=F,row.names=F)
-    runGCTAgrm <- "gcta64 --dosage-mach-gz " %&% gt.dir %&% machpre %&% "chr" %&% gencodeset %&%  ".mldose.gz " %&% gt.dir %&% machpre %&% "chr" %&% gencodeset %&% ".mlinfo.gz --make-grm-bin --extract tmp." %&% thresh %&% ".SNPlist." %&% gencodeset %&% " --out " %&% grm.dir %&% "local-" %&% gene
-    system(runGCTAgrm)
-    nonlocal <- setdiff(snplist,eqtllist)
-    if(length(nonlocal)==0){ ##condition when no local SNPs are eQTLs in FHS, generate global grm using all FHS eQTLs on Chr to ensure global-GENE_Chr.grm* files will be made
-        runGCTAgrm <- "gcta64 --dosage-mach-gz " %&% gt.dir %&% machpre %&% "chr" %&% gencodeset %&%  ".mldose.gz " %&% gt.dir %&% machpre %&% "chr" %&% gencodeset %&% ".mlinfo.gz --make-grm-bin --extract " %&% eqtlfile %&% " --out " %&% grm.dir %&% "global-" %&% gene %&% "-Chr" %&% gencodeset
+    ldak1 <- "./ldak.4.9 --cut-genes gene" %&% c %&% " --sp dgn-sp-format/DGN.imputed_maf0.05_R20.8.hapmapSnpsCEU.chr" %&% c %&% " --genefile genefile" %&% c %&% " --weights chr" %&% c %&% "/weightsALL"
+    ldak2 <- "./ldak.4.9 --calc-genes-reml gene" %&% c %&% " --pheno phenofile" %&% c %&% " --sp dgn-sp-format/DGN.imputed_maf0.05_R20.8.hapmapSnpsCEU.chr" %&% c %&% " --partition 1 --weights chr" %&% c %&% "/weightsALL"
+    system(ldak1)
+    system(ldak2)
+
+    res <- read.table("gene" %&% c %&% "/regress1",header=T)
+    res <- mutate(res,gene=gene)
+
+    if(exists("allres") == FALSE){
+      allres = res
     }else{
-        write.table(nonlocal, file= my.dir %&% "tmp." %&% thresh %&% ".SNPlist." %&% gencodeset,quote=F,col.names=F,row.names=F)
-    	runGCTAgrm <- "gcta64 --dosage-mach-gz " %&% gt.dir %&% machpre %&% "chr" %&% gencodeset %&%  ".mldose.gz " %&% gt.dir %&% machpre %&% "chr" %&% gencodeset %&% ".mlinfo.gz --make-grm-bin --extract tmp." %&% thresh %&% ".SNPlist." %&% gencodeset %&% " --out " %&% grm.dir %&% "global-" %&% gene %&% "-Chr" %&% gencodeset
+      allres <- rbind(allres, res)
     }
-    system(runGCTAgrm)
 }
 
+write.table(allres, file="DGN_ldak_reml_chr" %&% c %&% "_" %&% date %&% ".txt", quote=F, row.names=F)
 
-./ldak.4.9 --cut-genes testgene --sp dgn-sp-format/DGN.imputed_maf0.05_R20.8.hapmapSnpsCEU.chr22 --genefile genefile --weights chr22/weightsALL 
-./ldak.4.9 --calc-genes-reml testgene --pheno phenofile --sp dgn-sp-format/DGN.imputed_maf0.05_R20.8.hapmapSnpsCEU.chr22 --partition 1 --weights chr22/weightsALL
+
