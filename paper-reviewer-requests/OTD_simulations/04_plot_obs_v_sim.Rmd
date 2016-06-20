@@ -1,0 +1,47 @@
+---
+title: "04_plot_obs_v_sim"
+author: "Heather E. Wheeler"
+date: "June 19, 2016"
+output: html_document
+---
+
+```{r, warning=FALSE, message=FALSE}
+library(dplyr)
+library(data.table)
+library(ggplot2)
+library(GGally)
+library(tidyr)
+"%&%" = function(a,b) paste(a,b,sep="")
+pre.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/"
+my.dir <- pre.dir %&% "paper-reviewer-requests/OTD_simulations/"
+obs.dir <- my.dir %&% "obs_otd_exp/"
+sim.dir <- my.dir %&% "lmer.fits/"
+```
+
+###read in obs OTD
+```{r}
+obsct <- fread(obs.dir %&% "CT_exp.txt")
+tislist <- scan(pre.dir %&% "nine.spaces.tissue.list", "c", sep='\n')
+for(tis in tislist){
+  obstis <- fread(obs.dir %&% "TS_" %&% tis %&% "_exp.txt", sep='\t')
+  if(exists("obsts") == FALSE){
+    obsts <- obstis
+  }else{
+    obsts <- rbind(obsts, obstis)
+  }
+}
+```
+
+###read in sim OTD
+```{r}
+simct <- fread(sim.dir %&% "ranef.Cross-tissue.exp.pheno_sim_exp_phenotype_errvar-ct_mult-1_seed-123_lmer.ranefSUBJID_fixefSMTSD.gender.PFs_2016-06-18.txt")
+obsctdf <- data.frame(obsct) %>% filter(SUBJID %in% simct$SUBJID) %>% select(-SUBJID)
+simctdf <- data.frame(simct) %>% select(-SUBJID)
+cor.test(as.matrix(obsctdf),as.matrix(simctdf))
+
+simts <- fread(sim.dir %&% "resid.Tissue-specific.exp.pheno_sim_exp_phenotype_errvar-ct_mult-1_seed-123_lmer.ranefSUBJID_fixefSMTSD.gender.PFs_2016-06-18.txt")
+obstsdf <- data.frame(obsts) %>% filter(SAMPID %in% simts$SAMPID) %>% select(-SAMPID,-SUBJID,-TISSUE)
+simctdf <- data.frame(simct) %>% select(-SAMPID)
+cor.test(as.matrix(obstsdf),as.matrix(simtsdf))
+
+```
