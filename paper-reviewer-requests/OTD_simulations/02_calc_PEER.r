@@ -3,7 +3,7 @@
 "%&%" = function(a,b) paste(a,b,sep="")
 date = Sys.Date()
 args <- commandArgs(trailingOnly=T)
-
+args <- 'sim_exp_phenotype_errvar-ct_mult-1_seed-123'
 ###############################################
 ### Directories & Variables
 my.dir <- "/group/im-lab/nas40t2/hwheeler/cross-tissue/"
