@@ -1,0 +1,42 @@
+---
+title: "01_compare_w_price_wright"
+author: "Heather Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r, echo=TRUE, message=FALSE, warning=FALSE}
+library(ggplot2)
+library(dplyr)
+"%&%" = function(a,b) paste(a,b,sep="")
+h2.dir <- '/Volumes/im-lab/nas40t2/Data/Annotations/heritability/'
+```
+
+
+```{r,fig.width=5,fig.height=5,warning=F,message=F}
+gcta <- read.table('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt',header=TRUE) %>% dplyr::select(gene,local.h2)
+dim(gcta)
+##get price h2 (custom-made human array containing 23,720 unique oligonucleotide probes, http://www.nature.com/nature/journal/v452/n7186/full/nature06758.html)
+price <- read.table(h2.dir %&% "Alkes/h2all.txt",header=TRUE) %>% dplyr::rename(gene=gname)
+dim(price)
+wright <- read.table(h2.dir %&% "Fred/h2PB.txt",header=TRUE) %>% dplyr::rename(gene=gname)
+dim(wright)
+all<-full_join(gcta,price,by='gene')
+all<-full_join(all,wright,by='gene')
+dim(all)
+#dgn v. price blood
+ggplot(all,aes(x=local.h2,y=h2bloodcis))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()
+cor.test(all$local.h2,all$h2bloodcis,method='s')
+#dgn v. price adipose
+ggplot(all,aes(x=local.h2,y=h2adipcis))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()
+cor.test(all$local.h2,all$h2adipcis,method='s')
+#dgn v. wright peripheral blood
+ggplot(all,aes(x=local.h2,y=h2PB))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()
+cor.test(all$local.h2,all$h2PB,method='s')
+#wright v. price blood
+ggplot(all,aes(x=h2PB,y=h2bloodcis))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()
+cor.test(all$h2PB,all$h2bloodcis,method='s')
+#wright v. price adipose
+ggplot(all,aes(x=h2PB,y=h2adipcis))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()
+cor.test(all$h2PB,all$h2adipcis,method='s')
+```
