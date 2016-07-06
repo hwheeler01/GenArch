@@ -21,6 +21,39 @@ obs.h2.dir <- pre.dir %&% "gtex-h2-estimates/"
 
 See <https://github.com/hwheeler01/GenArch/blob/master/paper-reviewer-requests/OTD_simulations/01_make_sim.r> for how simulated expression phenotypes were generated.
 
+###read in obs OTD
+```{r}
+obsct <- fread(obs.dir %&% "CT_exp.txt")
+tislist <- scan(pre.dir %&% "nine.spaces.tissue.list", "c", sep='\n')
+for(tis in tislist){
+ obstis <- fread(obs.dir %&% "TS_" %&% tis %&% "_exp.txt", sep='\t')
+ if(exists("obsts") == FALSE){
+   obsts <- obstis
+ }else{
+   obsts <- rbind(obsts, obstis)
+ }
+}
+```
+ 
+###read in sim OTD
+```{r}
+simct <- fread(sim.dir %&% "ranef.Cross-tissue.exp.pheno_sim_exp_phenotype_errvar-ct_mult-1_seed-123_lmer.ranefSUBJID_fixefSMTSD.gender.PFs_2016-06-18.txt")
+obsctdf <- data.frame(obsct) %>% filter(SUBJID %in% simct$SUBJID) %>% select(-SUBJID)
+simctdf <- data.frame(simct) %>% select(-SUBJID)
+cor.test(as.matrix(obsctdf),as.matrix(simctdf))
+corbygene <- cor(obsctdf,simctdf)
+genecor <- diag(corbygene)
+hist(genecor)
+summary(genecor)
+sort(genecor,decreasing=T)[1:10]
+
+simts <- fread(sim.dir %&% "resid.Tissue-specific.exp.pheno_sim_exp_phenotype_errvar-ct_mult-1_seed-123_lmer.ranefSUBJID_fixefSMTSD.gender.PFs_2016-06-18.txt")
+obstsdf <- data.frame(obsts) %>% filter(SAMPID %in% simts$SAMPID) %>% select(-SAMPID,-SUBJID,-TISSUE)
+simctdf <- data.frame(simct) %>% select(-SAMPID)
+cor.test(as.matrix(obstsdf),as.matrix(simtsdf))
+```
+
+
 ###compare h2 sim vs obs
 ```{r, warning=FALSE, message=FALSE, fig.height=10, fig.width=10}
 tislist <- scan(my.dir %&% "ten.spaces.tissue.list", "c", sep='\n')
