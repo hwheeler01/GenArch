@@ -3,7 +3,6 @@
 "%&%" = function(a,b) paste(a,b,sep="")
 date = Sys.Date()
 args <- commandArgs(trailingOnly=T)
-args <- 'sim_exp_phenotype_errvar-ct_mult-1_seed-123'
 ###############################################
 ### Directories & Variables
 my.dir <- "/group/im-lab/nas40t2/hwheeler/cross-tissue/"
@@ -11,7 +10,6 @@ out.dir <- my.dir %&% "paper-reviewer-requests/OTD_simulations/"
 rna.dir <- out.dir %&% "sim_exp/"
 
 Nk <- 15 ##number of peer factors to calculate, recommend 25% of sample size, but no more than 100, GTEx included 15 in pilot analyses
-#simfile <- "sim_exp_phenotype_errvar-ct_mult-1_seed-123"
 simfile <- args[1]
 
 ################################################
