@@ -35,22 +35,63 @@ for(tis in tislist){
 }
 ```
  
-###read in sim OTD
+###compare CT sim vs obs
 ```{r}
-simct <- fread(sim.dir %&% "ranef.Cross-tissue.exp.pheno_sim_exp_phenotype_errvar-ct_mult-1_seed-123_lmer.ranefSUBJID_fixefSMTSD.gender.PFs_2016-06-18.txt")
-obsctdf <- data.frame(obsct) %>% filter(SUBJID %in% simct$SUBJID) %>% select(-SUBJID)
-simctdf <- data.frame(simct) %>% select(-SUBJID)
-cor.test(as.matrix(obsctdf),as.matrix(simctdf))
-corbygene <- cor(obsctdf,simctdf)
-genecor <- diag(corbygene)
-hist(genecor)
-summary(genecor)
-sort(genecor,decreasing=T)[1:10]
+simlist <- scan(my.dir %&% "shortsimlist", "c")
+simfilelist <- scan(my.dir %&% "ctsimfilelist", "c")
+for(i in 1:length(simlist)){
+  simct <- fread(my.dir %&% simfilelist[i])
+  s <- simlist[i]
+  print(s)
+  obsctdf <- data.frame(obsct) %>% filter(SUBJID %in% simct$SUBJID) %>% select(-SUBJID)
+  simctdf <- data.frame(simct) %>% select(-SUBJID)
+  print(cor.test(as.matrix(obsctdf),as.matrix(simctdf)))
+  corbygene <- cor(obsctdf,simctdf)
+  genecor <- diag(corbygene)
+  print(summary(genecor))
+  cordf <- mutate(data.frame(genecor),sim=s)
+  print(sort(genecor,decreasing=T)[1:10])
+  if(exists("allctcor") == FALSE){
+    allctcor <- cordf
+  }else{
+    allctcor <- rbind(allctcor,cordf)
+  }
+}
 
-simts <- fread(sim.dir %&% "resid.Tissue-specific.exp.pheno_sim_exp_phenotype_errvar-ct_mult-1_seed-123_lmer.ranefSUBJID_fixefSMTSD.gender.PFs_2016-06-18.txt")
-obstsdf <- data.frame(obsts) %>% filter(SAMPID %in% simts$SAMPID) %>% select(-SAMPID,-SUBJID,-TISSUE)
-simctdf <- data.frame(simct) %>% select(-SAMPID)
-cor.test(as.matrix(obstsdf),as.matrix(simtsdf))
+ggplot(allctcor,aes(genecor,color=sim)) + geom_freqpoly() + xlab('Gene correlation (obs v. sim)') + theme_bw()
+```
+
+###compare TS sim vs obs
+```{r}
+tisannot <- read.table(pre.dir %&% "gtex-annot/GTEx_Analysis_2014-06-13.SampleTissue.annot",header=T,sep='\t')
+simlist <- scan(my.dir %&% "shortsimlist", "c")
+simfilelist <- scan(my.dir %&% "tssimfilelist", "c")
+for(i in 1:length(simlist)){
+  simts <- fread(sim.dir %&% simfilelist[i])
+  s <- simlist[i]
+  obstsdf <- data.frame(obsts) %>% filter(SAMPID %in% simts$SAMPID)
+  simtsdf <- data.frame(simts)
+  simtstis <- left_join(simtsdf,tisannot,by='SAMPID')
+  for(tis in tislist){
+    tissim <- dplyr::filter(simtstis,SMTSD==tis)
+    tisobs <- dplyr::filter(obstsdf,TISSUE==tis)
+    sim <- dplyr::select(tissim,-SAMPID,-SMTSD)
+    obs <- dplyr::select(tisobs,-SAMPID,-SUBJID,-TISSUE)
+    tscorbygene <- cor(obs,sim)
+    tsgenecor <- diag(tscorbygene)
+    print(summary(tsgenecor))
+    print(sort(genecor,decreasing=T)[1:10]))
+    cordf <- mutate(data.frame(tsgenecor),tissue=tis,sim=s)
+    if(exists("allcor") == FALSE){
+      allcor <- cordf
+    }else{
+      allcor <- rbind(allcor,cordf)
+    }
+  }
+}
+
+ggplot(allcor,aes(tsgenecor,color=sim)) + geom_freqpoly() + facet_wrap(~tissue) + theme_bw() + xlab('Gene correlation (obs v. sim)')
+
 ```
 
 
@@ -58,13 +99,15 @@ cor.test(as.matrix(obstsdf),as.matrix(simtsdf))
 ```{r, warning=FALSE, message=FALSE, fig.height=10, fig.width=10}
 tislist <- scan(my.dir %&% "ten.spaces.tissue.list", "c", sep='\n')
 simlist <- scan(my.dir %&% "simlist", "c")
+slist <- scan(my.dir %&% "shortsimlist", "c")
 
 for(tis in tislist){
   h2obs <- read.table(obs.h2.dir %&% 'GTEx.' %&% tis %&% '.h2.all.models_FHSfdr0.05.Chr1-22_globalOtherChr.2015-10-06.txt', header=T,sep='\t') %>% select(tissue,ensid,gene,local.h2) %>% rename(obs_h2 = local.h2)
   for(i in 1:length(simlist)){
     sim <- simlist[i]
+    s <- slist[i]
     h2sim <- read.table(my.dir %&% 'GTEx.' %&% tis %&% '_' %&% sim %&% '.h2.all.models_FHSfdr0.05.Chr1-22_globalOtherChr.2016-06-22.txt',header=T,sep='\t') %>% select(ensid,local.h2)
-    colnames(h2sim) <- c('ensid','sim' %&% i)
+    colnames(h2sim) <- c('ensid',s)
     if(exists("h2join") == FALSE){
       h2join <- inner_join(h2obs,h2sim,by='ensid') 
     }else{
@@ -80,10 +123,10 @@ for(tis in tislist){
 }
 
 
-ggplot(allh2,aes(x=sim1,y=obs_h2)) + geom_point(alpha=1/4) + facet_wrap(~tissue,ncol=3) + theme_bw() + geom_smooth() + ggtitle(simlist[1]) + xlab("simulation h2") + ylab("observed h2")
-ggplot(allh2,aes(x=sim2,y=obs_h2)) + geom_point(alpha=1/4) + facet_wrap(~tissue,ncol=3) + theme_bw() + geom_smooth() + ggtitle(simlist[2]) + xlab("simulation h2") + ylab("observed h2")
-ggplot(allh2,aes(x=sim3,y=obs_h2)) + geom_point(alpha=1/4) + facet_wrap(~tissue,ncol=3) + theme_bw() + geom_smooth() + ggtitle(simlist[3]) + xlab("simulation h2") + ylab("observed h2")
-ggplot(allh2,aes(x=sim4,y=obs_h2)) + geom_point(alpha=1/4) + facet_wrap(~tissue,ncol=3) + theme_bw() + geom_smooth() + ggtitle(simlist[4]) + xlab("simulation h2") + ylab("observed h2")
+#ggplot(allh2,aes(x=sim1,y=obs_h2)) + geom_point(alpha=1/4) + facet_wrap(~tissue,ncol=3) + theme_bw() + geom_smooth() + ggtitle(simlist[1]) + xlab("simulation h2") + ylab("observed h2")
+#ggplot(allh2,aes(x=sim2,y=obs_h2)) + geom_point(alpha=1/4) + facet_wrap(~tissue,ncol=3) + theme_bw() + geom_smooth() + ggtitle(simlist[2]) + xlab("simulation h2") + ylab("observed h2")
+#ggplot(allh2,aes(x=sim3,y=obs_h2)) + geom_point(alpha=1/4) + facet_wrap(~tissue,ncol=3) + theme_bw() + geom_smooth() + ggtitle(simlist[3]) + xlab("simulation h2") + ylab("observed h2")
+#ggplot(allh2,aes(x=sim4,y=obs_h2)) + geom_point(alpha=1/4) + facet_wrap(~tissue,ncol=3) + theme_bw() + geom_smooth() + ggtitle(simlist[4]) + xlab("simulation h2") + ylab("observed h2")
 
 gallh2 <- gather(allh2,sim,sim_h2,5:8)
 ggplot(gallh2,aes(x=sim_h2,y=obs_h2,color=sim)) + geom_smooth() + facet_wrap(~tissue,ncol=3) + theme_bw() + xlab("simulation h2") + ylab("observed h2")
