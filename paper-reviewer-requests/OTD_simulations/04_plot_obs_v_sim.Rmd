@@ -80,7 +80,7 @@ for(i in 1:length(simlist)){
     tscorbygene <- cor(obs,sim)
     tsgenecor <- diag(tscorbygene)
     print(summary(tsgenecor))
-    print(sort(genecor,decreasing=T)[1:10]))
+    print(sort(genecor,decreasing=T)[1:10])
     cordf <- mutate(data.frame(tsgenecor),tissue=tis,sim=s)
     if(exists("allcor") == FALSE){
       allcor <- cordf
