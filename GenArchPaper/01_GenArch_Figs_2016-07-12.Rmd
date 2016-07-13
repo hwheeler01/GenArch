@@ -20,6 +20,7 @@ output: html_document
   my.vol <- '/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/BSLMM_exp/'
   rna.dir <- my.dir %&% "gtex-rnaseq/"
   out.dir <- rna.dir %&% "ind-tissues-RPKM/"
+  dgn.dir <- '/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/GTEx_2014-06013_release/transfers/PrediXmod/DGN-WB/DGN-calc-weights/'
 ```
 ##Fig1
 DGN-WB joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. distal h^2^ is estimated with either all non-chr SNPs or SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).
@@ -163,7 +164,6 @@ print(a)
 
 
 ###add all genes for Fig 3B blandaltman plot rather than just chr22
-dgn.dir <- '/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/GTEx_2014-06013_release/transfers/PrediXmod/DGN-WB/DGN-calc-weights/'
 alpha1 <- read.table(dgn.dir %&% 'DGN-WB_exp_10-foldCV_elasticNet_alpha1_hapmapSnpsCEU_chr1-22_2015-02-02.txt',header=TRUE) %>%  mutate(`1`=R2) %>% select(gene,`1`)
 ngenesall <- length(unique(alpha1$gene))
 ngenesall
@@ -188,18 +188,25 @@ dev.off()
 ##Fig 3
 ###DGN BSLMM
 ```{r dgn-bslmm, eval=TRUE}
-gcta <- read.table('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt',header=TRUE)
+gcta <- read.table('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt',header=TRUE) %>% dplyr::select(gene,local.h2)
 bslmm <- read.table(my.dir %&% 'DGN-WB_exp_BSLMM-s100K_iterations_all_genes_2015-06-14.txt',header=T)
-all <- inner_join(gcta,bslmm,by='gene')
-dim(all)
-b<-ggplot(all,aes(x=local.h2,y=pve50))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(0,1),ylim=c(0,1))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1),color='gray')+theme_bw()
+alpha1 <- read.table(dgn.dir %&% 'DGN-WB_exp_10-foldCV_elasticNet_alpha1_hapmapSnpsCEU_chr1-22_2015-02-02.txt',header=TRUE) %>% dplyr::select(gene,R2)
+all <- inner_join(gcta,alpha1,by='gene')
+all <- inner_join(all,bslmm,by='gene')
+all <- all[complete.cases(all),]
+b<-ggplot(all,aes(x=local.h2,y=pve50,color=R2)) + geom_point() +coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05)) + theme_bw() +xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1)) + scale_colour_gradient(low="pink",high="blue",name=expression("EN R"^2))  + theme(legend.position = c(0.25,0.55),legend.justification = c(1,0),legend.key.size=unit(0.3,"cm"),legend.title=element_text(size=8),legend.text=element_text(size=8))
 cor.test(all$local.h2,all$pve50)
-data <- all %>% mutate(position=1:length(pve50),`medianSNPs<=10`=n_gamma50<=10,LCS=factor(pge025>0.01,labels=c('\u2264 0.01','> 0.01')))
+cor.test(all$local.h2,all$R2)
+cor.test(all$pve50,all$R2)
+data <- all %>% mutate(position=1:length(pve50),`medianSNPs<=10`=n_gamma50<=10,LCS=factor(pge025>0.01,labels=c('<= 0.01','> 0.01')))
 a<-ggplot(data,aes(x=pve50,y=pge50,ymin=pge025,ymax=pge975,col=LCS)) + geom_pointrange(col='gray') + geom_point() + theme_bw() + xlab("PVE") + ylab("PGE") + theme(legend.position = c(1,0),legend.justification = c(1,0))
 
-tiff(filename=fig.dir %&% "Fig-DGN-BSLMM.tiff",width=720,height=360)
-multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=18)),b + ggtitle('B\n')+ theme(plot.title=element_text(hjust=0),text=element_text(size=18)),cols=2)
+setEPS()
+postscript(file=fig.dir %&% "Fig-DGN-BSLMM.eps",width=7.2,height=3.6)
+multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=12)),b + ggtitle('B\n')+ theme(plot.title=element_text(hjust=0),text=element_text(size=12)),cols=2)
 dev.off()
+
+b<-ggplot(all,aes(x=local.h2,y=pve50,color=R2)) + geom_point() +coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05)) + theme_bw() +xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1)) + scale_colour_gradient(low="pink",high="blue",name=expression("EN R"^2))  + theme(legend.position = c(0.25,0.55),legend.justification = c(1,0),legend.key.size=unit(0.5,"cm"),legend.title=element_text(size=12),legend.text=element_text(size=12))
 
 png(filename=fig.dir %&% "Fig-DGN-BSLMM.png",width=720,height=360)
 multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=18)),b + ggtitle('B\n')+ theme(plot.title=element_text(hjust=0),text=element_text(size=18)),cols=2)
@@ -224,29 +231,49 @@ summary(subdata$pge50)
 tislist <- scan('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/nine.tissue.list',sep="\n",what="character")
 tw <- data.frame()
 rvec<-vector()
+nvec<-vector()
+rvec2<-vector()
+rvec3<-vector()
 for(i in 1:length(tislist)){
   tis <- tislist[i]
-  bs <- read.table(my.vol %&% tislist[i] %&% '_TW_exp_BSLMM-s100K_iterations_all_chr1-22_2015-10-18.txt',header=T,sep="\t") %>% select(gene,pve50)
-  h2 <- read.table("/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/gtex-h2-estimates/GTEx.tissue-wide.h2_" %&% tislist[i] %&% "_marginal.local_2015-03-24.txt",header=T, sep="\t") %>% select(tissue,ensid,h2) %>% mutate(gene=ensid)
+  bs <- read.table(my.vol %&% tislist[i] %&% '_TW_exp_BSLMM-s100K_iterations_all_chr1-22_2015-10-18.txt',header=T,sep="\t") %>% dplyr::select(gene,pve50) %>% rename(ensid=gene)
+  h2 <- read.table("/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/gtex-h2-estimates/GTEx.tissue-wide.h2_" %&% tislist[i] %&% "_marginal.local_2015-03-24.txt",header=T, sep="\t") %>% dplyr::select(tissue,ensid,gene,h2,N)
+  alpha1 <- read.table(my.dir %&% 'gtex-OTD-CV-R2/TW_' %&% tis %&% '_exp_10-foldCV_elasticNet_alpha1_hapmapSnpsCEU_all_chr1-22_2015-09-10.txt',header=TRUE) %>%dplyr::select(gene,R2)
   explist <- scan(out.dir %&% tis %&% ".meanRPKMgt0.1_3samplesRPKMgt0_genelist","c")
   h2 <- dplyr::filter(h2,ensid %in% explist)
-  subdata <- inner_join(h2,bs,by="gene")
+  subdata <- inner_join(h2,bs,by="ensid")
+  subdata <- inner_join(subdata,alpha1,by='gene')
+  subdata <- subdata[complete.cases(subdata),] #uncomment to remove gray points 
   print(dim(subdata))
   res<-cor.test(subdata$pve50,subdata$h2)
-  cat(tislist[i],"\tPearson R=",round(res$estimate,3),"\tP-value=",res$p.value,"\n")
-  rvec <- cbind(rvec,unname(round(res$estimate,3)))
+  cat(tislist[i],"\tPearson R (PVE v h2)=",round(res$estimate,3),"\tP-value=",res$p.value,"\n")
+  rvec <- cbind(rvec,unname(round(res$estimate,2)))
+  res2<-cor.test(subdata$R2,subdata$h2)
+  cat(tislist[i],"\tPearson R (EN R2 v h2)=",round(res2$estimate,3),"\tP-value=",res2$p.value,"\n")
+  rvec2 <- cbind(rvec2,unname(round(res2$estimate,2)))
+  res3<-cor.test(subdata$R2,subdata$pve50)
+  cat(tislist[i],"\tPearson R (EN R2 v PVE)=",round(res3$estimate,3),"\tP-value=",res3$p.value,"\n")
+  rvec3 <- cbind(rvec3,unname(round(res3$estimate,2)))
+  nvec <- cbind(nvec,h2$N[1])
   tw <- rbind(tw,subdata)
 }
-p<-ggplot(tw,aes(x=h2,y=pve50))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1),color='gray') + facet_wrap(~tissue,ncol=3)+theme_bw()
+p<-ggplot(tw,aes(x=h2,y=pve50,color=R2))+geom_point()+coord_cartesian(xlim=c(-0.05,1.1),ylim=c(-0.05,1.1))+xlab(expression("LMM h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1)) + scale_colour_gradient(low="pink",high="blue",name=expression("EN R"^2)) + facet_wrap(~tissue,ncol=3)+theme_bw()
 
-ann_text <- data.frame( h2 = rep(0.75,9), pve50 = rep(0.05,9), R= rvec[1:9], tissue = factor(tislist), ensid=rep(0.9,9),gene=rep(0.9,9))
-p2<-p+geom_text(data=ann_text,aes(label=paste("R==",R,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3)+ theme(legend.justification=c(1,0), legend.position=c(1,0))
+ann_text <- data.frame( h2 = rep(1.08,9), pve50 = rep(0.15,9), R= rvec3[1:9], tissue = factor(tislist), ensid=rep(0.9,9),gene=rep(0.9,9))
+ann_text2 <- data.frame( h2 = rep(1.08,9), pve50 = rep(0.05,9), R= rvec2[1:9], tissue = factor(tislist), ensid=rep(0.9,9),gene=rep(0.9,9))
+p2<-p+geom_text(data=ann_text,aes(label=paste("EN_v_BSLMM:",R,sep=" ")),color="black",show_guide=F,parse=T,hjust=1,size=3)
+p3<-p2+geom_text(data=ann_text2,aes(label=paste("EN_v_LMM:",R,sep=" ")),color="black",show_guide=F,parse=T,hjust=1,size=3)
+p3
 
-png(filename=fig.dir %&% "Fig-GTEx_TW_PVE_v_h2.png",width=600,height=600)
-p2
+png(filename=fig.dir %&% "Fig-GTEx_TW_PVE_v_h2.png",width=700,height=600)
+p3
 dev.off()
-tiff(filename=fig.dir %&% "Fig-GTEx_TW_PVE_v_h2.tiff",width=600,height=600)
-p2
+
+p2<-p+geom_text(data=ann_text,aes(label=paste("EN_v_BSLMM:",R,sep=" ")),color="black",show_guide=F,parse=T,hjust=1,size=2.8)
+p3<-p2+geom_text(data=ann_text2,aes(label=paste("EN_v_LMM:",R,sep=" ")),color="black",show_guide=F,parse=T,hjust=1,size=2.8)
+setEPS()
+postscript(file=fig.dir %&% "Fig-GTEx_TW_PVE_v_h2.eps",width=9,height=8)
+p3
 dev.off()
 ```
 
