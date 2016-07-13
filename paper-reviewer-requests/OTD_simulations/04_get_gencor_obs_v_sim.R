@@ -11,7 +11,7 @@ sim.dir <- my.dir %&% "lmer.fits/"
 obs.h2.dir <- pre.dir %&% "gtex-h2-estimates/"
 
 ###read in obs OTD
-obsct <- fread(obs.dir %&% "CT_exp.txt")
+#obsct <- fread(obs.dir %&% "CT_exp.txt")
 tislist <- scan(pre.dir %&% "nine.spaces.tissue.list", "c", sep='\n')
 for(tis in tislist){
   obstis <- fread(obs.dir %&% "TS_" %&% tis %&% "_exp.txt", sep='\t')
@@ -23,25 +23,25 @@ for(tis in tislist){
 }
 
 ###compare CT sim vs obs
-simlist <- scan(my.dir %&% "shortsimlist", "c")
-simfilelist <- scan(my.dir %&% "ctsimfilelist", "c")
-for(i in 1:length(simlist)){
-  simct <- fread(my.dir %&% simfilelist[i])
-  s <- simlist[i]
-  obsctdf <- data.frame(obsct) %>% filter(SUBJID %in% simct$SUBJID) %>% select(-SUBJID)
-  simctdf <- data.frame(simct) %>% select(-SUBJID)
-  corbygene <- cor(obsctdf,simctdf)
-  genecor <- diag(corbygene)
-  genenames <- names(genecor)
-  cordf <- mutate(data.frame(genecor),sim=s,gene=genenames)
-  if(exists("allctcor") == FALSE){
-    allctcor <- cordf
-  }else{
-    allctcor <- rbind(allctcor,cordf)
-  }
-}
+#simlist <- scan(my.dir %&% "shortsimlist", "c")
+#simfilelist <- scan(my.dir %&% "ctsimfilelist", "c")
+#for(i in 1:length(simlist)){
+#  simct <- fread(my.dir %&% simfilelist[i])
+#  s <- simlist[i]
+#  obsctdf <- data.frame(obsct) %>% filter(SUBJID %in% simct$SUBJID) %>% select(-SUBJID)
+#  simctdf <- data.frame(simct) %>% select(-SUBJID)
+#  corbygene <- cor(obsctdf,simctdf)
+#  genecor <- diag(corbygene)
+#  genenames <- names(genecor)
+#  cordf <- mutate(data.frame(genecor),sim=s,gene=genenames)
+#  if(exists("allctcor") == FALSE){
+#    allctcor <- cordf
+#  }else{
+#    allctcor <- rbind(allctcor,cordf)
+#  }
+#}
 
-write.table(allctcor, file=my.dir %&% "CT_genecor_obs_v_sim.txt",quote=F,row.names = F)
+#write.table(allctcor, file=my.dir %&% "CT_genecor_obs_v_sim.txt",quote=F,row.names = F)
 
 ###compare TS sim vs obs
 tisannot <- read.table(pre.dir %&% "gtex-annot/GTEx_Analysis_2014-06-13.SampleTissue.annot",header=T,sep='\t')
@@ -62,6 +62,7 @@ for(i in 1:length(simlist)){
     tsgenecor <- diag(tscorbygene)
     genenames <- names(tsgenecor)
     cordf <- mutate(data.frame(tsgenecor),tissue=tis,sim=s,gene=genenames)
+    write.table(cordf, file=my.dir %&% "working_TS_genecor_obs_v_sim.txt",append=T,quote=F,row.names=F,col.names=F,sep="\t")
     if(exists("allcor") == FALSE){
       allcor <- cordf
     }else{
@@ -70,4 +71,4 @@ for(i in 1:length(simlist)){
   }
 }
 
-write.table(allcor, file=my.dir %&% "TS_genecor_obs_v_sim.txt",quote=F,row.names = F)
+write.table(allcor, file=my.dir %&% "TS_genecor_obs_v_sim.txt",quote=F,row.names = F,sep="\t")
