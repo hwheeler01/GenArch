@@ -1,7 +1,7 @@
 ---
 title: "03_plot_gcta_v_ldak"
 author: "Heather E. Wheeler"
-date: "June 19, 2016"
+date: "`r Sys.time()`"
 output: html_document
 ---
 
@@ -14,6 +14,7 @@ library(tidyr)
 "%&%" = function(a,b) paste(a,b,sep="")
 pre.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/"
 gcta.dir <- pre.dir %&% "expArch_DGN-WB_imputedGTs/"
+bslmm.dir <- pre.dir %&% "BSLMM_exp/"
 ldak.dir <- pre.dir %&% "paper-reviewer-requests/LDAK/"
 ```
 
@@ -37,4 +38,13 @@ all <- left_join(gcta,ldak,by='gene')
 ggplot(all,aes(x=local.h2,y=REML_Her)) + geom_point(alpha=1/3,size=1) + xlab(expression('GCTA local h'^2)) + ylab(expression('LDAK local h'^2)) + theme_bw(15) +geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method='lm') + coord_cartesian(xlim=c(-.02,1.02),ylim=c(-.02,1.02)) + ggtitle('GCTA REML constrain')
 
 cor.test(all$local.h2,all$REML_Her)
+```
+
+###bslmm PVE
+```{r,fig.width=5,fig.height=5}
+ldak <- fread(ldak.dir %&% "DGN_ldak_reml_chr1-22_2016-06-17.txt")
+gcta <- data.frame(fread(bslmm.dir %&% "DGN-WB_exp_BSLMM-s100K_iterations_all_genes_2015-06-14.txt"))
+all <- left_join(gcta,ldak,by='gene')
+ggplot(all,aes(x=pve50,y=REML_Her)) + geom_point(alpha=1/3,size=1) + xlab('BSLMM PVE') + ylab(expression('LDAK local h'^2)) + theme_bw(15) +geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method='lm') + coord_cartesian(xlim=c(-.02,1.02),ylim=c(-.02,1.02))
+cor.test(all$pve50,all$REML_Her)
 ```
