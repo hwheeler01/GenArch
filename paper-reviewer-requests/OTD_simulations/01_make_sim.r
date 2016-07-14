@@ -11,7 +11,7 @@ otd.dir <- my.dir %&% "paper-reviewer-requests/OTD_simulations/"
 sim.dir <- otd.dir %&% "sim_exp/"
 
 ###############################################
-errvar = args[1] ## choose 'ct' or 'ts'
+errvar = args[1] ## choose 'ct' or 'ts' or 'sum'
 mult = as.numeric(args[2]) ##constant to multiply the variance by
 seed = 123
 
@@ -36,10 +36,14 @@ for(tis in tislist){
   ctmat <- as.matrix(ctexp[,2:dim(ctexp)[2]])
   tsmat <- as.matrix(tsexp[,4:dim(tsexp)[2]])
 
+  presim <- ctmat + tsmat
+
   if(errvar == 'ct'){
     errmat <- apply(ctmat,2,errfunc) #generate error matrix from variance of each gene's CT exp
-  }else{
+  }else if(errvar =='ts'){
     errmat <- apply(tsmat,2,errfunc) #generate error matrix from variance of each gene's TS exp
+  }else{
+    errmat <- apply(presim,2,errfunc) #generate error matrix from variance of each gene's CT+TS exp
   }
 
   sim <- ctmat + tsmat + errmat
