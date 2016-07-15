@@ -88,6 +88,13 @@ tab <- xtable(table1)
 print(tab, type="latex",include.rownames=FALSE)
 ```
 
+###Add FDR to table1
+```{r}
+FDR <- round(0.05*as.numeric(table1[,6])/as.numeric(table1[,5]),3)
+newtable1 <- cbind(table1,FDR)
+newtab <- xtable(newtable1)
+print(newtab, type="latex",include.rownames=FALSE)
+```
 
 ###Calculate num expressed genes and make lists per tissue for filtering
 - Expressed: mean RPKM > 0.1 and at least 3 samples with RPKM > 0 

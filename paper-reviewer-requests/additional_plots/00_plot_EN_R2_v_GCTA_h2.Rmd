@@ -44,6 +44,7 @@ tw <- data.frame()
 rvec<-vector()
 nvec<-vector()
 rvec2<-vector()
+rvec3<-vector()
 for(i in 1:length(tislist)){
   tis <- tislist[i]
   bs <- read.table(my.vol %&% tislist[i] %&% '_TW_exp_BSLMM-s100K_iterations_all_chr1-22_2015-10-18.txt',header=T,sep="\t") %>% dplyr::select(gene,pve50) %>% rename(ensid=gene)
@@ -61,6 +62,9 @@ for(i in 1:length(tislist)){
   res2<-cor.test(subdata$R2,subdata$h2)
   cat(tislist[i],"\tPearson R (EN R2 v h2)=",round(res2$estimate,3),"\tP-value=",res2$p.value,"\n")
   rvec2 <- cbind(rvec2,unname(round(res2$estimate,3)))
+  res3<-cor.test(subdata$R2,subdata$pve50)
+  cat(tislist[i],"\tPearson R (EN R2 v PVE)=",round(res3$estimate,3),"\tP-value=",res2$p.value,"\n")
+  rvec3 <- cbind(rvec3,unname(round(res3$estimate,3)))
   nvec <- cbind(nvec,h2$N[1])
   tw <- rbind(tw,subdata)
 }
@@ -81,19 +85,40 @@ dev.off()
 ```{r,fig.width=5,fig.height=5}
 ##plot R (PVE vs. h2) vs. N
 n<-c(nvec, 922)
-R<-c(rvec,0.96)
+R<-c(rvec,0.954)
 nvr <- data.frame(n,R)
-ggplot(nvr,aes(x=n,y=R)) + geom_point() + geom_smooth(method="lm") + theme_bw() + ylab("R (BSLMM PVE v. GCTA h2)")
+p<-ggplot(nvr,aes(x=n,y=R)) + geom_point() + geom_smooth(method="lm") + theme_bw(15) + ylab(expression("Correlation between BSLMM PVE and GCTA h"^2))
+p
+cor.test(n,R)
+setEPS()
+postscript(file=fig.dir %&% "Fig-R_gcta_bslmm_v_n.eps",width=4,height=4)
+p
+dev.off()
+
+png(filename=fig.dir %&% "Fig-R_gcta_bslmm_v_n.png",width=360,height=360)
+p
+dev.off()
+
+
 cor.test(nvr$R,nvr$n)
 ggplot(nvr[1:9,],aes(x=n,y=R)) + geom_point() + geom_smooth(method="lm") + theme_bw() + ylab("R (BSLMM PVE v. GCTA h2)")
 cor.test(nvr[1:9,]$R,nvr[1:9,]$n)
 
 ##plot R (EN R2 vs. h2) vs. N
 n<-c(nvec, 922)
-R<-c(rvec2,0.94)
+R<-c(rvec2,0.938)
 nvr <- data.frame(n,R)
 ggplot(nvr,aes(x=n,y=R)) + geom_point() + geom_smooth(method="lm") + theme_bw() + ylab("R (EN R2 v. GCTA h2)")
 cor.test(nvr$R,nvr$n)
 ggplot(nvr[1:9,],aes(x=n,y=R)) + geom_point() + geom_smooth(method="lm") + theme_bw() + ylab("R (EN R2 v. GCTA h2)")
+cor.test(nvr[1:9,]$R,nvr[1:9,]$n)
+
+##plot R (EN R2 vs. PVE) vs. N
+n<-c(nvec, 922)
+R<-c(rvec3,0.986)
+nvr <- data.frame(n,R)
+ggplot(nvr,aes(x=n,y=R)) + geom_point() + geom_smooth(method="lm") + theme_bw() + ylab("R (EN R2 v. BSLMM PVE)")
+cor.test(nvr$R,nvr$n)
+ggplot(nvr[1:9,],aes(x=n,y=R)) + geom_point() + geom_smooth(method="lm") + theme_bw() + ylab("R (EN R2 v. BSLMM PVE)")
 cor.test(nvr[1:9,]$R,nvr[1:9,]$n)
 ```
