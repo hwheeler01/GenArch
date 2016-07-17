@@ -25,17 +25,25 @@ See <https://github.com/hwheeler01/GenArch/blob/master/paper-reviewer-requests/O
 ```{r,  warning=FALSE, message=FALSE}
 allctcor <- fread(my.dir %&% "CT_genecor_obs_v_sim.txt")
 ggplot(allctcor,aes(genecor,color=sim)) + geom_freqpoly() + xlab('Gene correlation (obs v. sim)') + theme_bw()
+
+##rm mult-10
+notenct <- dplyr::filter(allctcor,sim!="errvar-ct_mult-10" & sim!="errvar-sum_mult-10" & sim!="errvar-ts_mult-10")
+ggplot(notenct,aes(genecor,color=sim)) + geom_freqpoly() + xlab('Gene correlation (obs v. sim)') + theme_bw()
 ```
 
 ###compare TS sim vs obs
 ```{r, warning=FALSE, message=FALSE,fig.height=10,fig.width=10}
 alltscor <- fread(my.dir %&% "TS_genecor_obs_v_sim.txt")
 ggplot(alltscor,aes(tsgenecor,color=sim)) + geom_freqpoly() + facet_wrap(~tissue) + theme_bw() + xlab('Gene correlation (obs v. sim)')
+
+##rm mult-10
+notents <- dplyr::filter(alltscor,sim!="errvar-ct_mult-10" & sim!="errvar-sum_mult-10" & sim!="errvar-ts_mult-10")
+ggplot(notents,aes(tsgenecor,color=sim)) + geom_freqpoly() + facet_wrap(~tissue) + theme_bw() + xlab('Gene correlation (obs v. sim)')
 ```
 
 
 ###compare h2 sim vs obs
-```{r, warning=FALSE, message=FALSE, fig.height=10, fig.width=10}
+```{r, warning=FALSE, message=FALSE, fig.height=10, fig.width=10, eval=FALSE}
 tislist <- scan(my.dir %&% "ten.spaces.tissue.list", "c", sep='\n')
 simlist <- scan(my.dir %&% "simlist", "c")
 slist <- scan(my.dir %&% "shortsimlist", "c")
