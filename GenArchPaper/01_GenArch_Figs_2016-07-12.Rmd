@@ -21,133 +21,174 @@ output: html_document
   rna.dir <- my.dir %&% "gtex-rnaseq/"
   out.dir <- rna.dir %&% "ind-tissues-RPKM/"
   dgn.dir <- '/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/GTEx_2014-06013_release/transfers/PrediXmod/DGN-WB/DGN-calc-weights/'
+  se <- function(x) sqrt(var(x,na.rm=TRUE)/length(is.na(x)==FALSE))
 ```
 ##Fig1
 DGN-WB joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. distal h^2^ is estimated with either all non-chr SNPs or SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).
 ```{r jointH2,fig.width=6,fig.height=16, echo=TRUE, warning=FALSE, message=FALSE,eval=TRUE}
-otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt'
+dgn <- read.table(my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globalAll_reml-no-constrain.2015-12-15.txt',header=T)
+mean(dgn$loc.jt.h2,na.rm=TRUE)
+se(dgn$loc.jt.h2)
+mean(dgn$glo.jt.h2,na.rm=TRUE)
+mean(dgn$global.se,na.rm=TRUE)
+data <- dgn[complete.cases(dgn),]
+dim(dgn)
+dim(data)
+
+dgn <- read.table(my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-13.txt',header=T)
+mean(dgn$loc.jt.h2,na.rm=TRUE)
+se(dgn$loc.jt.h2)
+mean(dgn$glo.jt.h2,na.rm=TRUE)
+mean(dgn$global.se,na.rm=TRUE)
+data <- dgn[complete.cases(dgn),]
+dim(dgn)
+dim(data)
+
+##Fig1 UNCONSTRAINED
+#DGN-WB joint heritability. Local h^2^ is estimated with SNPs within 1 Mb of each gene. 
+#distal h^2^ is estimated with either all non-chr SNPs or SNPs that are eQTLs in the Framingham Heart Study on other chromosomes (FDR < 0.05).
+otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-13.txt'
 
 fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chromosomes used to define global GRM
-d  <- fdrother %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se) )
-cigt0 <- d$ymin>0
-ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
-ptrue
-fdrother <- mutate(d, loc.jt.P = 2*pnorm(-abs(loc.jt.h2/loc.jt.se)), glo.jt.P = 2*pnorm(-abs(glo.jt.h2/glo.jt.se))) %>% mutate(loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P),glo.jt.P=ifelse(is.na(glo.jt.P),1,glo.jt.P)) %>% mutate(locPlt05=loc.jt.P < 0.05,gloPlt05=glo.jt.P < 0.05) %>% mutate(`distal P`=factor(gloPlt05,labels=c('\u2265 0.05','< 0.05')))
+d  <- fdrother %>% mutate(ymin = glo.jt.h2 - 2 * glo.jt.se, ymax = glo.jt.h2 + 2 * glo.jt.se)
+#fdrother <- mutate(d, loc.jt.P = ifelse(loc.jt.h2 > 0, 2*pnorm(-abs(loc.jt.h2/loc.jt.se)),1) , glo.jt.P = ifelse(glo.jt.h2 > 0, 2*pnorm(-abs(glo.jt.h2/glo.jt.se)),1)) 
+fdrother <- mutate(d, loc.jt.P = 2*pnorm(-abs(loc.jt.h2/loc.jt.se)) , glo.jt.P = 2*pnorm(-abs(glo.jt.h2/glo.jt.se))) 
+fdrother <- mutate(fdrother, loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P),glo.jt.P=ifelse(is.na(glo.jt.P),1,glo.jt.P)) %>% 
+  mutate(locPlt05=loc.jt.P < 0.05,gloPlt05=glo.jt.P < 0.05) %>% mutate(`distal P`=factor(gloPlt05,labels=c('\u2265 0.05','< 0.05')))
 table(fdrother$gloPlt05)
 
 ##Plot FDR based results
-a<-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2,color=`distal P`)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1) + xlab(expression("local h"^2)) + ylab(expression("distal h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_bw() +theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(1,1),legend.position=c(1,1))
+a<-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2,color=`distal P`)) + geom_point(cex=1,alpha=2/3)  + 
+  xlab(expression("local h"^2)) + ylab(expression("distal h"^2)) + coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.7,1.3)) + theme_bw() +
+  theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(1,1),legend.position=c(1,1))
 
 ##plot joint h2 estimates
-local <- fdrother %>% select(loc.jt.h2,loc.jt.se,loc.jt.P,locPlt05)%>% arrange(loc.jt.h2) %>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),base::sample(loc.jt.se[is.na(loc.jt.se)==FALSE][1:100],size=length(loc.jt.se[is.na(loc.jt.se)==TRUE]),replace=TRUE),loc.jt.se))%>% arrange(loc.jt.h2) 
-names(local) = c('h2','se','jt.P','Plt05')
-data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-cigt0 <- data$ymin>0
-cat("local jt.P < 0.05 (distal: known eQTLs)")
-table(data$jt.P < 0.05,useNA='i')
-sum(table(data$jt.P < 0.05,useNA='i'))
-ptrue <-round(table(data$jt.P < 0.05,useNA='i')/sum(table(data$jt.P < 0.05,useNA='i')),3)*100
+local <- fdrother %>% select(loc.jt.h2,loc.jt.se,loc.jt.P,locPlt05,ensid)%>% arrange(loc.jt.h2) 
+local <- local %>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),base::sample(loc.jt.se[is.na(loc.jt.se)==FALSE][1:100],size=length(loc.jt.se[is.na(loc.jt.se)==TRUE]),replace=TRUE),loc.jt.se))%>% arrange(loc.jt.h2) 
+names(local) = c('h2','se','jt.P','Plt05','ensid')
+local <- local %>% mutate(ymin =  h2 - 2 * se, ymax =  h2 + 2 * se )
+cigt0 <- local$ymin>0
+table(local$jt.P < 0.05,useNA='i')
+sum(table(local$jt.P < 0.05,useNA='i'))
+ptrue <-round(table(local$jt.P < 0.05,useNA='i')/sum(table(local$jt.P < 0.05,useNA='i')),3)*100
 ptrue
-meanh2<-round(mean(data$h2),3)
+meanh2<-round(mean(local$h2),3)
 meanh2
-meanse <- round(mean(data$se),3)
+meanse <- round(mean(local$se),3)
 meanse
-data <- mutate(data,P=factor(Plt05,labels=c("\u2265 0.05","< 0.05")),position=1:nrow(data))
-my_grob2 = grobTree(textGrob(substitute(paste("% P < 0.05: ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
+local <- mutate(local,P=factor(Plt05,labels=c("\u2265 0.05","< 0.05")),position=1:nrow(local))
+my_grob2 = grobTree(textGrob(substitute(paste("% P < 0.05: ", m),list(m=ptrue[2])), x=0.05,  y=0.70, hjust=0,gp=gpar(fontsize=14)))
 
-b<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=P) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob2)
+b<-ggplot(local,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=P) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + 
+  xlab(expression("genes ordered by local h"^2))+theme_bw()+
+  theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+
+  annotation_custom(my_grob2)
 
-global <- fdrother %>% select(gene,glo.jt.h2,glo.jt.se,glo.jt.P,gloPlt05) %>% arrange(glo.jt.h2) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),base::sample(glo.jt.se[is.na(glo.jt.se)==FALSE][1:1000],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE]),replace=TRUE),glo.jt.se))%>% arrange(glo.jt.h2)  
-names(global) = c('gene','h2','se','jt.P','Plt05')
-data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-#data <- data[complete.cases(data),]
-cigt0 <- data$ymin>0
-ptrueCI<-round(table(cigt0)/sum(table(cigt0)),3)*100
-cat("global jt.P < 0.05 (distal: known eQTLs)")
-table(data$jt.P < 0.05,useNA='i')
-sum(table(data$jt.P < 0.05,useNA='i'))
-ptrue <-signif(table(data$jt.P < 0.05,useNA='i')/sum(table(data$jt.P < 0.05,useNA='i')),3)*100
+global <- fdrother %>% select(gene,glo.jt.h2,glo.jt.se,glo.jt.P,gloPlt05,ensid) %>% arrange(glo.jt.h2) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),base::sample(glo.jt.se[is.na(glo.jt.se)==FALSE][1:1000],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE]),replace=TRUE),glo.jt.se))%>% arrange(glo.jt.h2)  
+names(global) = c('gene','h2','se','jt.P','Plt05','ensid')
+global <- global %>% mutate(ymin =  h2 - 2 * se, ymax =  h2 + 2 * se)
+table(global$jt.P < 0.05,useNA='i')
+sum(table(global$jt.P < 0.05,useNA='i'))
+ptrue <-signif(table(global$jt.P < 0.05,useNA='i')/sum(table(global$jt.P < 0.05,useNA='i')),3)*100
 ptrue
-meanh2<-round(mean(data$h2),3)
+meanh2<-round(mean(global$h2),3)
 meanh2
-meanse <- round(mean(data$se),3)
+meanse <- round(mean(global$se),3)
 meanse
-data <- mutate(data,P=factor(Plt05,labels=c("\u2265 0.05","< 0.05")),position=1:nrow(data))
+global <- mutate(global,P=factor(Plt05,labels=c("\u2265 0.05","< 0.05")),position=1:nrow(global))
 
-glopriorlist <- dplyr::filter(data,Plt05==TRUE) %>% dplyr::select(gene)
+glopriorlist <- dplyr::filter(global,Plt05==TRUE) %>% dplyr::select(gene)
 
-my_grob2 = grobTree(textGrob(substitute(paste("% P < 0.05: ", m),list(m=ptrue[2])), x=0.05,  y=0.96, hjust=0,gp=gpar(fontsize=14)))
+my_grob2 = grobTree(textGrob(substitute(paste("% P < 0.05: ", m),list(m=ptrue[2])), x=0.05,  y=0.70, hjust=0,gp=gpar(fontsize=14)))
 
-c<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=P) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.position="none")+annotation_custom(my_grob2)
+c<-ggplot(global,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=P) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + 
+  xlab(expression("genes ordered by distal h"^2))+theme_bw()+coord_cartesian(ylim=c(-1.05,1.55))+
+  theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+
+  annotation_custom(my_grob2)
 
 ##make same plots using all SNPs on other chrs for global
-otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_all.Chr1-22_globalOtherChrallSNPs.2015-10-22.txt'
+otherfile<-my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globalAll_reml-no-constrain.2015-12-15.txt'
 
 other<-read.table(otherfile,header=T) ##all SNPs on non-gene chromosomes used to define global GRM
-d  <- other %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se) )
-cigt0 <- d$ymin>0
-ptrue<-round(table(cigt0)/sum(table(cigt0)),3)*100
-ptrue
+d  <- other %>% mutate(ymin =  glo.jt.h2 - 2 * glo.jt.se, ymax =  glo.jt.h2 + 2 * glo.jt.se )
 
-other <- mutate(d, loc.jt.P = 2*pnorm(-abs(loc.jt.h2/loc.jt.se)), glo.jt.P = 2*pnorm(-abs(glo.jt.h2/glo.jt.se))) %>% mutate(loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P),glo.jt.P=ifelse(is.na(glo.jt.P),1,glo.jt.P)) %>% mutate(locPlt05=loc.jt.P < 0.05,gloPlt05=glo.jt.P < 0.05) %>% mutate(`distal P`=factor(gloPlt05,labels=c('\u2265 0.05','< 0.05')))
+#other <- mutate(d, loc.jt.P = ifelse(loc.jt.h2 > 0, 2*pnorm(-abs(loc.jt.h2/loc.jt.se)),1), glo.jt.P = ifelse(glo.jt.h2 > 0, 2*pnorm(-abs(glo.jt.h2/glo.jt.se)),1)) %>% mutate(loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P),glo.jt.P=ifelse(is.na(glo.jt.P),1,glo.jt.P)) %>%   mutate(locPlt05=loc.jt.P < 0.05,gloPlt05=glo.jt.P < 0.05) %>% mutate(`distal P`=factor(gloPlt05,labels=c('\u2265 0.05','< 0.05')))
+other <- mutate(d, loc.jt.P = 2*pnorm(-abs(loc.jt.h2/loc.jt.se)) , glo.jt.P = 2*pnorm(-abs(glo.jt.h2/glo.jt.se))) %>% mutate(loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P),glo.jt.P=ifelse(is.na(glo.jt.P),1,glo.jt.P)) %>%   mutate(locPlt05=loc.jt.P < 0.05,gloPlt05=glo.jt.P < 0.05) %>% mutate(`distal P`=factor(gloPlt05,labels=c('\u2265 0.05','< 0.05')))
 table(other$gloPlt05)
 
-aother<-ggplot(other,aes(x=loc.jt.h2,y=glo.jt.h2,color=`distal P`)) + geom_point(cex=0.8) + geom_abline(intercept=1, slope=-1) + xlab(expression("local h"^2)) + ylab(expression("distal h"^2)) + coord_cartesian(ylim=c(-0.05,1.05),xlim=c(-0.05,1.05)) + theme_bw() + theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(1,1),legend.position=c(1,1))
+aother<-ggplot(other,aes(x=loc.jt.h2,y=glo.jt.h2,color=`distal P`)) + geom_point(cex=1,alpha=2/3) + 
+  xlab(expression("local h"^2)) + ylab(expression("distal h"^2)) + coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.7,1.3)) + theme_bw() + 
+  theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(1,1),legend.position=c(1,1))
 
-local <- other %>% select(loc.jt.h2,loc.jt.se,loc.jt.P,locPlt05) %>% arrange(loc.jt.h2) %>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),base::sample(loc.jt.se[is.na(loc.jt.se)==FALSE][1:100],size=length(loc.jt.se[is.na(loc.jt.se)==TRUE]),replace=TRUE),loc.jt.se))%>% arrange(loc.jt.h2)  
-names(local) = c('h2','se','jt.P','Plt05')
-data <- local %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-cigt0 <- data$ymin>0
-ptrueCI<-round(table(cigt0)/sum(table(cigt0)),3)*100
-cat("local jt.P < 0.05 (distal: all eQTLs)")
-table(data$jt.P < 0.05,useNA='i')
-sum(table(data$jt.P < 0.05,useNA='i'))
-ptrue <-round(table(data$jt.P < 0.05,useNA='i')/sum(table(data$jt.P < 0.05,useNA='i')),3)*100
+localall <- other %>% select(loc.jt.h2,loc.jt.se,loc.jt.P,locPlt05,ensid) %>% arrange(loc.jt.h2) %>% 
+  mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se),
+  base::sample(loc.jt.se[is.na(loc.jt.se)==FALSE][1:100],size=length(loc.jt.se[is.na(loc.jt.se)==TRUE]),replace=TRUE),loc.jt.se))%>% arrange(loc.jt.h2)  
+names(localall) = c('h2','se','jt.P','Plt05','ensid')
+localall <- localall %>% mutate(ymin =  h2 - 2 * se, ymax =  h2 + 2 * se )
+table(localall$jt.P < 0.05,useNA='i')
+sum(table(localall$jt.P < 0.05,useNA='i'))
+ptrue <-round(table(localall$jt.P < 0.05,useNA='i')/sum(table(localall$jt.P < 0.05,useNA='i')),3)*100
 ptrue
-meanh2<-round(mean(data$h2),3)
+meanh2<-round(mean(localall$h2),3)
 meanh2
-meanse <- round(mean(data$se),3)
+meanse <- round(mean(localall$se),3)
 meanse
-data <- mutate(data,P=factor(Plt05,labels=c("\u2265 0.05","< 0.05")),position=1:nrow(data))
-my_grob2 = grobTree(textGrob(substitute(paste("% P < 0.05: ", m),list(m=ptrue[2])), x=0.05,  y=0.66, hjust=0,gp=gpar(fontsize=14)))
+localall <- mutate(localall,P=factor(Plt05,labels=c("\u2265 0.05","< 0.05")),position=1:nrow(localall))
+my_grob2 = grobTree(textGrob(substitute(paste("% P < 0.05: ", m),list(m=ptrue[2])), x=0.05,  y=0.70, hjust=0,gp=gpar(fontsize=14)))
 
-bother<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=P) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob2)
+bother<-ggplot(localall,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=P) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + 
+  xlab(expression("genes ordered by local h"^2))+theme_bw()+
+  theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+
+  annotation_custom(my_grob2)
 
-global <- other %>% select(gene,glo.jt.h2,glo.jt.se,glo.jt.P,gloPlt05) %>% arrange(glo.jt.h2) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),base::sample(glo.jt.se[is.na(glo.jt.se)==FALSE][1:1000],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE]),replace=TRUE),glo.jt.se))%>% arrange(glo.jt.h2) 
-names(global) = c('gene','h2','se','jt.P','Plt05')
-data <- global %>% mutate(ymin = pmax(0, h2 - 2 * se), ymax = pmin(1, h2 + 2 * se) )
-cigt0 <- data$ymin>0
-ptrueCI<-round(table(cigt0)/sum(table(cigt0)),3)*100
-cat("global jt.P < 0.05 (distal: known eQTLs)")
-table(data$jt.P < 0.05,useNA='i')
-sum(table(data$jt.P < 0.05,useNA='i'))
-ptrue <-signif(table(data$jt.P < 0.05,useNA='i')/sum(table(data$jt.P < 0.05,useNA='i')),3)*100
+globalall <- other %>% select(gene,glo.jt.h2,glo.jt.se,glo.jt.P,gloPlt05,ensid) %>% arrange(glo.jt.h2) %>% 
+  mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),
+  base::sample(glo.jt.se[is.na(glo.jt.se)==FALSE][1:1000],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE]),replace=TRUE),glo.jt.se))%>% arrange(glo.jt.h2) 
+names(globalall) = c('gene','h2','se','jt.P','Plt05','ensid')
+globalall <- globalall %>% mutate(ymin =  h2 - 2 * se, ymax =  h2 + 2 * se )
+table(globalall$jt.P < 0.05,useNA='i')
+sum(table(globalall$jt.P < 0.05,useNA='i'))
+ptrue <-signif(table(globalall$jt.P < 0.05,useNA='i')/sum(table(globalall$jt.P < 0.05,useNA='i')),3)*100
 ptrue
-meanh2<-round(mean(data$h2,useNA="T"),3)
+meanh2<-round(mean(globalall$h2,useNA="T"),3)
 meanh2
-meanse <- round(mean(data$se),3)
+meanse <- round(mean(globalall$se),3)
 meanse
-data <- mutate(data,P=factor(Plt05,labels=c("\u2265 0.05","< 0.05")),position=1:nrow(data))
+globalall <- mutate(globalall,P=factor(Plt05,labels=c("\u2265 0.05","< 0.05")),position=1:nrow(globalall))
 
-glolist <- dplyr::filter(data,Plt05==TRUE) %>% dplyr::select(gene)
+glolist <- dplyr::filter(globalall,Plt05==TRUE) %>% dplyr::select(gene)
 table(glolist$gene %in% glopriorlist$gene)
 
-my_grob2 = grobTree(textGrob(substitute(paste("% P < 0.05: ", m),list(m=ptrue[2])), x=0.05,  y=0.96, hjust=0,gp=gpar(fontsize=14)))
+my_grob2 = grobTree(textGrob(substitute(paste("% P < 0.05: ", m),list(m=ptrue[2])), x=0.05,  y=0.70, hjust=0,gp=gpar(fontsize=14)))
 
-cother<-ggplot(data,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=P) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+coord_cartesian(ylim=c(-0.05,1.05))+theme_bw()+theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.position="none")+annotation_custom(my_grob2)
+cother<-ggplot(globalall,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=P) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + 
+  xlab(expression("genes ordered by distal h"^2))+theme_bw()+coord_cartesian(ylim=c(-1.05,1.55))+
+  theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+
+  annotation_custom(my_grob2)
 
-png(filename=fig.dir %&% "Fig-DGN-jt-h2.png",width=720,height=960)
+png(filename=fig.dir %&% "Fig-DGN-jt-h2-UNCONSTRAINED.png",width=720,height=960)
 multiplot(aother+ggtitle('local = SNPs within 1Mb of gene\ndistal = SNPs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")), bother, cother, a+ggtitle('local = SNPs within 1Mb of gene\ndistal = known eQTLs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")),b, c,cols=2)
 dev.off()
 
-tiff(filename=fig.dir %&% "Fig-DGN-jt-h2.tiff",width=720,height=960)
+tiff(filename=fig.dir %&% "Fig-DGN-jt-h2-UNCONSTRAINED.tiff",width=720,height=960)
 multiplot(aother+ggtitle('local = SNPs within 1Mb of gene\ndistal = SNPs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")), bother, cother, a+ggtitle('local = SNPs within 1Mb of gene\ndistal = known eQTLs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")),b, c,cols=2)
 dev.off()
+
+##calc mean CIs
+summary(local) #known eQTLs on non-chr
+summary(localall) #all non-chr SNPs
+summary(global)
+summary(globalall)
+
+bothlocal <- left_join(local,localall,by='ensid')
+cor(bothlocal$h2.x,bothlocal$h2.y,'s',use='p')
+bothglobal <- left_join(global,globalall,by='ensid')
+cor(bothglobal$h2.x,bothglobal$h2.y,'s',use='p')
 ```
 
 ##Fig 2
 ###DGN Polygenic v. sparse  by elastic net.
-```{r EN, echo=TRUE, warning=FALSE, message=FALSE,eval=TRUE}
+```{r EN, echo=TRUE, warning=FALSE, message=FALSE,eval=FALSE}
 data<-read.table(my.dir %&% 'DGN-WB_exp_10-foldCV_1-reps_elasticNet_eachAlphaR2_hapmap2snps_chr22_2015-01-21.txt',header=T)
 colnames(data)<-c("gene",0:20/20)
 a <- data$gene %in% fdrother$gene
@@ -194,7 +235,7 @@ alpha1 <- read.table(dgn.dir %&% 'DGN-WB_exp_10-foldCV_elasticNet_alpha1_hapmapS
 all <- inner_join(gcta,alpha1,by='gene')
 all <- inner_join(all,bslmm,by='gene')
 all <- all[complete.cases(all),]
-b<-ggplot(all,aes(x=local.h2,y=pve50,color=R2)) + geom_point() +coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05)) + theme_bw() +xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1)) + scale_colour_gradient(low="pink",high="blue",name=expression("EN R"^2))  + theme(legend.position = c(0.25,0.55),legend.justification = c(1,0),legend.key.size=unit(0.3,"cm"),legend.title=element_text(size=8),legend.text=element_text(size=8))
+b<-ggplot(all,aes(x=local.h2,y=pve50,color=R2)) + geom_point() +coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05)) + theme_bw() +xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(intercept=0,slope=1) + scale_colour_gradient(low="pink",high="blue",name=expression("EN R"^2))  + theme(legend.position = c(0.25,0.55),legend.justification = c(1,0),legend.key.size=unit(0.3,"cm"),legend.title=element_text(size=8),legend.text=element_text(size=8))
 cor.test(all$local.h2,all$pve50)
 cor.test(all$local.h2,all$R2)
 cor.test(all$pve50,all$R2)
@@ -206,7 +247,7 @@ postscript(file=fig.dir %&% "Fig-DGN-BSLMM.eps",width=7.2,height=3.6)
 multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=12)),b + ggtitle('B\n')+ theme(plot.title=element_text(hjust=0),text=element_text(size=12)),cols=2)
 dev.off()
 
-b<-ggplot(all,aes(x=local.h2,y=pve50,color=R2)) + geom_point() +coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05)) + theme_bw() +xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1)) + scale_colour_gradient(low="pink",high="blue",name=expression("EN R"^2))  + theme(legend.position = c(0.25,0.55),legend.justification = c(1,0),legend.key.size=unit(0.5,"cm"),legend.title=element_text(size=12),legend.text=element_text(size=12))
+b<-ggplot(all,aes(x=local.h2,y=pve50,color=R2)) + geom_point() +coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05)) + theme_bw() +xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(intercept=0,slope=1) + scale_colour_gradient(low="pink",high="blue",name=expression("EN R"^2))  + theme(legend.position = c(0.25,0.55),legend.justification = c(1,0),legend.key.size=unit(0.5,"cm"),legend.title=element_text(size=12),legend.text=element_text(size=12))
 
 png(filename=fig.dir %&% "Fig-DGN-BSLMM.png",width=720,height=360)
 multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=18)),b + ggtitle('B\n')+ theme(plot.title=element_text(hjust=0),text=element_text(size=18)),cols=2)
@@ -257,7 +298,7 @@ for(i in 1:length(tislist)){
   nvec <- cbind(nvec,h2$N[1])
   tw <- rbind(tw,subdata)
 }
-p<-ggplot(tw,aes(x=h2,y=pve50,color=R2))+geom_point()+coord_cartesian(xlim=c(-0.05,1.1),ylim=c(-0.05,1.1))+xlab(expression("LMM h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1)) + scale_colour_gradient(low="pink",high="blue",name=expression("EN R"^2)) + facet_wrap(~tissue,ncol=3)+theme_bw()
+p<-ggplot(tw,aes(x=h2,y=pve50,color=R2))+geom_point()+coord_cartesian(xlim=c(-0.05,1.1),ylim=c(-0.05,1.1))+xlab(expression("LMM h"^2))+ylab('BSLMM PVE')+geom_abline(intercept=0,slope=1) + scale_colour_gradient(low="pink",high="blue",name=expression("EN R"^2)) + facet_wrap(~tissue,ncol=3)+theme_bw()
 
 ann_text <- data.frame( h2 = rep(1.08,9), pve50 = rep(0.15,9), R= rvec3[1:9], tissue = factor(tislist), ensid=rep(0.9,9),gene=rep(0.9,9))
 ann_text2 <- data.frame( h2 = rep(1.08,9), pve50 = rep(0.05,9), R= rvec2[1:9], tissue = factor(tislist), ensid=rep(0.9,9),gene=rep(0.9,9))
@@ -275,6 +316,27 @@ setEPS()
 postscript(file=fig.dir %&% "Fig-GTEx_TW_PVE_v_h2.eps",width=9,height=8)
 p3
 dev.off()
+
+#h2 Spearman cor table
+h2d<-dplyr::select(tw,tissue,ensid,h2)
+h2dat <- h2d[duplicated(h2d)==FALSE,]
+h2tab<-tidyr::spread(h2dat,tissue,h2)
+dim(h2tab)
+cor(h2tab[,-1],use='p',method='s')
+
+#pve50 Spearman cor table
+pve50d<-dplyr::select(tw,tissue,ensid,pve50)
+pve50dat <- pve50d[duplicated(pve50d)==FALSE,]
+pve50tab<-tidyr::spread(pve50dat,tissue,pve50)
+dim(pve50tab)
+cor(pve50tab[,-1],use='p',method='s')
+
+#R2 (EN alpha=1) Spearman cor table
+R2d<-dplyr::select(tw,tissue,ensid,R2)
+R2dat <- R2d[duplicated(h2d)==FALSE,]
+R2tab<-tidyr::spread(R2dat,tissue,R2)
+dim(R2tab)
+cor(R2tab[,-1],use='p',method='s')
 ```
 
 ##Fig 5
@@ -285,7 +347,7 @@ Stephens lab data accessed from http://www.gtexportal.org/static/datasets/gtex_a
 
 From README: “We are using the eQTL posterior probabilities from the UC Multi-tissue eQTL method (doi:10.1371/journal.pgen.1003486) for each of the 9 tissues analyzed in the pilot phase (Adipose_subcutaneous, Artery_Tibal, Whole_Blood, Heart_Left_Ventricle, Lung, Muscle_Skeletal, Nerve_Tibial, Skin_Lower_Leg_Sun_Exposed, Thyroid) in the file res_final_uc_com_genes_com_snps.txt.gz. These values may be interpreted as Pr(SNP is eQTL in tissue s | data). 9875 eGenes are presented, with the”top" (most significant) SNP in each gene used."
 
-```{r,entropTSh2,eval=TRUE}
+```{r,entropTSh2,eval=FALSE}
 mt.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/Multi_tissue_eQTL_GTEx_Pilot_Phase_datasets/"
 h2.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/"
 bslmm.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/BSLMM_exp/"
@@ -339,7 +401,7 @@ dev.off()
 
 ##Fig 6
 ###Table of Pr vs PVE correlations
-```{r PrPVE, eval=TRUE}
+```{r PrPVE, eval=FALSE}
 pve.tw <- read.table(bslmm.dir %&% "GTEx_Tissue-Wide_local_PVE_by_BSLMM.txt",header=TRUE)
 #remove version number in order to compare ensembl IDs
 pve.tw <- mutate(pve.tw,gene=substr(pve.tw$gene,1,15))
