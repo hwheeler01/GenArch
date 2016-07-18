@@ -78,11 +78,9 @@ meanse <- round(mean(local$se),3)
 meanse
 local <- mutate(local,P=factor(Plt05,labels=c("\u2265 0.05","< 0.05")),position=1:nrow(local))
 my_grob2 = grobTree(textGrob(substitute(paste("% P < 0.05: ", m),list(m=ptrue[2])), x=0.05,  y=0.70, hjust=0,gp=gpar(fontsize=14)))
+#my_grob3 = grobTree(textGrob(substitute(paste("mean h^2: ", m),list(m=meanh2)), x=0.05,  y=0.60, hjust=0,gp=gpar(fontsize=14)))
 
-b<-ggplot(local,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=P) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + 
-  xlab(expression("genes ordered by local h"^2))+theme_bw()+
-  theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+
-  annotation_custom(my_grob2)
+b<-ggplot(local,aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=P) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+theme_bw()+  theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+ annotation_custom(my_grob2) 
 
 global <- fdrother %>% select(gene,glo.jt.h2,glo.jt.se,glo.jt.P,gloPlt05,ensid) %>% arrange(glo.jt.h2) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),base::sample(glo.jt.se[is.na(glo.jt.se)==FALSE][1:1000],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE]),replace=TRUE),glo.jt.se))%>% arrange(glo.jt.h2)  
 names(global) = c('gene','h2','se','jt.P','Plt05','ensid')
@@ -318,25 +316,38 @@ p3
 dev.off()
 
 #h2 Spearman cor table
+col1 <- colorRampPalette(c("red","#FF7F00","cyan", "#007FFF", "blue","red","#FF7F00","cyan", "#007FFF", "blue"))
 h2d<-dplyr::select(tw,tissue,ensid,h2)
 h2dat <- h2d[duplicated(h2d)==FALSE,]
 h2tab<-tidyr::spread(h2dat,tissue,h2)
 dim(h2tab)
-cor(h2tab[,-1],use='p',method='s')
+h2cor<-as.matrix(cor(h2tab[,-1],use='p',method='s'))
+corrplot(h2cor,method="number",cl.lim = c(0, 1),col=col1(100))
+
+setEPS()
+postscript(file=fig.dir %&% "Fig-GTEx_TW_h2_corplot.eps",width=6,height=6)
+corrplot(h2cor,method="number",cl.lim = c(0, 1),col=col1(100))
+dev.off()
+
+png(filename=fig.dir %&% "Fig-GTEx_TW_h2_corplot.png",width=480,height=480)
+corrplot(h2cor,method="number",cl.lim = c(0, 1),col=col1(100))
+dev.off()
 
 #pve50 Spearman cor table
 pve50d<-dplyr::select(tw,tissue,ensid,pve50)
 pve50dat <- pve50d[duplicated(pve50d)==FALSE,]
 pve50tab<-tidyr::spread(pve50dat,tissue,pve50)
 dim(pve50tab)
-cor(pve50tab[,-1],use='p',method='s')
+pve50cor<-as.matrix(cor(pve50tab[,-1],use='p',method='s'))
+corrplot(pve50cor,method="number",cl.lim = c(0, 1),col=col1(100))
 
 #R2 (EN alpha=1) Spearman cor table
 R2d<-dplyr::select(tw,tissue,ensid,R2)
 R2dat <- R2d[duplicated(h2d)==FALSE,]
 R2tab<-tidyr::spread(R2dat,tissue,R2)
 dim(R2tab)
-cor(R2tab[,-1],use='p',method='s')
+R2cor<-as.matrix(cor(R2tab[,-1],use='p',method='s'))
+corrplot(R2cor,method="number",cl.lim = c(0, 1),col=col1(100))
 ```
 
 ##Fig 5
@@ -384,6 +395,7 @@ groupdata <- dplyr::mutate(newdata, group=ifelse(entropy<0.33,0,1))
 groupdata <- dplyr::mutate(newdata, group=ifelse(entropy>0.67,2,groupdata$group))
 colnames(groupdata)[3] <- "h2"
 p <- ggplot(groupdata,aes(y=h2,x=factor(group,labels=c("0-0.33","0.33-0.67","0.67-1"))))+geom_boxplot()+ylab(expression(paste("Cross-Tissue ", "h"^{2}))) + xlab("Uniformity")
+kruskal.test(h2~factor(group),groupdata)
 cors <- data.frame(pval=signif(kruskal.test(h2~factor(group),groupdata)$p.value, 2))
 p1 <- p + geom_text(data=cors, aes(label=paste("P = ", pval, sep="")), x=-Inf, y=Inf, hjust=-0.5, vjust=2, size=5)
 print(kruskal.test(h2~factor(group),groupdata))
@@ -396,6 +408,15 @@ dev.off()
 
 png(filename=fig.dir %&% "Fig-CT-entropy.png",width=360,height=360)
 a
+dev.off()
+
+res<-summary(lm(log10(newdata$CrossTissue)~newdata$entropy))
+pval<-data.frame(p=signif(res$coef[2,4],2))
+b<-ggplot(newdata,aes(x=entropy,y=log10(CrossTissue)))+geom_point(alpha=1/4)+geom_smooth(method='lm')+theme_bw(16)+ylab(expression(paste("log"[10]," Cross-Tissue ", "h"^{2}))) + xlab("Uniformity") +geom_text(data=pval,aes(label=paste("P = ", p, sep="")), x=-Inf, y=Inf, hjust=-0.5, vjust=2, size=5)
+b
+
+png(filename=fig.dir %&% "Fig-CT-entropy-continuous-lm.png",width=360,height=360)
+b
 dev.off()
 ```
 
