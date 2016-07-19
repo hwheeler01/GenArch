@@ -65,13 +65,6 @@ Wright FA, Sullivan PF, Brooks AI, Zou F, Sun W, Xia K, et~al.
 \newblock Nature Genetics. 2014 apr;46(5):430--437.
 \newblock Available from: \url{http://dx.doi.org/10.1038/ng.2951}.
 
-\bibitem{Price_2011}
-Price AL, Helgason A, Thorleifsson G, McCarroll SA, Kong A, Stefansson K.
-\newblock Single-Tissue and Cross-Tissue Heritability of Gene Expression Via
-  Identity-by-Descent in Related or Unrelated Individuals.
-\newblock {PLoS} Genetics. 2011;7(2):e1001317.
-\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1001317}.
-
 \bibitem{Purcell_2009}
 Purcell SM, Wray NR, Stone JL, Visscher PM, O'Donovan MC, Sullivan PF, et~al.
 \newblock Common polygenic variation contributes to risk of schizophrenia and
@@ -130,6 +123,20 @@ Wheeler HE, Aquino-Michaels K, Gamazon ER, Trubetskoy VV, Dolan ME, Huang RS,
 \newblock Genetic Epidemiology. 2014;38(5):402--415.
 \newblock Available from: \url{http://dx.doi.org/10.1002/gepi.21808}.
 
+\bibitem{Zou_2005}
+Zou H, Hastie T.
+\newblock Regularization and variable selection via the elastic net.
+\newblock Journal of the Royal Statistical Society: Series B (Statistical
+  Methodology). 2005;67(2):301--320.
+\newblock Available from:
+  \url{http://dx.doi.org/10.1111/j.1467-9868.2005.00503.x}.
+
+\bibitem{abraham2013performance}
+Abraham G, Kowalczyk A, Zobel J, Inouye M.
+\newblock Performance and robustness of penalized and unpenalized methods for
+  genetic prediction of complex human disease.
+\newblock Genetic Epidemiology. 2013;37(2):184--195.
+
 \bibitem{Zhou_2013}
 Zhou X, Carbonetto P, Stephens M.
 \newblock Polygenic Modeling with Bayesian Sparse Linear Mixed Models.
@@ -163,6 +170,13 @@ Yang J, Lee SH, Goddard ME, Visscher PM.
 \newblock The American Journal of Human Genetics. 2011;88(1):76--82.
 \newblock Available from: \url{http://dx.doi.org/10.1016/j.ajhg.2010.11.011}.
 
+\bibitem{Price_2011}
+Price AL, Helgason A, Thorleifsson G, McCarroll SA, Kong A, Stefansson K.
+\newblock Single-Tissue and Cross-Tissue Heritability of Gene Expression Via
+  Identity-by-Descent in Related or Unrelated Individuals.
+\newblock {PLoS} Genetics. 2011;7(2):e1001317.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1001317}.
+
 \bibitem{pierce2014mediation}
 Pierce BL, Tong L, Chen LS, Rahaman R, Argos M, Jasmine F, et~al.
 \newblock Mediation Analysis Demonstrates That Trans-eQTLs Are Often Explained
@@ -180,14 +194,6 @@ Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et~al.
 Speed D, Hemani G, Johnson MR, Balding DJ.
 \newblock Improved heritability estimation from genome-wide SNPs.
 \newblock The American Journal of Human Genetics. 2012;91(6):1011--1021.
-
-\bibitem{Zou_2005}
-Zou H, Hastie T.
-\newblock Regularization and variable selection via the elastic net.
-\newblock Journal of the Royal Statistical Society: Series B (Statistical
-  Methodology). 2005;67(2):301--320.
-\newblock Available from:
-  \url{http://dx.doi.org/10.1111/j.1467-9868.2005.00503.x}.
 
 \bibitem{Flutre_2013}
 Flutre T, Wen X, Pritchard J, Stephens M.
@@ -208,6 +214,37 @@ Leek JT, Storey JD.
 \newblock Capturing heterogeneity in gene expression studies by surrogate
   variable analysis.
 \newblock PLoS Genet. 2007;3(9):1724--1735.
+
+\bibitem{manor2013robust}
+Manor O, Segal E.
+\newblock Robust prediction of expression differences among human individuals
+  using only genotype information.
+\newblock PLoS Genet. 2013;9(3):e1003396.
+
+\bibitem{gusev2016integrative}
+Gusev A, Ko A, Shi H, Bhatia G, Chung W, Penninx BW, et~al.
+\newblock Integrative approaches for large-scale transcriptome-wide association
+  studies.
+\newblock Nature genetics. 2016;.
+
+\bibitem{zhu2016integration}
+Zhu Z, Zhang F, Hu H, Bakshi A, Robinson MR, Powell JE, et~al.
+\newblock Integration of summary data from GWAS and eQTL studies predicts
+  complex trait gene targets.
+\newblock Nature genetics. 2016;.
+
+\bibitem{giambartolomei2014bayesian}
+Giambartolomei C, Vukcevic D, Schadt EE, Franke L, Hingorani AD, Wallace C,
+  et~al.
+\newblock Bayesian test for colocalisation between pairs of genetic association
+  studies using summary statistics.
+\newblock PLoS Genet. 2014;10(5):e1004383.
+
+\bibitem{he2013sherlock}
+He X, Fuller CK, Song Y, Meng Q, Zhang B, Yang X, et~al.
+\newblock Sherlock: detecting gene-disease associations by matching patterns of
+  expression QTL and GWAS.
+\newblock The American Journal of Human Genetics. 2013;92(5):667--680.
 
 \bibitem{Howie_2012}
 Howie B, Fuchsberger C, Stephens M, Marchini J, Abecasis GR.

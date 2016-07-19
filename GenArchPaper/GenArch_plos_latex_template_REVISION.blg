@@ -11,45 +11,45 @@ Warning--empty year in MacDonald_1
 Warning--empty year in MacDonald_2
 Warning--empty author and editor in R_Core_Team_2015
 Warning--missing publisher in R_Core_Team_2015
-You've used 48 entries,
+You've used 54 entries,
             3170 wiz_defined-function locations,
-            1005 strings with 26151 characters,
-and the built_in function-call counts, 185885 in all, are:
-= -- 22190
-> -- 944
+            1032 strings with 27653 characters,
+and the built_in function-call counts, 200505 in all, are:
+= -- 23976
+> -- 1080
 < -- 2
-+ -- 812
-- -- 236
-* -- 17884
-:= -- 20177
-add.period$ -- 221
-call.type$ -- 48
++ -- 880
+- -- 270
+* -- 19166
+:= -- 21747
+add.period$ -- 245
+call.type$ -- 54
 change.case$ -- 2
 chr.to.int$ -- 0
-cite$ -- 52
-duplicate$ -- 8605
-empty$ -- 18986
-format.name$ -- 279
-if$ -- 42603
+cite$ -- 58
+duplicate$ -- 9655
+empty$ -- 20400
+format.name$ -- 319
+if$ -- 45997
 int.to.chr$ -- 0
-int.to.str$ -- 48
-missing$ -- 608
-newline$ -- 275
-num.names$ -- 48
-pop$ -- 950
+int.to.str$ -- 54
+missing$ -- 686
+newline$ -- 305
+num.names$ -- 54
+pop$ -- 1070
 preamble$ -- 1
 purify$ -- 0
 quote$ -- 0
-skip$ -- 1072
+skip$ -- 1212
 stack$ -- 0
-substring$ -- 47296
-swap$ -- 1353
+substring$ -- 50424
+swap$ -- 1515
 text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 0
 warning$ -- 4
-while$ -- 545
-width$ -- 50
-write$ -- 592
+while$ -- 615
+width$ -- 56
+write$ -- 656
 (There were 4 warnings)
