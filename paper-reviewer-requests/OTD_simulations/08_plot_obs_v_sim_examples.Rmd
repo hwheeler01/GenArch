@@ -29,10 +29,12 @@ allctcor <- fread(my.dir %&% "CT_genecor_obs_v_sim.txt")
 ctsum1 <- dplyr::filter(allctcor,sim=="errvar-sum_mult-1") %>% arrange(desc(genecor))
 summary(ctsum1)
 head(ctsum1)
+ quantile(ctsum1$genecor,probs=c(0.025,0.975), na.rm=TRUE)
 dplyr::filter(ctsum1,genecor>0.5393 & genecor<0.5394)
 alltscor <- fread(my.dir %&% "TS_genecor_obs_v_sim.txt")
 tssum1 <- dplyr::filter(alltscor,sim=="errvar-sum_mult-1")
 summary(tssum1)
+quantile(tssum1$tsgenecor,probs=c(0.025,0.975), na.rm=TRUE)
 dplyr::filter(tssum1,gene=="ENSG00000166181.8")
 dplyr::filter(tssum1,gene=="ENSG00000137776.12")
 dplyr::filter(tssum1,gene=="ENSG00000135480.10")
@@ -60,8 +62,8 @@ simts <- fread(sim.dir %&% "resid.Tissue-specific.exp.pheno_sim_exp_phenotype_er
 
 ###rep examples
 ```{r,fig.width=10,fig.height=5}
-genelist<-c('ENSG00000166181.8',"ENSG00000137776.12","ENSG00000135480.10","ENSG00000148950.5","ENSG00000180739.12")
-glist <- c('API5','SLTM','KRT7','IMMP1L','S1PR5')
+genelist<-c('ENSG00000204525.10','ENSG00000166181.8',"ENSG00000137776.12","ENSG00000135480.10","ENSG00000148950.5","ENSG00000180739.12")
+glist <- c('HLA-C','API5','SLTM','KRT7','IMMP1L','S1PR5')
 for(i in 1:length(genelist)){
   gene <- genelist[i]
   g <- glist[i]
@@ -107,9 +109,9 @@ for(tis in tislist){
   res <- cor.test(subgene$observed,subgene$simulated)
   rvec <- cbind(rvec,unname(round(res$estimate,3)))
 }
-ann_text <- data.frame( observed = rep(0,10), simulated = rep(-3,10), R= rvec[1:10], TISSUE = factor(tislist), ID=rep(0.9,10))
+ann_text <- data.frame( observed = rep(0,10), simulated = rep(-2.5,10), R= rvec[1:10], TISSUE = factor(tislist), ID=rep(0.9,10))
 p<-ggplot(geneall,aes(x=observed,y=simulated)) + geom_point() + geom_smooth(method="lm") + facet_wrap(~TISSUE,ncol=5) + theme_bw() + ggtitle(gene %&% " - " %&% g)
-p1<-p+geom_text(data=ann_text,aes(label=paste("R==",R,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3)
+p1<-p+geom_text(data=ann_text,aes(label=paste("R==",R,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=5)
 
 png(filename=fig.dir %&% "sim_v_obs_SLTM.png",width=960,height=480)
 p1
@@ -124,7 +126,7 @@ p2<-ggplot(sum1all,aes(tsgenecor)) + geom_freqpoly() + facet_wrap(~tissue,ncol=5
 p2
 
 png(filename=fig.dir %&% "sim_v_obs_SLTM_ALL.png",width=960,height=960)
-multiplot(p1+ggtitle('A\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=12)),p2+ggtitle('B\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=12)))
+multiplot(p1+ggtitle('A\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=15)),p2+ggtitle('B\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=15)))
 dev.off()
 
 setEPS()
