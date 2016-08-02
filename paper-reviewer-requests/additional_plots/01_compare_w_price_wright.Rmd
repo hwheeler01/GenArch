@@ -27,22 +27,24 @@ all<-full_join(all,wright,by='gene')
 gtex <- read.table('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/GTEx.TW.WholeBlood.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-14.txt',header=T) %>% mutate(gtexWB=local.h2) %>% dplyr::select(gene,gtexWB)
 all<-full_join(all,gtex,by='gene')
 dim(all)
+nona <- all[complete.cases(all),]
+dim(nona)
 #dgn v. gtex whole blood
-ggplot(all,aes(x=local.h2,y=gtexWB))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()+coord_cartesian(ylim=c(-0.15,1.02))
-res<-cor.test(all$local.h2,all$gtexWB,method='s')
-CIrho(res$estimate,length(all$local.h2))
+ggplot(nona,aes(x=local.h2,y=gtexWB))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()+coord_cartesian(ylim=c(-0.15,1.02))
+res<-cor.test(nona$local.h2,nona$gtexWB,method='s')
+CIrho(res$estimate,length(nona$local.h2))
 #dgn v. price blood
-ggplot(all,aes(x=local.h2,y=h2bloodcis))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()
-res<-cor.test(all$local.h2,all$h2bloodcis,method='s')
-CIrho(res$estimate,length(all$local.h2))
+ggplot(nona,aes(x=local.h2,y=h2bloodcis))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()
+res<-cor.test(nona$local.h2,nona$h2bloodcis,method='s')
+CIrho(res$estimate,length(nona$local.h2))
 #dgn v. wright peripheral blood
-ggplot(all,aes(x=local.h2,y=h2PB))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()
-res<-cor.test(all$local.h2,all$h2PB,method='s')
-CIrho(res$estimate,length(all$local.h2))
+ggplot(nona,aes(x=local.h2,y=h2PB))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()
+res<-cor.test(nona$local.h2,nona$h2PB,method='s')
+CIrho(res$estimate,length(nona$local.h2))
 #wright v. price blood
-ggplot(all,aes(x=h2PB,y=h2bloodcis))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()
-res<-cor.test(all$h2PB,all$h2bloodcis,method='s')
-CIrho(res$estimate,length(all$local.h2))
+ggplot(nona,aes(x=h2PB,y=h2bloodcis))+geom_point(alpha=1/4)+geom_smooth()+theme_bw()
+res<-cor.test(nona$h2PB,nona$h2bloodcis,method='s')
+CIrho(res$estimate,length(nona$local.h2))
 ```
 
 ###plot all 3 blood
@@ -62,6 +64,18 @@ ggplot(nona,aes(x=h2PB,y=h2bloodcis,col=local.h2))+geom_point()+geom_smooth()+th
 round(cor(all[,-1],use='pairwise.complete.obs',method="s"),3)
 #Blood only
 allblood <- dplyr::mutate(all,dgnWB=local.h2,Price=h2bloodcis,Wright=h2PB) %>% dplyr::select(dgnWB,gtexWB,Price,Wright)
+#Pearson
+round(cor(allblood,use='pairwise.complete.obs'),3)
+#Spearman
+round(cor(allblood,use='pairwise.complete.obs',method="s"),3)
+```
+
+###cor tables - intersection of the 4 whole blood studies
+```{r}
+dim(nona)
+round(cor(nona[,-1],use='pairwise.complete.obs',method="s"),3)
+#Blood only
+allblood <- dplyr::mutate(nona,dgnWB=local.h2,Price=h2bloodcis,Wright=h2PB) %>% dplyr::select(dgnWB,gtexWB,Price,Wright)
 #Pearson
 round(cor(allblood,use='pairwise.complete.obs'),3)
 #Spearman
