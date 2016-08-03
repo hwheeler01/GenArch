@@ -23,6 +23,8 @@ output: html_document
 ```
 
 ```{r, loc.jt.tw,eval=TRUE,fig.width=8,fig.height=8}
+##read in SE calculated from 100 perms - Price et al. method
+setable <- read.table(my.dir %&% "SE_estimate_from_h2_localonly_reml-no-constrain_allgenes_100perms.txt",header=T)
 dgn <- read.table(my.dir %&% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globalAll_reml-no-constrain.2015-12-15.txt',header=T)
 tislist <- scan(my.dir %&% 'gtex-rnaseq/ind-tissues-from-nick/GTEx_PrediXmod.tissue.list',sep="\n",what="character")
 tisspacelist <- scan(my.dir %&% '40.tissue.list',sep="\n",what="character")
@@ -30,8 +32,8 @@ table1 <- matrix(0,nrow=length(tislist)+2,ncol=6)
 n <- dgn$N[1]
 numexpgenes <- dim(dgn)[1] 
 meanh2 <- sprintf("%.3f",mean(dgn$loc.jt.h2,na.rm=TRUE))
-semean <- sprintf("%.4f",se(dgn$loc.jt.h2))
-meanandse <- meanh2 %&% " (" %&% semean %&% ")"
+seperm <- setable$se[1]
+meanandse <- meanh2 %&% " (" %&% seperm %&% ")"
 pest <-  dgn %>% mutate(loc.jt.P=2*pnorm(-abs(loc.jt.h2/loc.jt.se))) %>% mutate(loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P)) %>% mutate(loc.jt.Q=p.adjust(loc.jt.P,method="BH"))  %>% arrange(loc.jt.h2) %>% mutate(Qlt05=loc.jt.Q<0.05)
 propsig <- sprintf("%.1f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="i"))*100)
 numsig <- table(pest$Qlt05)[2]
@@ -42,8 +44,8 @@ ct <- read.table(my.dir %&% 'cross-tissue.h2.all.models_FHSfdr0.05.Chr1-22_globa
 n <- ct$N[1]
 numexpgenes <- dim(ct)[1] 
 meanh2 <- sprintf("%.3f",mean(ct$local.h2,na.rm=TRUE))
-semean <- sprintf("%.4f",se(ct$local.h2))
-meanandse <- meanh2 %&% " (" %&% semean %&% ")"
+seperm <- setable$se[2]
+meanandse <- meanh2 %&% " (" %&% seperm %&% ")"
 pest <-  ct %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% mutate(local.q=p.adjust(local.p,method="BH")) %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.05)
 propsig <- sprintf("%.1f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="i"))*100)
 numsig <- table(pest$Qlt05)[2]
@@ -69,12 +71,12 @@ for(i in 1:length(tislist)){
   n <- data$N[1]
   numexpgenes <- dim(data)[1] ##num expressed genes mean(RPKM)>0.1
   meanh2 <- sprintf("%.3f",mean(data$local.h2,na.rm=TRUE))
-  semean <- sprintf("%.4f",se(data$local.h2))
+  seperm <- setable$se[i+2]
   pest <-  data %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% mutate(local.q=p.adjust(local.p,method="BH")) %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.05) 
   propsig <- sprintf("%.1f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="i"))*100)
   numsig <- table(pest$Qlt05)[2]
   tisspace <- tisspacelist[i]
-  meanandse <- meanh2 %&% " (" %&% semean %&% ")"
+  meanandse <- meanh2 %&% " (" %&% seperm %&% ")"
   tableinfo <- c(tisspace,n,meanandse,propsig,numsig,numexpgenes)
   table1[i+2,] <- tableinfo
 }

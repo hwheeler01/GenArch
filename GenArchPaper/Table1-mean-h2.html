@@ -117,7 +117,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Table1-mean-h2</h1>
 <h4 class="author"><em>Heather Wheeler</em></h4>
-<h4 class="date"><em>2016-08-02 13:55:12</em></h4>
+<h4 class="date"><em>2016-08-03 15:23:14</em></h4>
 
 </div>
 
@@ -136,15 +136,17 @@ $(document).ready(function () {
   rna.dir &lt;- my.dir %&amp;% &quot;gtex-rnaseq/&quot;
   annot.dir &lt;- my.dir %&amp;% &quot;gtex-annot/&quot;
   out.dir &lt;- rna.dir %&amp;% &quot;ind-tissues-RPKM/&quot;</code></pre>
-<pre class="r"><code>dgn &lt;- read.table(my.dir %&amp;% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globalAll_reml-no-constrain.2015-12-15.txt',header=T)
+<pre class="r"><code>##read in SE calculated from 100 perms - Price et al. method
+setable &lt;- read.table(my.dir %&amp;% &quot;SE_estimate_from_h2_localonly_reml-no-constrain_allgenes_100perms.txt&quot;,header=T)
+dgn &lt;- read.table(my.dir %&amp;% 'expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globalAll_reml-no-constrain.2015-12-15.txt',header=T)
 tislist &lt;- scan(my.dir %&amp;% 'gtex-rnaseq/ind-tissues-from-nick/GTEx_PrediXmod.tissue.list',sep=&quot;\n&quot;,what=&quot;character&quot;)
 tisspacelist &lt;- scan(my.dir %&amp;% '40.tissue.list',sep=&quot;\n&quot;,what=&quot;character&quot;)
 table1 &lt;- matrix(0,nrow=length(tislist)+2,ncol=6)
 n &lt;- dgn$N[1]
 numexpgenes &lt;- dim(dgn)[1] 
 meanh2 &lt;- sprintf(&quot;%.3f&quot;,mean(dgn$loc.jt.h2,na.rm=TRUE))
-semean &lt;- sprintf(&quot;%.4f&quot;,se(dgn$loc.jt.h2))
-meanandse &lt;- meanh2 %&amp;% &quot; (&quot; %&amp;% semean %&amp;% &quot;)&quot;
+seperm &lt;- setable$se[1]
+meanandse &lt;- meanh2 %&amp;% &quot; (&quot; %&amp;% seperm %&amp;% &quot;)&quot;
 pest &lt;-  dgn %&gt;% mutate(loc.jt.P=2*pnorm(-abs(loc.jt.h2/loc.jt.se))) %&gt;% mutate(loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P)) %&gt;% mutate(loc.jt.Q=p.adjust(loc.jt.P,method=&quot;BH&quot;))  %&gt;% arrange(loc.jt.h2) %&gt;% mutate(Qlt05=loc.jt.Q&lt;0.05)
 propsig &lt;- sprintf(&quot;%.1f&quot;,table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA=&quot;i&quot;))*100)
 numsig &lt;- table(pest$Qlt05)[2]
@@ -155,8 +157,8 @@ ct &lt;- read.table(my.dir %&amp;% 'cross-tissue.h2.all.models_FHSfdr0.05.Chr1-2
 n &lt;- ct$N[1]
 numexpgenes &lt;- dim(ct)[1] 
 meanh2 &lt;- sprintf(&quot;%.3f&quot;,mean(ct$local.h2,na.rm=TRUE))
-semean &lt;- sprintf(&quot;%.4f&quot;,se(ct$local.h2))
-meanandse &lt;- meanh2 %&amp;% &quot; (&quot; %&amp;% semean %&amp;% &quot;)&quot;
+seperm &lt;- setable$se[2]
+meanandse &lt;- meanh2 %&amp;% &quot; (&quot; %&amp;% seperm %&amp;% &quot;)&quot;
 pest &lt;-  ct %&gt;% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %&gt;% mutate(local.q=p.adjust(local.p,method=&quot;BH&quot;)) %&gt;% arrange(local.h2) %&gt;% mutate(Qlt05=local.q&lt;0.05)
 propsig &lt;- sprintf(&quot;%.1f&quot;,table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA=&quot;i&quot;))*100)
 numsig &lt;- table(pest$Qlt05)[2]
@@ -191,12 +193,12 @@ signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)/(signif(mean(dgn$loc.jt.h2,na.rm=TRUE),
   n &lt;- data$N[1]
   numexpgenes &lt;- dim(data)[1] ##num expressed genes mean(RPKM)&gt;0.1
   meanh2 &lt;- sprintf(&quot;%.3f&quot;,mean(data$local.h2,na.rm=TRUE))
-  semean &lt;- sprintf(&quot;%.4f&quot;,se(data$local.h2))
+  seperm &lt;- setable$se[i+2]
   pest &lt;-  data %&gt;% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %&gt;% mutate(local.q=p.adjust(local.p,method=&quot;BH&quot;)) %&gt;% arrange(local.h2) %&gt;% mutate(Qlt05=local.q&lt;0.05) 
   propsig &lt;- sprintf(&quot;%.1f&quot;,table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA=&quot;i&quot;))*100)
   numsig &lt;- table(pest$Qlt05)[2]
   tisspace &lt;- tisspacelist[i]
-  meanandse &lt;- meanh2 %&amp;% &quot; (&quot; %&amp;% semean %&amp;% &quot;)&quot;
+  meanandse &lt;- meanh2 %&amp;% &quot; (&quot; %&amp;% seperm %&amp;% &quot;)&quot;
   tableinfo &lt;- c(tisspace,n,meanandse,propsig,numsig,numexpgenes)
   table1[i+2,] &lt;- tableinfo
 }
@@ -208,55 +210,55 @@ library(xtable)</code></pre>
 <pre class="r"><code>tab &lt;- xtable(table1)
 print(tab, type=&quot;latex&quot;,include.rownames=FALSE)</code></pre>
 <pre><code>## % latex table generated in R 3.2.1 by xtable 1.8-2 package
-## % Tue Aug  2 13:56:00 2016
+## % Wed Aug  3 15:24:01 2016
 ## \begin{table}[ht]
 ## \centering
 ## \begin{tabular}{llllll}
 ##   \hline
 ## tissue &amp; n &amp; mean h2 (SE) &amp; \% q-val$&lt;$0.05 &amp; num q-val$&lt;$0.05 &amp; num expressed \\ 
 ##   \hline
-## DGN Whole Blood &amp; 922 &amp; 0.143 (0.0015) &amp; 45.4 &amp; 5772 &amp; 12719 \\ 
-##   Cross-tissue &amp; 450 &amp; 0.062 (0.0008) &amp; 26.6 &amp; 4505 &amp; 16951 \\ 
-##   Adipose - Subcutaneous &amp; 298 &amp; 0.038 (0.0008) &amp; 7.8 &amp; 1102 &amp; 14205 \\ 
-##   Adrenal Gland &amp; 126 &amp; 0.043 (0.0011) &amp; 2.4 &amp; 344 &amp; 14150 \\ 
-##   Artery - Aorta &amp; 198 &amp; 0.042 (0.0010) &amp; 6.0 &amp; 834 &amp; 13844 \\ 
-##   Artery - Coronary &amp; 119 &amp; 0.037 (0.0010) &amp; 1.6 &amp; 223 &amp; 14127 \\ 
-##   Artery - Tibial &amp; 285 &amp; 0.042 (0.0009) &amp; 8.4 &amp; 1140 &amp; 13504 \\ 
-##   Brain - Anterior cingulate cortex (BA24) &amp; 72 &amp; 0.028 (0.0015) &amp; 0.6 &amp; 94 &amp; 14515 \\ 
-##   Brain - Caudate (basal ganglia) &amp; 100 &amp; 0.037 (0.0012) &amp; 1.3 &amp; 189 &amp; 14632 \\ 
-##   Brain - Cerebellar Hemisphere &amp; 89 &amp; 0.049 (0.0014) &amp; 2.5 &amp; 353 &amp; 14295 \\ 
-##   Brain - Cerebellum &amp; 103 &amp; 0.050 (0.0013) &amp; 3.3 &amp; 480 &amp; 14491 \\ 
-##   Brain - Cortex &amp; 96 &amp; 0.045 (0.0012) &amp; 1.5 &amp; 227 &amp; 14689 \\ 
-##   Brain - Frontal Cortex (BA9) &amp; 92 &amp; 0.038 (0.0013) &amp; 1.2 &amp; 174 &amp; 14554 \\ 
-##   Brain - Hippocampus &amp; 81 &amp; 0.037 (0.0013) &amp; 0.5 &amp; 66 &amp; 14513 \\ 
-##   Brain - Hypothalamus &amp; 81 &amp; 0.017 (0.0013) &amp; 0.5 &amp; 77 &amp; 14759 \\ 
-##   Brain - Nucleus accumbens (basal ganglia) &amp; 93 &amp; 0.029 (0.0012) &amp; 0.9 &amp; 135 &amp; 14601 \\ 
-##   Brain - Putamen (basal ganglia) &amp; 82 &amp; 0.032 (0.0013) &amp; 0.7 &amp; 97 &amp; 14404 \\ 
-##   Breast - Mammary Tissue &amp; 183 &amp; 0.029 (0.0008) &amp; 2.7 &amp; 392 &amp; 14700 \\ 
-##   Cells - EBV-transformed lymphocytes &amp; 115 &amp; 0.058 (0.0013) &amp; 2.8 &amp; 347 &amp; 12454 \\ 
-##   Cells - Transformed fibroblasts &amp; 272 &amp; 0.051 (0.0010) &amp; 9.9 &amp; 1266 &amp; 12756 \\ 
-##   Colon - Sigmoid &amp; 124 &amp; 0.033 (0.0011) &amp; 2.2 &amp; 308 &amp; 14321 \\ 
-##   Colon - Transverse &amp; 170 &amp; 0.036 (0.0009) &amp; 3.3 &amp; 483 &amp; 14676 \\ 
-##   Esophagus - Gastroesophageal Junction &amp; 127 &amp; 0.032 (0.0010) &amp; 1.8 &amp; 256 &amp; 14125 \\ 
-##   Esophagus - Mucosa &amp; 242 &amp; 0.042 (0.0009) &amp; 7.6 &amp; 1088 &amp; 14239 \\ 
-##   Esophagus - Muscularis &amp; 219 &amp; 0.039 (0.0009) &amp; 6.7 &amp; 939 &amp; 14047 \\ 
-##   Heart - Atrial Appendage &amp; 159 &amp; 0.042 (0.0010) &amp; 3.3 &amp; 455 &amp; 13892 \\ 
-##   Heart - Left Ventricle &amp; 190 &amp; 0.034 (0.0009) &amp; 4.4 &amp; 592 &amp; 13321 \\ 
-##   Liver &amp; 98 &amp; 0.033 (0.0012) &amp; 1.1 &amp; 144 &amp; 13553 \\ 
-##   Lung &amp; 279 &amp; 0.032 (0.0007) &amp; 5.8 &amp; 857 &amp; 14775 \\ 
-##   Muscle - Skeletal &amp; 361 &amp; 0.033 (0.0007) &amp; 7.9 &amp; 1015 &amp; 12833 \\ 
-##   Nerve - Tibial &amp; 256 &amp; 0.052 (0.0009) &amp; 9.9 &amp; 1443 &amp; 14510 \\ 
-##   Ovary &amp; 85 &amp; 0.037 (0.0013) &amp; 0.6 &amp; 79 &amp; 14094 \\ 
-##   Pancreas &amp; 150 &amp; 0.047 (0.0011) &amp; 4.1 &amp; 569 &amp; 13941 \\ 
-##   Pituitary &amp; 87 &amp; 0.038 (0.0013) &amp; 1.3 &amp; 203 &amp; 15183 \\ 
-##   Skin - Not Sun Exposed (Suprapubic) &amp; 196 &amp; 0.041 (0.0009) &amp; 4.2 &amp; 620 &amp; 14642 \\ 
-##   Skin - Sun Exposed (Lower leg) &amp; 303 &amp; 0.039 (0.0008) &amp; 8.2 &amp; 1199 &amp; 14625 \\ 
-##   Small Intestine - Terminal Ileum &amp; 77 &amp; 0.036 (0.0014) &amp; 0.5 &amp; 69 &amp; 14860 \\ 
-##   Spleen &amp; 89 &amp; 0.059 (0.0014) &amp; 1.6 &amp; 226 &amp; 14449 \\ 
-##   Stomach &amp; 171 &amp; 0.032 (0.0009) &amp; 2.7 &amp; 392 &amp; 14531 \\ 
-##   Testis &amp; 157 &amp; 0.054 (0.0010) &amp; 6.4 &amp; 1080 &amp; 16936 \\ 
-##   Thyroid &amp; 279 &amp; 0.044 (0.0009) &amp; 9.2 &amp; 1342 &amp; 14642 \\ 
-##   Whole Blood &amp; 339 &amp; 0.033 (0.0008) &amp; 7.3 &amp; 888 &amp; 12160 \\ 
+## DGN Whole Blood &amp; 922 &amp; 0.143 (0.0039) &amp; 45.4 &amp; 5772 &amp; 12719 \\ 
+##   Cross-tissue &amp; 450 &amp; 0.062 (0.017) &amp; 26.6 &amp; 4505 &amp; 16951 \\ 
+##   Adipose - Subcutaneous &amp; 298 &amp; 0.038 (0.028) &amp; 7.8 &amp; 1102 &amp; 14205 \\ 
+##   Adrenal Gland &amp; 126 &amp; 0.043 (0.018) &amp; 2.4 &amp; 344 &amp; 14150 \\ 
+##   Artery - Aorta &amp; 198 &amp; 0.042 (0.024) &amp; 6.0 &amp; 834 &amp; 13844 \\ 
+##   Artery - Coronary &amp; 119 &amp; 0.037 (0.048) &amp; 1.6 &amp; 223 &amp; 14127 \\ 
+##   Artery - Tibial &amp; 285 &amp; 0.042 (0.02) &amp; 8.4 &amp; 1140 &amp; 13504 \\ 
+##   Brain - Anterior cingulate cortex (BA24) &amp; 72 &amp; 0.028 (0.036) &amp; 0.6 &amp; 94 &amp; 14515 \\ 
+##   Brain - Caudate (basal ganglia) &amp; 100 &amp; 0.037 (0.047) &amp; 1.3 &amp; 189 &amp; 14632 \\ 
+##   Brain - Cerebellar Hemisphere &amp; 89 &amp; 0.049 (0.068) &amp; 2.5 &amp; 353 &amp; 14295 \\ 
+##   Brain - Cerebellum &amp; 103 &amp; 0.050 (0.06) &amp; 3.3 &amp; 480 &amp; 14491 \\ 
+##   Brain - Cortex &amp; 96 &amp; 0.045 (0.057) &amp; 1.5 &amp; 227 &amp; 14689 \\ 
+##   Brain - Frontal Cortex (BA9) &amp; 92 &amp; 0.038 (0.077) &amp; 1.2 &amp; 174 &amp; 14554 \\ 
+##   Brain - Hippocampus &amp; 81 &amp; 0.037 (0.05) &amp; 0.5 &amp; 66 &amp; 14513 \\ 
+##   Brain - Hypothalamus &amp; 81 &amp; 0.017 (0.043) &amp; 0.5 &amp; 77 &amp; 14759 \\ 
+##   Brain - Nucleus accumbens (basal ganglia) &amp; 93 &amp; 0.029 (0.04) &amp; 0.9 &amp; 135 &amp; 14601 \\ 
+##   Brain - Putamen (basal ganglia) &amp; 82 &amp; 0.032 (0.064) &amp; 0.7 &amp; 97 &amp; 14404 \\ 
+##   Breast - Mammary Tissue &amp; 183 &amp; 0.029 (0.037) &amp; 2.7 &amp; 392 &amp; 14700 \\ 
+##   Cells - EBV-transformed lymphocytes &amp; 115 &amp; 0.058 (0.1) &amp; 2.8 &amp; 347 &amp; 12454 \\ 
+##   Cells - Transformed fibroblasts &amp; 272 &amp; 0.051 (0.031) &amp; 9.9 &amp; 1266 &amp; 12756 \\ 
+##   Colon - Sigmoid &amp; 124 &amp; 0.033 (0.019) &amp; 2.2 &amp; 308 &amp; 14321 \\ 
+##   Colon - Transverse &amp; 170 &amp; 0.036 (0.058) &amp; 3.3 &amp; 483 &amp; 14676 \\ 
+##   Esophagus - Gastroesophageal Junction &amp; 127 &amp; 0.032 (0.039) &amp; 1.8 &amp; 256 &amp; 14125 \\ 
+##   Esophagus - Mucosa &amp; 242 &amp; 0.042 (0.03) &amp; 7.6 &amp; 1088 &amp; 14239 \\ 
+##   Esophagus - Muscularis &amp; 219 &amp; 0.039 (0.015) &amp; 6.7 &amp; 939 &amp; 14047 \\ 
+##   Heart - Atrial Appendage &amp; 159 &amp; 0.042 (0.03) &amp; 3.3 &amp; 455 &amp; 13892 \\ 
+##   Heart - Left Ventricle &amp; 190 &amp; 0.034 (0.034) &amp; 4.4 &amp; 592 &amp; 13321 \\ 
+##   Liver &amp; 98 &amp; 0.033 (0.062) &amp; 1.1 &amp; 144 &amp; 13553 \\ 
+##   Lung &amp; 279 &amp; 0.032 (0.034) &amp; 5.8 &amp; 857 &amp; 14775 \\ 
+##   Muscle - Skeletal &amp; 361 &amp; 0.033 (0.03) &amp; 7.9 &amp; 1015 &amp; 12833 \\ 
+##   Nerve - Tibial &amp; 256 &amp; 0.052 (0.087) &amp; 9.9 &amp; 1443 &amp; 14510 \\ 
+##   Ovary &amp; 85 &amp; 0.037 (0.094) &amp; 0.6 &amp; 79 &amp; 14094 \\ 
+##   Pancreas &amp; 150 &amp; 0.047 (0.024) &amp; 4.1 &amp; 569 &amp; 13941 \\ 
+##   Pituitary &amp; 87 &amp; 0.038 (0.055) &amp; 1.3 &amp; 203 &amp; 15183 \\ 
+##   Skin - Not Sun Exposed (Suprapubic) &amp; 196 &amp; 0.041 (0.034) &amp; 4.2 &amp; 620 &amp; 14642 \\ 
+##   Skin - Sun Exposed (Lower leg) &amp; 303 &amp; 0.039 (0.016) &amp; 8.2 &amp; 1199 &amp; 14625 \\ 
+##   Small Intestine - Terminal Ileum &amp; 77 &amp; 0.036 (0.053) &amp; 0.5 &amp; 69 &amp; 14860 \\ 
+##   Spleen &amp; 89 &amp; 0.059 (0.061) &amp; 1.6 &amp; 226 &amp; 14449 \\ 
+##   Stomach &amp; 171 &amp; 0.032 (0.025) &amp; 2.7 &amp; 392 &amp; 14531 \\ 
+##   Testis &amp; 157 &amp; 0.054 (0.044) &amp; 6.4 &amp; 1080 &amp; 16936 \\ 
+##   Thyroid &amp; 279 &amp; 0.044 (0.066) &amp; 9.2 &amp; 1342 &amp; 14642 \\ 
+##   Whole Blood &amp; 339 &amp; 0.033 (0.023) &amp; 7.3 &amp; 888 &amp; 12160 \\ 
 ##    \hline
 ## \end{tabular}
 ## \end{table}</code></pre>
