@@ -422,7 +422,15 @@ This figure shows the comparison between estimates of heritability using BSLMM v
 
 \subsection*{Orthogonal decomposition of cross-tissue and tissue-specific expression traits}
 
-Since a substantial portion of local regulation was shown to be common across multiple tissues \cite{Ardlie_2015}, we sought to decompose the expression levels into a component that is common across all tissues and tissue-specific components. For this we use a linear mixed effects model with a person-level random effect. See details in Methods. We use the posterior mean of this random effect as an estimate of the cross-tissue component. We consider the residual component of this model as the tissue-specific component. We call this approach orthogonal tissue decomposition (OTD) because the cross-tissue and tissue-specific components are assumed to be independent in the model. 
+Since a substantial portion of local regulation was shown to be common across multiple tissues \cite{Ardlie_2015}, we sought to decompose the expression levels into a component that is common across all tissues and tissue-specific components. Figure \ref{fig-OTD} shows a diagram describing the decomposition. 
+For this we use a linear mixed effects model with a person-level random effect. See details in Methods. We use the posterior mean of this random effect as an estimate of the cross-tissue component. We consider the residual component of this model as the tissue-specific component. We call this approach orthogonal tissue decomposition (OTD) because the cross-tissue and tissue-specific components are assumed to be independent in the model. 
+
+\begin{figure}[H]
+\includegraphics[width=6cm]{Figures/Fig-CT-entropy.png}
+\caption{{\bf Orthogonal Tissue Decomposition of gene expression traits.}
+\label{fig-OTD}
+\end{figure}
+
 
 First we demonstrate that this approach is able to identify the cross tissue and tissue specific components via simulations. We generate simulated traits so that the true cross tissue and tissue specific components are known. To preserve the correlation structure between genes and tissues, we take the estimated cross tissue and tissue specific components as the true values. Then simulate expression traits as the sum of the cross tissue and tissue specific components and an error term (expression trait = cross tissue + tissue specific + noise). We simulate expression traits using different magnitude of the noise level and apply our OTD approach. 
 In Figure S5 we show for one simulated example the correlation between true and OTD-estimated components for one gene, SLTM (A) and the distribution of the correlation between true and OTD-estimates for all genes. The median Pearson correlation between true and OTD-estimted cross-tissue components was 0.54 [95\% CI: 0.33-0.77] and for tissue-specific component was 0.75 [0.46-0.88], demonstrating the robustness of our model (\nameref{S5_Fig}). 
@@ -622,28 +630,20 @@ PVE, PGE, and the \textbar{}\(\gamma\)\textbar{} parameter (the number of SNPs w
 
 \subsection*{Orthogonal Tissue Decomposition (OTD)}\label{orthogonal-tissue-decomposition}
 
-We use a mixed effects model to decompose the expression level of a gene into a subject specific and subject by tissue-specific components. The expression of a gene for individual $i$ in tissue $t$, $Y_{i,t}$, is modeled as
+We use a mixed effects model to decompose the expression level of a gene into a subject specific and subject by tissue-specific components. The expression of a gene $g$ for individual $i$ in tissue $t$, $Y_{i,t}$, is modeled as
 %
-\[Y_{i,t} =  Y_{i}^{\text{CT}}   + Y_{i,t}^{\text{TS}} + \mathbf{Z}_i \boldsymbol{\beta} + \epsilon_{i,t}  \] 
+\[Y_{i,t,g} = Y_{i,t} =  Y_{i}^{\text{CT}}   + Y_{i,t}^{\text{TS}} + \mathbf{Z}_i \boldsymbol{\beta} + \epsilon_{i,t}  \] 
 %
-where $Y_{i}^{\text{CT}}$ is the random subject level intercept,  $Y_{i,t}^{\text{TS}} $ is the random subject by tissue intercept, $\mathbf{Z}_i $ represents covariates (for overall intercept, tissue intercept, gender, and PEER factors), and $\epsilon_{i,t}$ is the error term. We assume $Y_{i}^{\text{CT}} \sim N(0,\sigma_{\text{CT}}^2)$, $Y_{i,t}^{\text{TS}} \sim N(0,\sigma_{\text{TS}}^2)$, $\epsilon \sim N(0,\sigma^2_{\epsilon})$, and all three independent of each other.
+where $Y_{i}^{\text{CT}}$ is the random subject level intercept,  $Y_{i,t}^{\text{TS}} $ is the random subject by tissue intercept, $\mathbf{Z}_i $ represents covariates (for overall intercept, tissue intercept, gender, and PEER factors), and $\epsilon_{i,t}$ is the error term. We assume $Y_{i}^{\text{CT}} \sim N(0,\sigma_{\text{CT}}^2)$, $Y_{i,t}^{\text{TS}} \sim N(0,\sigma_{\text{TS}}^2)$, $\epsilon \sim N(0,\sigma^2_{\epsilon})$, and all three independent of each other. We fit the model one gene at a time and to simplify notation we keep the index $g$ to be implicit and drop it from the equations.
 
-For the cross-tissue component to be identifiable, multiple replicates of expression is needed for each subject. In the same vein, for the tissue-specific component to be identifiable multiple replicates of expression is needed for a given tissue/subject pair. GTEx\cite{Ardlie_2015}  data consisted of measurement of expression for multiple tissues for each subject, thus multiple replications per subject. However, there were very few replicated measurement for a given tissue/subject pair. Thus, we fit the reduced model and use the estimates of the residual as the tissue-specific component.
+For the cross-tissue component to be identifiable, multiple replicates of expression are needed for each subject. In the same vein, for the tissue-specific component to be identifiable multiple replicates of expression is needed for a given tissue/subject pair. GTEx\cite{Ardlie_2015} data consisted of measurement of expression for multiple tissues for each subject, thus multiple replications per subject. However, there were very few replicated measurement for a given tissue/subject pair. Thus, we fit the reduced model and use the estimates of the residual as the tissue-specific component.
 %
 \[Y_{i,t} =  Y_{i}^{\text{CT}}   + \mathbf{Z}_i \boldsymbol{\beta} + \epsilon_{i,t}  \] 
 %
 
-%We applied OTD to GTEx Project
-%\cite{Ardlie_2015} data and decomposed the expression of each gene into
-%cross-tissue and tissue-specific components. The tissue availability is
-%unbalanced across individuals because of the difficulties of sample
-%collection and the uneven quality of the tissues. OTD decomposes the
-%expression traits into orthogonal components as represented by the
-%following model:
+We consider the expression level of a gene at a given tissue for individual $i$ to be composed of a cross tissue component which we represent as Y_i^{CT} and a tissue specific component, which given the lack of replications we estimate as the difference between the expression level and the cross tissue components (after adjusting for covariates).
 
 The mixed effects model parameters were estimated using the \texttt{lme4} package \cite{Bates_2015a} in R \cite{R_Core_Team_2015}. Batch effects and unmeasured confounders were accounted for using 15 \texttt{PEER} factors computed with the \texttt{PEER} \cite{Stegle_2012} package in R. Posterior modes of the subject level random intercepts were used as estimates of the cross-tissue components whereas the residuals of the models were used as tissue-specific components.
-%to fit the following mixed-effects model:
-% \texttt{lmer(expression $\sim$ (1|SUBJID) + TISSUE + GENDER + PEERs)}. 
 
 The model included whole tissue gene expression levels in 8555 GTEx
 tissue samples from 544 unique subjects. A total of 17,647
