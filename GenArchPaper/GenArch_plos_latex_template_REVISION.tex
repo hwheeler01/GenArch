@@ -281,54 +281,53 @@ To determine if the local estimates were affected by linkage disequilibrium (LD)
 \begin{adjustwidth}{-2.25in}{0in} % Comment out/remove adjustwidth environment if table fits in text column.
 \caption{
 {\bf Estimates of unconstrained local h$^2$ across genes within tissues.}}
-\begin{tabular}{lrrrrrr}
+\begin{tabular}{lrlrrr}
+ \hline
+tissue & n & mean h$^2$ (SE) & \% q-val$<$0.1 & num q-val$<$0.1 & num expressed \\ 
   \hline
-tissue & n & mean h$^2$ (SE) & \% $P<0.05$ & num $P<0.05$ & num expressed & FDR \\ 
-  \hline
-DGN Whole Blood & 922 & 0.143 (0.0015) & 50.3 & 6399 & 12719 & 0.099 \\ 
-  Cross-tissue & 450 & 0.062 (0.0008) & 35.4 & 6003 & 16951 & 0.141 \\ 
-  Adipose - Subcutaneous & 298 & 0.038 (0.0008) & 16.9 & 2402 & 14205 & 0.296 \\ 
-  Adrenal Gland & 126 & 0.043 (0.0011) & 11.4 & 1610 & 14150 & 0.439 \\ 
-  Artery - Aorta & 198 & 0.042 (0.0010) & 16.6 & 2294 & 13844 & 0.302 \\ 
-  Artery - Coronary & 119 & 0.037 (0.0010) & 10.5 & 1477 & 14127 & 0.478 \\ 
-  Artery - Tibial & 285 & 0.042 (0.0009) & 17.3 & 2333 & 13504 & 0.289 \\ 
-  Brain - Anterior cingulate cortex (BA24) & 72 & 0.028 (0.0015) & 10.6 & 1532 & 14515 & 0.474 \\ 
-  Brain - Caudate (basal ganglia) & 100 & 0.037 (0.0012) & 10.5 & 1540 & 14632 & 0.475 \\ 
-  Brain - Cerebellar Hemisphere & 89 & 0.049 (0.0014) & 13.3 & 1901 & 14295 & 0.376 \\ 
-  Brain - Cerebellum & 103 & 0.050 (0.0013) & 13.5 & 1955 & 14491 & 0.371 \\ 
-  Brain - Cortex & 96 & 0.045 (0.0012) & 10.7 & 1575 & 14689 & 0.466 \\ 
-  Brain - Frontal Cortex (BA9) & 92 & 0.038 (0.0013) & 10.9 & 1581 & 14554 & 0.46 \\ 
-  Brain - Hippocampus & 81 & 0.037 (0.0013) & 9.8 & 1422 & 14513 & 0.51 \\ 
-  Brain - Hypothalamus & 81 & 0.017 (0.0013) & 9.9 & 1460 & 14759 & 0.505 \\ 
-  Brain - Nucleus accumbens (basal ganglia) & 93 & 0.029 (0.0012) & 10.2 & 1486 & 14601 & 0.491 \\ 
-  Brain - Putamen (basal ganglia) & 82 & 0.032 (0.0013) & 10.1 & 1456 & 14404 & 0.495 \\ 
-  Breast - Mammary Tissue & 183 & 0.029 (0.0008) & 11.7 & 1714 & 14700 & 0.429 \\ 
-  Cells - EBV-transformed lymphocytes & 115 & 0.058 (0.0013) & 11.6 & 1448 & 12454 & 0.43 \\ 
-  Cells - Transformed fibroblasts & 272 & 0.051 (0.0010) & 19.0 & 2420 & 12756 & 0.264 \\ 
-  Colon - Sigmoid & 124 & 0.033 (0.0011) & 12.3 & 1760 & 14321 & 0.407 \\ 
-  Colon - Transverse & 170 & 0.036 (0.0009) & 12.5 & 1832 & 14676 & 0.401 \\ 
-  Esophagus - Gastroesophageal Junction & 127 & 0.032 (0.0010) & 11.6 & 1638 & 14125 & 0.431 \\ 
-  Esophagus - Mucosa & 242 & 0.042 (0.0009) & 17.4 & 2476 & 14239 & 0.288 \\ 
-  Esophagus - Muscularis & 219 & 0.039 (0.0009) & 16.8 & 2355 & 14047 & 0.298 \\ 
-  Heart - Atrial Appendage & 159 & 0.042 (0.0010) & 12.9 & 1787 & 13892 & 0.389 \\ 
-  Heart - Left Ventricle & 190 & 0.034 (0.0009) & 14.7 & 1960 & 13321 & 0.34 \\ 
-  Liver & 98 & 0.033 (0.0012) & 10.0 & 1350 & 13553 & 0.502 \\ 
-  Lung & 279 & 0.032 (0.0007) & 15.7 & 2315 & 14775 & 0.319 \\ 
-  Muscle - Skeletal & 361 & 0.033 (0.0007) & 17.0 & 2180 & 12833 & 0.294 \\ 
-  Nerve - Tibial & 256 & 0.052 (0.0009) & 18.8 & 2724 & 14510 & 0.266 \\ 
-  Ovary & 85 & 0.037 (0.0013) & 8.5 & 1194 & 14094 & 0.59 \\ 
-  Pancreas & 150 & 0.047 (0.0011) & 14.0 & 1954 & 13941 & 0.357 \\ 
-  Pituitary & 87 & 0.038 (0.0013) & 10.7 & 1621 & 15183 & 0.468 \\ 
-  Skin - Not Sun Exposed (Suprapubic) & 196 & 0.041 (0.0009) & 13.4 & 1966 & 14642 & 0.372 \\ 
-  Skin - Sun Exposed (Lower leg) & 303 & 0.039 (0.0008) & 17.7 & 2589 & 14625 & 0.282 \\ 
-  Small Intestine - Terminal Ileum & 77 & 0.036 (0.0014) & 9.0 & 1341 & 14860 & 0.554 \\ 
-  Spleen & 89 & 0.059 (0.0014) & 10.4 & 1508 & 14449 & 0.479 \\ 
-  Stomach & 171 & 0.032 (0.0009) & 12.0 & 1747 & 14531 & 0.416 \\ 
-  Testis & 157 & 0.054 (0.0010) & 16.5 & 2792 & 16936 & 0.303 \\ 
-  Thyroid & 279 & 0.044 (0.0009) & 18.2 & 2670 & 14642 & 0.274 \\ 
-  Whole Blood & 339 & 0.033 (0.0008) & 16.1 & 1956 & 12160 & 0.311 \\ 
-   \hline
-\end{tabular}
+DGN Whole Blood & 922 & 0.143 (0.0039) & 50.4 & 6407 & 12719 \\ 
+  Cross-tissue & 450 & 0.062 (0.017) & 31.9 & 5399 & 16951 \\ 
+  Adipose - Subcutaneous & 298 & 0.038 (0.028) & 9.2 & 1312 & 14205 \\ 
+  Adrenal Gland & 126 & 0.043 (0.018) & 3.2 & 453 & 14150 \\ 
+  Artery - Aorta & 198 & 0.042 (0.024) & 7.6 & 1046 & 13844 \\ 
+  Artery - Coronary & 119 & 0.037 (0.048) & 2.1 & 297 & 14127 \\ 
+  Artery - Tibial & 285 & 0.042 (0.02) & 10.1 & 1364 & 13504 \\ 
+  Brain - Anterior cingulate cortex (BA24) & 72 & 0.028 (0.036) & 0.9 & 124 & 14515 \\ 
+  Brain - Caudate (basal ganglia) & 100 & 0.037 (0.047) & 1.8 & 265 & 14632 \\ 
+  Brain - Cerebellar Hemisphere & 89 & 0.049 (0.068) & 3.3 & 470 & 14295 \\ 
+  Brain - Cerebellum & 103 & 0.050 (0.06) & 4.3 & 625 & 14491 \\ 
+  Brain - Cortex & 96 & 0.045 (0.057) & 2.2 & 317 & 14689 \\ 
+  Brain - Frontal Cortex (BA9) & 92 & 0.038 (0.077) & 1.6 & 240 & 14554 \\ 
+  Brain - Hippocampus & 81 & 0.037 (0.05) & 0.6 & 94 & 14513 \\ 
+  Brain - Hypothalamus & 81 & 0.017 (0.043) & 0.7 & 104 & 14759 \\ 
+  Brain - Nucleus accumbens (basal ganglia) & 93 & 0.029 (0.04) & 1.3 & 195 & 14601 \\ 
+  Brain - Putamen (basal ganglia) & 82 & 0.032 (0.064) & 0.9 & 135 & 14404 \\ 
+  Breast - Mammary Tissue & 183 & 0.029 (0.037) & 3.4 & 493 & 14700 \\ 
+  Cells - EBV-transformed lymphocytes & 115 & 0.058 (0.1) & 3.6 & 451 & 12454 \\ 
+  Cells - Transformed fibroblasts & 272 & 0.051 (0.031) & 11.8 & 1510 & 12756 \\ 
+  Colon - Sigmoid & 124 & 0.033 (0.019) & 3.0 & 425 & 14321 \\ 
+  Colon - Transverse & 170 & 0.036 (0.058) & 4.3 & 625 & 14676 \\ 
+  Esophagus - Gastroesophageal Junction & 127 & 0.032 (0.039) & 2.3 & 319 & 14125 \\ 
+  Esophagus - Mucosa & 242 & 0.042 (0.03) & 9.2 & 1306 & 14239 \\ 
+  Esophagus - Muscularis & 219 & 0.039 (0.015) & 8.2 & 1148 & 14047 \\ 
+  Heart - Atrial Appendage & 159 & 0.042 (0.03) & 4.2 & 579 & 13892 \\ 
+  Heart - Left Ventricle & 190 & 0.034 (0.034) & 5.5 & 733 & 13321 \\ 
+  Liver & 98 & 0.033 (0.062) & 1.4 & 195 & 13553 \\ 
+  Lung & 279 & 0.032 (0.034) & 7.2 & 1070 & 14775 \\ 
+  Muscle - Skeletal & 361 & 0.033 (0.03) & 9.5 & 1221 & 12833 \\ 
+  Nerve - Tibial & 256 & 0.052 (0.087) & 11.9 & 1725 & 14510 \\ 
+  Ovary & 85 & 0.037 (0.094) & 0.9 & 123 & 14094 \\ 
+  Pancreas & 150 & 0.047 (0.024) & 5.1 & 716 & 13941 \\ 
+  Pituitary & 87 & 0.038 (0.055) & 1.7 & 252 & 15183 \\ 
+  Skin - Not Sun Exposed (Suprapubic) & 196 & 0.041 (0.034) & 5.1 & 754 & 14642 \\ 
+  Skin - Sun Exposed (Lower leg) & 303 & 0.039 (0.016) & 9.8 & 1439 & 14625 \\ 
+  Small Intestine - Terminal Ileum & 77 & 0.036 (0.053) & 0.6 & 94 & 14860 \\ 
+  Spleen & 89 & 0.059 (0.061) & 2.2 & 319 & 14449 \\ 
+  Stomach & 171 & 0.032 (0.025) & 3.3 & 484 & 14531 \\ 
+  Testis & 157 & 0.054 (0.044) & 7.8 & 1325 & 16936 \\ 
+  Thyroid & 279 & 0.044 (0.066) & 10.8 & 1583 & 14642 \\ 
+  Whole Blood & 339 & 0.033 (0.023) & 8.6 & 1042 & 12160 \\ 
+   \hline\end{tabular}
 \begin{flushleft} Except for DGN Whole Blood, all tissues are from the GTEx Project. Cross-tissue uses derived expression levels from our orthogonal tissue decomposition (OTD) of GTEx data. Mean heritability (h$^2$) and the standard error of the mean (SE) are calculated across genes for each tissue. The percentage (\%) and number (num) of genes with significant h$^2$ estimates ($P<0.05$) and the number of genes expressed in each tissue are also reported. FDR is the false discovery rate at the $P<0.05$ threshold.
 \end{flushleft}
 \label{table-h2}
