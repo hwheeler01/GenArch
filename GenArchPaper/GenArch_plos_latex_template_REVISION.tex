@@ -426,8 +426,8 @@ Since a substantial portion of local regulation was shown to be common across mu
 For this we use a linear mixed effects model with a person-level random effect. See details in Methods. We use the posterior mean of this random effect as an estimate of the cross-tissue component. We consider the residual component of this model as the tissue-specific component. We call this approach orthogonal tissue decomposition (OTD) because the cross-tissue and tissue-specific components are assumed to be independent in the model. 
 
 \begin{figure}[H]
-\includegraphics[width=6cm]{Figures/Fig-CT-entropy.png}
-\caption{{\bf Orthogonal Tissue Decomposition of gene expression traits.}
+\includegraphics[width=\textwidth]{Figures/OTD.pdf}
+\caption{\bf Orthogonal Tissue Decomposition of gene expression traits.}
 \label{fig-OTD}
 \end{figure}
 
@@ -641,7 +641,7 @@ For the cross-tissue component to be identifiable, multiple replicates of expres
 \[Y_{i,t} =  Y_{i}^{\text{CT}}   + \mathbf{Z}_i \boldsymbol{\beta} + \epsilon_{i,t}  \] 
 %
 
-We consider the expression level of a gene at a given tissue for individual $i$ to be composed of a cross tissue component which we represent as Y_i^{CT} and a tissue specific component, which given the lack of replications we estimate as the difference between the expression level and the cross tissue components (after adjusting for covariates).
+We consider the expression level of a gene at a given tissue for individual $i$ to be composed of a cross tissue component which we represent as $Y_i^{CT}$ and a tissue specific component, which given the lack of replications we estimate as the difference between the expression level and the cross tissue components (after adjusting for covariates).
 
 The mixed effects model parameters were estimated using the \texttt{lme4} package \cite{Bates_2015a} in R \cite{R_Core_Team_2015}. Batch effects and unmeasured confounders were accounted for using 15 \texttt{PEER} factors computed with the \texttt{PEER} \cite{Stegle_2012} package in R. Posterior modes of the subject level random intercepts were used as estimates of the cross-tissue components whereas the residuals of the models were used as tissue-specific components.
 
