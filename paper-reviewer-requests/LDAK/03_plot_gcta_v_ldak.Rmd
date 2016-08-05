@@ -24,7 +24,7 @@ ldak <- fread(ldak.dir %&% "DGN_ldak_reml_chr1-22_2016-06-17.txt")
 gcta <- data.frame(fread(gcta.dir %&% "DGN-WB.h2.all.models_FHSfdr0.05.Chr1-22_globalAll_reml-no-constrain.2015-12-15.txt"))
 gcta <- gcta[,1:7]
 all <- left_join(gcta,ldak,by='gene')
-noc<-ggplot(all,aes(x=local.h2,y=REML_Her)) + geom_point(shape=1) + xlab(expression('GCTA local h'^2)) + ylab(expression('LDAK local h'^2)) + theme_bw(15) +geom_abline(intercept=0, slope=1,color='red') + geom_smooth(method='lm') + coord_cartesian(xlim=c(-.02,1.02),ylim=c(-.02,1.02))
+noc<-ggplot(all,aes(x=local.h2,y=REML_Her)) + geom_point(shape=1) + xlab(expression('GCTA local h'^2)) + ylab(expression('LDAK local h'^2)) + theme_bw(15) +geom_abline(intercept=0, slope=1,color='gray') +  coord_cartesian(xlim=c(-.02,1.02),ylim=c(-.02,1.02))
 noc
 cor.test(all$local.h2,all$REML_Her)
 t.test(all$local.h2,all$REML_Her)

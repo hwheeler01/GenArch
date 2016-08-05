@@ -28,11 +28,12 @@ tislist <- scan(my.dir %&% '40.tissue.list',sep="\n",what="character")
 table1 <- matrix(0,nrow=length(tislist)+1,ncol=6)
 ct <- read.table(my.dir %&% 'cross-tissue.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-14.txt',header=T)
 n <- ct$N[1]
-numexpgenes <- dim(ct)[1] 
+numexpgenes <- dim(ct)[1]
+#numexpgenes <- length(ct$local.p[is.na(ct$local.p)==FALSE]) 
 meanh2 <- sprintf("%.3f",mean(ct$local.h2,na.rm=TRUE))
 semean <- sprintf("%.4f",se(ct$local.h2))
 meanandse <- meanh2 %&% " (" %&% semean %&% ")"
-pest <-  ct %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% mutate(local.q=p.adjust(local.p,method="BH")) %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.05)
+pest <-  ct %>%  mutate(local.q=p.adjust(local.p,method="BH")) %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.1)
 propsig <- sprintf("%.1f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="i"))*100)
 numsig <- table(pest$Qlt05)[2]
 table1[1,] <- c("Cross-tissue",n,meanh2,propsig,numsig,numexpgenes)
@@ -41,17 +42,18 @@ for(i in 1:length(tislist)){
   tis <- tislist[i]
   data <- read.table(my.dir %&% 'GTEx.TS.' %&% tis  %&% '.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-14.txt',header=T,sep="\t")  
   n <- data$N[1]
-  numexpgenes <- dim(data)[1] ##num expressed genes mean(RPKM)>0.1
+  numexpgenes <- dim(data)[1]
+  #  numexpgenes <- length(data$local.p[is.na(data$local.p)==FALSE]) ##num expressed genes mean(RPKM)>0.1
   meanh2 <- sprintf("%.3f",mean(data$local.h2,na.rm=TRUE))
   semean <- sprintf("%.4f",se(data$local.h2))
-  pest <-  data %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% mutate(local.q=p.adjust(local.p,method="BH")) %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.05) 
+  pest <-  data %>%  mutate(local.q=p.adjust(local.p,method="BH")) %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.1) 
   propsig <- sprintf("%.2f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="i"))*100)
   numsig <- table(pest$Qlt05)[2]
   meanandse <- meanh2 %&% " (" %&% semean %&% ")"
   tableinfo <- c(tis,n,meanh2,propsig,numsig,numexpgenes)
   table1[i+1,] <- tableinfo
 }
-colnames(table1)=c("tissue","n","mean h2","% q-val<0.05","num q-val<0.05","num expressed")
+colnames(table1)=c("tissue","n","mean h2","% FDR<0.1","num FDR<0.1","num expressed")
 #table1
 
 library(xtable)

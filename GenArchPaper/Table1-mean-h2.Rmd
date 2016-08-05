@@ -30,11 +30,12 @@ tislist <- scan(my.dir %&% 'gtex-rnaseq/ind-tissues-from-nick/GTEx_PrediXmod.tis
 tisspacelist <- scan(my.dir %&% '40.tissue.list',sep="\n",what="character")
 table1 <- matrix(0,nrow=length(tislist)+2,ncol=6)
 n <- dgn$N[1]
-numexpgenes <- dim(dgn)[1] 
-meanh2 <- sprintf("%.3f",mean(dgn$loc.jt.h2,na.rm=TRUE))
+numexpgenes <- dim(dgn)[1]
+#numexpgenes <- length(dgn$local.p[is.na(dgn$local.p)==FALSE]) 
+meanh2 <- sprintf("%.3f",mean(dgn$local.h2,na.rm=TRUE))
 seperm <- setable$se[1]
 meanandse <- meanh2 %&% " (" %&% seperm %&% ")"
-pest <-  dgn %>% mutate(loc.jt.P=2*pnorm(-abs(loc.jt.h2/loc.jt.se))) %>% mutate(loc.jt.P=ifelse(is.na(loc.jt.P),1,loc.jt.P)) %>% mutate(loc.jt.Q=p.adjust(loc.jt.P,method="BH"))  %>% arrange(loc.jt.h2) %>% mutate(Qlt05=loc.jt.Q<0.1)
+pest <-  dgn %>%  mutate(local.q=p.adjust(local.p,method="BH"))  %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.1)
 propsig <- sprintf("%.1f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="i"))*100)
 numsig <- table(pest$Qlt05)[2]
 table1[1,] <- c("DGN Whole Blood",n,meanandse,propsig,numsig,numexpgenes)
@@ -42,11 +43,12 @@ table1[1,] <- c("DGN Whole Blood",n,meanandse,propsig,numsig,numexpgenes)
 #add cross-tissue to table 1
 ct <- read.table(my.dir %&% 'cross-tissue.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-14.txt',header=T)
 n <- ct$N[1]
-numexpgenes <- dim(ct)[1] 
+numexpgenes<-dim(ct)[1]
+#numexpgenes <- length(ct$local.p[is.na(ct$local.p)==FALSE]) 
 meanh2 <- sprintf("%.3f",mean(ct$local.h2,na.rm=TRUE))
 seperm <- setable$se[2]
 meanandse <- meanh2 %&% " (" %&% seperm %&% ")"
-pest <-  ct %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% mutate(local.q=p.adjust(local.p,method="BH")) %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.1)
+pest <-  ct %>%  mutate(local.q=p.adjust(local.p,method="BH")) %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.1)
 propsig <- sprintf("%.1f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="i"))*100)
 numsig <- table(pest$Qlt05)[2]
 table1[2,] <- c("Cross-tissue",n,meanandse,propsig,numsig,numexpgenes)
@@ -56,10 +58,10 @@ signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)
 signif(se(dgn$loc.jt.h2),3)
 signif(mean(dgn$glo.jt.h2,na.rm=TRUE),3)
 signif(se(dgn$glo.jt.h2),3)
-pest <-  dgn %>% mutate(glo.jt.P=2*pnorm(-abs(glo.jt.h2/glo.jt.se))) %>% mutate(glo.jt.P=ifelse(is.na(glo.jt.P),1,glo.jt.P)) %>% mutate(glo.jt.Q=p.adjust(glo.jt.P,method="BH"))   %>% arrange(glo.jt.h2) %>% mutate(Qlt05=glo.jt.Q<0.1) 
+pest <-  dgn %>% mutate(glo.jt.P=2*pnorm(-abs(glo.jt.h2/glo.jt.se))) %>%  mutate(glo.jt.Q=p.adjust(glo.jt.P,method="BH"))   %>% arrange(glo.jt.h2) %>% mutate(Qlt05=glo.jt.Q<0.1) 
 propsig <- table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="i"))*100
 propsig
-table(pest$Qlt05,useNA="i")
+table(pest$Qlt05)
 ##prop loc
 signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)/(signif(mean(dgn$loc.jt.h2,na.rm=TRUE),3)+signif(mean(dgn$glo.jt.h2,na.rm=TRUE),3))
 
@@ -69,10 +71,11 @@ for(i in 1:length(tislist)){
   explist <- scan(out.dir %&% tis %&% ".meanRPKMgt0.1_3samplesRPKMgt0_genelist","c")
   data <- dplyr::filter(data,ensid %in% explist)
   n <- data$N[1]
-  numexpgenes <- dim(data)[1] ##num expressed genes mean(RPKM)>0.1
+  numexpgenes <- dim(data)[1]
+  #  numexpgenes <- length(data$local.p[is.na(data$local.p)==FALSE]) ##num expressed genes mean(RPKM)>0.1
   meanh2 <- sprintf("%.3f",mean(data$local.h2,na.rm=TRUE))
   seperm <- setable$se[i+2]
-  pest <-  data %>% mutate(local.p=ifelse(is.na(local.p),1,local.p)) %>% mutate(local.q=p.adjust(local.p,method="BH")) %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.1) 
+  pest <-  data %>% mutate(local.q=p.adjust(local.p,method="BH")) %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.1) 
   propsig <- sprintf("%.1f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="i"))*100)
   numsig <- table(pest$Qlt05)[2]
   tisspace <- tisspacelist[i]
@@ -80,7 +83,7 @@ for(i in 1:length(tislist)){
   tableinfo <- c(tisspace,n,meanandse,propsig,numsig,numexpgenes)
   table1[i+2,] <- tableinfo
 }
-colnames(table1)=c("tissue","n","mean h2 (SE)","% q-val<0.1","num q-val<0.1","num expressed")
+colnames(table1)=c("tissue","n","mean h2 (SE)","% FDR<0.1","num FDR<0.1","num expressed")
 #table1
 
 library(xtable)

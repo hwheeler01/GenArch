@@ -30,18 +30,18 @@ for(tis in tislist){
   data <- read.table(my.dir %&% 'gtex-h2-estimates/GTEx.TW.' %&% tis %&% '.h2.all.models_FHSfdr0.05.Chr1-22_globalOtherChr.2015-10-06.txt',header=T,sep="\t") 
   explist <- scan(out.dir %&% tis %&% ".meanRPKMgt0.1_3samplesRPKMgt0_genelist","c")
   data <- dplyr::filter(data,ensid %in% explist)
-  glo.jt <- select(data,tissue,glo.jt.h2,glo.jt.se) %>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),sample(glo.jt.se[is.na(glo.jt.se)==FALSE],replace=TRUE,size=length(glo.jt.se[is.na(glo.jt.se)==TRUE])),glo.jt.se)) %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se)) %>% mutate(glo.jt.P = 2*pnorm(-abs(glo.jt.h2/glo.jt.se))) %>%  mutate(glo.jt.P=ifelse(is.na(glo.jt.P),1,glo.jt.P)) %>% mutate(glo.jt.Q = p.adjust(glo.jt.P,method="BH")) %>% mutate(gloQlt05=glo.jt.Q < 0.1) %>% arrange(glo.jt.h2) %>% mutate(place=1:length(data$tissue)) 
+  glo.jt <- select(data,tissue,glo.jt.h2,glo.jt.se)  %>% mutate(ymin = pmax(0, glo.jt.h2 - 2 * glo.jt.se), ymax = pmin(1, glo.jt.h2 + 2 * glo.jt.se)) %>% mutate(glo.jt.P = 2*pnorm(-abs(glo.jt.h2/glo.jt.se))) %>%  mutate(glo.jt.Q = p.adjust(glo.jt.P,method="BH")) %>% mutate(gloQlt05=glo.jt.Q < 0.1) %>% arrange(glo.jt.h2) %>% mutate(place=1:length(data$tissue)) 
   ts <- rbind(ts,glo.jt)
 }
 
 ts <- mutate(ts, `q-value`=factor(gloQlt05,labels=c('\u2265 0.1')))
 
-p<-ggplot(ts,aes(x=place,y=glo.jt.h2,ymin=ymin,ymax=ymax,color=`q-value`) ) + facet_wrap(~tissue,ncol=3) + geom_pointrange(col='gray')+geom_point()+ylab(expression("global h"^2)) + xlab(expression("genes ordered by joint global h"^2))+theme_bw() + coord_cartesian(ylim=c(0,1))
+p<-ggplot(ts[complete.cases(ts),],aes(x=place,y=glo.jt.h2,ymin=ymin,ymax=ymax,color=`q-value`) ) + facet_wrap(~tissue,ncol=3) + geom_pointrange(col='gray')+geom_point()+ylab(expression("global h"^2)) + xlab(expression("genes ordered by joint global h"^2))+theme_bw() + coord_cartesian(ylim=c(0,1))
 
-png(filename=fig.dir %&% "Fig-GTEx_TW_glo.jt.h2.png",width=720,height=480)
+png(filename=fig.dir %&% "Fig-GTEx_TW_glo_jt_h2.png",width=720,height=480)
 p
 dev.off()
-tiff(filename=fig.dir %&% "Fig-GTEx_TW_glo.jt.h2.tiff",width=720,height=480)
+tiff(filename=fig.dir %&% "Fig-GTEx_TW_glo_jt_h2.tiff",width=720,height=480)
 p
 dev.off()
 ```

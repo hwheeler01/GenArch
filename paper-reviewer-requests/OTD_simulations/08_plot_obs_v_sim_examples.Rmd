@@ -21,7 +21,7 @@ fig.dir <- '~/GitHub/GenArch/GenArchPaper/Figures/'
 source("~/Github/ThePlatinumStudy/Ototoxicity_modeling/multiplot.R")
 ```
 
-See <https://github.com/hwheeler01/GenArch/blob/master/paper-reviewer-requests/OTD_simulations/01_make_sim.r> for how simulated expression phenotypes were generated. See <https://github.com/hwheeler01/GenArch/blob/master/paper-reviewer-requests/OTD_simulations/04_get_gencor_obs_v_sim.R> for how correlations were calculated.
+See <https://github.com/hwheeler01/GenArch/blob/master/paper-reviewer-requests/OTD_simulations/01_make_sim.r> for how OTD-estimated expression phenotypes were generated. See <https://github.com/hwheeler01/GenArch/blob/master/paper-reviewer-requests/OTD_simulations/04_get_gencor_obs_v_sim.R> for how correlations were calculated.
 
 ###find representative genes
 ```{r,  warning=FALSE, message=FALSE}
@@ -29,12 +29,12 @@ allctcor <- fread(my.dir %&% "CT_genecor_obs_v_sim.txt")
 ctsum1 <- dplyr::filter(allctcor,sim=="errvar-sum_mult-1") %>% arrange(desc(genecor))
 summary(ctsum1)
 head(ctsum1)
- quantile(ctsum1$genecor,probs=c(0.025,0.975), na.rm=TRUE)
+ quantile(ctsum1$genecor,probs=c(0.025,0.975), na.rm=True)
 dplyr::filter(ctsum1,genecor>0.5393 & genecor<0.5394)
 alltscor <- fread(my.dir %&% "TS_genecor_obs_v_sim.txt")
 tssum1 <- dplyr::filter(alltscor,sim=="errvar-sum_mult-1")
 summary(tssum1)
-quantile(tssum1$tsgenecor,probs=c(0.025,0.975), na.rm=TRUE)
+quantile(tssum1$tsgenecor,probs=c(0.025,0.975), na.rm=True)
 dplyr::filter(tssum1,gene=="ENSG00000166181.8")
 dplyr::filter(tssum1,gene=="ENSG00000137776.12")
 dplyr::filter(tssum1,gene=="ENSG00000135480.10")
@@ -71,21 +71,21 @@ for(i in 1:length(genelist)){
   geneobsct <- dplyr::select(obsct,SUBJID,matches(gene))
   genesimct <- dplyr::select(simct,SUBJID,matches(gene))
   genect <- inner_join(geneobsct,genesimct,by='SUBJID') %>% mutate(TISSUE='Cross-tissue') %>% dplyr::select(SUBJID,TISSUE,starts_with(gene))
-  colnames(genect) <- c("ID","TISSUE","observed","simulated")
+  colnames(genect) <- c("ID","TISSUE","True","estimated")
   geneobsts <- dplyr::select(obsts,SAMPID,TISSUE,matches(gene))
   genesimts <- dplyr::select(simts,SAMPID,matches(gene))
   genets <- inner_join(geneobsts,genesimts,by='SAMPID')
-  colnames(genets) <- c("ID","TISSUE","observed","simulated")
+  colnames(genets) <- c("ID","TISSUE","True","estimated")
   geneall <- rbind(genect,genets)
   tislist <- sort(names(table(geneall$TISSUE)))
   for(tis in tislist){
     subgene <- dplyr::filter(geneall,TISSUE==tis)
-    res <- cor.test(subgene$observed,subgene$simulated)
+    res <- cor.test(subgene$True,subgene$estimated)
     rvec <- cbind(rvec,unname(round(res$estimate,3)))
   }
-  ann_text <- data.frame( observed = rep(0,10), simulated = rep(-3,10), R= rvec[1:10], TISSUE = factor(tislist), ID=rep(0.9,10))
-  p<-ggplot(geneall,aes(x=observed,y=simulated)) + geom_point() + geom_smooth(method="lm") + facet_wrap(~TISSUE,ncol=5) + theme_bw() + ggtitle(gene %&% " - " %&% g)
-  print(p+geom_text(data=ann_text,aes(label=paste("R==",R,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3))
+  ann_text <- data.frame( True = rep(0,10), estimated = rep(-3,10), R= rvec[1:10], TISSUE = factor(tislist), ID=rep(0.9,10))
+  p<-ggplot(geneall,aes(x=True,y=estimated)) + geom_point() + geom_smooth(method="lm") + facet_wrap(~TISSUE,ncol=5) + theme_bw() + ggtitle(gene %&% " - " %&% g)
+  print(p+geom_text(data=ann_text,aes(label=paste("R==",R,sep="")),color="black",show.legend=F,parse=T,hjust=0,size=3))
 }
 ```
 
@@ -97,21 +97,21 @@ rvec<-vector()
 geneobsct <- dplyr::select(obsct,SUBJID,matches(gene))
 genesimct <- dplyr::select(simct,SUBJID,matches(gene))
 genect <- inner_join(geneobsct,genesimct,by='SUBJID') %>% mutate(TISSUE='Cross-tissue') %>% dplyr::select(SUBJID,TISSUE,starts_with(gene))
-colnames(genect) <- c("ID","TISSUE","observed","simulated")
+colnames(genect) <- c("ID","TISSUE","True","estimated")
 geneobsts <- dplyr::select(obsts,SAMPID,TISSUE,matches(gene))
 genesimts <- dplyr::select(simts,SAMPID,matches(gene))
 genets <- inner_join(geneobsts,genesimts,by='SAMPID')
-colnames(genets) <- c("ID","TISSUE","observed","simulated")
+colnames(genets) <- c("ID","TISSUE","True","estimated")
 geneall <- rbind(genect,genets)
 tislist <- sort(names(table(geneall$TISSUE)))
 for(tis in tislist){
   subgene <- dplyr::filter(geneall,TISSUE==tis)
-  res <- cor.test(subgene$observed,subgene$simulated)
+  res <- cor.test(subgene$True,subgene$estimated)
   rvec <- cbind(rvec,unname(round(res$estimate,3)))
 }
-ann_text <- data.frame( observed = rep(0,10), simulated = rep(-2.5,10), R= rvec[1:10], TISSUE = factor(tislist), ID=rep(0.9,10))
-p<-ggplot(geneall,aes(x=observed,y=simulated)) + geom_point() + geom_smooth(method="lm") + facet_wrap(~TISSUE,ncol=5) + theme_bw() + ggtitle(gene %&% " - " %&% g)
-p1<-p+geom_text(data=ann_text,aes(label=paste("R==",R,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=5)
+ann_text <- data.frame( True = rep(0,10), "estimated" = rep(-2.5,10), R= rvec[1:10], TISSUE = factor(tislist), ID=rep(0.9,10))
+p<-ggplot(geneall,aes(x=True,y=estimated)) + geom_point() + geom_smooth(method="lm") + facet_wrap(~TISSUE,ncol=5) + theme_bw() + ggtitle(gene %&% " - " %&% g)
+p1 <- p+geom_text(data=ann_text,aes(label=paste("R==",R,sep="")),color="black",show.legend=F,parse=T,hjust=0,size=5)+ylab("OTD-estimated")
 
 png(filename=fig.dir %&% "sim_v_obs_SLTM.png",width=960,height=480)
 p1
@@ -122,7 +122,7 @@ ggsave(fig.dir %&% "sim_v_obs_SLTM.eps",device=cairo_ps,width=12,height=6)
 #plot distribution
 ctsum1 <- mutate(ctsum1,tissue='Cross-tissue',tsgenecor=genecor) %>% dplyr::select(tsgenecor,tissue,sim,gene)
 sum1all <- rbind(ctsum1,tssum1)
-p2<-ggplot(sum1all,aes(tsgenecor)) + geom_freqpoly() + facet_wrap(~tissue,ncol=5) + theme_bw() + xlab('Gene correlation (simulated v. observed)')
+p2<-ggplot(sum1all,aes(tsgenecor)) + geom_freqpoly() + facet_wrap(~tissue,ncol=5) + theme_bw() + xlab('Gene correlation (OTD-estimated v. True)')
 p2
 
 png(filename=fig.dir %&% "sim_v_obs_SLTM_ALL.png",width=960,height=960)
