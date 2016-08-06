@@ -31,7 +31,7 @@ alpha50 <- read.table(dgn.dir %&% 'DGN-WB_exp_10-foldCV_elasticNet_alpha0.5_hapm
 all <- inner_join(gcta,alpha50,by='gene')
 all <- inner_join(all,bslmm,by='gene')
 all <- all[complete.cases(all),]
-ggplot(all,aes(x=local.h2,y=pve50,color=R2)) + geom_point() +coord_cartesian(xlim=c(-0.01,1.01),ylim=c(-0.01,1.01)) + theme_bw() +xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1)) + scale_colour_gradient(low="pink",high="blue",name=expression("elastic net R"^2)) 
+ggplot(all,aes(x=local.h2,y=pve50,color=R2)) + geom_point() +coord_cartesian(xlim=c(-0.01,1.01),ylim=c(-0.01,1.01)) + theme_bw() +xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(intercept=0,slope=1) + scale_colour_gradient(low="pink",high="blue",name=expression("elastic net R"^2)) 
 cor.test(all$local.h2,all$R2)
 cor.test(all$local.h2,all$pve50)
 cor.test(all$pve50,all$R2)
@@ -71,7 +71,7 @@ for(i in 1:length(tislist)){
 
 
 ##plot R2 vs. h2
-p<-ggplot(tw,aes(x=h2,y=pve50,color=R2))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(c(0,1)) + scale_colour_gradient(low="pink",high="blue",name=expression("elastic net R"^2)) + facet_wrap(~tissue,ncol=3)+theme_bw()
+p<-ggplot(tw,aes(x=h2,y=pve50,color=R2))+geom_point(alpha=0.4)+coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(intercept=0,slope=1) + scale_colour_gradient(low="pink",high="blue",name=expression("elastic net R"^2)) + facet_wrap(~tissue,ncol=3)+theme_bw()
 
 ann_text <- data.frame( h2 = rep(0.75,9), pve50 = rep(0.05,9), R= rvec[1:9], tissue = factor(tislist), ensid=rep(0.9,9),gene=rep(0.9,9))
 p2<-p+geom_text(data=ann_text,aes(label=paste("R==",R,sep="")),color="black",show_guide=F,parse=T,hjust=0,size=3)
@@ -81,6 +81,19 @@ p2
 dev.off()
 ```
 
+### Color by Price h2
+```{r}
+h2.dir <- '/Volumes/im-lab/nas40t2/Data/Annotations/heritability/'
+price <- read.table(h2.dir %&% "Alkes/h2all.txt",header=TRUE) %>% dplyr::rename(gene=gname)
+twprice <- left_join(tw,price,by='gene')
+p=ggplot(twprice[complete.cases(twprice),],aes(x=h2,y=pve50,color=h2bloodcis))+geom_point()+coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.05,1.05))+xlab(expression("GCTA h"^2))+ylab('BSLMM PVE')+geom_abline(intercept=0,slope=1) + scale_colour_gradient(low="pink",high="blue",name=expression("Price et al. h"^2)) + facet_wrap(~tissue,ncol=3)+theme_bw()
+p
+cor.test(twprice$pve50,twprice$h2bloodcis)
+cor.test(twprice$h2,twprice$h2bloodcis)
+png(filename=fig.dir %&% "Fig-GTEx_TW_colorPriceh2bloodcis_pve_v_h2.png",width=700,height=600)
+p
+dev.off()
+```
 ### R vs. N
 ```{r,fig.width=5,fig.height=5}
 ##plot R (PVE vs. h2) vs. N
