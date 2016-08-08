@@ -87,6 +87,12 @@ Morris AP, Voight BF, Teslovich TM, Ferreira T, Segr{\a`e} AV, Steinthorsdottir
 \newblock Nature Genetics. 2012;44(9):981--990.
 \newblock Available from: \url{http://dx.doi.org/10.1038/ng.2383}.
 
+\bibitem{Zhou_2013}
+Zhou X, Carbonetto P, Stephens M.
+\newblock Polygenic Modeling with Bayesian Sparse Linear Mixed Models.
+\newblock {PLoS} Genetics. 2013;9(2):e1003264.
+\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1003264}.
+
 \bibitem{Gamazon_2015}
 Gamazon ER, Wheeler HE, Shah KP, Mozaffari SV, Aquino-Michaels K, Carroll RJ,
   et~al.
@@ -154,12 +160,6 @@ Abraham G, Kowalczyk A, Zobel J, Inouye M.
   genetic prediction of complex human disease.
 \newblock Genetic Epidemiology. 2013;37(2):184--195.
 
-\bibitem{Zhou_2013}
-Zhou X, Carbonetto P, Stephens M.
-\newblock Polygenic Modeling with Bayesian Sparse Linear Mixed Models.
-\newblock {PLoS} Genetics. 2013;9(2):e1003264.
-\newblock Available from: \url{http://dx.doi.org/10.1371/journal.pgen.1003264}.
-
 \bibitem{Cheung_2005}
 Cheung VG, Spielman RS, Ewens KG, Weber TM, Morley M, Burdick JT.
 \newblock Mapping determinants of human gene expression by regional and
@@ -199,13 +199,6 @@ Pierce BL, Tong L, Chen LS, Rahaman R, Argos M, Jasmine F, et~al.
 \newblock Mediation Analysis Demonstrates That Trans-eQTLs Are Often Explained
   by Cis-Mediation: A Genome-Wide Analysis among 1,800 South Asians.
 \newblock PLoS genetics. 2014;10(12):e1004818.
-
-\bibitem{Zhang_2015}
-Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et~al.
-\newblock Identification of common genetic variants controlling transcript
-  isoform variation in human whole blood.
-\newblock Nature Genetics. 2015;47(4):345--352.
-\newblock Available from: \url{http://dx.doi.org/10.1038/ng.3220}.
 
 \bibitem{speed2012improved}
 Speed D, Hemani G, Johnson MR, Balding DJ.
@@ -276,6 +269,13 @@ Fuchsberger C, Abecasis GR, Hinds DA.
 \newblock Bioinformatics. 2014;31(5):782--784.
 \newblock Available from:
   \url{http://dx.doi.org/10.1093/bioinformatics/btu704}.
+
+\bibitem{Zhang_2015}
+Zhang X, Joehanes R, Chen BH, Huan T, Ying S, Munson PJ, et~al.
+\newblock Identification of common genetic variants controlling transcript
+  isoform variation in human whole blood.
+\newblock Nature Genetics. 2015;47(4):345--352.
+\newblock Available from: \url{http://dx.doi.org/10.1038/ng.3220}.
 
 \bibitem{irizarry2003summaries}
 Irizarry RA, Bolstad BM, Collin F, Cope LM, Hobbs B, Speed TP.

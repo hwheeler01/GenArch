@@ -130,6 +130,7 @@ names(globalall) = c('gene','h2','se','jt.Q','Qlt05','ensid')
 globalall <- globalall %>% mutate(ymin =  h2 - 2 * se, ymax =  h2 + 2 * se )
 table(globalall$jt.Q < 0.1)
 sum(table(globalall$jt.Q < 0.1))
+table(globalall$jt.Q < 0.1 & globalall$h2 > 0)
 qtrue <-signif(table(globalall$jt.Q < 0.1)/sum(table(globalall$jt.Q < 0.1)),3)*100
 qtrue
 meanh2<-round(mean(globalall$h2,na.rm=T),3)
@@ -145,9 +146,9 @@ my_grob2 = grobTree(textGrob(substitute(paste("% FDR < 0.1: ", m),list(m=qtrue[2
 
 cother<-ggplot(globalall[complete.cases(globalall),],aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`FDR`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+theme_bw(20)+coord_cartesian(ylim=c(-1.05,1.55))+  theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob2)
 
-#png(filename=fig.dir %&% "Fig-DGN-jt-h2-UNCONSTRAINED.png",width=720,height=960)
-#multiplot(aother+ggtitle('local = SNPs within 1Mb of gene\ndistal = SNPs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")), bother, cother, a+ggtitle('local = SNPs within 1Mb of gene\ndistal = known eQTLs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")),b, c,cols=2)
-#dev.off()
+png(filename=fig.dir %&% "Fig-DGN-jt-h2-UNCONSTRAINED-6panels.png",width=720,height=960)
+multiplot(aother+ggtitle('local = SNPs within 1Mb of gene\ndistal = SNPs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")), bother, cother, a+ggtitle('local = SNPs within 1Mb of gene\ndistal = known eQTLs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")),b, c,cols=2)
+dev.off()
 
 png(filename=fig.dir %&% "Fig-DGN-jt-h2-UNCONSTRAINED.png",width=960,height=480)
 multiplot(bother +ggtitle('A\n')+theme(plot.title=element_text(hjust=0)), cother +ggtitle('B\n')+theme(plot.title=element_text(hjust=0)),cols=2)
@@ -165,7 +166,7 @@ bothglobal <- left_join(global,globalall,by='ensid')
 cor(bothglobal$h2.x,bothglobal$h2.y,'s',use='p')
 ```
 
-##Fig 2
+##Fig 3
 ###DGN Polygenic v. sparse  by elastic net.
 ```{r EN, echo=TRUE, warning=FALSE, message=FALSE,eval=FALSE}
 data<-read.table(my.dir %&% 'DGN-WB_exp_10-foldCV_1-reps_elasticNet_eachAlphaR2_hapmap2snps_chr22_2015-01-21.txt',header=T)
@@ -205,7 +206,7 @@ multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0)),p+ggtitle('B\
 dev.off()
 ```
 
-##Fig 3
+##Fig 2
 ###DGN BSLMM
 ```{r dgn-bslmm, eval=TRUE}
 gcta <- read.table('/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/expArch_DGN-WB_imputedGTs/DGN-WB.h2.all.models_FHSfdr0.05.all.Chr1-22_globalOtherChr.2015-03-18.txt',header=TRUE) %>% dplyr::select(gene,local.h2)
@@ -231,18 +232,27 @@ b<-ggplot(all,aes(x=local.h2,y=pve50,color=R2)) + geom_point() +coord_cartesian(
 png(filename=fig.dir %&% "Fig-DGN-BSLMM.png",width=720,height=360)
 multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0),text=element_text(size=18)),b + ggtitle('B\n')+ theme(plot.title=element_text(hjust=0),text=element_text(size=18)),cols=2)
 dev.off()
-
-subdata <- select(data,pve50,pge50,`medianSNPs<=10`)
-table(subdata[,3])/sum(table(subdata[,3]))
+#all
+subdata <- select(data,pve50,pge50,n_gamma50,`medianSNPs<=10`)
+table(subdata[,4])/sum(table(subdata[,4]))
 summary(subdata$pge50)
-
-subdata <- select(data,pve50,pge50,`medianSNPs<=10`) %>% filter(pve50>0.10)
-table(subdata[,3])/sum(table(subdata[,3]))
+quantile(subdata$pge50,c(0.025,0.5,0.975))
+summary(subdata$n_gamma50)
+quantile(subdata$n_gamma50,c(0.025,0.5,0.975))
+#pve>0.1
+subdata <- select(data,pve50,pge50,n_gamma50,`medianSNPs<=10`) %>% filter(pve50>0.10)
+table(subdata[,4])/sum(table(subdata[,4]))
 summary(subdata$pge50)
-
-subdata <- select(data,pve50,pge50,`medianSNPs<=10`) %>% filter(pve50>0.50)
-table(subdata[,3])/sum(table(subdata[,3]))
+quantile(subdata$pge50,c(0.025,0.5,0.975))
+summary(subdata$n_gamma50)
+quantile(subdata$n_gamma50,c(0.025,0.5,0.975))
+#pve>0.5
+subdata <- select(data,pve50,pge50,n_gamma50,`medianSNPs<=10`) %>% filter(pve50>0.50)
+table(subdata[,4])/sum(table(subdata[,4]))
 summary(subdata$pge50)
+quantile(subdata$pge50,c(0.025,0.5,0.975))
+summary(subdata$n_gamma50)
+quantile(subdata$n_gamma50,c(0.025,0.5,0.975))
 ```
 
 ##Fig 4
