@@ -53,7 +53,7 @@ fdrother<-read.table(otherfile,header=T) ##FHS eQTLs w/fdr<0.05 on non-gene chro
 d  <- fdrother %>% mutate(ymin = glo.jt.h2 - 2 * glo.jt.se, ymax = glo.jt.h2 + 2 * glo.jt.se)
 fdrother <- mutate(d, loc.jt.P = pchisq((loc.jt.h2/loc.jt.se)^2, df=1, lower.tail=FALSE), glo.jt.P = pchisq((glo.jt.h2/glo.jt.se)^2, df=1, lower.tail=FALSE)) 
 fdrother <- mutate(fdrother, loc.jt.Q = p.adjust(loc.jt.P,method="BH"), glo.jt.Q = p.adjust(glo.jt.P,method="BH")) %>% mutate(locQlt05=loc.jt.Q < 0.1,gloQlt05=glo.jt.Q < 0.1) %>% mutate(`distal FDR`=factor(gloQlt05,labels=c('\u2265 0.1','< 0.1')))
-table(fdrother$gloQlt05)
+table(fdrother$gloQlt05,useNA="i")
 
 ##Plot FDR based results
 a<-ggplot(fdrother,aes(x=loc.jt.h2,y=glo.jt.h2,color=`distal FDR`)) + geom_point(cex=1,alpha=2/3)  + 
@@ -66,9 +66,9 @@ local <- fdrother %>% select(loc.jt.h2,loc.jt.se,loc.jt.Q,locQlt05,ensid)%>% arr
 names(local) = c('h2','se','jt.Q','Qlt05','ensid')
 local <- local %>% mutate(ymin =  h2 - 2 * se, ymax =  h2 + 2 * se )
 cigt0 <- local$ymin>0
-table(local$jt.Q < 0.1)
-sum(table(local$jt.Q < 0.1))
-qtrue <-round(table(local$jt.Q < 0.1)/sum(table(local$jt.Q < 0.1)),3)*100
+table(local$jt.Q < 0.1,useNA="i")
+sum(table(local$jt.Q < 0.1,useNA="i"))
+qtrue <-round(table(local$jt.Q < 0.1,useNA="i")/sum(table(local$jt.Q < 0.1,useNA="i")),3)*100
 qtrue
 meanh2<-round(mean(local$h2,na.rm=T),3)
 meanh2
@@ -82,9 +82,9 @@ b<-ggplot(local[complete.cases(local),],aes(x=position,y=h2,ymin=ymin, ymax=ymax
 global <- fdrother %>% select(gene,glo.jt.h2,glo.jt.se,glo.jt.Q,gloQlt05,ensid) %>% arrange(glo.jt.h2) #%>% mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),base::sample(glo.jt.se[is.na(glo.jt.se)==FALSE][1:1000],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE]),replace=TRUE),glo.jt.se))%>% arrange(glo.jt.h2)  
 names(global) = c('gene','h2','se','jt.Q','Qlt05','ensid')
 global <- global %>% mutate(ymin =  h2 - 2 * se, ymax =  h2 + 2 * se)
-table(global$jt.Q < 0.1)
-sum(table(global$jt.Q < 0.1))
-qtrue <-signif(table(global$jt.Q < 0.1)/sum(table(global$jt.Q < 0.1)),3)*100
+table(global$jt.Q < 0.1,useNA="i")
+sum(table(global$jt.Q < 0.1,useNA="i"))
+qtrue <-signif(table(global$jt.Q < 0.1,useNA="i")/sum(table(global$jt.Q < 0.1,useNA="i")),3)*100
 qtrue
 meanh2<-round(mean(global$h2,na.rm=T),3)
 meanh2
@@ -105,16 +105,16 @@ other<-read.table(otherfile,header=T) ##all SNPs on non-gene chromosomes used to
 d  <- other %>% mutate(ymin =  glo.jt.h2 - 2 * glo.jt.se, ymax =  glo.jt.h2 + 2 * glo.jt.se )
 
 other <- mutate(d, loc.jt.P = pchisq((loc.jt.h2/loc.jt.se)^2, df=1, lower.tail=FALSE), glo.jt.P = pchisq((glo.jt.h2/glo.jt.se)^2, df=1, lower.tail=FALSE))  %>% mutate(loc.jt.Q = p.adjust(loc.jt.P,method="BH"), glo.jt.Q = p.adjust(glo.jt.P,method="BH")) %>%  mutate(locQlt05=loc.jt.Q < 0.1,gloQlt05=glo.jt.Q < 0.1) %>% mutate(`distal FDR`=factor(gloQlt05,labels=c('\u2265 0.1','< 0.1')))
-table(other$gloQlt05)
+table(other$gloQlt05,useNA="i")
 
 aother<-ggplot(other,aes(x=loc.jt.h2,y=glo.jt.h2,color=`distal FDR`)) + geom_point(cex=1,alpha=2/3) + xlab(expression("local h"^2)) + ylab(expression("distal h"^2)) + coord_cartesian(xlim=c(-0.05,1.05),ylim=c(-0.7,1.3)) + theme_bw() +  theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(1,1),legend.position=c(1,1))
 
 localall <- other %>% select(loc.jt.h2,loc.jt.se,loc.jt.Q,locQlt05,ensid) %>% arrange(loc.jt.h2) #%>% mutate(loc.jt.h2=ifelse(is.na(loc.jt.h2),0,loc.jt.h2), loc.jt.se=ifelse(is.na(loc.jt.se), base::sample(loc.jt.se[is.na(loc.jt.se)==FALSE][1:100],size=length(loc.jt.se[is.na(loc.jt.se)==TRUE]),replace=TRUE),loc.jt.se))%>% arrange(loc.jt.h2)  
 names(localall) = c('h2','se','jt.Q','Qlt05','ensid')
 localall <- localall %>% mutate(ymin =  h2 - 2 * se, ymax =  h2 + 2 * se )
-table(localall$jt.Q < 0.1)
-sum(table(localall$jt.Q < 0.1))
-qtrue <-round(table(localall$jt.Q < 0.1)/sum(table(localall$jt.Q < 0.1)),3)*100
+table(localall$jt.Q < 0.1,useNA="i")
+sum(table(localall$jt.Q < 0.1,useNA="i"))
+qtrue <-round(table(localall$jt.Q < 0.1,useNA="i")/sum(table(localall$jt.Q < 0.1,useNA="i")),3)*100
 qtrue
 meanh2<-round(mean(localall$h2,na.rm=T),3)
 meanh2
@@ -128,10 +128,10 @@ bother<-ggplot(localall[complete.cases(localall),],aes(x=position,y=h2,ymin=ymin
 globalall <- other %>% select(gene,glo.jt.h2,glo.jt.se,glo.jt.Q,gloQlt05,ensid) %>% arrange(glo.jt.h2) #%>%   mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),  base::sample(glo.jt.se[is.na(glo.jt.se)==FALSE][1:1000],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE]),replace=TRUE),glo.jt.se))%>% arrange(glo.jt.h2) 
 names(globalall) = c('gene','h2','se','jt.Q','Qlt05','ensid')
 globalall <- globalall %>% mutate(ymin =  h2 - 2 * se, ymax =  h2 + 2 * se )
-table(globalall$jt.Q < 0.1)
-sum(table(globalall$jt.Q < 0.1))
+table(globalall$jt.Q < 0.1,useNA="i")
+sum(table(globalall$jt.Q < 0.1,useNA="i"))
 table(globalall$jt.Q < 0.1 & globalall$h2 > 0)
-qtrue <-signif(table(globalall$jt.Q < 0.1)/sum(table(globalall$jt.Q < 0.1)),3)*100
+qtrue <-signif(table(globalall$jt.Q < 0.1,useNA="i")/sum(table(globalall$jt.Q < 0.1,useNA="i")),3)*100
 qtrue
 meanh2<-round(mean(globalall$h2,na.rm=T),3)
 meanh2
