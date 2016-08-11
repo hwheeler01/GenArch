@@ -98,6 +98,14 @@ p
 dev.off()</code></pre>
 <pre><code>## quartz_off_screen 
 ##                 2</code></pre>
+<pre class="r"><code>kruskal.test(d$pLI~factor(d$h2))</code></pre>
+<pre><code>## 
+##  Kruskal-Wallis rank sum test
+## 
+## data:  d$pLI by factor(d$h2)
+## Kruskal-Wallis chi-squared = 233.56, df = 1, p-value &lt; 2.2e-16</code></pre>
+<pre class="r"><code>kruskal.test(d$pLI~factor(d$h2))$p.value</code></pre>
+<pre><code>## [1] 9.980252e-53</code></pre>
 <pre class="r"><code>d&lt;-mutate(dgnpLI,enR2=factor(R2&gt;0.1,labels=c('\u2264 0.1','&gt; 0.1'))) 
 p&lt;-ggplot(d %&gt;% filter(!is.na(pLI)),aes(x=pLI,fill= enR2)) + geom_density(alpha=0.5)+theme_bw(20)+ scale_fill_discrete(name=expression(&quot;EN R&quot;^2)) + theme(legend.position=c(0.85,0.85))
 p</code></pre>
