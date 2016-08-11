@@ -205,6 +205,11 @@ Speed D, Hemani G, Johnson MR, Balding DJ.
 \newblock Improved heritability estimation from genome-wide SNPs.
 \newblock The American Journal of Human Genetics. 2012;91(6):1011--1021.
 
+\bibitem{lek2016analysis}
+Lek M, Karczewski K, Minikel E, Samocha K, Banks E, Fennell T, et~al.
+\newblock Analysis of protein-coding genetic variation in 60,706 humans.
+\newblock BioRxiv. 2016;p. 030338.
+
 \bibitem{Flutre_2013}
 Flutre T, Wen X, Pritchard J, Stephens M.
 \newblock A Statistical Framework for Joint {eQTL} Analysis in Multiple

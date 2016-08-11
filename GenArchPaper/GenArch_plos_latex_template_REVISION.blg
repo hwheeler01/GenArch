@@ -1,0 +1,55 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: GenArch_plos_latex_template_REVISION.aux
+The style file: plos-latex-template/plos2015.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=20001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: GenArch_references.bib
+Warning--empty year in MacDonald_1
+Warning--empty year in MacDonald_2
+Warning--empty author and editor in R_Core_Team_2015
+Warning--missing publisher in R_Core_Team_2015
+You've used 58 entries,
+            3170 wiz_defined-function locations,
+            1051 strings with 28580 characters,
+and the built_in function-call counts, 209228 in all, are:
+= -- 25044
+> -- 1152
+< -- 3
++ -- 916
+- -- 288
+* -- 19910
+:= -- 22682
+add.period$ -- 261
+call.type$ -- 58
+change.case$ -- 2
+chr.to.int$ -- 0
+cite$ -- 62
+duplicate$ -- 10292
+empty$ -- 21241
+format.name$ -- 341
+if$ -- 48035
+int.to.chr$ -- 0
+int.to.str$ -- 58
+missing$ -- 735
+newline$ -- 325
+num.names$ -- 58
+pop$ -- 1152
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 1309
+stack$ -- 0
+substring$ -- 52244
+swap$ -- 1634
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 4
+while$ -- 658
+width$ -- 60
+write$ -- 700
+(There were 4 warnings)
