@@ -12,6 +12,8 @@ output: html_document
   library(tidyr)
   library(GGally)
   library(grid)
+  library(calibrate)
+  library(knitr)
   "%&%" = function(a,b) paste(a,b,sep="")
   se <- function(x) sqrt(var(x,na.rm=TRUE)/length(is.na(x)==FALSE))
   source('/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/GTEx_2014-06013_release/transfers/PrediXmod/Paper_plots/multiplot.R')
@@ -30,13 +32,13 @@ tislist <- scan(my.dir %&% 'gtex-rnaseq/ind-tissues-from-nick/GTEx_PrediXmod.tis
 tisspacelist <- scan(my.dir %&% '40.tissue.list',sep="\n",what="character")
 table1 <- matrix(0,nrow=length(tislist)+2,ncol=6)
 n <- dgn$N[1]
-#numexpgenes <- dim(dgn)[1]
-numexpgenes <- length(dgn$local.p[is.na(dgn$local.p)==FALSE]) 
+numexpgenes <- dim(dgn)[1]
+#numexpgenes <- length(dgn$local.p[is.na(dgn$local.p)==FALSE]) 
 meanh2 <- sprintf("%.3f",mean(dgn$local.h2,na.rm=TRUE))
 seperm <- setable$se[1]
 meanandse <- meanh2 %&% " (" %&% seperm %&% ")"
 pest <-  dgn %>% mutate(pchi=pchisq((local.h2/local.se)^2, df=1, lower.tail=FALSE)) %>% mutate(local.q=p.adjust(pchi,method="BH"))  %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.1)
-propsig <- sprintf("%.1f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="n"))*100)
+propsig <- sprintf("%.1f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="i"))*100)
 numsig <- table(pest$Qlt05)[2]
 table1[1,] <- c("DGN Whole Blood",n,meanandse,propsig,numsig,numexpgenes)
 hist(pest$local.p,main="DGN")
@@ -46,7 +48,7 @@ hist(pest$pchi,main="DGN")
 #add cross-tissue to table 1
 ct <- read.table(my.dir %&% 'cross-tissue.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-14.txt',header=T)
 n <- ct$N[1]
-#numexpgenes<-dim(ct)[1]
+numexpgenes<-dim(ct)[1]
 numexpgenes <- length(ct$local.p[is.na(ct$local.p)==FALSE]) 
 meanh2 <- sprintf("%.3f",mean(ct$local.h2,na.rm=TRUE))
 seperm <- setable$se[2]
@@ -64,7 +66,7 @@ signif(se(dgn$loc.jt.h2),3)
 signif(mean(dgn$glo.jt.h2,na.rm=TRUE),3)
 signif(se(dgn$glo.jt.h2),3)
 pest <-  dgn %>% mutate(glo.jt.P=pchisq((glo.jt.h2/glo.jt.se)^2, df=1, lower.tail=FALSE)) %>%  mutate(glo.jt.Q=p.adjust(glo.jt.P,method="BH"))   %>% arrange(glo.jt.h2) %>% mutate(Qlt05=glo.jt.Q<0.1) 
-propsig <- table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="n"))*100
+propsig <- table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="i"))*100
 propsig
 table(pest$Qlt05)
 ##prop loc
@@ -76,12 +78,12 @@ for(i in 1:length(tislist)){
   explist <- scan(out.dir %&% tis %&% ".meanRPKMgt0.1_3samplesRPKMgt0_genelist","c")
   data <- dplyr::filter(data,ensid %in% explist)
   n <- data$N[1]
-  #numexpgenes <- dim(data)[1]
-  numexpgenes <- length(data$local.p[is.na(data$local.p)==FALSE]) ##num expressed genes mean(RPKM)>0.1
+  numexpgenes <- dim(data)[1]
+  #numexpgenes <- length(data$local.p[is.na(data$local.p)==FALSE]) ##num expressed genes mean(RPKM)>0.1
   meanh2 <- sprintf("%.3f",mean(data$local.h2,na.rm=TRUE))
   seperm <- setable$se[i+2]
   pest <-  data %>% mutate(pchi=pchisq((local.h2/local.se)^2, df=1, lower.tail=FALSE)) %>% mutate(local.q=p.adjust(pchi,method="BH")) %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.1) 
-  propsig <- sprintf("%.1f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="n"))*100)
+  propsig <- sprintf("%.1f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="i"))*100)
   numsig <- table(pest$Qlt05)[2]
   tisspace <- tisspacelist[i]
   meanandse <- meanh2 %&% " (" %&% seperm %&% ")"
@@ -96,6 +98,7 @@ colnames(table1)=c("tissue","n","mean h2 (SE)","% FDR<0.1","num FDR<0.1","num ex
 library(xtable)
 tab <- xtable(table1)
 print(tab, type="latex",include.rownames=FALSE)
+print(kable(tab))
 ```
 
 

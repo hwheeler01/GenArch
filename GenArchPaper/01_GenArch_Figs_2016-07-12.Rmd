@@ -123,7 +123,8 @@ meanse
 localall <- mutate(localall,`FDR`=factor(Qlt05,labels=c("\u2265 0.1","< 0.1")),position=1:nrow(localall))
 my_grob2 = grobTree(textGrob(substitute(paste("% FDR < 0.1: ", m),list(m=qtrue[2])), x=0.05,  y=0.70, hjust=0,gp=gpar(fontsize=18)))
 
-bother<-ggplot(localall[complete.cases(localall),],aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`FDR`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+theme_bw(20)+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+  annotation_custom(my_grob2)
+#bother<-ggplot(localall[complete.cases(localall),],aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`FDR`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+theme_bw(20)+ theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+  annotation_custom(my_grob2)
+bother<-ggplot(localall[complete.cases(localall),],aes(x=position,y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("local h"^2)) + xlab(expression("genes ordered by local h"^2))+theme_bw(20)+coord_cartesian(ylim=c(-1.05,2))
 
 globalall <- other %>% select(gene,glo.jt.h2,glo.jt.se,glo.jt.Q,gloQlt05,ensid) %>% arrange(glo.jt.h2) #%>%   mutate(glo.jt.h2=ifelse(is.na(glo.jt.h2),0,glo.jt.h2), glo.jt.se=ifelse(is.na(glo.jt.se),  base::sample(glo.jt.se[is.na(glo.jt.se)==FALSE][1:1000],size=length(glo.jt.se[is.na(glo.jt.se)==TRUE]),replace=TRUE),glo.jt.se))%>% arrange(glo.jt.h2) 
 names(globalall) = c('gene','h2','se','jt.Q','Qlt05','ensid')
@@ -144,11 +145,12 @@ table(glolist$gene %in% glopriorlist$gene)
 
 my_grob2 = grobTree(textGrob(substitute(paste("% FDR < 0.1: ", m),list(m=qtrue[2])), x=0.05,  y=0.70, hjust=0,gp=gpar(fontsize=18)))
 
-cother<-ggplot(globalall[complete.cases(globalall),],aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`FDR`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+theme_bw(20)+coord_cartesian(ylim=c(-1.05,1.55))+  theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob2)
+#cother<-ggplot(globalall[complete.cases(globalall),],aes(x=position,y=h2,ymin=ymin, ymax=ymax, color=`FDR`) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+theme_bw(20)+coord_cartesian(ylim=c(-1.05,1.75))+  theme(axis.text=element_text(size=16),axis.title=element_text(size=18,face="bold"),legend.justification=c(0,1),legend.position=c(0,1))+annotation_custom(my_grob2)
+cother<-ggplot(globalall[complete.cases(globalall),],aes(x=position,y=h2,ymin=ymin, ymax=ymax) ) + geom_pointrange(col='gray')+geom_point()+ylab(expression("distal h"^2)) + xlab(expression("genes ordered by distal h"^2))+theme_bw(20)+coord_cartesian(ylim=c(-1.05,2))
 
-png(filename=fig.dir %&% "Fig-DGN-jt-h2-UNCONSTRAINED-6panels.png",width=720,height=960)
-multiplot(aother+ggtitle('local = SNPs within 1Mb of gene\ndistal = SNPs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")), bother, cother, a+ggtitle('local = SNPs within 1Mb of gene\ndistal = known eQTLs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")),b, c,cols=2)
-dev.off()
+#png(filename=fig.dir %&% "Fig-DGN-jt-h2-UNCONSTRAINED-6panels.png",width=720,height=960)
+#multiplot(aother+ggtitle('local = SNPs within 1Mb of gene\ndistal = SNPs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")), bother, cother, a+ggtitle('local = SNPs within 1Mb of gene\ndistal = known eQTLs on non-gene chrs\n') + theme(plot.title=element_text(face="bold")),b, c,cols=2)
+#dev.off()
 
 png(filename=fig.dir %&% "Fig-DGN-jt-h2-UNCONSTRAINED.png",width=960,height=480)
 multiplot(bother +ggtitle('A\n')+theme(plot.title=element_text(hjust=0)), cother +ggtitle('B\n')+theme(plot.title=element_text(hjust=0)),cols=2)
@@ -407,9 +409,9 @@ dplot
 dev.off()
 
 newdata<-newdata %>% dplyr::filter(CrossTissue > 1e-6)
-res<-summary(lm(log10(newdata$CrossTissue)~newdata$entropy))
+res<-summary(lm(newdata$CrossTissue~newdata$entropy))
 pval<-data.frame(p=signif(res$coef[2,4],2))
-b<-ggplot(newdata,aes(x=entropy,y=log10(CrossTissue)))+geom_point(alpha=1/4)+geom_smooth(method='lm')+theme_bw(16)+ylab(expression(paste("log"[10]," Cross-Tissue ", "h"^{2}))) + xlab("Uniformity") +geom_text(data=pval,aes(label=paste("P = ", p, sep="")), x=-Inf, y=Inf, hjust=-0.5, vjust=2, size=5)
+b<-ggplot(newdata,aes(x=entropy,y=CrossTissue))+geom_point(alpha=1/4)+geom_smooth(method='lm')+theme_bw(16)+ylab(expression(paste("Cross-Tissue ", "h"^{2}))) + xlab("Uniformity") +geom_text(data=pval,aes(label=paste("P = ", p, sep="")), x=-Inf, y=Inf, hjust=-0.5, vjust=2, size=5)
 b
 
 png(filename=fig.dir %&% "Fig-CT-entropy-continuous-lm.png",width=360,height=360)

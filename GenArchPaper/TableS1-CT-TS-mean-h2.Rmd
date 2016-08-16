@@ -44,12 +44,12 @@ for(i in 1:length(tislist)){
   tis <- tislist[i]
   data <- read.table(my.dir %&% 'GTEx.TS.' %&% tis  %&% '.h2.all.models_FHSfdr0.05.Chr1-22_globaleQTLOtherChr_reml-no-constrain.2015-12-14.txt',header=T,sep="\t")  
   n <- data$N[1]
-  numexpgenes <- dim(data)[1]
-    numexpgenes <- length(data$local.p[is.na(data$local.p)==FALSE]) ##num expressed genes mean(RPKM)>0.1
+#  numexpgenes <- dim(data)[1]
+#    numexpgenes <- length(data$local.p[is.na(data$local.p)==FALSE]) ##num expressed genes mean(RPKM)>0.1
   meanh2 <- sprintf("%.3f",mean(data$local.h2,na.rm=TRUE))
   semean <- sprintf("%.4f",se(data$local.h2))
   pest <-  data %>%  mutate(pchi=pchisq((local.h2/local.se)^2, df=1, lower.tail=FALSE)) %>% mutate(local.q=p.adjust(pchi,method="BH")) %>% arrange(local.h2) %>% mutate(Qlt05=local.q<0.1) 
-  propsig <- sprintf("%.2f",table(pest$Qlt05)[2]/sum(table(pest$Qlt05,useNA="n"))*100)
+  propsig <- sprintf("%.1f",table(pest$Qlt05)[2]/numexpgenes*100)
   numsig <- table(pest$Qlt05)[2]
   meanandse <- meanh2 %&% " (" %&% semean %&% ")"
   tableinfo <- c(tis,n,meanh2,propsig,numsig,numexpgenes)
