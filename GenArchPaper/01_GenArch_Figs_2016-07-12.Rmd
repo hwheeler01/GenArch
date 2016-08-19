@@ -203,6 +203,11 @@ tiff(filename=fig.dir %&% "Fig-DGN-EN.tiff",width=960,height=480)
 multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0)),p+ggtitle('B\n')+theme(plot.title=element_text(hjust=0)),cols=2)
 dev.off()
 
+setEPS()
+postscript(file=fig.dir %&% "Fig-DGN-EN.eps",width=9.6,height=4.8)
+multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0)),p+ggtitle('B\n')+theme(plot.title=element_text(hjust=0)),cols=2)
+dev.off()
+
 png(filename=fig.dir %&% "Fig-DGN-EN.png",width=960,height=480)
 multiplot(a+ggtitle('A\n')+theme(plot.title=element_text(hjust=0)),p+ggtitle('B\n')+theme(plot.title=element_text(hjust=0)),cols=2)
 dev.off()
@@ -426,9 +431,14 @@ entPPA <- left_join(mt,geneS,by='gene') %>% dplyr::rename(Uniformity=entropy) %>
 set <- c(7,19,26,40,54,66,86,101,121,144,165,189,215,252,297,352,442,582,1048,9875)
 subentPPA <- entPPA[set,] %>% mutate(geneorder=factor(1:20))
 gentPPA <- melt(subentPPA[,-2])
-c<-ggplot(gentPPA, aes(x=geneorder,y=variable,fill=value)) + geom_tile() + ylab('Tissue PPA') + xlab('Representative genes sorted by Uniformity')+theme_bw(16)
+c<-ggplot(gentPPA, aes(x=geneorder,y=variable,fill=value)) + geom_tile() + ylab('Tissue PPA') + xlab('Representative genes sorted by Uniformity')+theme_bw(12)
 c
 png(filename = fig.dir %&% "Fig-CT-entropy-ppa.png",width=980,height=480)
+multiplot(c+ggtitle('A')+theme(plot.title=element_text(hjust=0)),dplot+ggtitle('B')+theme(plot.title=element_text(hjust=0)),cols=2)
+dev.off()
+
+setEPS()
+postscript(file=fig.dir %&% "Fig-CT-entropy-ppa.eps",width=10,height=4)
 multiplot(c+ggtitle('A')+theme(plot.title=element_text(hjust=0)),dplot+ggtitle('B')+theme(plot.title=element_text(hjust=0)),cols=2)
 dev.off()
 ```
@@ -467,6 +477,13 @@ corrplot(mat2,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=1.5
 dev.off()
 
 png(filename=fig.dir %&% "Fig-cor-StephensPr-v-PVE.png",width=960,height=480)
+par(mfrow=c(1,2))
+corrplot(mat2.tw,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
+corrplot(mat2,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
+dev.off()
+
+setEPS()
+postscript(file=fig.dir %&% "Fig-cor-StephensPr-v-PVE.eps",width=9.6,height=4.8)
 par(mfrow=c(1,2))
 corrplot(mat2.tw,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')
 corrplot(mat2,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=1.5,cl.cex=1.2,cl.ratio = 0.4,bg='black')

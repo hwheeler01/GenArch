@@ -31,4 +31,6 @@ p
 png(filename=fig.dir %&% "pLI-by-R2.png",width=480,height=480)
 p
 dev.off()
+p
+ggsave(fig.dir %&% "pLI-by-R2.eps",device=cairo_ps,width=4.8,height=4.8)
 ```
