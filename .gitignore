@@ -22,3 +22,4 @@ vignettes/*.pdf
 *txt.gz
 *h2.txt
 *BSLMM.txt
+.DS_Store
