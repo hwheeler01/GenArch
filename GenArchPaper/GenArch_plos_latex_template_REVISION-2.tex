@@ -1,0 +1,830 @@
+% Template for PLoS
+% Version 3.1 February 2015
+%
+% To compile to pdf, run:
+% latex plos.template
+% bibtex plos.template
+% latex plos.template
+% latex plos.template
+% dvipdf plos.template
+%
+% % % % % % % % % % % % % % % % % % % % % %
+%
+% -- IMPORTANT NOTE
+%
+% This template contains comments intended 
+% to minimize problems and delays during our production 
+% process. Please follow the template instructions
+% whenever possible.
+%
+% % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Once your paper is accepted for publication, 
+% PLEASE REMOVE ALL TRACKED CHANGES in this file and leave only
+% the final text of your manuscript.
+%
+% There are no restrictions on package use within the LaTeX files except that 
+% no packages listed in the template may be deleted.
+%
+% Please do not include colors or graphics in the text.
+%
+% Please do not create a heading level below \subsection. For 3rd level headings, use \paragraph{}.
+%
+% % % % % % % % % % % % % % % % % % % % % % %
+%
+% -- FIGURES AND TABLES
+%
+% Please include tables/figure captions directly after the paragraph where they are first cited in the text.
+%
+% DO NOT INCLUDE GRAPHICS IN YOUR MANUSCRIPT
+% - Figures should be uploaded separately from your manuscript file. 
+% - Figures generated using LaTeX should be extracted and removed from the PDF before submission. 
+% - Figures containing multiple panels/subfigures must be combined into one image file before submission.
+% For figure citations, please use "Fig." instead of "Figure".
+% See http://www.plosone.org/static/figureGuidelines for PLOS figure guidelines.
+%
+% Tables should be cell-based and may not contain:
+% - tabs/spacing/line breaks within cells to alter layout or alignment
+% - vertically-merged cells (no tabular environments within tabular environments, do not use \multirow)
+% - colors, shading, or graphic objects
+% See http://www.plosone.org/static/figureGuidelines#tables for table guidelines.
+%
+% For tables that exceed the width of the text column, use the adjustwidth environment as illustrated in the example table in text below.
+%
+% % % % % % % % % % % % % % % % % % % % % % % %
+%
+% -- EQUATIONS, MATH SYMBOLS, SUBSCRIPTS, AND SUPERSCRIPTS
+%
+% IMPORTANT
+% Below are a few tips to help format your equations and other special characters according to our specifications. For more tips to help reduce the possibility of formatting errors during conversion, please see our LaTeX guidelines at http://www.plosone.org/static/latexGuidelines
+%
+% Please be sure to include all portions of an equation in the math environment.
+%
+% Do not include text that is not math in the math environment. For example, CO2 will be CO\textsubscript{2}.
+%
+% Please add line breaks to long display equations when possible in order to fit size of the column. 
+%
+% For inline equations, please do not include punctuation (commas, etc) within the math environment unless this is part of the equation.
+%
+% % % % % % % % % % % % % % % % % % % % % % % % 
+%
+% Please contact latex@plos.org with any questions.
+%
+% % % % % % % % % % % % % % % % % % % % % % % %
+
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+
+% Use adjustwidth environment to exceed column width (see example table in text)
+\usepackage{changepage}
+
+% Use Unicode characters when possible
+\usepackage[utf8]{inputenc}
+
+% textcomp package and marvosym package for additional characters
+\usepackage{textcomp,marvosym}
+
+% fixltx2e package for \textsubscript
+\usepackage{fixltx2e}
+
+% amsmath and amssymb packages, useful for mathematical formulas and symbols
+\usepackage{amsmath,amssymb}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+% Use nameref to cite supporting information files (see Supporting Information section for more info)
+\usepackage{nameref,hyperref}
+
+% line numbers
+\usepackage[right]{lineno}
+
+% ligatures disabled
+\usepackage{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+
+% rotating package for sideways tables
+\usepackage{rotating}
+
+% Remove comment for double spacing
+\usepackage{setspace} 
+\doublespacing
+
+% Text layout
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in 
+\textheight 8.75in
+
+% Bold the 'Figure #' in the caption and separate it from the title/caption with a period
+% Captions will be left justified
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
+
+% Use the PLoS provided BiBTeX style
+\bibliographystyle{plos-latex-template/plos2015}
+
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+% Leave date blank
+\date{}
+
+% Header and Footer with logo
+\usepackage{lastpage,fancyhdr,graphicx}
+\usepackage{epstopdf}
+\pagestyle{myheadings}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\includegraphics[width=2.0in]{plos-latex-template/PLOS-submission.eps}}
+\rfoot{\thepage/\pageref{LastPage}}
+\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
+\fancyheadoffset[L]{2.25in}
+\fancyfootoffset[L]{2.25in}
+\lfoot{\sf PLOS}
+
+%% Include all macros below
+
+\newcommand{\lorem}{{\bf LOREM}}
+\newcommand{\ipsum}{{\bf IPSUM}}
+
+
+%% END MACROS SECTION
+
+%added packages
+\usepackage{soul} 
+\usepackage{color}
+\usepackage{float}
+%% END ADDED PACKAGES
+
+\begin{document}
+\vspace*{0.35in}
+
+% Title must be 250 characters or less.
+% Please capitalize all terms in the title except conjunctions, prepositions, and articles.
+\begin{flushleft}
+{\Large
+\textbf\newline{Survey of the Heritability and Sparse Architecture of Gene Expression Traits Across Human Tissues}
+}
+\newline
+\newline
+Short title: Heritability and Sparse Architecture of Gene Expression
+% Insert author names, affiliations and corresponding author email (do not include titles, positions, or degrees).
+\newline
+\\
+Heather E. Wheeler\textsuperscript{1,2,*},
+Kaanan P. Shah\textsuperscript{3},
+Jonathon Brenner\textsuperscript{2},
+Tzintzuni Garcia\textsuperscript{4},
+Keston Aquino-Michaels\textsuperscript{3},
+GTEx Consortium,
+Nancy J. Cox\textsuperscript{5}, Dan L.
+Nicolae\textsuperscript{3}, Hae Kyung Im\textsuperscript{3,*}
+\\
+\bigskip
+\bf{1} Department of Biology, Loyola University Chicago, Chicago, IL, USA
+\\
+\bf{2} Department of Computer Science, Loyola University Chicago, Chicago, IL, USA
+\\
+\bf{3} Section of Genetic Medicine, Department of Medicine, University of Chicago, Chicago, IL, USA
+\\
+\bf{4} Center for Research Informatics, University of Chicago, Chicago, IL, USA
+\\
+\bf{5} Division of Genetic Medicine, Vanderbilt University, Nashville, TN, USA
+\bigskip
+
+% Insert additional author notes using the symbols described below. Insert symbol callouts after author names as necessary.
+% 
+% Remove or comment out the author notes below if they aren't used.
+%
+% Primary Equal Contribution Note
+%\Yinyang These authors contributed equally to this work.
+
+% Additional Equal Contribution Note
+% Also use this double-dagger symbol for special authorship notes, such as senior authorship.
+%\ddag These authors also contributed equally to this work.
+
+% Current address notes
+%\textcurrency a Insert current address of first author with an address update
+% \textcurrency b Insert current address of second author with an address update
+% \textcurrency c Insert current address of third author with an address update
+
+% Deceased author note
+%\dag Deceased
+
+% Group/Consortium Author Note
+%\textpilcrow Membership list can be found in the Acknowledgments section.
+
+% Use the asterisk to denote corresponding authorship and provide email address in note below.
+* hwheeler1@luc.edu, haky@uchicago.edu
+
+\end{flushleft}
+
+\pagebreak{}
+
+% Please keep the abstract below 300 words (currently 280)
+\section*{Abstract}
+Understanding the genetic architecture of gene expression traits is key to elucidating the underlying mechanisms of complex traits. Here, for the first time, we perform a systematic survey of the heritability and the distribution of effect sizes across all representative tissues in the human body. We find that local h\textsuperscript{2} can be relatively well characterized with 59\% of expressed genes showing significant h\textsuperscript{2} (FDR \textless{} 0.1) in the DGN whole blood cohort. However, current sample sizes ($n\le922$) do not allow us to compute distal h\textsuperscript{2}. Bayesian Sparse Linear Mixed Model (BSLMM) analysis provides strong evidence that the genetic contribution to local expression traits is dominated by a handful of genetic variants rather than by the collective contribution of a large number of variants each of modest size. In other words, the local architecture of gene expression traits is sparse rather than polygenic across all 40 tissues (from DGN and GTEx) examined. This result is confirmed by the sparsity of optimal performing gene expression predictors via elastic net modeling. To further explore the tissue context specificity, we decompose the expression traits into cross-tissue and tissue-specific components using a novel Orthogonal Tissue Decomposition (OTD) approach. Through a series of simulations we show that the cross-tissue and tissue-specific components are identifiable via OTD. Heritability and sparsity estimates of these derived expression phenotypes show similar characteristics to the original traits. Consistent properties relative to prior GTEx multi-tissue analysis results suggest that these traits reflect the expected biology. Finally, we apply this knowledge to develop prediction models of gene expression traits for all tissues. The prediction models, heritability, and prediction performance R\textsuperscript{2} for original and decomposed expression phenotypes are made publicly available (\url{https://github.com/hakyimlab/PrediXcan}).
+
+% Please keep the Author Summary between 150 and 200 words
+% Use first person. PLOS ONE authors please skip this step. 
+% Author Summary not valid for PLOS ONE submissions.   
+\section*{Author Summary} %currently 171 words
+Gene regulation is known to contribute to the underlying mechanisms of complex traits. The GTEx project has generated RNA-Seq data on hundreds of individuals across more than 40 tissues providing a comprehensive atlas of gene expression traits. Here, we systematically examined the local versus distant heritability as well as the sparsity versus polygenicity of protein coding gene expression traits in tissues across the entire human body. To determine tissue context specificity, we decomposed the expression levels into cross-tissue and tissue-specific components. Regardless of tissue type, we found that local heritability, but not distal heritability, can be well characterized with current sample sizes. We found that the distribution of effect sizes is more consistent with a sparse local architecture in all tissues. We also show that the cross-tissue and tissue-specific expression phenotypes constructed with our orthogonal tissue decomposition model recapitulate complex Bayesian multi-tissue analysis results. This knowledge was applied to develop prediction models of gene expression traits for all tissues, which we make publicly available.
+
+\linenumbers
+
+%Nat. Comm: The main text (not including abstract, Methods, References and figure legends) is limited to 5,000 words. Currently ~4000 words
+%Figure legends are limited to 350 words each. References are limited to 70. Footnotes are not used.
+%Depending on the word count, Articles may have up to 10 display items (figures and/or tables).  Currently 7 (6 Figs, 1 Table)
+
+\section*{Introduction}
+Regulatory variation plays a key role in the genetics of complex traits \cite{Nicolae_2010, Nica_2010, Gusev_2014}. Methods that partition the contribution of environment and genetic components are useful tools to understand the biology underlying complex traits. Partitioning heritability into different functional classes (e.g. promoters, coding regions, DNase I hypersensitivity sites) has been successful in quantifying the contribution of different mechanisms that drive the etiology of diseases \cite{Gusev_2014,torres2014cross,davis2013partitioning}.
+
+Most human expression quantitative trait loci (eQTL) studies have focused on how local genetic variation affects gene expression in order to reduce the multiple testing burden that would be required for a global analysis \cite{Albert_2015, Stranger_2012}. Furthermore, when both local and distal eQTLs are reported \cite{Stranger_2007,Innocenti_2011,Wright_2014}, effect sizes and replicability are much higher for local eQTLs. While many common diseases are likely polygenic \cite{Purcell_2009,Stahl_2012,Morris_2012}, it is unclear whether gene expression levels are also polygenic or instead have simpler genetic architectures. It is also unclear how much these expression architectures vary across genes \cite{Albert_2015}. 
+
+Bayesian Sparse Linear Mixed Modeling (BSLMM) models complex traits as a mixture of sparse and polygenic contributions. The sparse component consists of a handful of variants of large effect sizes whereas the polygenic component allows for most variants to contribute to the trait albeit with small effect sizes. BSLMM assumes the genotypic effects come from a mixture of two normal distributions and thus is flexible to both polygenic and sparse genetic architectures as well as everything in-between \cite{Zhou_2013}. The model is enforced by sparsity inducing priors on the
+regression coefficients. BSLMM allows us to directly estimate the sparse and polygenic components of a trait.
+
+As a somewhat independent approach to determine the sparsity and polygenicity of gene expression traits traits, we can look at the relative prediction performance of sparse and polygenic models. For example, if the true genetic architecture of a trait is polygenic, it is natural to expect that polygenic models will predict better (higher predicted vs. observed R$^2$) than sparse ones. We assessed the ability of various models, with different underlying assumptions, to predict gene expression in order to understand the underlying genetic architecture of gene expression. For gene expression prediction, we have shown that sparse models such as LASSO (Least Absolute Shrinkage and Selection Operator) perform better than a polygenic score model and that a model that uses the top eQTL variant outperformed the polygenic score but did not do as well as LASSO or elastic net (mixing parameter $\alpha=0.5$) \cite{Gamazon_2015}. These results suggest that for many genes, the genetic architecture is sparse, but not regulated by a single SNP, which is consistent with previous work describing the allelic heterogeneity of gene expression \cite{brown2013integrative,king2014genetic,zhang2011genetic}. 
+
+Thus, gene expression traits with sparse architecture should be better predicted with models such as LASSO, which prefers solutions with fewer parameters, each of large effect \cite{Tibshirani_1996}. Conversely, highly polygenic traits should be better predicted with ridge regression or similarly polygenic models that prefer solutions with many parameters, each of small effect \cite{Hoerl_1970,de_los_Campos_2010,Wheeler_2014}. Elastic net \cite{Zou_2005} is a good multi-purpose model that encompasses both LASSO and ridge regression at its extremes and has been shown to predict well across many complex traits with diverse genetic architectures \cite{abraham2013performance}. 
+
+Most previous human eQTL studies were performed in whole blood or lymphoblastoid cell lines due to ease of access or culturabilty \cite{Stranger_2007,Cheung_2005,Battle_2013}. Although studies with a few other tissues have been published, comprehensive coverage of human tissues was not available until the launching of the Genotype-Tissue Expression (GTEx) Project. GTEx aims to examine the genetics of gene expression more comprehensively and has recently published a pilot analysis of eQTL data from 1641 samples across 43 tissues from 175 individuals \cite{Ardlie_2015}. Here we use a much larger set of 8555 samples across 53 tissues corresponding to 544 individuals. One of the findings of the pilot analysis was that a large portion of the local regulation of expression traits is shared across multiple tissues. Corroborating this finding, our prediction model built in DGN whole blood showed robust prediction \cite{Gamazon_2015} across the nine tissues with the largest sample size from the GTEx Pilot Project \cite{Ardlie_2015}.
+
+This shared regulation across tissues implies that there is much to be learned from large sample studies of easily accessible tissues. Yet, a portion of gene regulation seems to be tissue dependent \cite{Ardlie_2015}. To further investigate the genetic architecture that is common across tissues or specific to each tissue, we use a mixed effects model-based approach termed orthogonal tissue decomposition (OTD) and sought to decouple the cross-tissue and tissue-specific mechanisms in the rich GTEx dataset. We show that the cross-tissue and tissue-specific expression phenotypes constructed with our OTD model reflect the expected biology. 
+
+% Results and Discussion can be combined.
+\section*{Results}
+\subsection*{Significant local heritability of gene expression in all tissues}\label{local-genetic-variation-can-be-well-characterized-for-all-tissues}
+
+We estimated the local and distal heritability of gene expression levels in 40 tissues from the GTEx consortium and whole blood from the Depression Genes and Networks (DGN) cohort. The sample size in GTEx varied from 72 to 361 depending on the tissue, while 922 samples were available in DGN \cite{Battle_2013}. We used linear mixed models (see Methods) and calculated variances using restricted maximum likelihood (REML) as implemented in GCTA \cite{Yang_2011}. For the local heritability component, we used common (minor allele frequency \textgreater{} 0.05) variants within 1Mb of the transcription start and end of each protein coding gene, whereas for the distal component, we used common variants outside of the chromosome where the gene was located.
+
+Table \ref{table-h2} summarizes the local heritability estimate results across all tissues. In order to obtain an unbiased estimate of mean h\textsuperscript{2} across genes, we do not constrain the model to only output h\textsuperscript{2} estimates between 0 and 1. Instead, as done previously \cite{Price_2011,Wright_2014}, we allow the h\textsuperscript{2} estimates to be negative when fitting the model and thus refer to it as the unconstrained REML. This approach reduces the standard error of the estimated mean of heritability (law of large numbers). For distal heritability, the errors in the individual heritability estimates were still too large to render a significant mean distal heritability, even in DGN whole blood, the tissue with the largest sample size (\nameref{S1_Fig}). The local component of h\textsuperscript{2} is relatively well estimated in DGN whole blood with 59\% of genes  (7474 out of 12719) showing FDR \textless{} 0.1 (Table \ref{table-h2}).
+
+It has been shown that local-eQTLs are more likely to be distal-eQTLs of target genes \cite{pierce2014mediation}. However, restricting the distal h\textsuperscript{2} estimates to known eQTLs  on non-gene chromosomes discovered in a separate cohort (see Methods) did not improve distal h\textsuperscript{2} estimates. 
+
+We examined the sensitivity of our local h\textsuperscript{2} estimates to uneven linkage disequilibrium (LD) across the genome using LDAK \cite{speed2012improved}, a method proposed to account for LD. Overall, we find good concordance between GCTA and LDAK estimates, with slightly lower LDAK estimates (\nameref{S2_Fig}). Given the limited sample size we will focus on local regulation for the remainder of the paper.
+
+
+Across all tissues 15-59\% of genes had significant estimates (FDR \textless{} 0.1)  as shown in Table \ref{table-h2}. %Gene expression local heritability estimates were consistent between whole blood tissue from the DGN and GTEx cohorts (Spearman's $\rho = 0.27$ [95\% confidence interval (CI): 0.25-0.30]). DGN estimates made here were also consistent with those made in independent blood cohorts from previous studies. Comparing DGN to Price et al. \cite{Price_2011} and Wright et al. \cite{Wright_2014}, $\rho = 0.32$ [0.30-0.35] and 0.073 [0.047-0.10], respectively. Spearman's $\rho$ between Price et al. \cite{Price_2011} and Wright et al. \cite{Wright_2014} gene expression heritability estimates was 0.11 [0.080-0.13].
+We also found that more heritable genes tend to be more tolerant to loss of function mutations (Fig. \ref{fig-pli-h2}). Presumably, such genes are more tolerant to both loss of function mutations and mutations that alter gene expression regulation. This result is consistent with the finding that more eQTLs are found in more tolerant genes \cite{lek2016analysis}.
+
+% latex table generated in R 3.2.1 by xtable 1.7-4 package
+% Wed Dec 16 14:40:32 2015
+\begin{table}[!ht]
+\begin{adjustwidth}{-2.25in}{0in} % Comment out/remove adjustwidth environment if table fits in text column.
+\caption{
+{\bf Estimates of unconstrained local h\textsuperscript{2} across genes within tissues.}}
+\begin{tabular}{lrlrrr}
+ \hline
+tissue & n & mean h\textsuperscript{2} (SE) & \% FDR\textless{}0.1 & num FDR\textless{}0.1 & num expressed \\ 
+  \hline
+DGN Whole Blood & 922 & 0.149 (0.0039) & 58.8 & 7474 & 12719 \\ 
+  Cross-tissue & 450 & 0.062 (0.017) & 20.2 & 2995 & 14861 \\ 
+  Adipose - Subcutaneous & 298 & 0.038 (0.028) & 18.8 & 2666 & 14205 \\ 
+  Adrenal Gland & 126 & 0.043 (0.018) & 17.5 & 2479 & 14150 \\ 
+  Artery - Aorta & 198 & 0.042 (0.024) & 17.2 & 2385 & 13844 \\ 
+  Artery - Coronary & 119 & 0.037 (0.048) & 16.5 & 2326 & 14127 \\ 
+  Artery - Tibial & 285 & 0.042 (0.02) & 18.4 & 2489 & 13504 \\ 
+  Brain - Anterior cingulate cortex (BA24) & 72 & 0.028 (0.036) & 15.4 & 2235 & 14515 \\ 
+  Brain - Caudate (basal ganglia) & 100 & 0.037 (0.047) & 17.2 & 2521 & 14632 \\ 
+  Brain - Cerebellar Hemisphere & 89 & 0.049 (0.068) & 16.0 & 2294 & 14295 \\ 
+  Brain - Cerebellum & 103 & 0.050 (0.06) & 18.3 & 2646 & 14491 \\ 
+  Brain - Cortex & 96 & 0.045 (0.057) & 17.7 & 2593 & 14689 \\ 
+  Brain - Frontal Cortex (BA9) & 92 & 0.038 (0.077) & 16.6 & 2416 & 14554 \\ 
+  Brain - Hippocampus & 81 & 0.037 (0.05) & 16.4 & 2376 & 14513 \\ 
+  Brain - Hypothalamus & 81 & 0.017 (0.043) & 15.2 & 2238 & 14759 \\ 
+  Brain - Nucleus accumbens (basal ganglia) & 93 & 0.029 (0.04) & 17.1 & 2498 & 14601 \\ 
+  Brain - Putamen (basal ganglia) & 82 & 0.032 (0.064) & 17.3 & 2495 & 14404 \\ 
+  Breast - Mammary Tissue & 183 & 0.029 (0.037) & 17.0 & 2496 & 14700 \\ 
+  Cells - EBV-transformed lymphocytes & 115 & 0.058 (0.1) & 16.6 & 2066 & 12454 \\ 
+  Cells - Transformed fibroblasts & 272 & 0.051 (0.031) & 20.0 & 2552 & 12756 \\ 
+  Colon - Sigmoid & 124 & 0.033 (0.019) & 16.0 & 2298 & 14321 \\ 
+  Colon - Transverse & 170 & 0.036 (0.058) & 16.3 & 2398 & 14676 \\ 
+  Esophagus - Gastroesophageal Junction & 127 & 0.032 (0.039) & 16.1 & 2270 & 14125 \\ 
+  Esophagus - Mucosa & 242 & 0.042 (0.03) & 17.1 & 2432 & 14239 \\ 
+  Esophagus - Muscularis & 219 & 0.039 (0.015) & 17.7 & 2493 & 14047 \\ 
+  Heart - Atrial Appendage & 159 & 0.042 (0.03) & 16.8 & 2327 & 13892 \\ 
+  Heart - Left Ventricle & 190 & 0.034 (0.034) & 16.5 & 2203 & 13321 \\ 
+  Liver & 98 & 0.033 (0.062) & 16.5 & 2230 & 13553 \\ 
+  Lung & 279 & 0.032 (0.034) & 17.0 & 2509 & 14775 \\ 
+  Muscle - Skeletal & 361 & 0.033 (0.03) & 17.9 & 2301 & 12833 \\ 
+  Nerve - Tibial & 256 & 0.052 (0.087) & 20.6 & 2992 & 14510 \\ 
+  Ovary & 85 & 0.037 (0.094) & 17.2 & 2418 & 14094 \\ 
+  Pancreas & 150 & 0.047 (0.024) & 17.2 & 2398 & 13941 \\ 
+  Pituitary & 87 & 0.038 (0.055) & 16.6 & 2527 & 15183 \\ 
+  Skin - Not Sun Exposed (Suprapubic) & 196 & 0.041 (0.034) & 17.0 & 2490 & 14642 \\ 
+  Skin - Sun Exposed (Lower leg) & 303 & 0.039 (0.016) & 18.4 & 2687 & 14625 \\ 
+  Small Intestine - Terminal Ileum & 77 & 0.036 (0.053) & 17.4 & 2591 & 14860 \\ 
+  Spleen & 89 & 0.059 (0.061) & 17.0 & 2451 & 14449 \\ 
+  Stomach & 171 & 0.032 (0.025) & 16.1 & 2338 & 14531 \\ 
+  Testis & 157 & 0.054 (0.044) & 17.8 & 3009 & 16936 \\ 
+  Thyroid & 279 & 0.044 (0.066) & 19.4 & 2838 & 14642 \\ 
+  Whole Blood & 339 & 0.033 (0.023) & 18.6 & 2260 & 12160 \\ 
+   \hline
+\end{tabular}
+\begin{flushleft} Except for DGN Whole Blood, all tissues are from the GTEx Project. Cross-tissue uses derived expression levels from our orthogonal tissue decomposition (OTD) of GTEx data. Mean heritability (h\textsuperscript{2}) is calculated across genes for each tissue. The standard error (SE) is estimated from the h\textsuperscript{2} estimates obtained when the expression sample labels are shuffled 100 times. The percentage (\%) and number (num) of genes with significant h\textsuperscript{2} estimates (FDR \textless{} 0.1) in each tissue are reported. The number of genes in each tissue with mean RPKM \textgreater{} 0.1 (num expressed) is also reported.
+\end{flushleft}
+\label{table-h2}
+\end{adjustwidth}
+\end{table}
+
+%\clearpage
+
+
+\begin{figure}[H]
+%\includegraphics[width=6cm]{Figures/pLI-by-h2.png}
+\caption{{\bf Genes with heritable expression in DGN whole blood are more tolerant to loss of function mutations.} 
+The distribution of the probability of being loss-of-function intolerant (pLI) for each gene (from the Exome Aggregation Consortium \cite{lek2016analysis}) dichotomized by local heritability estimates. The Kruskal-Wallis rank sum test revealed a significant difference in the pLI of heritability groups ($\chi^2 = 234$, $P < 10^{-52}$). More heritable genes (h\textsuperscript{2} \textgreater{} 0.1 in blue) have lower pLI metrics and are thus more tolerant to mutation than genes with lower h\textsuperscript{2}.
+}
+\label{fig-pli-h2}
+\end{figure}
+
+
+\subsection*{Sparse local architecture revealed by direct estimation using Bayesian Sparse Linear Mixed Modeling (BSLMM)}
+
+Next, we sought to determine whether the local common genetic contribution to gene expression is polygenic or sparse. In other words, whether many variants with small effects or a small number of large effects were contributing to expression trait variability. To do this, we used the BSLMM \cite{Zhou_2013} approach, which models the genetic contribution as the sum of a sparse component and a highly polygenic component. The parameter PGE in this model represents the proportion of genetic variance explained by sparse effects. Another parameter, the total variance explained (PVE) by additive genetic variants, is a more flexible Bayesian equivalent of the heritability we have estimated using a linear mixed model (LMM) as implemented in GCTA. 
+
+For genes with low heritability, our power to discern between sparse and polygenic architecture is limited. 
+In contrast, for highly heritable genes, the credible sets are tighter and we are able to determine that the sparse component is large. For example, the median PGE was 0.99 [95\% CI: 0.94-1] for genes with PVE \textgreater{} 0.50 (Fig. \ref{fig-dgn-bslmm}A). The median PGE was 0.95 [95\% CI: 0.72-0.99] for genes with PVE \textgreater{} 0.1. Fittingly, for most (96.3\%) of the genes with heritability \textgreater{} 0.10, the number of SNPs included in the model was below 10.
+
+\begin{figure}[H]
+%\includegraphics[width=12cm]{Figures/Fig-DGN-BSLMM.png}
+\caption{{\bf Sparsity estimates using Bayesian Sparse Linear Mixed Models in DGN whole blood.} 
+(\textbf{A}) This panel shows a measure of sparsity of the gene expression traits represented by the PGE parameter from the BSLMM approach. PGE is the proportion of the sparse component of the total variance explained by genetic variants, PVE (the BSLMM equivalent of h\textsuperscript{2}). The median of the posterior samples of BSLMM output is used as estimates of these parameters.
+Genes with a lower credible set (LCS) $>0.01$ are shown in blue and the rest in red. The 95\% credible set of each estimate is shown in gray. 
+ For highly heritable genes the sparse component is close to 1, thus for high heritability genes the local architecture is sparse. For lower heritability genes, there is not enough evidence to determine sparsity or polygenicity. (\textbf{B}) This panel shows the heritability estimate from BSLMM (PVE) vs the estimates from GCTA, which are found to be similar (R=0.96). Here, the estimates are constrained to be between 0 and 1 in both models. Each point is colored according to that gene's elastic net \(\alpha=1\) cross-validated prediction correlation squared (EN R$^2$). Note genes with high heritability have high prediction R$^2$, as expected.
+}
+\label{fig-dgn-bslmm}
+\end{figure}
+
+
+\subsection*{Prediction models with a sparse component outperform polygenic models}\label{the-effect-of-local-genetic-variation-on-gene-expression-is-sparse-rather-than-polygenic}
+
+To further confirm the local sparsity of gene expression traits, we looked at the prediction performance of a range of models with different degrees of polygenicity, such as the elastic net model with mixing parameter values ranging from 0 (fully polygenic, ridge regression) to 1 (sparse, LASSO). We performed 10-fold cross-validation using the elastic net \cite{Zou_2005} to test the predictive performance of local SNPs for gene expression across a range of mixing parameters ($\alpha$). Given common folds and seeds, the mixing parameter that yields the largest cross-validation R\textsuperscript{2} informs the degree of sparsity of each gene expression trait. That is, at one extreme, if the optimal \(\alpha=0\) (equivalent to ridge regression), the gene expression trait is highly polygenic, whereas if the optimal \(\alpha=1\) (equivalent to LASSO), the trait is highly sparse. We found that for most gene expression traits, the cross-validated R\textsuperscript{2} was smaller for \(\alpha=0\) and \(\alpha=0.05\), but nearly identical for \(\alpha=0.5\) through \(\alpha=1\) in the DGN cohort (Fig. \ref{fig-dgn-en}). An \(\alpha=0.05\) was also clearly suboptimal for gene expression prediction in the GTEx tissues, while models with \(\alpha=0.5\) or 1 had similar predictive power (\nameref{S3_Fig}). Together with the BSLMM results, this suggests that given current data, the effect of local common genetic variation on gene expression is sparse rather than polygenic for most genes.
+
+\begin{figure}[H]
+%\includegraphics[width=12cm]{Figures/Fig-DGN-EN.png}
+\caption{{\bf DGN cross-validated predictive performance across the elastic net.} 
+Elastic net prediction models were built in the DGN whole blood and performance was quantified by the cross-validated R$^2$ between observed and predicted expression levels. (\textbf{A}) This panel shows the 10-fold cross validated R$^2$ for 51 genes with R$^2$ $>0.3$ from chromosome 22 as a function of the elastic net mixing parameters (\(\alpha\)). Smaller mixing parameters correspond to more polygenic models while larger ones correspond to more sparse models. Each line represents a gene. The performance is in general flat for most values of the mixing parameter except very close to zero where it shows a pronounced dip. Thus polygenic models perform more poorly than sparse models. (\textbf{B}) This panel shows the difference between the cross validated R$^2$ of the LASSO model and the elastic net model mixing parameters 0.05 and 0.5 for autosomal protein coding genes. Elastic net with $\alpha=0.5$ values hover around zero, meaning that it has similar predictive performance to LASSO. The R$^2$ difference of the more polygenic model (elastic net with $\alpha=0.05$) is mostly above the 0 line, indicating that this model performs worse than the LASSO model.
+}
+\label{fig-dgn-en}
+\end{figure}
+
+
+\subsection*{BSLMM outperforms LMM in estimating h\textsuperscript{2}  for small samples}
+
+In DGN, there is a strong correlation between BSLMM-estimated PVE and GCTA-estimated h\textsuperscript{2} (Fig. \ref{fig-dgn-bslmm}B, R=0.96). In contrast, when we applied BSLMM to the GTEx data, we found that many genes had measurably larger BSLMM-estimated PVE than LMM-estimated h\textsuperscript{2} (Fig. \ref{fig-gtex-pve-h2}). This is further confirmation of the predominantly sparse local architecture of gene expression traits: the underlying assumption in the LMM approach to estimate heritability is that the genetic effect sizes are normally distributed, i.e. most variants have small effect sizes. LMM is quite robust to departure from this assumption, but only when the sample size is rather large (\nameref{S4_Fig}). For the relatively small sample sizes in GTEx (\(n \leq 361\)), we found that directly modeling the sparse component with BSLMM (polygenic + sparse components) outperforms LMM (single polygenic component) for estimating h\textsuperscript{2}. Here, unlike in previous sections (see Table \ref{table-h2} and \nameref{S1_Fig}), both the BSLMM and LMM model estimates are constrained to be between 0 and 1. 
+
+\begin{figure}[H]
+%\includegraphics[width=12cm]{Figures/Fig-GTEx_TW_PVE_v_h2.png}
+\caption{{\bf BSLMM vs LMM estimates of heritability in GTEx.} 
+This figure shows the comparison between estimates of heritability using BSLMM vs. LMM (GCTA) for GTEx data. Here, in both models the estimates are constrained to be between 0 and 1. For most genes BSLMM estimates are larger than LMM estimates reflecting the fact that BSLMM yields better estimates of heritability because of its ability to account for the sparse component. Each point is colored according to that gene's prediction R2 (correlation squared between cross-validated elastic net prediction vs observed expression denoted EN R$^2$). At the bottom left of each panel, we show the correlation between BSLMM (EN\_v\_BSLMM) and LMM (EN\_v\_LMM). BSLMM is consistently more correlated with the elastic net correlation. This provides further indication that the local architecture is predominantly sparse.}
+\label{fig-gtex-pve-h2}
+\end{figure}
+
+To ensure that the high values of heritability estimated by BSLMM are due to actually higher h\textsuperscript{2} and not to limitations or bias of the BSLMM, we use the fact that cross-validated prediction R\textsuperscript{2} (observed vs predicted squared correlation when prediction parameters are estimated without including the observations to be predicted) is bounded by the heritable component. In other words, genetically based prediction models can only explain or predict the portion that is heritable. As shown in Figure \ref{fig-gtex-pve-h2}, most of the genes with high BSLMM heritability but low LMM h\textsuperscript{2} have large values of prediction R\textsuperscript{2}. 
+We further validated this behavior by showing Price et al. \cite{Price_2011} identity-by-descent (IBD) heritability estimates correlate more strongly with BSLMM than LMM estimates (\nameref{S5_Fig}). For all tissues, correlation is higher between IBD estimates and BSLMM than between IBD and LMM. These findings provide strong evidence that LMM is underestimating h\textsuperscript{2} for these genes.
+
+
+\subsection*{Orthogonal decomposition 	of cross-tissue and tissue-specific expression traits}
+
+Since a substantial portion of local regulation was shown to be common across multiple tissues \cite{Ardlie_2015}, we sought to decompose the expression levels into a component that is common across all tissues and tissue-specific components. Figure \ref{fig-OTD} shows a diagram describing the decomposition for which we use a linear mixed effects model with a person-level random effect (see Methods). We use the posterior mean of this random effect as an estimate of the cross-tissue component. We consider the residual component of this model as the tissue-specific component. We call this approach orthogonal tissue decomposition (OTD) because the cross-tissue and tissue-specific components are assumed to be independent in the model. 
+
+\begin{figure}[H]
+%\includegraphics[width=\textwidth]{Figures/OTD.pdf}
+\caption{\textbf{Orthogonal Tissue Decomposition of gene expression traits.} For a given gene, the expression level is decoupled into a component that is specific to the individual and another component that is specific to the individual and tissue. The left side of the equation in the figure corresponds to the original ``whole tissue'' expression levels. The right side has the component specific for the individual, independent of the tissue and the tissue-specific component. Given the lack of multiple replications for a given tissue/individual we use a mixed effects model with a random effect that is specific to the individual. The cross-tissue component is estimated as the posterior mean of the subject-specific random effect. The tissue-specific component is estimated as the residual of the model fit, i.e. the difference between the ``whole tissue'' expression and the cross-tissue component. The rationale is that once we remove the component that is common across tissues, the remaining will be specific to the tissue. Models are fit one gene at a time. Covariates are not shown to simplify the presentation.}
+\label{fig-OTD}
+\end{figure}
+
+
+First, we sought to demonstrate that OTD is able to identify the cross-tissue and tissue-specific components via simulations. We generated simulated traits so that the true cross-tissue and tissue-specific components are known. To preserve the correlation structure between genes and tissues, we considered the estimated cross-tissue and tissue-specific components as the true values. Then, we simulated expression traits as the sum of the cross-tissue and tissue-specific components and an error term (expression trait = cross-tissue + tissue-specific + noise). We simulated expression traits using different magnitudes of the noise level and then applied our OTD approach. Simulated values were constructed using noise variance equal in magnitude to the original variance of the expression levels of each gene. This is a rather conservative choice since the variance of the noise component is unlikely to be larger than the total variance of the expression trait.
+In \nameref{S6_Fig}, we show for one simulated example the correlation between true and OTD-estimated components for one representative gene, \textit{SLTM}, and the distribution of the correlation between true and OTD-estimates for all genes. The median Pearson correlation between true and OTD-estimted cross-tissue components was 0.54 [95\% CI: 0.33-0.77] and for tissue-specific components was 0.75 [0.46-0.88], demonstrating the robustness of our model (\nameref{S6_Fig}).
+
+For the OTD derived cross-tissue and 40 tissue-specific expression phenotypes, we computed the local heritability and generated prediction models.
+The decomposition is applied at the expression trait level so that the downstream genetic regulation analysis is performed separately for each derived trait, cross-tissue and tissue-specific expression, which greatly reduces computational burden. 
+
+\subsection*{Cross-tissue expression phenotype is less noisy and shows higher predictive performance}%\label{cross-tissue-expression-phenotype-has-increased-predictive-power-and-recapitulates-known-multi-tissue-eqtl-target-genes}
+
+Our estimates of h\textsuperscript{2} for cross-tissue expression traits are larger than the corresponding estimates for each whole tissue (\nameref{S7_Fig}) because our OTD approach increases the ratio of the genetically regulated component to noise by averaging across multiple tissues. In addition to the increased h\textsuperscript{2}, we observe reduction in standard errors of the estimated cross-tissue h\textsuperscript{2}. This is due, in part, to the larger effective sample size for cross-tissue phenotypes. There were 450 samples for which cross-tissue traits were available whereas the maximum sample size for whole tissue phenotypes was 362. Similarly, cross-tissue BSLMM PVE estimates had lower error than whole tissue PVE (\nameref{S8_Fig}, \nameref{S9_Fig}). 
+
+As for the tissue-specific components, 
+the cross-tissue heritability estimates were also larger and the standard errors were smaller reflecting the fact that a substantial portion of regulation is common across tissues (\nameref{S10_Fig}). The percentage of GCTA h\textsuperscript{2} estimates with FDR \textless{0.1}  was much larger for cross-tissue expression (20\%) than the tissue-specific expressions (6-13\%, \nameref{S1_Table}). Similarly, the percentage of BSLMM PVE estimates with a lower credible set greater than 0.01 was 49\% for cross-tissue expression, but ranged from 24-27\% for tissue-specific expression (\nameref{S9_Fig}).
+
+Cross-tissue predictive performance exceeded that of both tissue-specific and whole tissue expression as indicated by higher cross-validated R\textsuperscript{2} (\nameref{S11_Fig}). Like whole tissue expression, cross-tissue and tissue-specific expression showed higher predictive performance when using more sparse models. In other words elastic-net models with \(\alpha \geq 0.5\) predicted better than the ones with \(\alpha=0.05\) (\nameref{S11_Fig}). 
+
+
+%% from README: correspond to the marginal posterior of the SNP being active in Adipose, etc. These columns are the same as in the file "res_final_uc_com_genes_com_snps.txt.gz" (described above), which only contains the best SNP per gene
+%To Haky, the SNP seems to be the same for each gene. From the README file: "These values may be interpreted as Pr(SNP is eQTL in tissue s | data). 9875 eGenes are presented, with the?top" (most significant) SNP in each gene used."
+%first few rows of file res_final_uc_com_genes_com_snps.txt.gz:
+%gene	snp	Adipose	Artery	Blood	Heart	Lung	Muscle	Nerve	Skin	Thyroid
+%ENSG00000137288.4	rs11759971	0.6596	0.6547	0.5383	0.6264	0.6759	0.5699	0.6750	0.7638	0.6775
+%ENSG00000168005.4	rs36077346	0.7835	0.7817	0.7632	0.7743	0.7928	0.5103	0.7922	0.7837	0.7932
+%ENSG00000255893.1	rs657249	1.0000	1.0000	0.3647	1.0000	1.0000	1.0000	1.0000	1.0000	1.0000
+
+\subsection*{Cross-tissue expression phenotype recapitulates published multi-tissue eQTL results}
+
+To verify that the cross-tissue phenotype has the properties we expect, we compared our OTD results to those from a joint multi-tissue eQTL analysis  \cite{Flutre_2013}, which was previously performed on a subset of the GTEx data \cite{Ardlie_2015} covering 9 tissues. In particular, we used the posterior probability of a gene being actively regulated (PPA) in a tissue. These analysis results are available on the GTEx portal (see Methods).
+
+First, we reasoned that genes with high cross-tissue h\textsuperscript{2} would be actively regulated in most tissues so that the PPA of a gene would be roughly uniform across tissues. By contrast, a gene with tissue-specific regulation would have concentrated posterior probability in one or a few tissues. Thus we decided to define a measure of uniformity of the posterior probability vector across the 9 tissues using the concept of entropy. More specifically, for each gene we normalized the vector of posterior probabilities so that the sum equaled 1. Then we applied the usual entropy definition (negative of the sum of the log of the posterior probabilities weighted by the same probabilities, see Methods). In other words, we defined a uniformity statistic that combines the nine posterior probabilities into one value such that higher values mean the gene regulation is more uniform across all nine tissues, rather than in just a small subset of the nine.
+
+Thus, we expected that genes with high cross-tissue heritability would show high probability of being active in multiple tissues and have high uniformity measure. Reassuringly, this is exactly what we find. Genes with high cross-tissue heritability concentrate on the higher end of the uniformity measure (Fig. \ref{fig-ct-entropy}, \nameref{S12_Fig}). 
+%%the comparison between this entropy statistics and cross-tissue expression heritability (R=0.082) and PVE (R = 0.12).
+
+\begin{figure}[H]
+%\includegraphics[width=13cm]{Figures/Fig-CT-entropy-ppa.png}
+\caption{{\bf Measure of uniformity of the posterior probability of active regulation vs. cross-tissue heritability.}
+Uniformity was computed using the posterior probability of a gene being actively regulated in a tissue, PPA, from the Flutre et al. \cite{Flutre_2013} multi-tissue eQTL analysis. {\bf (A)} Representative examples showing that genes with PPA concentrated in one tissue were assigned small values of the uniformity measure whereas genes with PPA uniformly distributed across tissues were assigned high value of uniformity measure. See Methods for the entropy-based definition of uniformity. {\bf (B)}  This panel shows the distribution of heritability of the cross-tissue component vs. a measure of uniformity of genetic regulation across tissues. 
+The Kruskal-Wallis rank sum test revealed a significant difference in the cross-tissue h\textsuperscript{2} of uniformity groups ($\chi^2 = 31.4$, $P < 10^{-6}$).}
+\label{fig-ct-entropy}
+\end{figure}
+
+
+For the original whole tissue, we expected the whole tissue expression heritability to correlate with the posterior probability of a gene being actively regulated in a tissue. This is confirmed in Figure \ref{fig-corrplot}A where PPA in each tissue is correlated with the BSLMM PVE of the expression in that tissue. In the off diagonal elements we observe high correlation between tissues, which was expected given that large portion of the regulation has been shown to be common across tissues. Whole blood has the lowest correlation  consistent with whole blood clustering aways from other tissues \cite{Ardlie_2015}. In contrast, Figure \ref{fig-corrplot}B shows that the tissue-specific expression PVE correlates well with matching tissue PPA but the off diagonal correlations are substantially reduced consistent with these phenotypes representing tissue-specific components. Again whole blood shows a negative correlation which could be indicative of some over correction of the cross-tissue component. Overall these results indicate that the cross-tissue and tissue-specific phenotypes have properties that are consistent with the intended decomposition.
+
+%Strikingly, the tissue-specific phenotype heritability showed highest correlation with the PPA of the matching tissue and lower correlations with other tissues, confirming that OTD also captures tissue-specific components of gene expression (Fig. \ref{fig-corrplot}B). However, for whole blood there is a consistently negative correlation with other tissues. This issue needs to be further investigated.
+
+%\hl{Genes with higher heritability for the cross tissue component have more uniform distribution of PPA across tissues}
+
+
+\begin{figure}[H]
+%\includegraphics[width=12cm]{Figures/Fig-cor-StephensPr-v-PVE.png}
+\caption{{\bf Comparison of heritability of whole tissue or tissue-specific components vs. PPA.} 
+Panel (\textbf{A}) of this figure shows the Pearson correlation (R) between the BSLMM PVE of the original (we are calling whole here) tissue expression levels vs. the probability of the tissue being actively regulated in a given tissue (PPA). Matching tissues show, in general, the largest correlation values but most of the off diagonal correlations are also relatively high consistent with the shared regulation across tissues. 
+Panel (\textbf{B}) shows the Pearson correlation between the PVE of the tissue-specific component of expression via orthogonal tissue decomposition (OTD) vs. PPA. Correlations are in general lower but matching tissues show the largest correlation. Off diagonal correlations are reduced substantially consistent with properties that are specific to each tissue. 
+%Pearson correlation (R) between the posterior probability the top multi-tissue eQTL 
+%regulates its gene in a given tissue (PPA, Flutre et al. method) and the PVE of (A) whole 
+%tissue gene expression or (B) tissue-specific gene expression from the orthogonal
+%tissue decomposition (OTD). 
+Area of each circle is proportional to the absolute value of R.
+}
+\label{fig-corrplot}
+\end{figure}
+
+
+% Please do not create a heading level below \subsection. For 3rd level headings, use \paragraph{}. 
+
+\section*{Discussion}
+Motivated by the key role that regulatory variation plays in the genetic control of complex traits \cite{Nicolae_2010,Nica_2010,Gusev_2014}, we performed a survey of the heritability and patterns of effect sizes of gene expression traits across a comprehensive set of human tissues. We quantified the local and distal heritability of gene expression in DGN and 40 different tissues from the GTEx consortium. Distal components estimates were too noisy to draw meaningful conclusions.
+
+%For the DGN dataset, we estimate the relative proportion of mean local and distal genetic contribution to gene expression traits. For GTEx samples it was not possible to estimate the mean distal heritability because of the limited sample size. As sample sizes grow to thousands of individuals, we expect to be able to estimate these values.
+
+%In DGN (whole blood) joint model, the mean local h\textsuperscript{2} was 13.9\% and the mean distal h\textsuperscript{2} was 3.8\% such that the local variation contribution is estimated as 13.9/(3.8+13.9) = 79\%. This is much higher than the 37\% reported by Price et al. \cite{Price_2011} based on blood expression data from a cohort of Icelandic individuals using identity by descent, which captures both common and any rare variation. In addition, our potentially underestimation of the distal component could be due to over-correction of confounders used in the preprocessing of the expression trait data we used. Indeed, PEER \cite{Stegle_2012}, SVA \cite{Leek_2007}, and other types of hidden confounder corrections have been shown to increase local eQTL replicability, but their consequences on distal regulation is not well understood.  As larger sample sizes become available, we will test this hypothesis in GTEx data by computing the distal h\textsuperscript{2} without PEER factor correction. Restricting the distal h\textsuperscript{2} estimates to known eQTLs  on non-gene chromosomes did not improve distal h\textsuperscript{2} estimates.
+
+Using results implied by the improved predictive performance of sparse models and by directly estimating sparsity using BSLMM (Bayesian Sparse Linear Mixed Model), we show evidence that local common variant regulation is sparse across all the tissues analyzed here. Our finding that a handful of genetic variants seem to contribute to the variability in gene expression traits has important implications for the strategies used in future investigations of gene regulation and downstream effects on complex traits. For example, most fine mapping methods that attempt to find the causal SNPs that drive a GWAS locus focus on a limited number of variants. This only makes sense in cases where the underlying genetic architecture is sparse, that is, when a handful of causal variants are determining the variability of the traits. We note that any rare variants not tagged by common variants are not included in our gene expression heritability estimates and prediction models. For genes with moderate and low heritability the evidence is not as strong, due to reduced power, but results are consistent with a sparse local architecture. Sparse models capture the most variance in gene expression at current sample sizes and have been used successfully in gene expression prediction methods \cite{manor2013robust,Gamazon_2015,gusev2016integrative,zhu2016integration}. Better methods to correct for hidden confounders that do not dilute distal signals and larger sample sizes will be needed to determine the properties of distal regulation. 
+
+Given that a substantial portion of local regulation is shared across tissues, we proposed here to decompose the expression traits into cross-tissue and tissue-specific components. This approach, called orthogonal tissue decomposition (OTD), aims to decouple the shared regulation from the tissue-specific regulation. We examined the genetic architecture of these derived traits and find that they follow similar patterns to the original whole tissue expression traits. The cross-tissue component benefits from an effectively larger sample size than any individual tissue trait, which is reflected in more accurate heritability estimates and consistently higher prediction performance. Encouragingly, we find that genes with high cross-tissue heritability tend to be regulated more uniformly across tissues. As for the tissue-specific expression traits, we found that they recapitulate correlation with the vector of probability of tissue-specific regulation. Many groups have proposed integrating genotype and expression data to understand complex traits \cite{Gamazon_2015,giambartolomei2014bayesian,gusev2016integrative,he2013sherlock,Wheeler_2014,zhu2016integration}. Through integration of our OTD expression traits with studies of complex diseases, we expect results from the cross-tissue models to relate to mechanisms that are shared across multiple tissues, whereas results from the tissue-specific models will inform us about the context specific mechanisms. 
+
+In this paper, we quantitate the genetic architecture of gene expression and develop predictors across tissues. We show that local heritability can be accurately estimated across tissues, but distal heritability cannot be reliably estimated at current sample sizes. Using two different approaches, BSLMM and the elastic net, we show that for common local gene regulation, the genetic architecture is mostly sparse rather than polygenic. Using new expression phenotypes generated in our OTD model, we show that cross-tissue predictive performance exceeded that of both tissue-specific and whole tissue expression as indicated by higher elastic net cross-validated R\textsuperscript{2}. Predictors, heritability estimates and cross-validation statistics generated in this study of gene expression architecture are freely available (\url{https://github.com/hakyimlab/PrediXcan}) for use in future studies of complex trait genetics.
+
+
+% You may title this section "Methods" or "Models". 
+% "Models" is not a valid title for PLoS ONE authors. However, PLoS ONE
+% authors may use "Analysis" 
+\section*{Methods}
+\subsection*{Genomic and Transcriptomic
+Data}\label{genomic-and-transcriptomic-data}
+
+\paragraph*{DGN Dataset.}\label{dgn-dataset}
+
+We obtained whole blood RNA-seq and genome-wide genotype data for 922
+individuals from the Depression Genes and Networks (DGN) cohort
+\cite{Battle_2013}, all of European ancestry. For all analyses, we used the HCP
+(hidden covariates with prior) normalized gene-level expression data
+used for the \emph{trans}-eQTL analysis in Battle et al. \cite{Battle_2013} and
+downloaded from the NIMH repository. The 922 individuals were unrelated
+(all pairwise \(\hat{\pi}\) \textless{} 0.05) and thus all included in
+downstream analyses. Imputation of approximately 650K input SNPs (minor
+allele frequency {[}MAF{]} \textgreater{} 0.05, Hardy-Weinberg
+Equilibrium {[}P \textgreater{} 0.05{]}, non-ambiguous strand {[}no A/T
+or C/G SNPs{]}) was performed on the Michigan
+Imputation Server
+(\url{https://imputationserver.sph.umich.edu/start.html}) \cite{Howie_2012,Fuchsberger_2014}
+with the following parameters: 1000G Phase 1 v3 ShapeIt2 (no singletons)
+reference panel, SHAPEIT phasing, and EUR population. Approximately 1.9M
+non-ambiguous strand SNPs with MAF \textgreater{} 0.05, imputation
+R\textsuperscript{2} \textgreater{} 0.8 and, to reduce computational
+burden, inclusion in HapMap Phase II were retained for subsequent
+analyses.
+
+\paragraph*{GTEx Dataset.}\label{gtex-dataset}
+
+We obtained RNA-seq gene expression levels from 8555 tissue samples (53
+unique tissue types) from 544 unique subjects in the GTEx Project \cite{Ardlie_2015} 
+data release on 2014-06-13. Of the individuals with gene
+expression data, genome-wide genotypes (imputed with 1000 Genomes) were
+available for 450 individuals. While all 8555 tissue samples were used
+in the OTD model (described below) to generate cross-tissue and
+tissue-specific components of gene expression, we used the 40 tissues
+with the largest sample sizes ($n>70$) when quantifying tissue-specific effects (see \nameref{S1_Table}).
+Approximately 2.6M non-ambiguous strand SNPs included in HapMap Phase II were retained for
+subsequent analyses.
+
+\paragraph*{Framingham Expression Dataset.}\label{framingham-dataset}
+
+We obtained exon array expression and genotype array data from 5257 individuals from the Framingham Heart Study \cite{Zhang_2015}. The final sample size after quality control was 4286. We used the Affymetrix power tools (APT) suite to perform the preprocessing and normalization steps. First the robust multi-array analysis (RMA) protocol was applied which consists of three steps: background correction, quantile normalization, and summarization \cite{irizarry2003summaries}. The background correction step uses antigenomic probes that do not match known genome sequences to adjust the baseline for detection, and is applied separately to each array. Next, the normalization step utilizes a `sketch' quantile normalization technique instead of a memory-intensive full quantile normalization. The benefit is a much lower memory requirement with little accuracy trade-off for large sample sets such as this one. Next, the adjusted probe values were summarized (by the median polish method) into log-transformed expression values such that one value is derived per exon or gene. The summarized expression values were then annotated more fully using the annotation databases contained in the huex10stprobeset.db (exon-level annotations) and huex10sttranscriptcluster.db (gene-level annotations) R packages available from Bioconductor \cite{MacDonald_1,MacDonald_2}. In both cases gene annotations were provided for each feature. 
+
+Plink \cite{chang2015second} was used for data wrangling and cleaning steps. The data wrangling steps included updating probe IDs, unifying data to the positive strand, and updating locations to GRCh37. The data cleaning steps included a step to filter for variant and subject missingness and minor alleles, one to filter variants with Hardy-Weinberg exact test, and a step to remove unusual heterozygosity. To make our data compatible with the Haplotype Reference Consortium (HRC) panel (\url{http://www.well.ox.ac.uk/~wrayner/tools/}), we used the HRC-check-bin tool in order to carry out data wrangling steps required. The data were then split by chromosome and pre-phased with SHAPEIT \cite{delaneau2012linear} using the 1000 Genomes phase 3 panel and converted to vcf format. These files were then submitted to the Michigan Imputation Server (\url{https://imputationserver.sph.umich.edu/start.html}) \cite{Howie_2012,Fuchsberger_2014} for imputation with the HRC version 1 panel \cite{mccarthy2015reference}.  We applied Matrix eQTL \cite{shabalin2012matrix} to the normalized expression and imputed genotype data to generate prior eQTLs for our heritability analysis.
+
+\subsection*{Partitioning local and distal heritability of gene
+expression}\label{partitioning-local-and-distal-heritability-of-gene-expression}
+
+Motivated by the observed differences in regulatory effect sizes of variants located in the vicinity of the genes and distal to the gene,
+we partitioned the proportion of gene expression variance explained by
+SNPs in the DGN cohort into two components: local (SNPs within 1Mb of
+the gene) and distal (eQTLs on non-gene chromosomes) as defined by the
+GENCODE \cite{Harrow_2012} version 12 gene annotation. We calculated the
+proportion of the variance (narrow-sense heritability) explained by each
+component using the following mixed-effects model:
+%
+\[ Y_g = \sum_{k  \in local}w^\text{local}_{k,g} X_k + \sum_{k  \in distal}w^\text{distal}_{k,g} X_k + \epsilon \]
+%
+where $Y_g$ represents the expression of gene $g$, $X_k$ is the allelic dosage for SNP $k$, local refers to the set of SNPs located within 1Mb of the gene's transcription start and end, distal refers to SNPs in other chromosomes, and $\epsilon$ is the error term representing environmental and other unknown factors. We assume that the local and distal components are independent of each other as well as independent of the error term.
+We assume random effects for \(w^\text{local}_{k,g} \sim N(0, \sigma^2_{w,\text{local}})\), \(w^\text{distal}_{k,g} \sim N(0, \sigma^2_{w,\text{distal}})\), and
+\(\epsilon \sim N(0, \sigma^2_{\epsilon} I_n)\), where \(I_n\) is the
+identity matrix. We calculated the total variability explained by local
+and distal components using restricted
+maximum likelihood (REML) as implemented in the GCTA software \cite{Yang_2011}. 
+
+In an effort to determine if distal heritability estimates could be improved, we also tested a mixed-effect model restricting the distal component to known eQTLs on non-gene chromosomes discovered in the Framingham cohort at FDR \textless{} 0.05. When we found the distal estimate could not be improved, we focused on estimating local heritability without the distal component in the equation above.
+
+For the purpose of estimating the mean heritability (see Table \ref{table-h2}, \nameref{S1_Fig} and \nameref{S1_Table}), we allowed the heritability estimates to 
+take negative values (unconstrained model). Despite the lack of obvious biological interpretation of a negative heritability, 
+it is an accepted procedure used in order to avoid bias in the estimated mean \cite{Price_2011,Wright_2014}. Genes with FDR \textless{} 0.1 (derived from the two-sided GCTA P-value) were considered to have significant heritability. 
+
+For comparing to BSLMM PVE, we restricted the GCTA heritability estimates to be within the [0,1] interval (constrained model, see Figures \ref{fig-dgn-bslmm}, \ref{fig-gtex-pve-h2} and \ref{fig-ct-entropy}). 
+
+\subsection*{Quantifying sparsity with Bayesian Sparse Linear Mixed
+Modeling
+(BSLMM)}\label{quantifying-sparsity-with-bayesian-sparse-linear-mixed-models-bslmm}
+
+We used BSLMM \cite{Zhou_2013} to model the effect of local genetic variation
+(common SNPs within 1 Mb of gene) on the genetic architecture of gene
+expression. BSLMM uses a linear model with a polygenic component (small effects) and a sparse component (large effects)
+enforced by sparsity inducing priors on the
+regression coefficients \cite{Zhou_2013}. BSLMM assumes the genotypic effects come from a mixture of two normal distributions and thus is flexible to both polygenic and sparse genetic architectures \cite{Zhou_2013}. We used the software GEMMA \cite{Zhou_2012} to
+implement BSLMM for each gene %{\small (\( \texttt{gemma -g [genoFile] -p [expFile] -a [snpFile] -bslmm 1 -s 100000 -o [out]} \))}
+with 100K sampling steps per gene.
+%The \texttt{-bslmm 1} option specifies a linear BSLMM and the \texttt{-s 100000} option specifies the number of sampling steps per gene.
+BSLMM estimates the PVE (the proportion of variance in
+phenotype explained by the additive genetic model, analogous to the heritability estimated in GCTA) and PGE (the proportion of genetic variance explained by the sparse effects terms where 0 means that genetic effect is purely polygenic and 1 means that the effect is purely sparse). From the second half of the sampling iterations for each gene, we report the median and the 95\% credible sets of the
+PVE, PGE, and the \textbar{}\(\gamma\)\textbar{} parameter (the number of SNPs with non-zero coefficients).
+
+
+\subsection*{Determining polygenicity versus sparsity using the elastic
+net}\label{determining-polygenicity-versus-sparsity-using-the-elastic-net}
+
+We used the \textit{glmnet} R package to fit an elastic net model where the tuning parameter is chosen via 10-fold cross-validation to maximize prediction performance measured by Pearson's R$^2$ \cite{Friedman_2010, Simon_2011}.
+
+The elastic net penalty is controlled by mixing parameter \(\alpha\),
+which spans LASSO (\(\alpha=1\), the default) \cite{Tibshirani_1996} at one extreme
+and ridge regression (\(\alpha=0\)) \cite{Hoerl_1970} at the other. The ridge
+penalty shrinks the coefficients of correlated SNPs towards each other,
+while the LASSO tends to pick one of the correlated SNPs and discard the
+others. Thus, an optimal prediction R\textsuperscript{2} for
+\(\alpha=0\) means the gene expression trait is highly polygenic, while
+an optimal prediction R\textsuperscript{2} for \(\alpha=1\) means the
+trait is highly sparse. 
+
+In the DGN cohort, we tested 21 values of the mixing parameter
+(\(\alpha=0, 0.05, 0.1, ..., 0.90, 0.95, 1\)) for optimal prediction of
+gene expression of the 341 genes on chromosome 22. In order to compare prediction R$^2$ values across $\alpha$ values, we used common folds and seeds for each run. For the rest of the
+autosomes in DGN and for whole tissue, cross-tissue, and tissue-specific
+expression in the GTEx cohort, we tested \(\alpha=0.05, 0.5, 1\).
+
+
+\subsection*{Orthogonal Tissue Decomposition (OTD)}\label{orthogonal-tissue-decomposition}
+
+We use a mixed effects model to decompose the expression level of a gene into a subject-specific component and a subject-by-tissue-specific component.  We fit the model one gene at a time and to simplify notation we assume the gene index, $g$, is implicit and drop it from the equations below. The expression $Y$ of a gene $g$ for individual $i$ in tissue $t$ is modeled as
+%
+\[Y_{i,t,g} = Y_{i,t} =  Y_{i}^{\text{CT}}   + Y_{i,t}^{\text{TS}} + \mathbf{Z}'_i \boldsymbol{\beta} + \epsilon_{i,t}  \] 
+%
+%
+where $Y_{i}^{\text{CT}}$ is the random subject level intercept,  $Y_{i,t}^{\text{TS}} $ is the random subject by tissue intercept, $\mathbf{Z}_i $ represents covariates (for overall intercept, tissue intercept, gender, and PEER factors), and $\epsilon_{i,t}$ is the error term. We assume $Y_{i}^{\text{CT}} \sim N(0,\sigma_{\text{CT}}^2)$, $Y_{i,t}^{\text{TS}} \sim N(0,\sigma_{\text{TS}}^2)$, $\epsilon \sim N(0,\sigma^2_{\epsilon})$, and that all three terms are independent of each other. All variances are estimated by restricted maximum likelihood (REML). $Y_{i,t,g}=Y_{i,t}$ is a scalar. $\mathbf{Z}_i$ is a vector of length $p$, which represents the number of covariates. $\boldsymbol{\beta}$ is a vector of length $p$ and represents the effects of covariates on the expression level of the gene. The prime in $\mathbf{Z}'_i \boldsymbol{\beta}$ represents the inner product between the two vectors.
+All variances are estimated by restricted maximum likelihood (REML). These variances will be different for each gene. The tissue-specific component's variance is common across tissues. Differences between tissues will be reflected in the posterior mean of each tissue/individual random effects.
+
+For the cross-tissue component ($Y_{i}^{\text{CT}}$) to be identifiable, multiple replicates of expression are needed for each subject. In the same vein, for the tissue-specific component ($Y_{i,t}^{\text{TS}} $) to be identifiable, multiple replicates of expression are needed for a given tissue/subject pair. GTEx\cite{Ardlie_2015} data consisted of expression measurement in multiple tissues for each subject, thus multiple replicates per subject were available. However, there were very few replicated measurement for a given tissue/subject pair. Thus, we fit the reduced model and use the estimates of the residual as the tissue-specific component.
+%
+\[Y_{i,t} =  Y_{i}^{\text{CT}}   + \mathbf{Z}'_i \boldsymbol{\beta} + \epsilon_{i,t}  \] 
+%
+
+We consider the expression level of a gene at a given tissue for individual $i$ to be composed of a cross-tissue component which we represent as $Y_i^{\text{CT}}$ and a tissue-specific component, which given the lack of replicates, we estimate as the difference between the expression level and the cross-tissue components (after adjusting for covariates). The assumptions are the same as the full model, i.e., $Y_{i}^{\text{CT}} \sim N(0,\sigma_{\text{CT}}^2)$, $\epsilon \sim N(0,\sigma^2_{\epsilon})$, and that both terms are independent of each other. 
+
+The mixed effects model parameters were estimated using the \texttt{lme4} package \cite{Bates_2015a} in R. Batch effects and unmeasured confounders were accounted for using 15 \texttt{PEER} factors computed with the \texttt{PEER} \cite{Stegle_2012} package in R. 
+We also included gender as a covariate.
+Posterior modes of the subject level random intercepts were used as estimates of the cross-tissue components whereas the residuals of the models were used as tissue-specific components.
+
+The model included whole tissue gene expression levels in 8555 GTEx
+tissue samples from 544 unique subjects. A total of 17,647
+protein-coding genes (defined by GENCODE \cite{Harrow_2012} version 18) with a
+mean gene expression level across tissues greater than 0.1 RPKM (reads
+per kilobase of transcript per million reads mapped) and RPKM \textgreater{} 0 in at least 3 individuals were included in
+the model. 
+
+\subsection*{OTD simulation}
+
+To test the robustness of our method, we generated simulated expression levels so that we could compare our estimates with the ground truth. To preserve correlation structure between genes and tissues, we used the cross-tissue and tissue-specific estimates of OTD based on the observed data as a basis for the simulations. Thus, we simulated expression phenotypes as the sum of the observed OTD cross-tissue and tissue-specific components plus an error term derived by randomly sampling a normal distribution with a standard deviation equal to 1, 2, or 10 times the variance of each gene's component sum. We performed OTD on the simulated phenotypes and compared the OTD-estimated cross-tissue and tissue-specific expression levels for each gene to the true levels using Pearson correlation. As expected, higher levels of noise reduced the correlation between true and simulated values, but the correlation remained significant for all simulated phenotypes.
+
+\subsection*{Comparison of OTD trait heritability with multi-tissue eQTL
+results}\label{comparison-of-otd-pve-to-multi-tissue-eqtl-results}
+
+To verify that the newly derived cross-tissue and tissue-specific traits were capturing the expected properties, we used the results of the multi-tissue eQTL analysis developed by Flutre et al. \cite{Flutre_2013} and performed on nine tissues from the pilot phase of the GTEx project \cite{Ardlie_2015}.  
+In particular, we downloaded the posterior probabilities of a gene being actively regulated in a tissue (PPA) from the GTEx portal at \url{http://www.gtexportal.org/static/datasets/gtex_analysis_pilot_v3/multi_tissue_eqtls/Multi_tissue_eQTL_GTEx_Pilot_Phase_datasets.tar}. PPA can be interpreted as
+the probability a gene is regulated by an eQTL in tissue \(t\) given the data. In the GTEx pilot, the most significant eQTL per gene was used to compute PPA \cite{Ardlie_2015}. PPA is computed from a joint analysis of all tissues and takes account of sharing of eQTLs among tissues \cite{Flutre_2013}. For example, consider a SNP showing modest association with expression in tissue \(t\). If this SNP also shows strong association in the other tissues, then it will be assigned a higher probability of being an active eQTL in tissue \(t\) than if it showed no association in the other tissues \cite{Flutre_2013}.
+
+We reasoned that genes with large cross-tissue component (i.e. high cross-tissue h\textsuperscript{2}) would have more uniform PPA across tissues. Thus we defined for each gene a measure of uniformity, $U_g$, across tissues based on the nine-dimensional vector of PPAs using the entropy formula. More specifically, we divided each vector of PPA by their sum across tissues and computed the measure of uniformity as follows:
+%
+\[ U_g = -\sum_{t}p_{t,g} \log p_{t,g} \]
+%
+where \(p_{t,g}\) is the normalized PPA for gene $g$ and tissue $t$.
+
+
+
+\section*{Acknowledgments}
+We thank Nicholas Knoblauch and Jason Torres for initial pipeline
+development and planning. We thank Nicholas Miller for assistance building
+the results database.
+
+%\subsection*{Grants}\label{grants}
+%
+%We acknowledge the following US National Institutes of Health grants:
+%R01MH107666 (H.K.I.), K12 CA139160 (H.K.I.), T32 MH020065 (K.P.S.), R01 MH101820 (GTEx), 
+%P30 DK20595 and P60 DK20595 (Diabetes Research and
+%Training Center), P50 DA037844 (Rat Genomics), P50 MH094267 (Conte). H.E.W. was
+%supported in part by start-up funds from Loyola University Chicago.
+
+
+\paragraph{GTEx data.}\label{gtex-data}
+
+The Genotype-Tissue Expression (GTEx) Project was supported by the
+Common Fund of the Office of the Director of the National Institutes of
+Health (commonfund.nih.gov/GTEx). Additional funds were provided by the
+NCI, NHGRI, NHLBI, NIDA, NIMH, and NINDS. Donors were enrolled at
+Biospecimen Source Sites funded by NCI Leidos Biomedical Research, Inc.
+subcontracts to the National Disease Research Interchange (10XS170),
+Roswell Park Cancer Institute (10XS171), and Science Care, Inc.
+(X10S172). The Laboratory, Data Analysis, and Coordinating Center
+(LDACC) was funded through a contract (HHSN268201000029C) to the The
+Broad Institute, Inc. Biorepository operations were funded through a
+Leidos Biomedical Research, Inc. subcontract to Van Andel Research
+Institute (10ST1035). Additional data repository and project management
+were provided by Leidos Biomedical Research, Inc.(HHSN261200800001E).
+The Brain Bank was supported supplements to University of Miami grant
+DA006227. Statistical Methods development grants were made to the
+University of Geneva (MH090941 \& MH101814), the University of Chicago
+(MH090951,MH090937, MH101825, \& MH101820), the University of North
+Carolina - Chapel Hill (MH090936), North Carolina State University
+(MH101819),Harvard University (MH090948), Stanford University
+(MH101782), Washington University (MH101810), and to the University of
+Pennsylvania (MH101822). The datasets used for the analyses described in
+this manuscript were obtained from dbGaP at
+\url{http://www.ncbi.nlm.nih.gov/gap} through dbGaP accession number
+phs000424.v3.p1.
+
+\paragraph{DGN data.}\label{dgn-data}
+
+NIMH Study 88 -- Data was provided by
+Dr.~Douglas F. Levinson. We gratefully acknowledge the resources were
+supported by National Institutes of Health/National Institute of Mental
+Health grants 5RC2MH089916 (PI: Douglas F. Levinson, M.D.;
+Coinvestigators: Myrna M. Weissman, Ph.D., James B. Potash, M.D., MPH,
+Daphne Koller, Ph.D., and Alexander E. Urban, Ph.D.) and 3R01MH090941
+(Co-investigator: Daphne Koller, Ph.D.).
+
+\paragraph{Framingham data.}
+
+The Framingham Heart Study is conducted and supported by the National Heart, Lung, and Blood Institute (NHLBI) in collaboration with Boston University (Contract No. N01-HC-25195 and HHSN268201500001I). This manuscript was not prepared in collaboration with investigators of the Framingham Heart Study and does not necessarily reflect the opinions or views of the Framingham Heart Study, Boston University, or NHLBI.
+
+Funding for SHARe Affymetrix genotyping was provided by NHLBI Contract N02-HL- 64278. SHARe Illumina genotyping was provided under an agreement between Illumina and Boston University. Funding for Affymetrix genotyping of the FHS Omni cohorts was provided by Intramural NHLBI funds from Andrew D. Johnson and Christopher J. O'Donnell.
+
+Additional funding for SABRe was provided by Division of Intramural Research, NHLBI, and Center for Population Studies, NHLBI.
+
+The following datasets were downloaded from dbGaP: phs000363.v12.p9 and phs000342.v13.p9.
+
+\paragraph{Computing resources.}\label{computing-resources}
+
+\paragraph{OSDC}
+
+This work made use of the Open Science Data Cloud (OSDC) which is an
+Open Cloud Consortium (OCC)-sponsored project. This work was supported
+in part by grants from Gordon and Betty Moore Foundation and the
+National Science Foundation and major contributions from OCC members
+like the University of Chicago \cite{grossman2012design}.
+
+\paragraph{Bionimbus}
+This work made use of the
+Bionimbus Protected Data Cloud (PDC), which is a collaboration between
+the Open Science Data Cloud (OSDC) and the IGSB (IGSB), the Center for
+Research Informatics (CRI), the Institute for Translational Medicine
+(ITM), and the University of Chicago Comprehensive Cancer Center
+(UCCCC). The Bionimbus PDC is part of the OSDC ecosystem and is funded
+as a pilot project by the NIH \cite{heath2014bionimbus} (\url{https://www.bionimbus-pdc.opensciencedatacloud.org/}).
+
+
+\nolinenumbers
+
+
+% Either type in your references using
+% \begin{thebibliography}{}
+% \bibitem{}
+% Text
+% \end{thebibliography}
+%
+% OR
+%
+% Compile your BiBTeX database using our plos2015.bst
+% style file and paste the contents of your .bbl file
+% here.
+% 
+
+\bibliography{GenArch_references}
+
+\section*{Supporting Information}
+
+% Include only the SI item label in the subsection heading. Use the \nameref{label} command to cite SI items in the text.
+\begin{singlespace}
+
+\subsection*{S1 Fig}
+%\includegraphics[width=12cm]{Figures_REVISION-2/Supporting_Information/S1Fig-DGN-jt-h2-UNCONSTRAINED.png}
+\label{S1_Fig}
+
+\noindent {\bf  Local and distal heritability  (h\textsuperscript{2}) of gene expression levels in whole blood from the DGN RNA-seq dataset.} 
+In order to obtain an unbiased estimate of mean h\textsuperscript{2}, we allow the values to be negative when fitting the restricted maximum likelihood (unconstrained REML). (\textbf{A}) Local (SNPs within 1Mb of each gene) and (\textbf{B}) distal (all SNPs on non-gene chromosomes) gene expression h\textsuperscript{2} estimates ordered by increasing h\textsuperscript{2}. Gray segments show two times the standard errors of each h\textsuperscript{2} estimate. Notice the larger range and errors of the distal estimates.
+
+\pagebreak
+
+\subsection*{S2 Fig}
+%\includegraphics[width=9cm]{Figures_REVISION-2/Supporting_Information/S2Fig-LDAK-gcta-no-cons.eps}
+\label{S2_Fig}
+
+\noindent {\bf DGN local heritability estimation comparison between LDAK and GCTA.} The Pearson correlation between GCTA and the LD-adjusted kinship local h\textsuperscript{2} estimates of gene expression is 0.96.
+
+\subsection*{S3 Fig}
+%\includegraphics[width=13cm]{Figures_REVISION-2/Supporting_Information/S3Fig-GTEx_TW_EN_CV.png}
+\label{S3_Fig}
+{\bf GTEx whole tissue cross-validated predictive performance across the elastic net.} The difference between the cross validated R$^2$ of the LASSO model and the elastic net model mixing parameters 0.05 and 0.5 for autosomal protein coding genes per tissue. Elastic net with $\alpha=0.5$ values hover around zero, meaning that it has similar predictive performance to LASSO. The R$^2$ difference of the more polygenic model (elastic net with $\alpha=0.05$) is mostly above the 0 line, indicating that this model performs worse than the LASSO model across tissues.
+
+\subsection*{S4 Fig}
+%\includegraphics[width=9cm]{Figures_REVISION-2/Supporting_Information/S4Fig-R_gcta_bslmm_v_n.png}
+\label{S4_Fig}
+
+\noindent {\bf Correlation between heritability models compared to sample size.} The Pearson correlation between estimates of heritability using BSLMM vs. GCTA is dependent on sample size (R = 0.99, $P = 3 x 10^{-9}$).
+
+\subsection*{S5 Fig}
+%\includegraphics[width=13cm]{Figures_REVISION-2/Supporting_Information/S5Fig-GTEx_TW_colorPriceh2bloodcis_pve_v_h2.png}
+\label{S5_Fig}
+
+{\bf BSLMM and LMM estimates of heritability in GTEx compared to IBD estimates} 
+This figure shows the comparison between estimates of heritability using BSLMM vs. LMM (GCTA) for GTEx data. Here, in both models the estimates are constrained to be between 0 and 1. For most genes BSLMM estimates are larger than LMM estimates reflecting the fact that BSLMM yields better estimates of heritability because of its ability to account for the sparse component. Each point is colored according to that gene's estimate of h\textsuperscript{2} by shared identity by descent (IBD) in Price et al. \cite{Price_2011}. At the bottom left of each panel, we show the IBD correlation with BSLMM (IBD\_v\_BSLMM) and LMM (IBD\_v\_LMM). BSLMM is consistently more correlated with the IBD estimate. This  provides further evidence that LMM is underestimating h\textsuperscript{2} for these genes.
+
+\subsection*{S6 Fig}
+%\includegraphics[width=13cm]{Figures_REVISION-2/Supporting_Information/S6sim_v_obs_SLTM_ALL.png}
+\label{S6_Fig}
+
+\noindent {\bf Identifiability of cross-tissue and tissue-specific components shown in simulated data.} The simulated phenotype is the sum of the observed cross-tissue and tissue-specific components (estimated via OTD in the observed data) plus an error term derived by randomly sampling a normal distribution with variance equal to the variance of each gene. {\bf (A)} Correlation between true and OTD-estimated cross-tissue and tissue-specific components for one gene, \textit{SLTM}.  {\bf(B)} Histogram of the correlation between true and OTD-estimated components across all genes.
+
+\subsection*{S7 Fig}
+%\includegraphics[width=9cm]{Figures_REVISION-2/Supporting_Information/S7Fig-GTEx-CT-v-TW.png}
+\label{S7_Fig}
+
+\noindent {\bf Cross-tissue and whole tissue comparison of heritability (h\textsuperscript{2}, A) and standard error (SE, B).} Cross-tissue local h\textsuperscript{2} is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Whole tissue local h\textsuperscript{2} is estimated using the measured gene expression for each respective tissue and SNPs within 1 Mb of each gene. Estimates of h\textsuperscript{2} for cross-tissue expression traits are larger and their standard errors are smaller than the corresponding estimates for each whole tissue expression trait.
+
+\subsection*{S8 Fig}
+%\includegraphics[width=13cm]{Figures_REVISION-2/Supporting_Information/S8Fig-GTEx_TW_BSLMM.png}
+\label{S8_Fig}
+{\bf GTEx whole tissue expression Bayesian Sparse Linear Mixed Model.} Comparison of median PGE (proportion of PVE explained by sparse effects) to median PVE (total proportion of variance explained, the BSLMM equivalent of h\textsuperscript{2}) for expression of each gene. The 95\% credible set of each PGE estimate is in gray and genes with a lower credible set (LCS) greater than 0.01 are in blue. For highly heritable genes the sparse component is close to 1, thus for high heritability genes the local architecture is sparse across tissues. For lower heritability genes, there is not enough evidence to determine sparsity or polygenicity. 
+
+\subsection*{S9 Fig}
+%\includegraphics[width=13cm]{Figures_REVISION-2/Supporting_Information/S9Fig-GTEx_CT-TS_BSLMM.png}
+\label{S9_Fig}
+{\bf GTEx orthogonal tissue decomposition cross-tissue and tissue-specific expression Bayesian Sparse Linear Mixed Model.} Comparison of median PGE (proportion of PVE explained by sparse effects) to median PVE (total proportion of variance explained, the BSLMM equivalent of h\textsuperscript{2}) for expression of each gene. The 95\% credible set of each PGE estimate is in gray and genes with a lower credible set (LCS) greater than 0.01 are in blue. For highly heritable genes the sparse component is close to 1, thus for high heritability genes the local architecture is sparse across tissues. About twice as many cross-tissue expression traits have significant PGE (LCS \textgreater{} 0.01) compared to the tissue-specific expression traits.
+
+\subsection*{S10 Fig}
+%\includegraphics[width=9cm]{Figures_REVISION-2/Supporting_Information/S10Fig-GTEx-CT-v-TS.png}
+\label{S10_Fig}
+
+\noindent {\bf Cross-tissue and tissue-specific comparison of heritability (h\textsuperscript{2}, A) and standard error (SE, B) estimation.} Cross-tissue local h\textsuperscript{2} is estimated using the cross-tissue component (random effects) of the mixed effects model for gene expression and SNPs within 1 Mb of each gene. Tissue-specifc local h\textsuperscript{2} is estimated using the tissue-specific component (residuals) of the mixed effects model for gene expression for each respective tissue and SNPs within 1 Mb of each gene. Estimates of h\textsuperscript{2} for cross-tissue expression traits are larger and their standard errors are smaller than the corresponding estimates for each tissue-specific expression trait.
+
+\subsection*{S11 Fig}
+%\includegraphics[width=13cm]{Figures_REVISION-2/Supporting_Information/S11Fig-GTEx_CT-TS_EN_CV.png}
+\label{S11_Fig}
+{\bf GTEx orthogonal tissue decomposition cross-tissue and tissue-specific expression cross-validated predictive performance across the elastic net.} The difference between the cross validated R$^2$ of the LASSO model and the elastic net model mixing parameters 0.05 and 0.5 for autosomal protein coding genes per cross-tissue and tissue-specific gene expression traits. Elastic net with $\alpha=0.5$ values hover around zero, meaning that it has similar predictive performance to LASSO. The R$^2$ difference of the more polygenic model (elastic net with $\alpha=0.05$) is mostly above the 0 line, indicating that this model performs worse than the LASSO model across decomposed tissues.
+\end{singlespace}
+\pagebreak
+
+\subsection*{S12 Fig}
+%\includegraphics[width=9cm]{Figures_REVISION-2/Supporting_Information/S12Fig-CT-entropy-continuous-lm.png}
+\label{S12_Fig}
+{\bf Continuous distribution of heritability of the cross-tissue component vs. a measure of uniformity of genetic regulation across tissues.}
+The measure of uniformity was computed using the posterior probability of a gene being actively regulated in a tissue, PPA, from the Flutre et al. \cite{Flutre_2013} multi-tissue eQTL analysis. Genes with PPA concentrated in one tissue were assigned small values of the uniformity measure whereas genes with PPA uniformly distributed across tissues were assigned high value of uniformity measure. See Methods for the entropy-based definition of uniformity. The blue line is the best fit linear regression and shows a significant positive correlation between h\textsuperscript{2} and uniformity ($\beta = 0.12$, $P = 2e-11$).
+
+
+\subsection*{S1 Table}
+%TableS1.pdf
+{\bf S1 Table. Estimates of cross-tissue and tissue-specific local h\textsuperscript{2}.} Expression levels derived by Orthogonal Tissue Decomposition and h\textsuperscript{2} estimated using the \texttt{--reml-no-constrain} method.
+
+\end{document}
+

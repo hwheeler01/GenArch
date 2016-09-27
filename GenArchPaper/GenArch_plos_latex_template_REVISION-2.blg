@@ -1,0 +1,53 @@
+This is BibTeX, Version 0.99d (TeX Live 2015)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: GenArch_plos_latex_template_REVISION-2.aux
+The style file: plos-latex-template/plos2015.bst
+Reallocated glb_str_ptr (elt_size=4) to 20 items from 10.
+Reallocated global_strs (elt_size=20001) to 20 items from 10.
+Reallocated glb_str_end (elt_size=4) to 20 items from 10.
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: GenArch_references.bib
+Warning--empty year in MacDonald_1
+Warning--empty year in MacDonald_2
+You've used 56 entries,
+            3170 wiz_defined-function locations,
+            1039 strings with 28263 characters,
+and the built_in function-call counts, 207500 in all, are:
+= -- 24837
+> -- 1140
+< -- 3
++ -- 910
+- -- 285
+* -- 19784
+:= -- 22485
+add.period$ -- 254
+call.type$ -- 56
+change.case$ -- 2
+chr.to.int$ -- 0
+cite$ -- 58
+duplicate$ -- 10144
+empty$ -- 21071
+format.name$ -- 337
+if$ -- 47628
+int.to.chr$ -- 0
+int.to.str$ -- 56
+missing$ -- 718
+newline$ -- 315
+num.names$ -- 56
+pop$ -- 1118
+preamble$ -- 1
+purify$ -- 0
+quote$ -- 0
+skip$ -- 1276
+stack$ -- 0
+substring$ -- 51984
+swap$ -- 1596
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 0
+warning$ -- 2
+while$ -- 645
+width$ -- 58
+write$ -- 678
+(There were 2 warnings)
