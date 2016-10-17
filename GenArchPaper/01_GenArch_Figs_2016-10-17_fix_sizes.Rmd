@@ -483,9 +483,9 @@ corrplot(mat2,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=1.5
 dev.off()
 
 setEPS()
-postscript(file=fig.dir %&% "Fig-cor-StephensPr-v-PVE.eps",width=7.4,height=3.7)
+postscript(file=fig.dir %&% "Fig-cor-StephensPr-v-PVE.eps",width=7.5,height=3.5)
 par(mfrow=c(1,2))
-corrplot(mat2.tw,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=0.7,cl.cex=0.7,cl.ratio = 0.2,bg='black',tl.offset=0)
-corrplot(mat2,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=0.7,cl.cex=0.7,cl.ratio = 0.2,bg='black',tl.offset=0)
+corrplot(mat2.tw,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=0.8,cl.cex=0.6,cl.ratio = 0.2,bg='black')
+corrplot(mat2,method="circle",cl.lim = c(-0.35, 0.35),is.corr = FALSE,tl.cex=0.8,cl.cex=0.6,cl.ratio = 0.2,bg='black')
 dev.off()
 ```
