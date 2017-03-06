@@ -1,0 +1,45 @@
+---
+title: "Check DGN exp data"
+author: "Heather Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r}
+### Functions & packages
+"%&%" = function(a,b) paste(a,b,sep="")
+library(preprocessCore)
+
+###############################################
+### Directories & Variables
+my.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/"
+ct.dir <- "/Volumes/im-lab/nas40t2/hwheeler/PrediXcan_CV/cis.v.trans.prediction/"
+tis <- "DGN-WB"
+
+###Scan data
+rpkmid <- ct.dir %&% tis %&% ".exp.ID.list"
+expid <- scan(rpkmid,"character")
+rpkmgene <- ct.dir %&% tis %&% ".exp.GENE.list"
+geneid <- scan(rpkmgene,"character")
+rpkmfile <- ct.dir %&% tis %&% ".exp.IDxGENE"
+expdata <- scan(rpkmfile)
+expdata <- matrix(expdata, ncol = length(geneid), byrow=TRUE)
+rownames(expdata) <- expid
+colnames(expdata) <- geneid
+```
+
+###quantile normalize and compare plots
+Nice tutorial: <https://davetang.org/muse/2014/07/07/quantile-normalisation-in-r/>
+```{r,fig.width=3,fig.height=3}
+gex <- t(expdata) #get genes in cols
+qn.gex <- normalize.quantiles(gex) ##quantile normalize
+for(i in 1:20){
+  hist(gex[i,],main=rownames(gex[i]),xlab="raw expression")
+  hist(qn.gex[i,],main=rownames(qn.gex[i]),xlab="qn expression")
+  print(summary(gex[i,]))
+  print(summary(qn.gex[i,]))
+}
+```
+
+
+####Conclusion: data was not previously quantile normalized, so quantile normalize prior to PEER factor calcs

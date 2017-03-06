@@ -1,0 +1,64 @@
+---
+title: "03_plot_adj_PEER"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r, message=FALSE, warning=FALSE}
+"%&%" = function(a,b) paste(a,b,sep="")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+my.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/"
+dgn.dir <- my.dir %&% "expArch_DGN-WB_imputedGTs/"
+trans.dir <- dgn.dir %&% "transPCA/"
+tis <- "DGN-WB"
+data <- Sys.Date()
+Nk = 20
+```
+
+###Plot h2 vs. PFnum
+```{r}
+hsq <- read.table(trans.dir %&% "hsq_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray') + geom_line() + geom_point() + ggtitle("--reml-no-constrain")
+##rerun with constrained --reml
+hsq <- read.table(trans.dir %&% "hsq_constrained_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray') + geom_line() + geom_point() + ggtitle("--reml")
+```
+
+###Plot adjPF (BLUP resid) vs. PF
+```{r}
+pf <- read.table(trans.dir %&% "DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt")
+colnames(pf) <- c("FID","IID",1:Nk)
+adjpf <- read.table(trans.dir %&% "adj_DGN-WB.20.PEER.factors.2017-03-06.txt")
+colnames(adjpf) <- c("FID","IID",1:Nk)
+
+gpf <- gather(pf,PFnum,PF,-FID,-IID)
+gadjpf <- gather(adjpf,PFnum,adjPF,-FID,-IID)
+
+allpf <- dplyr::mutate(gpf,adjPF=gadjpf[,4])
+ggplot(allpf, aes(x=PF,y=adjPF)) + geom_point(color="blue",size=1) + geom_abline(aes(slope=1,intercept=0)) + facet_wrap(~as.numeric(PFnum))  + ggtitle("--reml-no-constrain")
+
+pf <- read.table(trans.dir %&% "DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt")
+colnames(pf) <- c("FID","IID",1:Nk)
+adjpf <- read.table(trans.dir %&% "adj_constrained_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt")
+colnames(adjpf) <- c("FID","IID",1:Nk)
+
+gpf <- gather(pf,PFnum,PF,-FID,-IID)
+gadjpf <- gather(adjpf,PFnum,adjPF,-FID,-IID)
+
+allpf <- dplyr::mutate(gpf,adjPF=gadjpf[,4])
+ggplot(allpf, aes(x=PF,y=adjPF)) + geom_point(color="blue",size=1) + geom_abline(aes(slope=1,intercept=0)) + facet_wrap(~as.numeric(PFnum))  + ggtitle("--reml")
+```
+
+###Plot Nk = [40, 60, 100]
+```{r}
+for(Nk in c(40, 60, 100)){
+  hsq <- read.table(trans.dir %&% "hsq_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+print(ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray') + geom_line() + geom_point() + ggtitle("Nk = " %&% Nk %&% " --reml-no-constrain"))
+##rerun with constrained --reml
+hsq <- read.table(trans.dir %&% "hsq_constrained_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+print(ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray') + geom_line() + geom_point() + ggtitle("Nk = " %&% Nk %&% " --reml"))
+}
+```
