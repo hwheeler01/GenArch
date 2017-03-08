@@ -1,0 +1,39 @@
+---
+title: "05_plot_exp_h2_PF_vs_transPCA"
+author: "Heather E. Wheeler"
+date: "`r Sys.time()`"
+output: html_document
+---
+
+```{r, message=FALSE, warning=FALSE}
+"%&%" = function(a,b) paste(a,b,sep="")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+my.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/"
+dgn.dir <- my.dir %&% "expArch_DGN-WB_imputedGTs/"
+trans.dir <- dgn.dir %&% "transPCA/"
+tis <- "DGN-WB"
+data <- Sys.Date()
+Nk = 20
+```
+
+###Plot h2 (PF exp) vs. h2 (BLUP adj PF exp)
+```{r}
+for(Nk in c(20,40,60,100)){
+  hsq <- read.table(trans.dir %&% "DGN-WB.h2_transPCA-constrained_" %&% Nk %&% "_PFs_Chr10_globalAll_reml-no-constrain.2017-03-08.txt", header=T)
+
+  local <- dplyr::select(hsq,local.h2,tpca.local.h2)
+  colnames(local) <- c('PF','adjPF')
+  print(summary(local))
+  glocal <- gather(local,model,h2)
+  print(ggplot(glocal,aes(x=h2,fill=model,color=model)) + geom_density(alpha=0.3) + ggtitle("Nk=" %&% Nk %&% " local h2"))
+
+  global <- dplyr::select(hsq,global.h2,tpca.global.h2)
+  colnames(global) <- c('PF','adjPF')
+  print(summary(global))
+  gglobal <- gather(global,model,h2)
+  print(ggplot(gglobal,aes(x=h2,fill=model,color=model)) + geom_density(alpha=0.3) + ggtitle("Nk=" %&% Nk %&% " global h2"))
+}
+```
+
