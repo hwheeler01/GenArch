@@ -27,7 +27,7 @@ adj.pf <- pf[,1:2]
 
 for(i in 1:Nk){
 ##try --reml and --reml-no-constrain
-  rungcta <- "gcta64 --reml --grm " %&% dgn.dir %&% 
+  rungcta <- "gcta64 --reml-no-constrain --grm " %&% dgn.dir %&% 
   "dgn-grms/DGN.global_Chr1-22 --pheno " %&% trans.dir %&% pf.file %&% 
   " --mpheno " %&% i %&% " --reml-pred-rand --out tmp." %&% tis %&% Nk %&%
   " --reml-maxit 1000"
@@ -45,11 +45,11 @@ for(i in 1:Nk){
   if(file.exists("tmp." %&% tis %&% Nk %&% ".indi.blp")==TRUE){
     blup <- read.table("tmp." %&% tis %&% Nk %&% ".indi.blp")
     adj.pf <- cbind(adj.pf,blup[,6])
-  }else{ #gcta did not coverge or Error: the information matrix is not invertible.
-    adj.pf <- cbind(adj.pf,NA)
+  }else{ #gcta did not converge, thus keep original PF
+    adj.pf <- cbind(adj.pf,pf[i+2])
   }
   system("rm tmp." %&% tis %&% Nk %&% ".indi.blp")
 }
 
-write.table(hsq.mat, file = trans.dir %&% "hsq_constrained_" %&% pf.file, quote=F, row.names=F)
-write.table(adj.pf, file = trans.dir %&% "adj_constrained_" %&% pf.file, quote=F, row.names=F, col.names=F)
+write.table(hsq.mat, file = trans.dir %&% "hsq_unconstrained_" %&% pf.file, quote=F, row.names=F)
+write.table(adj.pf, file = trans.dir %&% "adj_unconstrained_" %&% pf.file, quote=F, row.names=F, col.names=F)

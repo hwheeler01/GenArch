@@ -118,7 +118,7 @@ for(i in 1:length(localensid)){
 
 	## Y ~ localGRM + adjPFs
 	runLOC <- "gcta64 --grm " %&% grm.dir %&% "local-" %&% gene %&% " --reml-no-constrain --pheno tmp.pheno." %&% 
-	  Nk %&% gencodeset %&% " --out tmp." %&% Nk %&% gencodeset %&% " --qcovar adj_constrained_DGN-WB." %&% Nk %&% 
+	  Nk %&% gencodeset %&% " --out tmp." %&% Nk %&% gencodeset %&% " --qcovar adj_unconstrained_DGN-WB." %&% Nk %&% 
 	  ".PEER.factors.2017-03-06.txt"
 	system(runLOC)
 	if(file.exists("tmp." %&% Nk %&% gencodeset %&% ".hsq")==TRUE){
@@ -132,7 +132,7 @@ for(i in 1:length(localensid)){
 	
 	## Y ~ globalGRM (all SNPs) + adjPFs
 	runGLO <- "gcta64 --grm " %&% my.dir %&% "dgn-grms/DGN.global_Chr1-22 --reml-no-constrain --pheno tmp.pheno." %&% 
-	  Nk %&% gencodeset %&% " --out tmp." %&% Nk %&% gencodeset %&% " --qcovar adj_constrained_DGN-WB." %&% Nk %&% 
+	  Nk %&% gencodeset %&% " --out tmp." %&% Nk %&% gencodeset %&% " --qcovar adj_unconstrained_DGN-WB." %&% Nk %&% 
 	  ".PEER.factors.2017-03-06.txt"
 	system(runGLO)
 	if(file.exists("tmp." %&% Nk %&% gencodeset %&% ".hsq")==TRUE){
@@ -146,5 +146,9 @@ for(i in 1:length(localensid)){
 }
 
 full.mat <- cbind(loc.mat,loc.adj.mat,glo.mat,glo.adj.mat)
-write.table(full.mat,file=tis %&% ".h2_transPCA-constrained_" %&% Nk %&% "_PFs_Chr" %&% gencodeset %&% 
+#first run: constrained adj PFs, output:
+#write.table(full.mat,file=tis %&% ".h2_transPCA-constrained_" %&% Nk %&% "_PFs_Chr" %&% gencodeset %&% 
+#              "_globalAll_reml-no-constrain." %&% date %&% ".txt",quote=F,row.names=F,sep="\t")
+#second run: unconstrained adj PFs, output:
+write.table(full.mat,file=tis %&% ".h2_transPCA-unconstrained_" %&% Nk %&% "_PFs_Chr" %&% gencodeset %&% 
               "_globalAll_reml-no-constrain." %&% date %&% ".txt",quote=F,row.names=F,sep="\t")

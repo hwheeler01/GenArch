@@ -18,22 +18,47 @@ data <- Sys.Date()
 Nk = 20
 ```
 
-###Plot h2 (PF exp) vs. h2 (BLUP adj PF exp)
+###Plot DGN h2 (PF exp) vs. h2 (BLUP adj constrained PF exp)
 ```{r}
 for(Nk in c(20,40,60,100)){
-  hsq <- read.table(trans.dir %&% "DGN-WB.h2_transPCA-constrained_" %&% Nk %&% "_PFs_Chr10_globalAll_reml-no-constrain.2017-03-08.txt", header=T)
+  hsq <- read.table(trans.dir %&% "DGN-WB.h2_transPCA-constrained_" %&% Nk %&% "_PFs_Chr1-22_globalAll_reml-no-constrain.2017-03-08.txt", header=T)
 
   local <- dplyr::select(hsq,local.h2,tpca.local.h2)
   colnames(local) <- c('PF','adjPF')
+  print("Nk=" %&% Nk %&% " local h2")
   print(summary(local))
   glocal <- gather(local,model,h2)
   print(ggplot(glocal,aes(x=h2,fill=model,color=model)) + geom_density(alpha=0.3) + ggtitle("Nk=" %&% Nk %&% " local h2"))
 
   global <- dplyr::select(hsq,global.h2,tpca.global.h2)
   colnames(global) <- c('PF','adjPF')
+  print("Nk=" %&% Nk %&% " global h2")
   print(summary(global))
   gglobal <- gather(global,model,h2)
   print(ggplot(gglobal,aes(x=h2,fill=model,color=model)) + geom_density(alpha=0.3) + ggtitle("Nk=" %&% Nk %&% " global h2"))
 }
 ```
 
+###Plot DGN h2 (PF exp) vs. h2 (BLUP adj unconstrained PF exp)
+```{r}
+for(Nk in c(20,40,60,100)){
+  hsq <- read.table(trans.dir %&% "DGN-WB.h2_transPCA-unconstrained_" %&% Nk %&% "_PFs_Chr1-22_globalAll_reml-no-constrain.2017-03-09.txt", header=T)
+
+  local <- dplyr::select(hsq,local.h2,tpca.local.h2)
+  colnames(local) <- c('PF','adjPF')
+  print("Nk=" %&% Nk %&% " local h2")
+  print(summary(local))
+  glocal <- gather(local,model,h2)
+  print(ggplot(glocal,aes(x=h2,fill=model,color=model)) + geom_density(alpha=0.3) + ggtitle("Nk=" %&% Nk %&% " local h2") + theme_bw(20))
+
+  global <- dplyr::select(hsq,global.h2,tpca.global.h2)
+  colnames(global) <- c('PF','adjPF')
+  print("Nk=" %&% Nk %&% " global h2")
+  print(summary(global))
+  gglobal <- gather(global,model,h2)
+  print(ggplot(gglobal,aes(x=h2,fill=model,color=model)) + geom_density(alpha=0.3) + ggtitle("Nk=" %&% Nk %&% " global h2") + theme_bw(20))
+}
+```
+
+###Next
+- DGN was already adjusted for trans-eQTLs? Need messier data?
