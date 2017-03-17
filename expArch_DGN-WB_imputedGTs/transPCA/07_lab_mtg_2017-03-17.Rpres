@@ -1,0 +1,225 @@
+transPCA: taking the h2 out of PEER
+========================================================
+author: Heather Wheeler
+date: `r Sys.time()`
+autosize: true
+
+Local and global h2 of gene expression in DGN whole blood
+========================================================
+![](/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/expArch_DGN-WB_imputedGTs/transPCA/journal.pgen.1006423.s001.PNG)
+***Wheeler et al. 2016, PLOS Genetics***
+
+transPCA
+========================================================
+- Gene expression data is usually adjusted for hidden confounders using SVA (surrogate variable analysis) or PEER (probabilistic estimation of expression residuals) prior to eQTL or h2 analyses
+- Haky and Keston observed that the PEER factors themselves can have a significant h2 estimate (PF variance explained by the SNPs)
+- Thus, we may be ***overadjusting*** when we estimate global h2 with PEER-adjusted gene expression
+    - ***throwing the baby out with the bath water***
+- We may need to adjust the adjusters (PFs)
+
+Preliminary analyses in DGN whole blood (n=922)
+========================================================
+1. Calculate PEER factors in DGN
+    - Nk = 20, 40, 60, 80, 100
+2. Calculate PF h2 using GCTA
+    - if h2 is non-zero, we are losing information
+3. Adjust each PF by removing the total genetic effect with BLUP (best linear unbiased prediction)
+    - the adjusted PF is the residuals
+4. Does adjusting gene expression by adjPFs give larger global h2 estimates than adjusting by the original PFs?
+
+
+
+GCTA h2 of each PEER Factor, Nk = 20
+========================================================
+
+```{r,echo=FALSE,fig.width=6,fig.height=6}
+"%&%" = function(a,b) paste(a,b,sep="")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(calibrate)
+library(knitr)
+my.dir <- "/Volumes/im-lab/nas40t2/hwheeler/cross-tissue/"
+dgn.dir <- my.dir %&% "expArch_DGN-WB_imputedGTs/"
+trans.dir <- dgn.dir %&% "transPCA/"
+tis <- "DGN-WB"
+data <- Sys.Date()
+Nk = 20
+hsq <- read.table(trans.dir %&% "hsq_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray') + geom_line() + geom_point() + ggtitle("--reml-no-constrain") + theme_gray(24)
+##rerun with constrained --reml
+hsq <- read.table(trans.dir %&% "hsq_constrained_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray') + geom_line() + geom_point() + ggtitle("--reml") + theme_gray(24)
+```
+
+GCTA h2 of each PEER Factor, Nk = 40
+========================================================
+
+```{r,echo=FALSE,fig.width=6,fig.height=6}
+for(Nk in c(40)){
+  hsq <- read.table(trans.dir %&% "hsq_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+print(ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray') + geom_line() + geom_point() + ggtitle("Nk = " %&% Nk %&% " --reml-no-constrain")+ theme_gray(24))
+##rerun with constrained --reml
+hsq <- read.table(trans.dir %&% "hsq_constrained_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+print(ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray') + geom_line() + geom_point() + ggtitle("Nk = " %&% Nk %&% " --reml")+ theme_gray(24))
+}
+```
+
+GCTA h2 of each PEER Factor, Nk = 60
+========================================================
+
+```{r,echo=FALSE,fig.width=6,fig.height=6}
+for(Nk in c(60)){
+  hsq <- read.table(trans.dir %&% "hsq_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+print(ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray') + geom_line() + geom_point() + ggtitle("Nk = " %&% Nk %&% " --reml-no-constrain")+ theme_gray(24))
+##rerun with constrained --reml
+hsq <- read.table(trans.dir %&% "hsq_constrained_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+print(ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray') + geom_line() + geom_point() + ggtitle("Nk = " %&% Nk %&% " --reml")+ theme_gray(24))
+}
+```
+
+GCTA h2 of each PEER Factor, Nk = 100
+========================================================
+
+```{r,echo=FALSE,fig.width=6,fig.height=6}
+for(Nk in c(100)){
+  hsq <- read.table(trans.dir %&% "hsq_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+print(ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray') + geom_line() + geom_point() + ggtitle("Nk = " %&% Nk %&% " --reml-no-constrain")+ theme_gray(24))
+##rerun with constrained --reml
+hsq <- read.table(trans.dir %&% "hsq_constrained_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+print(ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray') + geom_line() + geom_point() + ggtitle("Nk = " %&% Nk %&% " --reml")+ theme_gray(24))
+}
+```
+
+Take out the genetic component of each PEER factor
+========================================================
+Use GCTA to predict the random effects by the BLUP (best linear unbiased prediction) method:
+
+`--reml-pred-rand`
+
+Outfile:    `*.indi.blp` 
+
+columns are family ID, individual ID, an intermediate variable, the total genetic effect (breeding value),  another intermediate variable and the ***residual effect***.
+
+The ***residual effect*** is our adjusted PEER factor (adjPF).
+
+GCTA command to get adjusted PEER factors
+========================================================
+`gcta64 --reml-no-constrain --grm Chr1-22 --mpheno PFs --pheno i --reml-pred-rand --reml-maxit 1000 --out results`
+
+<https://github.com/hwheeler01/GenArch/tree/master/expArch_DGN-WB_imputedGTs/transPCA>
+
+`/group/im-lab/nas40t2/hwheeler/cross-tissue/expArch_DGN-WB_imputedGTs/transPCA/`
+
+GCTA h2 of each PEER Factor, Nk = 20
+========================================================
+```{r,echo=FALSE}
+Nk = 20
+hsq <- read.table(trans.dir %&% "hsq_DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt", header=T)
+hsq1 <- apply(hsq[1:10,],2,function(x) round(x,3))
+kable(hsq1)
+```
+
+***
+
+```{r,echo=FALSE}
+hsq2 <- apply(hsq[11:20,],2,function(x) round(x,3))
+kable(hsq2)
+```
+
+adjPF (BLUP resid) vs. PF
+========================================================
+```{r,echo=FALSE,fig.width=8,fig.height=8}
+Nk=20
+pf <- read.table(trans.dir %&% "DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt")
+colnames(pf) <- c("FID","IID",1:Nk)
+adjpf <- read.table(trans.dir %&% "adj_unconstrained_DGN-WB.20.PEER.factors.2017-03-06.txt")
+colnames(adjpf) <- c("FID","IID",1:Nk)
+
+gpf <- gather(pf,PFnum,PF,-FID,-IID)
+gadjpf <- gather(adjpf,PFnum,adjPF,-FID,-IID)
+
+allpf <- dplyr::mutate(gpf,adjPF=gadjpf[,4])
+ggplot(allpf, aes(x=PF,y=adjPF)) + geom_point(color="blue",size=1) + geom_abline(aes(slope=1,intercept=0)) + facet_wrap(~as.numeric(PFnum))  + ggtitle("--reml-no-constrain") + theme_gray(16)
+```
+
+DGN global expression h2 (PF vs. adjPF)
+========================================================
+```{r,echo=FALSE}
+Nk=20
+hsq <- read.table(trans.dir %&% "DGN-WB.h2_transPCA-unconstrained_" %&% Nk %&% "_PFs_Chr1-22_globalAll_reml-no-constrain.2017-03-09.txt", header=T)
+global <- dplyr::select(hsq,global.h2,tpca.global.h2)
+colnames(global) <- c('PF','adjPF')
+print("Nk=" %&% Nk %&% " global h2")
+print(summary(global))
+```
+
+DGN global expression h2 (PF vs. adjPF)
+========================================================
+```{r,echo=FALSE,fig.width=12,fig.height=8}
+gglobal <- gather(global,model,h2)
+print(ggplot(gglobal,aes(x=h2,fill=model,color=model)) + geom_density(alpha=0.3) + ggtitle("Nk=" %&% Nk %&% " global h2") + theme_gray(24))
+```
+
+DGN global expression h2 (PF vs. adjPF)
+========================================================
+```{r,echo=FALSE}
+Nk=40
+hsq <- read.table(trans.dir %&% "DGN-WB.h2_transPCA-unconstrained_" %&% Nk %&% "_PFs_Chr1-22_globalAll_reml-no-constrain.2017-03-09.txt", header=T)
+global <- dplyr::select(hsq,global.h2,tpca.global.h2)
+colnames(global) <- c('PF','adjPF')
+print("Nk=" %&% Nk %&% " global h2")
+print(summary(global))
+```
+
+DGN global expression h2 (PF vs. adjPF)
+========================================================
+```{r,echo=FALSE,fig.width=12,fig.height=8}
+gglobal <- gather(global,model,h2)
+print(ggplot(gglobal,aes(x=h2,fill=model,color=model)) + geom_density(alpha=0.3) + ggtitle("Nk=" %&% Nk %&% " global h2") + theme_gray(24))
+```
+
+DGN global expression h2 (PF vs. adjPF)
+========================================================
+```{r,echo=FALSE}
+Nk=60
+hsq <- read.table(trans.dir %&% "DGN-WB.h2_transPCA-unconstrained_" %&% Nk %&% "_PFs_Chr1-22_globalAll_reml-no-constrain.2017-03-09.txt", header=T)
+global <- dplyr::select(hsq,global.h2,tpca.global.h2)
+colnames(global) <- c('PF','adjPF')
+print("Nk=" %&% Nk %&% " global h2")
+print(summary(global))
+```
+
+DGN global expression h2 (PF vs. adjPF)
+========================================================
+```{r,echo=FALSE,fig.width=12,fig.height=8}
+gglobal <- gather(global,model,h2)
+print(ggplot(gglobal,aes(x=h2,fill=model,color=model)) + geom_density(alpha=0.3) + ggtitle("Nk=" %&% Nk %&% " global h2") + theme_gray(24))
+```
+
+DGN global expression h2 (PF vs. adjPF)
+========================================================
+```{r,echo=FALSE}
+Nk=100
+hsq <- read.table(trans.dir %&% "DGN-WB.h2_transPCA-unconstrained_" %&% Nk %&% "_PFs_Chr1-22_globalAll_reml-no-constrain.2017-03-09.txt", header=T)
+global <- dplyr::select(hsq,global.h2,tpca.global.h2)
+colnames(global) <- c('PF','adjPF')
+print("Nk=" %&% Nk %&% " global h2")
+print(summary(global))
+```
+
+DGN global expression h2 (PF vs. adjPF)
+========================================================
+```{r,echo=FALSE,fig.width=12,fig.height=8}
+gglobal <- gather(global,model,h2)
+print(ggplot(gglobal,aes(x=h2,fill=model,color=model)) + geom_density(alpha=0.3) + ggtitle("Nk=" %&% Nk %&% " global h2") + theme_gray(24))
+```
+
+Next
+========================================================
+- Expression h2 shift to the right is promising
+- The DGN expression data I used here was already adjusted prior to my PF or adjPF adjustment
+    - HCP (hidden covariates with prior) normalized gene-level expression data used for the trans-eQTL analysis in Battle et al. 2013
+    - Go back and redo from pre-adjusted RPKM
+- Try GTEx and Framingham (how many PFs? 100?)
+- Ideas?

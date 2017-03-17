@@ -31,7 +31,7 @@ ggplot(hsq,aes(x=PF,y=h2,ymin=h2-2*se,ymax=h2+2*se)) + geom_pointrange(col='gray
 ```{r}
 pf <- read.table(trans.dir %&% "DGN-WB." %&% Nk %&% ".PEER.factors.2017-03-06.txt")
 colnames(pf) <- c("FID","IID",1:Nk)
-adjpf <- read.table(trans.dir %&% "adj_DGN-WB.20.PEER.factors.2017-03-06.txt")
+adjpf <- read.table(trans.dir %&% "adj_unconstrained_DGN-WB.20.PEER.factors.2017-03-06.txt")
 colnames(adjpf) <- c("FID","IID",1:Nk)
 
 gpf <- gather(pf,PFnum,PF,-FID,-IID)
